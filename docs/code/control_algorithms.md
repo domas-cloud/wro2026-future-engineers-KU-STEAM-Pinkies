@@ -8,6 +8,11 @@ Valdymo logika turi atskirti suvokimą nuo vykdymo:
 - `ESP32` interpretuoja kameros ir jutiklių informaciją bei valdo techninę įrangą;
 - `ESP32` gauna valdymo komandas ir vykdo techninę įrangą.
 
+## Ryšys Su Senu Roboto Modeliu
+
+Pagrindinė algoritmo idėja perimta iš ankstesnio KU STEAM Pinkies roboto: jutiklių nuskaitymas, paklaidos skaičiavimas, korekcinis valdymas, vairo/variklio išėjimas ir kliūčių logika.
+Skirtumas tas, kad ankstesnėje versijoje daugiau sprendimų buvo siejama su `Arduino Mega` ir `Raspberry Pi Zero 2`, o naujame robote visa skaičiavimo dalis perkelta į `ESP32`, o `Raspberry Pi Zero` paliktas tik kamerai.
+
 ## Pagrindinės Valdymo Atsakomybės
 
 - iš kamerų įvesties išskirti juostos padėtį arba juostos paklaidą;

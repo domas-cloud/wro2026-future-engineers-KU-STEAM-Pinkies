@@ -25,6 +25,7 @@
 - [Žinučių protokolas](code/message_protocol.md)
 - [Navigacijos logika](code/navigation_logic.md)
 - [Saugos ir apsaugos mechanizmai](code/safety_failsafes.md)
+- [Seno algoritmo pritaikymas](code/legacy_algorithm_mapping.md)
 
 ## Greitos Nuorodos Į Testavimą
 
