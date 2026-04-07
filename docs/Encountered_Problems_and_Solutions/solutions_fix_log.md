@@ -12,7 +12,7 @@ This is the chronological record of problems and the changes made to solve them.
 - fix applied;
 - how the fix was verified.
 
-## Example Entry Types
+## Common Fix Log Entries
 
 - steering alignment fix;
 - sensor relocation;

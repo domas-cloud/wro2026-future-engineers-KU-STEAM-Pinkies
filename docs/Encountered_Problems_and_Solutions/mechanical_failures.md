@@ -8,7 +8,7 @@
 - chassis flex;
 - part breakage.
 
-## Build-Specific Likely Issues
+## Build-Specific Failure Modes to Track
 
 - `MG90S` horn or linkage slack;
 - `N20` mount shifting under load;

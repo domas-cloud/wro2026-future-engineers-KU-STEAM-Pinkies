@@ -31,4 +31,4 @@ If the metric does not improve, keep the result anyway so later comparisons rema
 
 ## Current Approach
 
-If the repository does not yet contain numeric results, document the measurement method so the next test session can fill in the numbers consistently.
+If the repository does not yet contain numeric results, document the measurement method and record the numbers in a consistent format during the next test session.

@@ -1,14 +1,14 @@
 # Video Submission
 
-- YouTube: https://www.youtube.com/watch?v=J5yrJuZZ5P8
+- Competition: WRO 2026 Future Engineers
+- YouTube URL: not recorded in this repo yet
 - Minimum autonomous driving segment: 30 seconds
 
 ## Notes
 
-- competition: WRO 2026 Future Engineers;
-- title: add the final video title here;
-- date: add the capture date here;
-- track setup: add the test or competition layout here;
+- title: not recorded yet;
+- date: not recorded yet;
+- track setup: not recorded yet;
 - subsystem focus: steering, obstacle response, lane following, and recovery;
 - what it proves: autonomous operation and repeatable behavior.
 
