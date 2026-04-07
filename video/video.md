@@ -1,15 +1,16 @@
-https://www.youtube.com/watch?v=J5yrJuZZ5P8
+# Video Submission
 
-# Video Notes
+- YouTube: https://www.youtube.com/watch?v=J5yrJuZZ5P8
+- Minimum autonomous driving segment: 30 seconds
 
-Record what the competition video shows, when it was captured, and what subsystem it demonstrates.
+## Notes
 
-Suggested entries:
+- title: add the final video title here;
+- date: add the capture date here;
+- track setup: add the test or competition layout here;
+- subsystem focus: steering, obstacle response, lane following, and recovery;
+- what it proves: autonomous operation and repeatable behavior.
 
-- video title or link;
-- date;
-- track or test setup;
-- duration of the autonomous driving segment;
-- what the video proves.
+## Use
 
-Use this file to point judges to the clips that show steering, obstacle response, and final driving behavior.
+Keep this file aligned with the published submission video so judges can find the exact evidence quickly.

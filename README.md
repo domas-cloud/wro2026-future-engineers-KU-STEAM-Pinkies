@@ -18,6 +18,10 @@ KU STEAM Pinkies.
 The robot is a car-style build with servo steering and a rear drive motor.
 The documentation focuses on mechanical design, power and sensor architecture, software behavior, testing, and reproducibility.
 
+## License
+
+This repository uses the [MIT License](LICENSE).
+
 ## Performance Video
 
 - [Competition video notes](video/video.md)
