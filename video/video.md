@@ -5,6 +5,7 @@
 
 ## Notes
 
+- competition: WRO 2026 Future Engineers;
 - title: add the final video title here;
 - date: add the capture date here;
 - track setup: add the test or competition layout here;

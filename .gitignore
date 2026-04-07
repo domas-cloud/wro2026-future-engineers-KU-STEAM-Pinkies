@@ -1,0 +1,15 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build and cache artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# Optional local exports
+*.tmp
+*.bak
