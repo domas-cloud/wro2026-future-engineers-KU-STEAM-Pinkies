@@ -37,6 +37,7 @@ This repository uses the [MIT License](LICENSE).
 
 ## Build Documentation
 
+- [Documentation Index](docs/README.md)
 - [Brainstorming](docs/brainstorming/problem_identification.md)
 - [Planning](docs/planning/timeline_deadlines.md)
 - [Hardware](docs/hardware/electronics_overview.md)
