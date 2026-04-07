@@ -1,25 +1,25 @@
-# Control Software
+# Valdymo Programinė Įranga
 
-This folder contains the robot's control code and anything needed to run it.
+Šiame aplanke saugomas roboto valdymo kodas ir viskas, ko reikia jam paleisti.
 
-## Intended Structure
+## Numatyta Struktūra
 
-- `perception/` for camera and sensor processing on the `Raspberry Pi Zero`;
-- `control/` for steering, drive, and state logic;
-- `communication/` for messages between the Pi Zero and `ESP32`;
-- `tests/` for software validation helpers if needed.
+- `perception/` kameros ir jutiklių duomenų gavimui `Raspberry Pi Zero`;
+- `control/` vairavimui, važiavimui ir būsenų logikai;
+- `communication/` žinutėms tarp Pi Zero ir `ESP32`;
+- `tests/` programinės įrangos validacijai, jei to reikia.
 
-## Responsibilities
+## Atsakomybės
 
-- camera interpretation and obstacle awareness on the `Raspberry Pi Zero`;
-- `BNO085` and `VL53L5CX` preprocessing;
-- serial command generation for the `ESP32`;
-- `MG90S` steering control and `N20` drive output on the `ESP32` side.
+- kameros interpretavimas ir kliūčių atpažinimas `Raspberry Pi Zero` pusėje;
+- `BNO085` ir `VL53L5CX` paruošimas tolimesniam naudojimui;
+- komandų siuntimas į `ESP32` serijiniu ryšiu;
+- `MG90S` vairavimo valdymas ir `N20` variklio išėjimas `ESP32` pusėje.
 
-## Documentation Expectations
+## Ko Tikimasi Dokumentacijoje
 
-- list the modules clearly;
-- explain which parts run on the Pi Zero and which parts run on the `ESP32`;
-- keep command names aligned with `docs/code/message_protocol.md`;
-- describe the startup sequence;
-- note any assumptions about control loop rate or sensor update rate.
+- aiškiai išvardyti modulius;
+- paaiškinti, kurios dalys veikia Pi Zero, o kurios `ESP32`;
+- komandų pavadinimus suderinti su `docs/code/message_protocol.md`;
+- aprašyti paleidimo seką;
+- nurodyti bet kokias prielaidas apie valdymo ciklo ar jutiklių atnaujinimo dažnį.

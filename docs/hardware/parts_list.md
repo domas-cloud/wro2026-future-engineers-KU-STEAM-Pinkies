@@ -1,32 +1,32 @@
-# Parts List
+# Dalių Sąrašas
 
-## Core Electronics
+## Pagrindinė Elektronika
 
 - `ESP32`
 - `Raspberry Pi Zero`
 - `BNO085 9-DOF IMU`
-- `VL53L5CX` matrix ToF sensor
-- camera module
+- `VL53L5CX` matricos ToF jutiklis
+- kameros modulis
 
-## Drive and Steering
+## Pavara ir Vairavimas
 
-- `MG90S` steering servo
-- `N20` drive motor
+- `MG90S` vairo servomechanizmas
+- `N20` variklis
 - `L298N H-bridge`
 
-## Power
+## Maitinimas
 
-- `2x 18650 Li-ion` battery pack
-- regulated logic power path
+- `2x 18650 Li-ion` akumuliatorių paketas
+- reguliuojama loginė maitinimo šaka
 
-## Mechanical
+## Mechanika
 
-- steering linkage parts
-- gear set from `models/`
-- chassis structure
-- wheel mounting hardware
+- vairo traukės dalys
+- pavarų rinkinys iš `models/`
+- kėbulo struktūra
+- ratų tvirtinimo detalės
 
-## Documentation Note
+## Pastaba Dėl Dokumentacijos
 
-This list is intentionally short and model-driven.
-If the exact part revision changes, update this file and the hardware docs together so the repo stays reproducible.
+Šis sąrašas yra sąmoningai trumpas ir orientuotas į modelį.
+Jei pasikeičia konkreti detalės versija, atnaujink šį failą ir techninę dokumentaciją kartu, kad repo išliktų atkuriamas.

@@ -1,18 +1,18 @@
-# Power Instability
+# Maitinimo Nestabilumas
 
-## What To Log
+## Ką Registruoti
 
-- brownouts;
-- resets under load;
-- noisy sensor readings caused by power drops;
-- voltage rail problems.
+- įtampos kritimus;
+- persikrovimus veikiant apkrovai;
+- triukšmingus jutiklių rodmenis, kuriuos sukelia įtampos kritimai;
+- įtampos šakų problemas.
 
-## Build-Specific Suspects
+## Specifiniai Įtariamieji
 
-- `N20` startup current pulling down the battery rail;
-- `L298N` voltage drop reducing available motor headroom;
-- shared power rail noise affecting `BNO085`, `VL53L5CX`, or the camera.
+- `N20` paleidimo srovė, kuri numuša baterijos šaką;
+- `L298N` įtampos kritimas, mažinantis variklio atsargą;
+- bendros maitinimo šakos triukšmas, veikiantis `BNO085`, `VL53L5CX` arba kamerą.
 
-## Why It Matters
+## Kodėl Tai Svarbu
 
-Power instability is one of the fastest ways to make a robot look like it has unrelated mechanical or software failures.
+Maitinimo nestabilumas yra vienas greičiausių būdų priversti robotą atrodyti taip, tarsi jis turėtų nesusijusių mechaninių ar programinių klaidų.

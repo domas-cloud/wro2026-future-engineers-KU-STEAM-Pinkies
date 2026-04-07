@@ -1,25 +1,25 @@
-# Steering System - Concept Selection
+# Vairo Sistemos - Koncepcijos Pasirinkimas
 
-## Selected Concept
+## Pasirinkta Koncepcija
 
-We selected a servo-steered front axle with a three-gear synchronizing mechanism.
-The central gear receives steering input and transfers motion to the left and right gears so both sides move together.
+Pasirinkome servo valdomą priekinę ašį su trijų pavarų sinchronizavimo mechanizmu.
+Centrinė pavara priima vairo įvestį ir perduoda judesį į kairę ir dešinę puses, kad abi pusės judėtų kartu.
 
-## Why We Chose It
+## Kodėl Ją Pasirinkome
 
-- The steering motion is symmetric, which helps keep the front axle aligned.
-- Gear linkage gives us a compact way to convert servo motion into predictable wheel angle movement.
-- The layout is easier to document and reproduce than a loose multi-link steering arrangement.
-- The concept matches our goal of a car-like robot with controlled turns rather than skid steering.
+- Vairo judėjimas yra simetriškas, todėl lengviau išlaikyti priekinę ašį lygią.
+- Pavarų trauka leidžia kompaktiškai paversti servo judesį į prognozuojamą ratų kampą.
+- Tokį sprendimą lengviau dokumentuoti ir atkurti nei laisvą kelių trauklių konstrukciją.
+- Ši koncepcija atitinka mūsų tikslą sukurti automobilio tipo robotą su valdomais posūkiais, o ne skersiniu slydimu važiuojantį robotą.
 
-## What The Mechanism Should Do
+## Ką Turi Daryti Mechanizmas
 
-- Turn the front wheels with proportional response to the steering command.
-- Keep left and right motion synchronized.
-- Reduce visible backlash as much as possible.
-- Support repeated testing and tuning without changing the whole chassis.
+- Sukti priekinius ratus proporcingai vairo komandai.
+- Išlaikyti kairės ir dešinės pusių judėjimo sinchronizaciją.
+- Kiek įmanoma sumažinti matomą laisvumą.
+- Leisti kartoti testavimą ir derinimą nekeičiant viso kėbulo.
 
-## Current Status
+## Dabartinė Būsena
 
-The concept is the basis for the mechanical and software documentation in this repository.
-If later testing shows backlash, insufficient range, or poor return-to-center behavior, those issues should be recorded in the problems and testing sections instead of hidden.
+Ši koncepcija yra šios repozitoriumo mechaninės ir programinės dokumentacijos pagrindas.
+Jei vėlesni testai parodys laisvumą, per mažą diapazoną arba blogą grįžimą į centrą, tuos dalykus reikia įrašyti į problemų ir testavimo skyrius, o ne paslėpti.

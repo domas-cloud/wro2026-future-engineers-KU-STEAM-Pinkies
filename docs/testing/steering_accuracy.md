@@ -1,29 +1,29 @@
-# Steering Accuracy Tests
+# Vairo Tikslumo Testai
 
-## Why This Test Exists
+## Kodėl Šis Testas Egzistuoja
 
-The steering system is one of the most important mechanical subsystems on the robot.
-If steering is not accurate, the rest of the software has to compensate for a physical problem.
+Vairo sistema yra viena svarbiausių roboto mechaninių posistemių.
+Jei vairavimas netikslus, likusi programinė įranga turi kompensuoti fizinę problemą.
 
-## What To Check
+## Ką Tikrinti
 
-- repeatable center position;
-- left and right symmetry;
-- range of motion;
-- backlash or binding;
-- behavior under load.
+- pakartojamą centro padėtį;
+- kairės ir dešinės simetriją;
+- judėjimo diapazoną;
+- laisvumą arba strigimą;
+- elgesį veikiant apkrovai.
 
-## Test Procedure
+## Testo Procedūra
 
-1. Center the steering and record the neutral position.
-2. Command small left and right offsets.
-3. Compare the visual wheel angle on both sides.
-4. Repeat the test with the chassis loaded and unloaded.
-5. Check whether the steering returns to center after several cycles.
+1. Nustatyk vairą į centrą ir užrašyk neutralią padėtį.
+2. Duok mažus kairės ir dešinės krypties poslinkius.
+3. Vizualiai palygink ratų kampą abiejose pusėse.
+4. Pakartok testą su apkrautu ir neapkrautu kėbulu.
+5. Patikrink, ar vairas po kelių ciklų grįžta į centrą.
 
-## Pass Conditions
+## Sėkmės Sąlygos
 
-- the servo returns close to the same center position each time;
-- left and right movement stays visually symmetric;
-- no obvious binding appears across the usable range;
-- the steering remains stable when the robot is moved or lightly loaded.
+- servo kiekvieną kartą grįžta beveik į tą pačią centro padėtį;
+- kairės ir dešinės krypties judėjimas išlieka vizualiai simetriškas;
+- visame naudojamame diapazone nematyti aiškaus strigimo;
+- vairas išlieka stabilus, kai robotas yra pajudinamas arba lengvai apkraunamas.

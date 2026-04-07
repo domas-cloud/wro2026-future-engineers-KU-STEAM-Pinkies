@@ -1,18 +1,18 @@
-# What Didn't Work
+# Kas Neveikė
 
-## Use This Section For
+## Kam Naudoti Šį Skyrių
 
-- concepts that were tried and rejected;
-- parts that caused instability or interference;
-- software strategies that were too slow, too fragile, or too complex.
+- idėjoms, kurios buvo išbandytos ir atmestos;
+- detalėms, kurios sukėlė nestabilumą arba trikdžius;
+- programinės įrangos strategijoms, kurios buvo per lėtos, per trapios arba per sudėtingos.
 
-## Build Examples To Capture
+## Ką Verta Užfiksuoti
 
-- sensor positions that created blind spots;
-- steering settings that caused overshoot;
-- power paths that introduced resets or noisy readings;
-- navigation logic that was too complex for the `ESP32` to handle reliably.
+- jutiklių padėtis, kuri sukūrė aklas zonas;
+- vairo nustatymai, sukėlę per didelį persukimą;
+- maitinimo keliai, kurie kėlė persikrovimus arba triukšmingus rodmenis;
+- navigacijos logika, kuri buvo per sudėtinga, kad `ESP32` galėtų ją patikimai vykdyti.
 
-## Why This Matters
+## Kodėl Tai Svarbu
 
-Judges can see stronger engineering thinking when the team documents what was rejected and why.
+Teisėjai mato stipresnį inžinerinį mąstymą tada, kai komanda dokumentuoja, kas buvo atmesta ir kodėl.

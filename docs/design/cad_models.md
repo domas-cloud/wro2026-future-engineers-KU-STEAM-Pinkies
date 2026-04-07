@@ -1,18 +1,18 @@
-# CAD Models
+# CAD Modeliai
 
-## Files In This Repository
+## Šiame Repozitoriume Esantys Failai
 
 - `models/linkage.stl`
 - `models/middle gear_.stl`
 - `models/side gear.stl`
 
-## What These Files Represent
+## Ką Šie Failai Reiškia
 
-- `linkage.stl` supports the steering linkage path.
-- `middle gear_.stl` represents the main gear element in the steering mechanism.
-- `side gear.stl` represents the side gear elements that synchronize motion.
+- `linkage.stl` palaiko vairo traukės kelią;
+- `middle gear_.stl` vaizduoja pagrindinį pavarų mechanizmo elementą;
+- `side gear.stl` vaizduoja šonines pavaras, kurios sinchronizuoja judesį.
 
-## Documentation Goal
+## Dokumentacijos Tikslas
 
-The CAD section should connect each exported model to the physical mechanism and explain why the geometry matters.
-The repo should let another team rebuild the mechanism from the written description and the model files.
+CAD dalyje kiekvienas eksportuotas modelis turi būti susietas su fiziniu mechanizmu ir paaiškinta, kodėl geometrija yra svarbi.
+Repozitoriumas turi leisti kitai komandai atkurti mechanizmą iš rašytinio aprašymo ir modelių failų.

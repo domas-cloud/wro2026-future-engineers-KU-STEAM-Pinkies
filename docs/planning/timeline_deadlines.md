@@ -1,24 +1,24 @@
-# Timeline and Deadlines
+# Laiko Planas ir Terminai
 
-## Season Approach
+## Sezono Eiga
 
-We organize the work in stages:
+Darbus skaidome etapais:
 
-1. concept selection and early requirements;
-2. mechanical build and electronics integration;
-3. software integration;
-4. testing and iteration;
-5. documentation cleanup before submission.
+1. koncepcijos pasirinkimas ir ankstyvi reikalavimai;
+2. mechanikos surinkimas ir elektronikos integracija;
+3. programinės įrangos integracija;
+4. testavimas ir iteracijos;
+5. dokumentacijos sutvarkymas prieš pateikimą.
 
-## Why This Order
+## Kodėl Tokia Tvarka
 
-The mechanical layout and power path affect everything else, so those decisions should be stable before deep software tuning.
-Software work can start early, but the final tuning only makes sense once the robot behaves consistently in hardware.
+Mechaninė struktūra ir maitinimo kelias veikia viską kitą, todėl šie sprendimai turėtų būti stabilūs dar prieš rimtą programinės įrangos derinimą.
+Programavimo darbus galima pradėti anksčiau, bet galutinis derinimas prasmingas tik tada, kai robotas aparatūroje elgiasi stabiliai.
 
-## Documentation Milestones
+## Dokumentacijos Etapai
 
-- baseline repository structure completed;
-- core subsystem docs written;
-- CAD and wiring artifacts linked;
-- test notes and iteration history added;
-- final README checked for broken links and missing files.
+- bazinė repozitoriumo struktūra užbaigta;
+- parašyta pagrindinė posistemių dokumentacija;
+- susieti CAD ir laidų artefaktai;
+- pridėtos testų pastabos ir iteracijų istorija;
+- galutinis README patikrintas dėl neveikiančių nuorodų ir trūkstamų failų.

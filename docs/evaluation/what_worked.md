@@ -1,19 +1,19 @@
-# What Worked
+# Kas Veikė
 
-## Use This Section For
+## Kam Naudoti Šį Skyrių
 
-- the steering or control ideas that behaved well;
-- the sensor placements that provided useful data;
-- the software structure that made testing easier;
-- the mechanical choices that improved stability.
+- vairavimo arba valdymo idėjoms, kurios veikė gerai;
+- jutiklių padėtims, kurios pateikė naudingus duomenis;
+- programinės įrangos struktūrai, kuri palengvino testavimą;
+- mechaniniams sprendimams, kurie pagerino stabilumą.
 
-## Likely Successes To Report
+## Tikėtini Sėkmės Atvejai
 
-- `ESP32` handling the calculations while the `Raspberry Pi Zero` handled camera capture kept the roles clear;
-- `BNO085` improved heading awareness when mounted rigidly;
-- `VL53L5CX` improved local obstacle awareness;
-- `MG90S` steering stayed simple enough to tune and explain.
+- `ESP32` atliekami skaičiavimai, o `Raspberry Pi Zero` naudojamas kameros gavimui, aiškiai atskyrė vaidmenis;
+- standžiai pritvirtintas `BNO085` pagerino krypties suvokimą;
+- `VL53L5CX` pagerino vietinį kliūčių suvokimą;
+- `MG90S` vairavimas liko pakankamai paprastas, kad jį būtų galima derinti ir paaiškinti.
 
-## Documentation Rule
+## Dokumentacijos Taisyklė
 
-Only include items that are backed by real build or test experience.
+Įtraukk tik tuos punktus, kuriuos pagrindžia tikra surinkimo arba testavimo patirtis.

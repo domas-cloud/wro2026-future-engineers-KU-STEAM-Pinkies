@@ -1,37 +1,37 @@
-# Track Testing
+# Testai Trasos Sąlygomis
 
-## Purpose
+## Paskirtis
 
-Track testing validates the complete robot in conditions closer to the competition.
+Trasos testai patikrina visą robotą sąlygomis, artimesnėmis varžyboms.
 
-## What To Observe
+## Ką Stebėti
 
-- lane following consistency;
-- obstacle handling behavior;
-- steering stability across turns;
-- repeatability across multiple runs.
+- važiavimo juosta pastovumą;
+- elgesį įveikiant kliūtis;
+- vairo stabilumą posūkiuose;
+- pakartojamumą per kelis važiavimus.
 
-## Build-Specific Observations
+## Specifiniai Surinkimo Stebėjimai
 
-- whether the `MG90S` returns to center consistently;
-- whether the `N20` drive motor and `L298N` keep acceleration repeatable;
-- whether `VL53L5CX` readings remain usable near obstacles and reflective surfaces;
-- whether the `BNO085` helps stabilize heading after repeated turns.
+- ar `MG90S` nuosekliai grįžta į centrą;
+- ar `N20` variklis ir `L298N` išlaiko pakartojamą įsibėgėjimą;
+- ar `VL53L5CX` rodmenys išlieka naudingi šalia kliūčių ir atspindinčių paviršių;
+- ar `BNO085` padeda stabilizuoti kryptį po kelių posūkių.
 
-## Track Test Scenarios
+## Trasos Testų Scenarijai
 
-- straight lane follow on a clear segment;
-- left and right turns with repeated steering correction;
-- obstacle appearance and recovery on a short segment;
-- a full lap where the robot must repeat the same behavior several times.
+- tiesus važiavimas juosta aiškioje atkarpoje;
+- kairių ir dešinių posūkių kartojimas su pakartotine vairo korekcija;
+- kliūties atsiradimas ir atsigavimas trumpame ruože;
+- visas ratas, kuriame robotas turi kelis kartus pakartoti tą patį elgesį.
 
-## Evidence To Keep
+## Ką Išsaugoti
 
-- track layout or a short description of the course;
-- number of laps or repeats;
-- what failed or improved;
-- photos or video timestamp if available.
+- trasos išdėstymą arba trumpą jos aprašą;
+- ratų skaičių arba pakartojimų skaičių;
+- kas nepavyko arba kas pagerėjo;
+- nuotraukas arba video laiką, jei tokie yra.
 
-## Documentation Rule
+## Dokumentacijos Taisyklė
 
-Record the test setup, the conditions, and the observed behavior even when the robot still needs improvement.
+Užrašyk testų paruošimą, sąlygas ir stebėtą elgesį net tada, kai robotas dar nėra tobulas.

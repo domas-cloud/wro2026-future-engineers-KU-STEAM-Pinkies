@@ -1,20 +1,20 @@
-# Sensor Issues
+# Jutiklių Problemos
 
-## What To Log
+## Ką Registruoti
 
-- blind spots;
-- noisy readings;
-- miscalibration;
-- physical placement problems;
-- interference from the environment or other hardware.
+- aklas zonas;
+- triukšmingus rodmenis;
+- neteisingą kalibraciją;
+- fizinio išdėstymo problemas;
+- aplinkos arba kitos technikos trikdžius.
 
-## Build-Specific Examples
+## Specifiniai Pavyzdžiai
 
-- `BNO085` fusion drift before calibration;
-- `VL53L5CX` distance jumps caused by reflective surfaces;
-- camera framing that misses the lane edge;
-- sensor reads affected by vibration or cable routing.
+- `BNO085` sujungimo dreifas prieš kalibravimą;
+- `VL53L5CX` atstumo šuoliai dėl atspindinčių paviršių;
+- kameros kadras, kuris neapima juostos krašto;
+- jutiklių rodmenys, kuriuos veikia vibracija arba kabelių maršrutas.
 
-## Why It Matters
+## Kodėl Tai Svarbu
 
-Sensor problems often appear as software faults, so the fix log must explain what was actually changed.
+Jutiklių problemos dažnai atrodo kaip programinės įrangos klaidos, todėl pataisymų žurnale reikia aiškiai paaiškinti, kas iš tikrųjų buvo pakeista.

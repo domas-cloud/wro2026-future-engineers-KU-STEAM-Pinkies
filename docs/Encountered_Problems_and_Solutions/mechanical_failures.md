@@ -1,20 +1,20 @@
-# Mechanical Failures
+# Mechaniniai Gedimai
 
-## What To Log
+## Ką Registruoti
 
-- steering binding;
-- loose gears or mounts;
-- wheel alignment issues;
-- chassis flex;
-- part breakage.
+- vairo strigimą;
+- atsilaisvinusias pavaras arba tvirtinimus;
+- ratų lygiavimo problemas;
+- kėbulo lankstumą;
+- dalių lūžimą.
 
-## Build-Specific Failure Modes to Track
+## Specifiniai Gedimų Tipai, Kuriuos Verta Stebėti
 
-- `MG90S` horn or linkage slack;
-- `N20` mount shifting under load;
-- gear train misalignment;
-- sensor mounts vibrating loose.
+- `MG90S` svirties arba traukės laisvumą;
+- `N20` tvirtinimo pasislinkimą veikiant apkrovai;
+- pavarų sistemos nesutapimą;
+- atsilaisvinančius jutiklių tvirtinimus dėl vibracijos.
 
-## Fix Log Format
+## Pataisymų Žurnalo Forma
 
-For each issue, record the symptom, cause, fix, and the test that confirmed the fix.
+Kiekvienam atvejui užrašyk simptomą, priežastį, pataisymą ir testą, kuris patvirtino, kad pataisa veikia.

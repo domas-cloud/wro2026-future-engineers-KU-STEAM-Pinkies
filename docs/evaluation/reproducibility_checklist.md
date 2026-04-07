@@ -1,22 +1,22 @@
-# Reproducibility Checklist
+# Atkuriamumo Kontrolinis Sąrašas
 
-## Purpose
+## Paskirtis
 
-Use this checklist to verify that another team could rebuild the robot from the repository.
+Naudok šį sąrašą tam, kad patikrintum, ar kita komanda galėtų atkurti robotą iš repozitoriumo.
 
-## Checklist
+## Kontrolinis Sąrašas
 
-- the main robot concept is explained in the brainstorming docs;
-- the hardware stack is named with real component models;
-- the wiring and power path are described in text and diagrams;
-- the software architecture explains that the `Raspberry Pi Zero` is used for camera capture only and the `ESP32` performs the calculations and control;
-- the sensor placement is explained in relation to the chassis and the field;
-- the CAD files are linked and match the written description;
-- the repository contains team photos, vehicle photos, and a video reference;
-- the test logs show how the robot was checked and adjusted over time;
-- the problems log explains what failed and how it was fixed.
+- pagrindinė roboto idėja paaiškinta brainstorming skyriuose;
+- techninės įrangos komplektas įvardytas tikrais komponentų modeliais;
+- laidų ir maitinimo kelias aprašytas tekstu ir schemomis;
+- programinės įrangos architektūra aiškiai parodo, kad `Raspberry Pi Zero` naudojamas tik kameros gavimui, o `ESP32` atlieka skaičiavimus ir valdymą;
+- jutiklių išdėstymas paaiškintas kėbulo ir trasos atžvilgiu;
+- CAD failai susieti ir atitinka rašytinį aprašymą;
+- repozitoriume yra komandos nuotraukos, roboto nuotraukos ir video nuoroda;
+- testų žurnalai rodo, kaip robotas buvo tikrinamas ir koreguojamas laikui bėgant;
+- problemų žurnalas paaiškina, kas nepavyko ir kaip tai buvo pataisyta.
 
-## Evidence To Check
+## Įrodymų Sąrašas
 
 - `README.md`;
 - `docs/`;
@@ -27,6 +27,6 @@ Use this checklist to verify that another team could rebuild the robot from the 
 - `video/`;
 - `src/`.
 
-## Acceptance Rule
+## Priėmimo Taisyklė
 
-If any major subsystem cannot be identified from the repository, the reproducibility score drops because the build is no longer easy to reconstruct.
+Jei kurios nors svarbios posistemės repozitoriume negalima atpažinti, atkuriamumo įvertinimas krenta, nes surinkimą tampa sunkiau atkurti.

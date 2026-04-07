@@ -1,34 +1,34 @@
-# Performance Measurements
+# Našumo Matavimai
 
-## What To Measure
+## Ką Matuoti
 
-- lap consistency;
-- steering accuracy;
-- obstacle handling reliability;
-- recovery after an error or interruption.
+- rato stabilumą;
+- vairo tikslumą;
+- kliūčių įveikimo patikimumą;
+- atsigavimą po klaidos arba nutrūkimo.
 
-## Suggested Recording Template
+## Siūlomas Įrašymo Šablonas
 
-- test date;
-- robot version;
-- track setup;
-- sensor and power state;
-- qualitative result;
-- numeric result if available.
+- testavimo data;
+- roboto versija;
+- trasos konfigūracija;
+- jutiklių ir maitinimo būsena;
+- kokybinis rezultatas;
+- skaitinis rezultatas, jei toks yra.
 
-## Recommended Metrics
+## Rekomenduojami Rodikliai
 
-- steering center drift;
-- number of obstacle interventions per lap;
-- lap completion rate;
-- recovery time after a disturbance;
-- observed reset or brownout count.
+- vairo centro nuokrypis;
+- kliūčių intervencijų skaičius vienam ratui;
+- rato užbaigimo procentas;
+- atsigavimo laikas po trikdžio;
+- pastebėtų persikrovimų arba įtampos kritimų skaičius.
 
-## How To Use The Data
+## Kaip Naudoti Duomenis
 
-If a metric improves after a build change, record the change and the exact version that produced it.
-If the metric does not improve, keep the result anyway so later comparisons remain honest.
+Jei metrika pagerėja po konstrukcijos pakeitimo, užrašyk pakeitimą ir tikslią versiją, kuri tą pagerėjimą sukėlė.
+Jei metrika nepagerėja, rezultatą vis tiek palik, kad vėlesni palyginimai išliktų sąžiningi.
 
-## Current Approach
+## Dabartinis Požiūris
 
-If the repository does not yet contain numeric results, document the measurement method and record the numbers in a consistent format during the next test session.
+Jei repozitoriume dar nėra skaitinių rezultatų, aprašyk matavimo metodą ir kitame testavimo seanse užrašyk skaičius vienodu formatu.

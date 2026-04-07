@@ -1,24 +1,24 @@
-# PID Tuning
+# PID Derinimas
 
-## Why PID Matters
+## Kodėl PID Svarbus
 
-If the robot uses PID for steering or motion correction, the tuning should be documented because it directly affects track consistency.
+Jei robotas vairavimui arba judėjimo korekcijai naudoja PID, derinimą reikia dokumentuoti, nes jis tiesiogiai veikia važiavimo stabilumą trasoje.
 
-## What To Record
+## Ką Įrašyti
 
-- what variable is controlled;
-- what gains were adjusted;
-- what changed after tuning;
-- what symptoms indicated overcorrection or sluggish behavior.
+- kokia reikšmė valdoma;
+- kokie parametrai buvo koreguojami;
+- kas pasikeitė po derinimo;
+- kokie simptomai rodė per didelę korekciją arba vangų elgesį.
 
-## Tuning Workflow
+## Derinimo Eiga
 
-1. Set a safe baseline with conservative gains.
-2. Tune steering response first, because it affects lane tracking most directly.
-3. Check for overshoot, delay, and oscillation.
-4. Adjust drive-related corrections only after steering is stable.
-5. Repeat the test on the same track section so comparisons stay meaningful.
+1. Nustatyti saugų pradžios tašką su konservatyviais parametrais.
+2. Pirmiausia derinti vairo atsaką, nes jis tiesiogiai veikia važiavimą juosta.
+3. Tikrinti persikirtimą, vėlavimą ir svyravimą.
+4. Važiavimo korekcijas reguliuoti tik tada, kai vairas jau stabilus.
+5. Testą kartoti toje pačioje trasos vietoje, kad palyginimai išliktų prasmingi.
 
-## Current Status
+## Dabartinė Būsena
 
-If numeric tuning results are not yet available, the document should still describe the tuning method and the order in which parameters were changed.
+Jei skaitiniai derinimo rezultatai dar nėra prieinami, dokumente vis tiek reikia aprašyti derinimo metodą ir tvarką, kuria buvo keičiami parametrai.

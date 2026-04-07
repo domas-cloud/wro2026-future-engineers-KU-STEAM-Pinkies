@@ -1,23 +1,23 @@
-# Test Log Template
+# Testų Žurnalo Šablonas
 
-## Purpose
+## Paskirtis
 
-Use this file as the standard format for recording tests in the repository.
-It helps keep unit tests, track tests, and iteration notes consistent.
+Naudok šį failą kaip standartinį formatą testams registruoti repozitoriume.
+Jis padeda išlaikyti vienodą unit testų, bandymų trasoje ir iteracijų užrašų struktūrą.
 
-## Entry Format
+## Įrašo Forma
 
-- test id or name;
-- date;
-- build version;
-- subsystem;
-- setup;
-- expected result;
-- actual result;
-- pass or fail;
-- evidence link or photo/video reference;
-- follow-up action.
+- testo ID arba pavadinimas;
+- data;
+- surinkimo versija;
+- posistemė;
+- paruošimas;
+- tikėtinas rezultatas;
+- faktinis rezultatas;
+- pavyko arba nepavyko;
+- įrodymo nuoroda arba nuotraukos / video nuoroda;
+- tolimesnis veiksmas.
 
-## How To Use
+## Kaip Naudoti
 
-Copy this structure into the actual test notes and keep the entries short, factual, and tied to a specific robot version.
+Nukopijuok šią struktūrą į tikrus testų užrašus ir laikyk įrašus trumpus, faktinius bei susietus su konkrečia roboto versija.

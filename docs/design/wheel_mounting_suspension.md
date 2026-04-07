@@ -1,17 +1,17 @@
-# Wheel Mounting and Suspension Choices
+# Ratų Tvirtinimas ir Pakabos Pasirinkimai
 
-## Wheel Mounting
+## Ratų Tvirtinimas
 
-The wheels need to stay aligned under load and during turns.
-Secure mounting is important because wheel wobble becomes steering error.
+Ratai turi išlikti sulygiuoti veikiant apkrovai ir posūkių metu.
+Tvirtas tvirtinimas yra svarbus, nes ratų klibėjimas virsta vairavimo klaida.
 
-## Suspension Choice
+## Pakabos Pasirinkimas
 
-If the robot uses limited or no suspension, that choice should be stated explicitly and justified.
-For a competition robot, simplicity can be valid if it improves stiffness and predictability.
+Jei robotas naudoja ribotą pakabą arba jos nenaudoja, tai reikia aiškiai įvardyti ir pagrįsti.
+Varžybiniam robotui paprastumas gali būti teisingas pasirinkimas, jei jis pagerina standumą ir prognozuojamumą.
 
-## What To Document
+## Ką Dokumentuoti
 
-- wheel type and placement;
-- whether the robot is rigid or has compliance;
-- why that choice helps lane tracking and obstacle handling.
+- ratų tipą ir padėtį;
+- ar robotas yra standus, ar turi elastingumo;
+- kodėl toks sprendimas padeda važiavimui juosta ir kliūčių įveikimui.

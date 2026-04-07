@@ -1,15 +1,15 @@
-# Sensor Placement Strategy
+# Jutiklių Išdėstymo Strategija
 
-## Placement Logic
+## Išdėstymo Logika
 
-The camera, `BNO085`, and `VL53L5CX` should be placed according to what they need to observe.
+Kamera, `BNO085` ir `VL53L5CX` turi būti išdėstyti pagal tai, ką jiems reikia matyti.
 
-- Camera: positioned to see the lane and relevant obstacles.
-- `BNO085`: mounted rigidly near the robot's center of motion.
-- `VL53L5CX`: placed to cover the expected obstacle zones and blind spots.
+- Kamera: orientuota taip, kad matytų juostą ir svarbias kliūtis.
+- `BNO085`: standžiai sumontuotas netoli roboto judėjimo centro.
+- `VL53L5CX`: padėtas taip, kad dengtų tikėtinas kliūčių zonas ir aklas vietas.
 
-## What To Explain
+## Ką Paaiškinti
 
-- why the placement supports the field geometry;
-- what blind spots are still possible;
-- how placement changed during iteration.
+- kodėl išdėstymas tinka trasos geometrijai;
+- kokios aklos zonos vis dar galimos;
+- kaip išdėstymas keitėsi iteracijų metu.

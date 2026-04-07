@@ -1,19 +1,19 @@
-# Code Bugs
+# Kodo Klaidos
 
-## What To Log
+## Ką Registruoti
 
-- logic errors;
-- wrong state transitions;
-- communication problems between ESP32 and Pi Zero;
-- unsafe fallback behavior;
-- performance bottlenecks.
+- logikos klaidas;
+- neteisingus būsenų perėjimus;
+- ryšio problemas tarp `ESP32` ir Pi Zero;
+- nesaugų atsarginį elgesį;
+- našumo kliūtis.
 
-## Build-Specific Examples
+## Specifiniai Pavyzdžiai
 
-- serial message parsing errors between `ESP32` and `Raspberry Pi Zero`;
-- state machine not returning to lane follow after obstacle handling;
-- stale sensor values being reused after a camera pause.
+- serijinių žinučių nuskaitymo klaidos tarp `ESP32` ir `Raspberry Pi Zero`;
+- būsenų mašina po kliūties apdorojimo negrįžta į važiavimą juosta;
+- seni jutiklių duomenys vėl naudojami po kameros pauzės.
 
-## Fix Log Format
+## Pataisymų Žurnalo Forma
 
-Each bug should show the failing behavior, the root cause, the patch, and the verification step.
+Kiekviena klaida turi parodyti neveikiantį elgesį, priežastį, pataisą ir patikrinimo žingsnį.

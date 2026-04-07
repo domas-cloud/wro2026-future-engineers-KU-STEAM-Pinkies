@@ -1,25 +1,25 @@
-# Chassis Design
+# Kėbulo Konstrukcija
 
-## Chassis Goal
+## Kėbulo Tikslas
 
-The chassis must keep the robot rigid enough for steering accuracy while leaving enough room for electronics, sensors, and wiring.
+Kėbulas turi išlaikyti robotą pakankamai standų, kad vairavimas būtų tikslus, ir kartu palikti vietos elektronikai, jutikliams bei laidams.
 
-## Design Considerations
+## Konstrukciniai Svarstymai
 
-- low flex around the steering mount;
-- enough clearance for wheel travel;
-- secure mounting for batteries and compute boards;
-- easy access for maintenance and inspection.
+- kuo mažesnis lankstumas aplink vairo tvirtinimą;
+- pakankamas tarpas ratų judėjimui;
+- saugus akumuliatoriaus ir skaičiavimo plokščių tvirtinimas;
+- lengva prieiga priežiūrai ir patikrai.
 
-## Component Placement Logic
+## Komponentų Išdėstymo Logika
 
-- the `MG90S` should sit where the steering linkage stays short and direct;
-- the `N20` and `L298N` should be mounted so the drive path stays mechanically clean;
-- the `ESP32` and `Raspberry Pi Zero` should be positioned away from the highest-noise power path if possible;
-- the `BNO085` should be mounted rigidly and away from vibration sources where practical;
-- the `VL53L5CX` should have a clear line of sight toward the area it must observe.
+- `MG90S` turi būti ten, kur vairo traukė išlieka trumpa ir tiesi;
+- `N20` ir `L298N` turi būti sumontuoti taip, kad pavaros kelias išliktų mechaniškai tvarkingas;
+- `ESP32` ir `Raspberry Pi Zero` pageidautina išdėstyti kuo toliau nuo triukšmingiausios maitinimo šakos;
+- `BNO085` turi būti tvirtai pritvirtintas ir, kiek įmanoma, toliau nuo vibracijos šaltinių;
+- `VL53L5CX` turi turėti aiškų matymo lauką į sritį, kurią turi stebėti.
 
-## Why This Matters
+## Kodėl Tai Svarbu
 
-If the chassis flexes too much, the steering geometry and sensor alignment drift during movement.
-The documentation should therefore explain both structure and rigidity, not just appearance.
+Jei kėbulas per daug lankstosi, vairavimo geometrija ir jutiklių suderinimas judant pradeda kisti.
+Todėl dokumentacijoje reikia aiškinti ne tik išvaizdą, bet ir konstrukcijos standumą.

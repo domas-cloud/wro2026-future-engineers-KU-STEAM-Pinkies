@@ -1,52 +1,52 @@
-# Navigation Logic
+# Navigacijos Logika
 
-## Expected Behavior
+## Laukiamas Elgesys
 
-The robot should follow the lane, recognize relevant obstacles, and switch behavior when the field situation changes.
+Robotas turi sekti juostą, atpažinti svarbias kliūtis ir keisti elgseną, kai pasikeičia situacija trasoje.
 
-The navigation layer should combine camera data with `BNO085` and `VL53L5CX` inputs rather than relying on a single sensor stream.
+Navigacijos sluoksnis turi derinti kameros duomenis su `BNO085` ir `VL53L5CX` įvestimis, o ne pasikliauti tik vienu jutikliu.
 
-## High-Level Flow
+## Aukšto Lygio Eiga
 
-- sense the current scene on the `ESP32`;
-- decide whether lane following or obstacle handling has priority;
-- send steering and drive commands;
-- monitor for error conditions.
+- įvertinti esamą sceną `ESP32`;
+- nuspręsti, ar svarbiau važiavimas juosta, ar kliūties apdorojimas;
+- siųsti vairo ir važiavimo komandas;
+- stebėti klaidų būsenas.
 
-## Suggested State Model
+## Siūlomas Būsenų Modelis
 
-- `INIT` for hardware and sensor startup;
-- `LANE_FOLLOW` for normal driving;
-- `OBSTACLE_CHECK` for local distance confirmation;
-- `AVOID_OR_STOP` when the path is blocked or uncertain;
-- `RECOVER` when the lane becomes visible again.
+- `INIT` aparatūros ir jutiklių paleidimui;
+- `LANE_FOLLOW` normaliam važiavimui;
+- `OBSTACLE_CHECK` vietiniam atstumo patvirtinimui;
+- `AVOID_OR_STOP`, kai kelias užblokuotas arba neaiškus;
+- `RECOVER`, kai juosta vėl tampa matoma.
 
-## Transition Rules
+## Perėjimo Taisyklės
 
-- `INIT -> LANE_FOLLOW` when sensors and compute boards report ready;
-- `LANE_FOLLOW -> OBSTACLE_CHECK` when a nearby obstacle or boundary is detected;
-- `OBSTACLE_CHECK -> AVOID_OR_STOP` when the obstacle is confirmed;
-- `AVOID_OR_STOP -> RECOVER` when the path becomes safe again;
-- `RECOVER -> LANE_FOLLOW` when lane visibility and sensor confidence return to normal.
+- `INIT -> LANE_FOLLOW`, kai jutikliai ir skaičiavimo plokštės praneša, kad yra pasiruošusios;
+- `LANE_FOLLOW -> OBSTACLE_CHECK`, kai aptinkama artima kliūtis arba riba;
+- `OBSTACLE_CHECK -> AVOID_OR_STOP`, kai kliūtis patvirtinama;
+- `AVOID_OR_STOP -> RECOVER`, kai kelias vėl tampa saugus;
+- `RECOVER -> LANE_FOLLOW`, kai juostos matomumas ir jutiklių patikimumas grįžta į normą.
 
-## Behavior Notes
+## Elgsenos Pastabos
 
-- lane following should be the default state;
-- obstacle handling should temporarily override lane following;
-- the robot should return to lane following only after the path is clear and the sensor input is stable;
-- steering commands should be limited when the robot is in a recovery or uncertainty state.
+- važiavimas juosta turi būti numatytoji būsena;
+- kliūčių apdorojimas turi laikinai perimti prioritetą iš važiavimo juosta;
+- robotas turi grįžti į važiavimą juosta tik tada, kai kelias laisvas ir jutiklių įvestis stabili;
+- kai robotas yra atsigavimo arba neapibrėžtumo būsenoje, vairo komandos turi būti ribojamos.
 
-## Decision Inputs
+## Sprendimų Įvestys
 
-- camera data from the Raspberry Pi Zero;
-- `BNO085` for heading stability and motion awareness;
-- `VL53L5CX` for nearby obstacle confirmation;
-- communication health between the Raspberry Pi Zero and ESP32;
-- power or startup status if the robot exposes that to software.
+- kameros duomenys iš `Raspberry Pi Zero`;
+- `BNO085` krypties stabilumui ir judėjimo suvokimui;
+- `VL53L5CX` artimų kliūčių patvirtinimui;
+- ryšio būklė tarp `Raspberry Pi Zero` ir `ESP32`;
+- maitinimo arba paleidimo būsena, jei ją programinė įranga mato.
 
-## What The Documentation Must Show
+## Ką Turi Parodyti Dokumentacija
 
-- the decision sequence;
-- the state changes;
-- how obstacle handling interacts with lane following;
-- how the system recovers after an interruption.
+- sprendimų seką;
+- būsenų pokyčius;
+- kaip kliūčių apdorojimas sąveikauja su važiavimu juosta;
+- kaip sistema atsistato po nutrūkimo.

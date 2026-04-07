@@ -1,39 +1,39 @@
-# Control Algorithms
+# Valdymo Algoritmai
 
-## Architecture
+## Architektūra
 
-The control logic should separate perception from actuation:
+Valdymo logika turi atskirti suvokimą nuo vykdymo:
 
-- the Pi Zero captures and forwards camera data;
-- the ESP32 interprets camera and sensor information and drives the hardware.
-- the ESP32 receives control commands and drives the hardware.
+- `Raspberry Pi Zero` fiksuoja ir perduoda kamerų duomenis;
+- `ESP32` interpretuoja kameros ir jutiklių informaciją bei valdo techninę įrangą;
+- `ESP32` gauna valdymo komandas ir vykdo techninę įrangą.
 
-## Core Control Responsibilities
+## Pagrindinės Valdymo Atsakomybės
 
-- extract lane position or lane error from the camera input;
-- combine camera input with `BNO085` and `VL53L5CX` support signals;
-- convert the current error into a steering command;
-- limit steering changes so the robot does not oscillate;
-- reduce drive output when confidence is low or the robot is in recovery.
+- iš kamerų įvesties išskirti juostos padėtį arba juostos paklaidą;
+- kamerų įvestį sujungti su `BNO085` ir `VL53L5CX` pagalbiniais signalais;
+- esamą paklaidą paversti vairo komanda;
+- riboti vairo pokyčius, kad robotas nesiūbuotų;
+- mažinti važiavimo išėjimą, kai pasitikėjimas mažas arba robotas yra atsigavimo būsenoje.
 
-## Algorithm Types
+## Algoritmų Tipai
 
-- lane-following control;
-- steering correction;
-- obstacle response;
-- safety overrides when a sensor input looks invalid.
+- važiavimo juosta valdymas;
+- vairo korekcija;
+- reakcija į kliūtis;
+- saugos perrašymai, kai jutiklio įvestis atrodo neteisinga.
 
-## Preferred Behavior Stack
+## Pageidaujamas Elgsenos Rinkinys
 
-- camera input first for lane geometry;
-- inertial support for heading stability;
-- local distance sensing for obstacle confirmation;
-- state-machine logic for deciding whether to follow, avoid, slow down, or stop.
+- pirmiausia kamerų įvestis, kad būtų matoma juostos geometrija;
+- inercinė pagalba krypties stabilumui;
+- vietinis atstumo matavimas kliūties patvirtinimui;
+- būsenų mašinos logika sprendimui, ar sekti juostą, apvažiuoti, sulėtinti ar sustoti.
 
-## Documentation Notes
+## Dokumentacijos Pastabos
 
-If the team later chooses a different control method, the document should explain why that choice was better than the previous one and what evidence led to the change.
+Jei komanda vėliau pasirinks kitą valdymo metodą, dokumente reikia paaiškinti, kodėl tas pasirinkimas buvo geresnis už ankstesnį ir kokie įrodymai lėmė pokytį.
 
-## Documentation Requirement
+## Dokumentacijos Reikalavimas
 
-Explain the algorithm choice, the reason it fits the robot, and the failure cases it must handle.
+Paaiškink algoritmo pasirinkimą, kodėl jis tinka robotui, ir kokius gedimo atvejus jis turi valdyti.

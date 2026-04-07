@@ -1,13 +1,13 @@
-# Battery Selection
+# Akumuliatoriaus Pasirinkimas
 
-## Selection Criteria
+## Pasirinkimo Kriterijai
 
-- enough current for drive and electronics;
-- stable output under load;
-- physical size that fits the chassis;
-- safe handling and mounting;
-- simple charging and maintenance.
+- pakankama srovė pavarai ir elektronikai;
+- stabili išvestis veikiant apkrovai;
+- fizinis dydis, tinkantis kėbului;
+- saugus naudojimas ir tvirtinimas;
+- paprastas įkrovimas ir priežiūra.
 
-## Documentation Rule
+## Dokumentacijos Taisyklė
 
-The repository should explain why the chosen battery matches the robot's power needs instead of only listing its capacity.
+Repozitoriume reikia paaiškinti, kodėl pasirinktas akumuliatorius tinka roboto energijos poreikiams, o ne tik išvardyti jo talpą.

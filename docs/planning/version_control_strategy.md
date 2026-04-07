@@ -1,22 +1,22 @@
-# Version Control Strategy
+# Versijų Valdymo Strategija
 
-## Goal
+## Tikslas
 
-Use the repository as an engineering log, not as a dump of final files.
+Naudok repozitoriumą kaip inžinerinį žurnalą, o ne tik kaip galutinių failų saugyklą.
 
-## Commit Strategy
+## Komitų Strategija
 
-- Commit in meaningful steps, not only at the end.
-- Use messages that describe the change, such as `Added steering concept` or `Updated ToF placement`.
-- Keep mechanical, electrical, and software changes separate when possible.
+- Komituoti prasmingais žingsniais, o ne tik pabaigoje.
+- Naudoti pranešimus, kurie aprašo pakeitimą, pavyzdžiui, `Pridėta vairo koncepcija` arba `Atnaujinta ToF vieta`.
+- Mechaninius, elektrinius ir programinius pakeitimus, kai įmanoma, laikyti atskirai.
 
-## Branch Strategy
+## Šakų Strategija
 
-- Keep feature work on dedicated branches when possible.
-- Merge only when the change is coherent and documented.
-- Avoid mixing cleanup with functional changes in one commit.
+- Funkcinius darbus, kai įmanoma, laikyti atskirose šakose.
+- Sujungti tik tada, kai pakeitimas yra vientisas ir dokumentuotas.
+- Viename komite nesumaišyti valymo ir funkcinių pakeitimų.
 
-## Documentation Value
+## Dokumentacijos Vertė
 
-The commit history should show iteration, not just the final state.
-That history is part of the reproducibility score.
+Komitų istorija turi rodyti iteraciją, o ne tik galutinę būseną.
+Ši istorija yra atkuriamumo įvertinimo dalis.

@@ -1,26 +1,26 @@
-# Sensor List
+# Jutiklių Sąrašas
 
-## Sensors In Use
+## Naudojami Jutikliai
 
-- Camera for lane and obstacle perception.
-- `BNO085 9-DOF IMU` for orientation and motion stability.
-- `VL53L5CX` matrix ToF lidar for distance and obstacle awareness.
+- Kamera juostos ir kliūčių matymui.
+- `BNO085 9-DOF IMU` orientacijai ir judėjimo stabilumui.
+- `VL53L5CX` matricos ToF lidarui atstumui ir kliūčių suvokimui.
 
-## Role of Each Sensor
+## Kiekvieno Jutiklio Vaidmuo
 
-- The camera gives global track context.
-- The IMU helps stabilize motion and detect heading changes.
-- The ToF sensor provides short-range distance information that complements vision.
+- Kamera suteikia bendrą trasos vaizdą.
+- IMU padeda stabilizuoti judėjimą ir nustatyti krypties pokyčius.
+- ToF jutiklis pateikia artimo atstumo informaciją, kuri papildo vaizdą.
 
-## Build Notes
+## Surinkimo Pastabos
 
-- `BNO085` must be mounted rigidly so the fusion output reflects robot motion rather than board flex.
-- `VL53L5CX` placement must match the obstacle zone geometry and avoid blocked sight lines.
-- Camera framing and ToF coverage should be documented together because they solve different parts of the same navigation problem.
+- `BNO085` turi būti sumontuotas standžiai, kad sujungimo rezultatai atspindėtų roboto judėjimą, o ne plokštės lankstumą;
+- `VL53L5CX` padėtis turi atitikti kliūčių zonos geometriją ir neužstoti matymo linijų;
+- kameros kadras ir ToF aprėptis turi būti aprašyti kartu, nes jie sprendžia skirtingas tos pačios navigacijos problemos dalis.
 
-## Documentation Requirements
+## Dokumentacijos Reikalavimai
 
-- list the exact modules used;
-- explain where each sensor is mounted;
-- explain what each sensor contributes to the robot decision loop;
-- note any calibration or alignment requirements.
+- išvardyti tikslius naudojamus modulius;
+- paaiškinti, kur sumontuotas kiekvienas jutiklis;
+- paaiškinti, ką kiekvienas jutiklis prisideda prie roboto sprendimų ciklo;
+- nurodyti bet kokius kalibravimo ar suderinimo reikalavimus.

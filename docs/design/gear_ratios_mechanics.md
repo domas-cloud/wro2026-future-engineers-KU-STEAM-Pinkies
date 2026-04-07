@@ -1,17 +1,17 @@
-# Gear Ratios and Mechanics
+# Pavarų Santykiai ir Mechanika
 
-## Purpose
+## Paskirtis
 
-The gear train is part of the steering behavior, so it is not just a mechanical detail.
-Gear ratio affects steering speed, steering force, and how easy it is to control the wheels precisely.
+Pavarų sistema yra vairavimo elgsenos dalis, todėl tai nėra tik mechaninė detalė.
+Pavarų santykis veikia vairavimo greitį, vairo jėgą ir tai, kaip lengva tiksliai valdyti ratus.
 
-## What To Explain
+## Ką Paaiškinti
 
-- why the chosen ratio is appropriate;
-- whether the design favors force or speed;
-- how the ratio influences steering smoothness;
-- what changed between early and later iterations.
+- kodėl pasirinktas santykis yra tinkamas;
+- ar konstrukcija labiau orientuota į jėgą, ar į greitį;
+- kaip santykis veikia vairavimo sklandumą;
+- kas pasikeitė tarp ankstyvų ir vėlesnių iteracijų.
 
-## Current Documentation Approach
+## Dabartinis Dokumentacijos Požiūris
 
-Because the repository should not invent measured results, this section should describe the reasoning used to select the ratio and then attach real measurements once testing is complete.
+Kadangi repozitoriume negalima išgalvoti matuotų rezultatų, šioje dalyje reikia aprašyti pasirinkto santykio logiką, o realius matavimus pridėti tik užbaigus testavimą.

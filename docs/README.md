@@ -1,39 +1,39 @@
-# Documentation Index
+# Dokumentacijos Indeksas
 
-This folder contains the engineering documentation for the robot.
+Šiame aplanke saugoma roboto inžinerinė dokumentacija.
 
-## Main Sections
+## Pagrindiniai Skyriai
 
-- [Brainstorming](brainstorming/problem_identification.md)
-- [Planning](planning/timeline_deadlines.md)
-- [Hardware](hardware/electronics_overview.md)
-- [Mechanical Design](design/chassis_design.md)
-- [Power Management](power_management/power_distribution.md)
-- [Software](code/code_architecture.md)
-- [Testing](testing/test_log_template.md)
-- [Evaluation](evaluation/reproducibility_checklist.md)
-- [Problems and Fixes](Encountered_Problems_and_Solutions/solutions_fix_log.md)
+- [Idėjų generavimas](brainstorming/problem_identification.md)
+- [Planavimas](planning/timeline_deadlines.md)
+- [Techninė įranga](hardware/electronics_overview.md)
+- [Mechaninė konstrukcija](design/chassis_design.md)
+- [Maitinimo valdymas](power_management/power_distribution.md)
+- [Programinė įranga](code/code_architecture.md)
+- [Testavimas](testing/test_log_template.md)
+- [Vertinimas](evaluation/reproducibility_checklist.md)
+- [Problemos ir sprendimai](Encountered_Problems_and_Solutions/solutions_fix_log.md)
 
-## Hardware Quick Links
+## Greitos Nuorodos Į Techniką
 
-- [Parts List](hardware/parts_list.md)
-- [Sensor List](hardware/sensor_list.md)
-- [PCB / Wiring Diagrams](hardware/pcb_wiring_diagrams.md)
+- [Dalių sąrašas](hardware/parts_list.md)
+- [Jutiklių sąrašas](hardware/sensor_list.md)
+- [PCB / laidų schemos](hardware/pcb_wiring_diagrams.md)
 
-## Code Quick Links
+## Greitos Nuorodos Į Kodą
 
-- [Message Protocol](code/message_protocol.md)
-- [Navigation Logic](code/navigation_logic.md)
-- [Safety and Fail-safes](code/safety_failsafes.md)
+- [Žinučių protokolas](code/message_protocol.md)
+- [Navigacijos logika](code/navigation_logic.md)
+- [Saugos ir apsaugos mechanizmai](code/safety_failsafes.md)
 
-## Testing Quick Links
+## Greitos Nuorodos Į Testavimą
 
-- [Test Log Template](testing/test_log_template.md)
-- [Track Testing](testing/track_testing.md)
-- [Performance Measurements](testing/performance_measurements.md)
+- [Testų žurnalo šablonas](testing/test_log_template.md)
+- [Testai trasoje](testing/track_testing.md)
+- [Našumo matavimai](testing/performance_measurements.md)
 
-## Evaluation Quick Links
+## Greitos Nuorodos Į Vertinimą
 
-- [Reproducibility Checklist](evaluation/reproducibility_checklist.md)
-- [Final Performance](evaluation/final_performance.md)
-- [What Worked](evaluation/what_worked.md)
+- [Atkuriamumo kontrolinis sąrašas](evaluation/reproducibility_checklist.md)
+- [Galutinis našumas](evaluation/final_performance.md)
+- [Kas veikė](evaluation/what_worked.md)

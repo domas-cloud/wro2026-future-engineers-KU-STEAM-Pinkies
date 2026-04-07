@@ -1,18 +1,18 @@
-# Electromechanical Diagrams
+# Elektromechaninės Schemos
 
-This folder contains the robot's electrical and mechanical diagram material.
+Šiame aplanke saugoma roboto elektros ir mechaninių schemų medžiaga.
 
-## Main Files
+## Pagrindiniai Failai
 
-- [Wiring Overview](wiring_overview.md)
+- [Laidų apžvalga](wiring_overview.md)
 
-## Expected Diagram Content
+## Ką Turi Rodyti Schema
 
-- all electronic components;
-- all motors and actuators;
-- power rails and regulators;
-- signal connections between the `ESP32`, `Raspberry Pi Zero`, camera, `BNO085`, `VL53L5CX`, `MG90S`, and `N20` drive stage.
+- visi elektroniniai komponentai;
+- visi varikliai ir vykdikliai;
+- maitinimo šakos ir reguliatoriai;
+- signalų ryšiai tarp `ESP32`, `Raspberry Pi Zero`, kameros, `BNO085`, `VL53L5CX`, `MG90S` ir `N20` pavaros.
 
-## Use
+## Kaip Naudoti
 
-Start with [Wiring Overview](wiring_overview.md) for the textual system map before adding the final diagram files.
+Pirmiausia perskaityk [Laidų apžvalgą](wiring_overview.md), kad matytum tekstinį sistemos žemėlapį prieš pridedant galutines schemas.

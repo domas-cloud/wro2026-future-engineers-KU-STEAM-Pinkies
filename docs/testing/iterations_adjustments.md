@@ -1,42 +1,42 @@
-# Iterations and Adjustments
+# Iteracijos ir Koregavimai
 
-## Purpose
+## Paskirtis
 
-This section records how the robot changed over time.
+Ši dalis registruoja, kaip robotas keitėsi laikui bėgant.
 
-## What To Include
+## Ką Įtraukti
 
-- what was tried in version 1;
-- what failed or underperformed;
-- what changed in version 2 or 3;
-- what test result motivated each change.
+- kas buvo bandoma 1 versijoje;
+- kas nepavyko arba veikė prasčiau;
+- kas pasikeitė 2 ar 3 versijoje;
+- koks testo rezultatas paskatino kiekvieną pakeitimą.
 
-## Iteration Examples For This Build
+## Iteracijų Pavyzdžiai Šiam Robotui
 
-- steering geometry adjusted after servo range testing;
-- sensor position shifted after blind-spot checks;
-- power routing improved after brownout or noise observations;
-- software thresholds tuned after repeated track runs.
+- vairo geometrija pakoreguota po servo judesio diapazono testų;
+- jutiklio padėtis perkelta po aklų zonų patikrinimų;
+- maitinimo maršrutas patobulintas po įtampos kritimų arba triukšmo stebėjimų;
+- programinės įrangos slenksčiai sureguliuoti po kelių važiavimų trasoje.
 
-## What A Good Iteration Record Looks Like
+## Kaip Atrodo Geras Iteracijos Įrašas
 
-- version number or build name;
-- what changed physically or in software;
-- why the change was made;
-- what observation or test result triggered it;
-- whether the next build improved or regressed.
+- versijos numeris arba surinkimo pavadinimas;
+- kas pasikeitė fiziškai arba programoje;
+- kodėl pakeitimas buvo atliktas;
+- kokia pastaba arba testo rezultatas jį paskatino;
+- ar kita versija pagerėjo, ar pablogėjo.
 
-## Suggested Record Format
+## Siūlomas Įrašo Formatas
 
-- build name;
-- date;
-- subsystem changed;
-- problem observed;
-- change made;
-- test result after the change;
-- follow-up action if the issue still exists.
+- surinkimo pavadinimas;
+- data;
+- pakeista posistemė;
+- pastebėta problema;
+- atliktas pakeitimas;
+- testo rezultatas po pakeitimo;
+- tolimesnis veiksmas, jei problema vis dar egzistuoja.
 
-## Why This Matters
+## Kodėl Tai Svarbu
 
-Iteration is one of the strongest signals of real engineering work.
-The repository should make that process visible.
+Iteracijos yra vienas stipriausių tikros inžinerijos darbo ženklų.
+Repozitoriumas turėtų tą procesą padaryti matomą.

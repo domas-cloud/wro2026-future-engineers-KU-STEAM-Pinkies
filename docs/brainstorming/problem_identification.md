@@ -1,25 +1,25 @@
-# Problem Identification
+# Problemos Identifikavimas
 
-## What We Needed To Solve
+## Ką Reikėjo Išspręsti
 
-The robot had to move reliably on a structured track, follow the lane, recognize obstacles, and remain controllable across repeated runs.
-That means the main problem was not just building a moving car, but balancing steering accuracy, driving stability, sensor coverage, and compute latency in one system.
+Robotas turėjo patikimai judėti struktūruota trasa, sekti juostą, atpažinti kliūtis ir išlikti valdomas per pakartotinius važiavimus.
+Taigi pagrindinė problema buvo ne tik sukurti važiuojantį automobilį, bet ir subalansuoti vairo tikslumą, važiavimo stabilumą, jutiklių aprėptį bei skaičiavimų delsą vienoje sistemoje.
 
-## Main Constraints
+## Pagrindiniai Apribojimai
 
-- Limited on-robot compute and power.
-- Need for precise steering without excessive mechanical backlash.
-- Need to detect obstacles and track features without overcomplicating the build.
-- Need for documentation that another team can actually reproduce.
+- Ribota robote esanti skaičiavimo galia ir energija.
+- Reikia tikslaus vairavimo be per didelio mechaninio laisvumo.
+- Reikia aptikti kliūtis ir trasos ypatybes neapsunkinant konstrukcijos.
+- Reikia dokumentacijos, kurią kita komanda galėtų realiai atkurti.
 
-## Why This Matters
+## Kodėl Tai Svarbu
 
-In Future Engineers, small errors in steering, sensor placement, or control timing can cascade into missed turns or obstacle collisions.
-The documentation therefore focuses on design decisions, not only the final shape of the robot.
+Future Engineers varžybose maži vairo, jutiklių padėties ar valdymo laiko netikslumai gali baigtis praleistais posūkiais arba susidūrimais su kliūtimis.
+Todėl dokumentacijoje daugiau dėmesio skiriama sprendimams, o ne tik galutinei roboto formai.
 
-## Success Criteria
+## Sėkmės Kriterijai
 
-- Robot can follow the lane and handle obstacles in a repeatable way.
-- Steering is mechanically stable and electronically controllable.
-- Power and sensor layout support the full system without interference.
-- The repository shows how the robot evolved, not only the final version.
+- Robotas gali pakartojamai sekti juostą ir įveikti kliūtis.
+- Vairavimas yra mechaniškai stabilus ir elektroniškai valdomas.
+- Maitinimo ir jutiklių išdėstymas palaiko visą sistemą be trikdžių.
+- Repozitoriumas parodo, kaip robotas vystėsi, o ne tik galutinę versiją.

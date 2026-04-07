@@ -1,37 +1,37 @@
-# Electronics Overview
+# Elektronikos Apžvalga
 
-## System Split
+## Sistemos Padalijimas
 
-The robot uses two main compute layers:
+Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
 
-- Raspberry Pi Zero for camera capture only;
-- ESP32 for calculations, control, and timing-sensitive tasks.
+- `Raspberry Pi Zero` tik kameros duomenims;
+- `ESP32` visiems skaičiavimams, valdymui ir laikui jautrioms užduotims.
 
-## Functional Boundaries
+## Funkcinės Ribos
 
-- the `Raspberry Pi Zero` handles camera capture only;
-- the `ESP32` handles calculations, steering output, motor control, and fast safety response;
-- the camera feed is the Pi Zero input; the `BNO085` and `VL53L5CX` are read by the `ESP32`;
-- the battery and regulators provide clean power, not behavior.
+- `Raspberry Pi Zero` atlieka tik kameros gavimą;
+- `ESP32` atlieka skaičiavimus, vairo išėjimą, variklio valdymą ir greitą saugos reakciją;
+- kameros srautas yra Pi Zero įvestis, o `BNO085` ir `VL53L5CX` skaito `ESP32`;
+- baterija ir reguliatoriai tiekia švarią energiją, o ne elgseną.
 
-## Main Electrical Blocks
+## Pagrindiniai Elektriniai Blokai
 
-- `L298N H-bridge` for the `N20` drive motor;
-- `MG90S` steering servo;
-- camera on the `Raspberry Pi Zero`;
+- `L298N H-bridge` skirtas `N20` varikliui;
+- `MG90S` vairo servomechanizmas;
+- kamera `Raspberry Pi Zero`;
 - `BNO085 9-DOF IMU`;
-- `VL53L5CX` matrix ToF lidar;
-- power regulation and distribution.
+- `VL53L5CX` matricos ToF lidar;
+- maitinimo reguliavimas ir paskirstymas.
 
-## Design Intent
+## Projektavimo Tikslas
 
-The electronics architecture should keep the control stack understandable:
+Elektronikos architektūra turi išlaikyti valdymo grandinę lengvai suprantamą:
 
-- Pi Zero provides camera input;
-- ESP32 makes the driving decisions and executes actuator commands;
-- sensors provide navigation context and safety data directly to the ESP32;
-- the battery pack supplies motor power while logic rails are regulated separately.
+- Pi Zero pateikia kameros įvestį;
+- `ESP32` priima važiavimo sprendimus ir vykdo vykdiklių komandas;
+- jutikliai tiesiogiai teikia navigacijos kontekstą ir saugos duomenis `ESP32`;
+- akumuliatorių paketas tiekia variklio galią, o loginės šakos yra reguliuojamos atskirai.
 
-## Documentation Output
+## Dokumentacijos Rezultatas
 
-This section should be backed by wiring diagrams and a clear connection list in `schemes/`.
+Ši dalis turi būti pagrįsta laidų schemomis ir aiškiu ryšių sąrašu aplanke `schemes/`.

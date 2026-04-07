@@ -1,24 +1,24 @@
-# Solutions and Fix Log
+# Sprendimų ir Pataisymų Žurnalas
 
-## Purpose
+## Paskirtis
 
-This is the chronological record of problems and the changes made to solve them.
+Tai chronologinis problemų ir jų sprendimui atliktų pakeitimų žurnalas.
 
-## Recommended Entry Format
+## Rekomenduojama Įrašo Forma
 
-- date or build version;
-- problem summary;
-- subsystem affected;
-- fix applied;
-- how the fix was verified.
+- data arba surinkimo versija;
+- problemos santrauka;
+- paveikta posistemė;
+- pritaikytas pataisymas;
+- kaip pataisymas buvo patikrintas.
 
-## Common Fix Log Entries
+## Dažniausi Pataisymų Įrašai
 
-- steering alignment fix;
-- sensor relocation;
-- power rail stabilization;
-- software state-machine patch.
+- vairo suderinimo pataisa;
+- jutiklio vietos pakeitimas;
+- maitinimo šakos stabilizavimas;
+- programinės įrangos būsenų mašinos pataisa.
 
-## Documentation Value
+## Dokumentacijos Vertė
 
-This log turns troubleshooting into evidence of engineering iteration.
+Šis žurnalas paverčia gedimų paiešką aiškiu inžinerinės iteracijos įrodymu.

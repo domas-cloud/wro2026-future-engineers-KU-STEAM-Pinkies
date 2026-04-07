@@ -1,20 +1,20 @@
-# Noise Reduction and Filtering
+# Triukšmo Mažinimas ir Filtravimas
 
-## Sources of Noise
+## Triukšmo Šaltiniai
 
-- motor switching noise;
-- servo load transients;
-- sensor signal variation;
-- shared ground and wiring interference.
+- variklio perjungimo triukšmas;
+- servomechanizmo apkrovos šuoliai;
+- jutiklių signalo svyravimai;
+- bendros žemės ir laidų trikdžiai.
 
-## Mitigation Approach
+## Mažinimo Būdas
 
-- separate sensitive signal wiring from high-current paths where possible;
-- keep wiring short and organized;
-- use filtering and regulation where required;
-- verify sensor stability after the full robot is powered.
+- kiek įmanoma atskirti jautrius signalų laidus nuo didelės srovės kelių;
+- laidus laikyti trumpus ir tvarkingus;
+- kur reikia, naudoti filtravimą ir reguliavimą;
+- patikrinti jutiklių stabilumą po pilno roboto įjungimo.
 
-## Why This Matters
+## Kodėl Tai Svarbu
 
-Noise can cause unstable steering or unreliable obstacle detection.
-The documentation should show that this was considered during design, not only after failure.
+Triukšmas gali sukelti nestabilų vairavimą arba nepatikimą kliūčių aptikimą.
+Dokumentacijoje turi būti matyti, kad tai buvo apgalvota dar projektavimo metu, o ne tik po gedimo.

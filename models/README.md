@@ -1,14 +1,14 @@
-# CAD Models
+# CAD Modeliai
 
-This folder contains the exported model files for the steering mechanism and related parts.
+Šiame aplanke saugomi eksportuoti vairo mechanizmo ir susijusių detalių modeliai.
 
-## Files
+## Failai
 
 - `linkage.stl`
 - `middle gear_.stl`
 - `side gear.stl`
 
-## Purpose
+## Paskirtis
 
-These files support the steering system documentation and the reproducibility checklist.
-If the geometry changes, update the corresponding design docs so the text and models stay aligned.
+Šie failai padeda pagrįsti vairo sistemos dokumentaciją ir atkuriamumo kontrolinį sąrašą.
+Jei geometrija pasikeičia, atnaujink ir atitinkamus konstrukcinius dokumentus, kad tekstas ir modeliai išliktų suderinti.

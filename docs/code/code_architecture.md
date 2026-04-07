@@ -1,75 +1,75 @@
-# Code Architecture
+# Programos Architektūra
 
-## Intended Separation
+## Numatyta Atskirtis
 
-- camera capture layer on the Raspberry Pi Zero;
-- control and actuation layer on the ESP32;
-- shared interface for commands, sensor readings, and safety states.
+- kameros gavimo sluoksnis veikia `Raspberry Pi Zero`;
+- valdymo ir vykdiklių sluoksnis veikia `ESP32`;
+- bendras sąsajos sluoksnis komandų, jutiklių rodmenų ir saugos būsenų perdavimui.
 
-## Module Map
+## Modulių Žemėlapis
 
 - `camera`:
-  - camera capture on the Raspberry Pi Zero;
-  - frame forwarding to the ESP32;
-  - capture health handling.
+  - kameros gavimas `Raspberry Pi Zero`;
+  - kadrų perdavimas į `ESP32`;
+  - kameros ryšio būklės stebėjimas.
 - `sensing`:
-  - `BNO085` orientation and motion input on the ESP32;
-  - `VL53L5CX` distance frames on the ESP32;
-  - sensor health checks and simple filtering.
+  - `BNO085` orientacijos ir judėjimo duomenys `ESP32` pusėje;
+  - `VL53L5CX` atstumo kadrai `ESP32` pusėje;
+  - jutiklių būklės tikrinimas ir paprastas filtravimas.
 - `control`:
-  - steering correction;
-  - drive output shaping;
-  - state-machine based behavior selection;
-  - all calculations on the ESP32.
+  - vairo korekcija;
+  - važiavimo išėjimo formavimas;
+  - būsenų mašinos pagrindu veikiantis elgsenos pasirinkimas;
+  - visi skaičiavimai `ESP32` pusėje.
 - `communication`:
-  - Pi Zero to ESP32 camera-data messages;
-  - acknowledgements or heartbeat messages if used;
-  - safe fallback when the link pauses.
+  - kamerinių duomenų žinutės iš Pi Zero į `ESP32`;
+  - patvirtinimo arba „heartbeat“ žinutės, jei jos naudojamos;
+  - saugus atsarginis elgesys nutrūkus ryšiui.
 
-## Interface Contract
+## Sąsajos Sutartis
 
-The inter-board message should carry the minimum information needed to deliver camera data reliably:
+Tarp plokščių siunčiama žinutė turi nešti tik tiek informacijos, kiek reikia patikimam kamerinių duomenų perdavimui:
 
-- camera frame or camera observation data;
-- frame timestamp or sequence counter;
-- capture status;
-- a short health indicator if the link supports it.
+- kameros kadro arba stebėjimo duomenys;
+- kadro laiko žyma arba sekos numeris;
+- užfiksavimo būsena;
+- trumpas būklės indikatorius, jei ryšys tai palaiko.
 
-The exact transport can vary, but the purpose should stay the same: the Pi Zero supplies camera data and the ESP32 handles the calculations.
+Tikslus transportas gali skirtis, bet paskirtis turi likti ta pati: `Raspberry Pi Zero` tiekia kameros duomenis, o `ESP32` atlieka visus skaičiavimus.
 
-## Data Flow
+## Duomenų Srautas
 
-1. Camera data is captured on the Raspberry Pi Zero.
-2. The Pi Zero forwards the camera data to the ESP32.
-3. The ESP32 processes camera, IMU, and distance sensor input.
-4. The ESP32 chooses a behavior state such as lane follow or obstacle handling.
-5. The ESP32 converts those decisions into `MG90S` steering output and `L298N` motor control.
-6. The ESP32 keeps checking sensor validity and can drop into a safe state if the inputs are unreliable.
+1. Kameros duomenys užfiksuojami `Raspberry Pi Zero`.
+2. Pi Zero perduoda kameros duomenis į `ESP32`.
+3. `ESP32` apdoroja kameros, IMU ir atstumo jutiklių informaciją.
+4. `ESP32` pasirenka elgsenos būseną, pavyzdžiui, važiavimą juosta arba kliūties apvažiavimą.
+5. `ESP32` paverčia šiuos sprendimus į `MG90S` vairo išėjimą ir `L298N` variklio valdymą.
+6. `ESP32` toliau tikrina jutiklių patikimumą ir, jei įvestys nepatikimos, gali pereiti į saugią būseną.
 
-## Why This Structure
+## Kodėl Tokia Struktūra
 
-This split keeps the system understandable and reduces the chance that one function becomes responsible for everything.
-It also makes the repository easier to reproduce because each layer has a clear responsibility.
+Toks padalijimas padeda sistemą išlaikyti suprantamą ir sumažina riziką, kad viena funkcija bus atsakinga už viską.
+Be to, taip repozitoriumą lengviau atkurti, nes kiekvienas sluoksnis turi aiškią atsakomybę.
 
-## What Should Be Included
+## Ką Reikia Įtraukti
 
-- module list;
-- data flow diagram;
-- startup sequence;
-- error handling and recovery behavior.
+- modulių sąrašą;
+- duomenų srauto diagramą;
+- paleidimo seką;
+- klaidų valdymą ir atsigavimo elgseną.
 
-## Startup Sequence
+## Paleidimo Seką
 
-- initialize compute boards;
-- bring up the camera capture path and sensor buses;
-- check `BNO085` and `VL53L5CX` readiness on the ESP32;
-- confirm camera data flow between `Raspberry Pi Zero` and `ESP32`;
-- set `MG90S` steering to center;
-- keep the `N20` drive output disabled until the system is ready.
+- inicializuoti skaičiavimo plokštes;
+- aktyvuoti kameros gavimo kelią ir jutiklių magistrales;
+- `ESP32` pusėje patikrinti `BNO085` ir `VL53L5CX` pasirengimą;
+- patvirtinti kameros duomenų srautą tarp `Raspberry Pi Zero` ir `ESP32`;
+- nustatyti `MG90S` į centrinę padėtį;
+- `N20` išėjimą laikyti išjungtą, kol sistema bus pasiruošusi.
 
-## Error Handling
+## Klaidos Valdymas
 
-- if camera data is missing, keep the robot in a safe idle or hold state;
-- if sensor input is missing, use the safest available behavior instead of guessing;
-- if the camera link drops, the ESP32 should stop or hold the last safe state according to the chosen safety policy;
-- if the startup sequence does not complete, do not arm the drive motor.
+- jei kameros duomenų nėra, robotas turi likti saugioje budėjimo arba laikymo būsenoje;
+- jei trūksta jutiklių įvesties, reikia rinktis saugiausią galimą elgseną, o ne spėlioti;
+- jei kameros ryšys nutrūksta, `ESP32` turėtų sustoti arba laikyti paskutinę saugią būseną pagal pasirinktą saugos politiką;
+- jei paleidimo seka nebaigiama, variklio įjungti negalima.

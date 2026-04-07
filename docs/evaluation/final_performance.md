@@ -1,20 +1,20 @@
-# Final Performance
+# Galutinis Našumas
 
-## Purpose
+## Paskirtis
 
-Summarize the final robot behavior after the main round of testing and iteration.
+Apibendrinti galutinį roboto elgesį po pagrindinio testavimo ir iteracijų etapo.
 
-## What To Include
+## Ką Įtraukti
 
-- final stability of steering;
-- obstacle handling behavior;
-- any remaining limitations;
-- what the team would improve next.
+- galutinį vairo stabilumą;
+- elgesį įveikiant kliūtis;
+- likusius apribojimus;
+- ką komanda norėtų patobulinti toliau.
 
-## Evidence Basis
+## Įrodymų Pagrindas
 
-Write this section from the latest test logs, final build photos, and the last successful driving videos.
+Šį skyrių rašyk remdamasis naujausiais testų žurnalais, galutinėmis surinkimo nuotraukomis ir paskutiniais sėkmingais važiavimo video.
 
-## Reporting Rule
+## Ataskaitos Taisyklė
 
-If numeric results are not available yet, summarize the latest successful tests honestly and note that the exact metrics will be added later.
+Jei skaitinių rezultatų dar nėra, sąžiningai apibendrink naujausius sėkmingus testus ir pažymėk, kad tikslūs rodikliai bus pridėti vėliau.

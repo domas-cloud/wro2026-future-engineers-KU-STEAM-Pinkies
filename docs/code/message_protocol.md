@@ -1,30 +1,30 @@
-# Message Protocol
+# Žinučių Protokolas
 
-## Purpose
+## Paskirtis
 
-This document describes the message boundary between the `Raspberry Pi Zero` and `ESP32`.
+Šis dokumentas aprašo žinučių ribą tarp `Raspberry Pi Zero` ir `ESP32`.
 
-## Suggested Message Content
+## Siūlomas Žinutės Turinys
 
-- requested behavior state;
-- steering target or steering correction;
-- drive enable flag;
-- drive intensity or speed request;
-- confidence or safety flag;
-- sequence counter or heartbeat if the implementation uses one.
+- prašoma elgsenos būsena;
+- vairo tikslas arba vairo korekcija;
+- važiavimo įjungimo žyma;
+- važiavimo stiprumas arba greičio prašymas;
+- pasitikėjimo arba saugos žyma;
+- sekos skaitiklis arba „heartbeat“, jei įgyvendinimas jį naudoja.
 
-## Responsibilities
+## Atsakomybės
 
-- the Raspberry Pi Zero computes what the robot wants to do;
-- the ESP32 executes the command and applies low-level safety checks;
-- the physical link is documented in the wiring overview.
+- `Raspberry Pi Zero` apskaičiuoja, ko robotas nori imtis;
+- `ESP32` įvykdo komandą ir taiko žemo lygio saugos patikras;
+- fizinis ryšys aprašytas laidų apžvalgoje.
 
-## Reliability Notes
+## Patikimumo Pastabos
 
-- stale messages should not be treated as new commands;
-- if the command stream pauses, the ESP32 should enter a safe hold or stop behavior according to the selected policy;
-- each message should be distinguishable from the previous one.
+- seni pranešimai neturi būti laikomi naujomis komandomis;
+- jei komandų srautas sustoja, `ESP32` pagal pasirinktą politiką turi pereiti į saugų laikymo arba stabdymo režimą;
+- kiekviena žinutė turi būti aiškiai atskiriama nuo ankstesnės.
 
-## Documentation Use
+## Naudojimas Dokumentacijoje
 
-When the team adds code, this file should match the actual command fields and the startup handshake.
+Kai komanda pridės kodą, šis failas turi sutapti su tikrais komandų laukais ir paleidimo „handshake“.

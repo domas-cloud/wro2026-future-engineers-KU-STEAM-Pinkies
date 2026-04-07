@@ -1,17 +1,17 @@
-# Task Distribution
+# Užduočių Paskirstymas
 
-## Principle
+## Principas
 
-Work is divided by subsystem so that the team can update one part of the robot without confusing the others.
+Darbas skirstomas pagal posistemes, kad komanda galėtų atnaujinti vieną roboto dalį nesupainiodama kitų.
 
-## Suggested Ownership
+## Siūloma Atsakomybė
 
-- Mechanical work: chassis, steering, gear train, wheel mounting, CAD.
-- Electronics work: wiring, power distribution, sensor integration.
-- Software work: perception, state logic, control, safety handling.
-- Documentation work: README maintenance, file linking, test notes, evidence capture.
+- mechaniniai darbai: kėbulas, vairas, pavarų sistema, ratų tvirtinimas, CAD;
+- elektronikos darbai: laidai, maitinimo paskirstymas, jutiklių integracija;
+- programinės įrangos darbai: suvokimas, būsenų logika, valdymas, saugos elgsena;
+- dokumentacijos darbai: README palaikymas, failų susiejimas, testų užrašai, įrodymų rinkimas.
 
-## Why This Helps
+## Kodėl Tai Padeda
 
-Subsystem ownership makes it easier to trace design decisions and also helps prevent duplicated work.
-It also makes the documentation easier to keep aligned with the real build.
+Atsakomybė pagal posistemes padeda lengviau sekti projektavimo sprendimus ir sumažina dubliuoto darbo riziką.
+Taip pat lengviau išlaikyti dokumentaciją suderintą su tikru surinkimu.

@@ -1,30 +1,30 @@
-# Motor and Servo Selection
+# Variklio ir Servomechanizmo Pasirinkimas
 
-## Drive Motor
+## Variklis
 
-The drive side uses a motor that can provide enough torque for acceleration and repeated starts on the field.
-The selection should favor control and reliability over raw top speed.
+Pavaros pusėje naudojamas variklis, kuris gali suteikti pakankamą sukimo momentą įsibėgėjimui ir pakartotiniams startams trasoje.
+Renkantis svarbiau buvo valdymas ir patikimumas, o ne vien maksimalus greitis.
 
-## Steering Servo
+## Vairo Servomechanizmas
 
-The steering servo must be able to position the front wheels accurately and return to center repeatably.
-Because steering precision affects lane following directly, servo stability is more important than very fast movement.
+Vairo servomechanizmas turi tiksliai nustatyti priekinių ratų padėtį ir pakartojamai grįžti į centrą.
+Kadangi vairo tikslumas tiesiogiai veikia važiavimą juosta, servo stabilumas yra svarbesnis už labai greitą judėjimą.
 
-## Mechanical Fit
+## Mechaninis Suderinamumas
 
-The servo choice is tied to the steering linkage and gear train.
-That means the servo is not only a part list item; it defines how much travel the steering geometry can use and how much load the mechanism can tolerate.
+Servomechanizmo pasirinkimas susietas su vairo traukėmis ir pavarų mechanizmu.
+Tai reiškia, kad servo nėra tik dalių sąrašo punktas; jis nusako, kiek posūkio gali naudoti vairo geometrija ir kokią apkrovą mechanizmas gali atlaikyti.
 
-## Selection Criteria
+## Pasirinkimo Kriterijai
 
-- sufficient torque;
-- predictable response;
-- compatible voltage and power draw;
-- mechanical fit with the steering geometry;
-- easy replacement if testing shows a better option.
+- pakankamas sukimo momentas;
+- prognozuojamas atsakas;
+- suderinama įtampa ir srovės poreikis;
+- mechaninis suderinamumas su vairo geometrija;
+- paprastas pakeitimas, jei testai parodo geresnį variantą.
 
-## What Should Be Documented
+## Ką Reikia Dokumentuoti
 
-- exact part names;
-- why the parts were chosen;
-- any tradeoff between speed, torque, precision, and power.
+- tikslius dalių pavadinimus;
+- kodėl dalys buvo pasirinktos;
+- bet kokį kompromisą tarp greičio, momento, tikslumo ir galios.

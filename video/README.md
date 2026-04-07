@@ -1,13 +1,13 @@
-# Video
+# Vaizdo Įrašai
 
-Use this folder for video evidence related to the robot and its development.
+Šiame aplanke saugoma su robotu ir jo kūrimu susijusi vaizdo medžiaga.
 
-The main competition video should be at least 30 seconds long and show autonomous driving.
-The repository should point to the published YouTube video from `video/video.md`.
+Pagrindinis varžybinis video turi būti bent 30 sekundžių trukmės ir rodyti autonominį važiavimą.
+Repo turi nurodyti publikuotą YouTube video iš `video/video.md`.
 
-Suggested content:
+Siūlomas turinys:
 
-- test run clips;
-- obstacle handling clips;
-- steering behavior clips;
-- final demonstration video links or notes.
+- bandymų fragmentai;
+- kliūčių įveikimo fragmentai;
+- vairavimo elgsenos fragmentai;
+- galutinio demonstracinio video nuorodos arba pastabos.

@@ -1,48 +1,48 @@
-# Power Distribution
+# Maitinimo Paskirstymas
 
-## Power Path
+## Maitinimo Kelias
 
-The robot must distribute battery power to the motor, steering servo, ESP32, Raspberry Pi Zero, and sensors in a controlled way.
+Robotas turi kontroliuotai paskirstyti baterijos energiją varikliui, vairo servomechanizmui, `ESP32`, `Raspberry Pi Zero` ir jutikliams.
 
-## Design Goals
+## Projektavimo Tikslai
 
-- keep noisy motor loads from disturbing the compute boards;
-- use regulated rails where needed;
-- make the power path easy to trace in the wiring diagram;
-- document which component depends on which voltage.
+- neleisti triukšmingoms variklio apkrovoms trikdyti skaičiavimo plokščių;
+- naudoti reguliuotas šakas ten, kur to reikia;
+- kad maitinimo kelias būtų lengvai sekamas laidų schemoje;
+- aiškiai dokumentuoti, kuris komponentas priklauso nuo kurios įtampos.
 
-## Why This Matters
+## Kodėl Tai Svarbu
 
-Power issues often look like software bugs.
-This section should make it clear how the robot avoids that confusion.
+Maitinimo problemos dažnai atrodo kaip programinės įrangos klaidos.
+Ši dalis turi aiškiai parodyti, kaip robotas vengia tokio painiojimo.
 
-## Power Architecture For This Robot
+## Šio Roboto Maitinimo Architektūra
 
-The robot uses a shared battery source but separates the load by function:
+Robotui naudojamas bendras baterijos šaltinis, bet apkrova išskirstoma pagal funkciją:
 
-- the drive motor is powered through the `L298N` motor path;
-- the `ESP32` handles low-level control on a regulated logic rail;
-- the `Raspberry Pi Zero` receives its own stable supply for camera capture;
-- the `MG90S` servo is powered from a rail that can handle steering transients;
-- the `BNO085` and `VL53L5CX` are powered from the sensor-side logic supply according to the breakout requirements.
+- variklio maitinimas eina per `L298N` pavaros grandinę;
+- `ESP32` vykdo valdymą reguliuotoje loginėje šakoje;
+- `Raspberry Pi Zero` gauna atskirą stabilų maitinimą kameros darbui;
+- `MG90S` servomechanizmas maitinamas iš šakos, galinčios atlaikyti vairo apkrovos šuolius;
+- `BNO085` ir `VL53L5CX` maitinami iš jutiklių loginės šakos pagal jų breakout reikalavimus.
 
-## Design Reasoning
+## Projektavimo Logika
 
-This layout reduces the chance that drive current dips will reset the compute boards or corrupt sensor readings.
-It also makes troubleshooting easier, because any power issue can be traced to a specific branch instead of the whole robot.
+Tokia schema sumažina tikimybę, kad variklio srovės kritimai iš naujo paleis skaičiavimo plokštes arba sugadins jutiklių rodmenis.
+Taip pat ji palengvina gedimų paiešką, nes kiekvieną maitinimo problemą galima susieti su konkrečia šaka, o ne su visu robotu.
 
-## Power-Up Sequence
+## Paleidimo Eiga
 
-1. battery connects to the power distribution path;
-2. logic rails stabilize first;
-3. `ESP32` boots calculations and control while the `Raspberry Pi Zero` boots camera capture;
-4. sensors initialize and report valid status;
-5. `MG90S` centers the steering;
-6. `N20` drive output is enabled only after the system is ready.
+1. baterija prijungiama prie maitinimo paskirstymo grandinės;
+2. pirmiausia stabilizuojasi loginės šakos;
+3. `ESP32` paleidžia skaičiavimus ir valdymą, o `Raspberry Pi Zero` paleidžia kameros gavimą;
+4. jutikliai inicializuojami ir pateikia teisingą būseną;
+5. `MG90S` nustato vairą į centrą;
+6. `N20` variklio išėjimas įjungiamas tik tada, kai sistema jau pasiruošusi.
 
-## Failure Handling
+## Gedimų Valdymas
 
-- if logic voltage sags, the robot should not continue driving;
-- if the motor branch causes resets, the drive path needs to be isolated or filtered more aggressively;
-- if the servo current disturbs the logic rail, the servo supply needs its own buffering or regulator path;
-- if sensor readings become unstable during motion, verify grounding and cable routing first.
+- jei loginė įtampa krenta, robotas neturi tęsti važiavimo;
+- jei variklio šaka sukelia perkrovimus, pavaros kelią reikia izoliuoti arba stipriau filtruoti;
+- jei servomechanizmo srovė trikdo loginę šaką, servo maitinimui reikia atskiro buferio arba reguliatoriaus kelio;
+- jei važiavimo metu jutiklių rodmenys tampa nestabilūs, pirmiausia tikrink įžeminimą ir kabelių maršrutą.

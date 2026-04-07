@@ -1,25 +1,25 @@
-# Steering System
+# Vairo Sistema
 
-## Mechanism
+## Mechanizmas
 
-The robot uses servo-based steering with a gear-linked front axle.
-The goal is to convert servo motion into symmetric wheel movement with predictable angle changes.
+Robotas naudoja servo pagrindu veikiantį vairavimą su pavaromis susietą priekinę ašį.
+Tikslas yra paversti servo judėjimą į simetrišką ratų judėjimą su prognozuojamais kampų pokyčiais.
 
-## Engineering Notes
+## Inžinerinės Pastabos
 
-- keep the steering path compact;
-- minimize backlash where possible;
-- avoid interference between the gear train and the chassis;
-- ensure the servo can return to center consistently.
+- išlaikyti vairavimo kelią kuo kompaktiškesnį;
+- kiek įmanoma sumažinti laisvumą;
+- išvengti pavarų sistemos ir kėbulo susikirtimo;
+- užtikrinti, kad servo nuosekliai grįžtų į centrą.
 
-## Integration Notes
+## Integracijos Pastabos
 
-The steering system should be documented together with the chassis because mounting height, linkage length, and gear alignment all influence the actual steering angle.
-If the servo output or linkage geometry changes, the software steering limits should be rechecked.
+Vairo sistema turi būti dokumentuojama kartu su kėbulu, nes tvirtinimo aukštis, traukės ilgis ir pavarų suderinimas veikia tikrąjį vairo kampą.
+Jei pasikeičia servo išėjimas arba traukės geometrija, programinės įrangos vairo ribas reikia patikrinti iš naujo.
 
-## What To Document
+## Ką Dokumentuoti
 
-- the steering geometry;
-- the range of motion;
-- what was tested during prototyping;
-- any issues such as binding, slack, or offset.
+- vairo geometriją;
+- judėjimo diapazoną;
+- kas buvo testuota prototipavimo metu;
+- bet kokias problemas, tokias kaip strigimas, laisvumas ar poslinkis.

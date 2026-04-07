@@ -1,18 +1,18 @@
-# Comparison With Initial Goals
+# Palyginimas Su Pradiniais Tikslais
 
-## Purpose
+## Paskirtis
 
-Compare the final robot against the original requirements and concept goals.
+Palyginti galutinį robotą su pradiniais reikalavimais ir koncepcijos tikslais.
 
-## Questions To Answer
+## Į Kokius Klausimus Atsakyti
 
-- Which goals were met?
-- Which goals changed during development?
-- What constraints forced those changes?
-- What would be the next logical improvement?
+- kurie tikslai buvo pasiekti?
+- kurie tikslai pasikeitė vystymo metu?
+- kokie apribojimai privertė keisti sprendimus?
+- koks būtų logiškas kitas patobulinimas?
 
-## Build-Specific Comparison
+## Konkretaus Modelio Palyginimas
 
-- compare the original steering concept against the final `MG90S` build;
-- compare the planned sensor idea against the final `BNO085` plus `VL53L5CX` setup;
-- compare the planned drive behavior against the `N20 + L298N` implementation.
+- palyginti pradinę vairo idėją su galutiniu `MG90S` sprendimu;
+- palyginti planuotą jutiklių idėją su galutine `BNO085` ir `VL53L5CX` sąranka;
+- palyginti planuotą važiavimo elgesį su `N20 + L298N` įgyvendinimu.

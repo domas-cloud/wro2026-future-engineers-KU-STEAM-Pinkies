@@ -1,14 +1,14 @@
-# Team Photos
+# Komandos Nuotraukos
 
-This folder stores team documentation photos.
+Šiame aplanke saugomos komandos dokumentacinės nuotraukos.
 
-WRO expects two team photos: one official team photo and one informal or funny team photo.
+WRO paprastai tikisi dviejų komandos nuotraukų: vienos oficialios ir vienos neformalios arba linksmos.
 
-## Use
+## Naudojimas
 
-- official team photo;
-- one informal team photo;
-- team working photos;
-- build sessions;
-- testing sessions;
-- presentation or lab documentation images.
+- oficiali komandos nuotrauka;
+- viena neformali komandos nuotrauka;
+- komandos darbo nuotraukos;
+- surinkimo sesijos;
+- testavimo sesijos;
+- pristatymo arba laboratorinės dokumentacijos vaizdai.
