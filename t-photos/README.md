@@ -1,10 +1,10 @@
 # Team Photos
 
-Use this folder for team documentation photos that help show who built the robot and how the work was organized.
+This folder stores team documentation photos.
 
 WRO expects two team photos: one official team photo and one informal or funny team photo.
 
-Suggested content:
+## Use
 
 - official team photo;
 - one informal team photo;

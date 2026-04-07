@@ -6,11 +6,11 @@
 - `BNO085 9-DOF IMU` for orientation and motion stability.
 - `VL53L5CX` matrix ToF lidar for distance and obstacle awareness.
 
-## Why These Sensors
+## Role of Each Sensor
 
 - The camera gives global track context.
 - The IMU helps stabilize motion and detect heading changes.
-- The ToF sensors provide short-range distance information that complements vision.
+- The ToF sensor provides short-range distance information that complements vision.
 
 ## Build Notes
 
