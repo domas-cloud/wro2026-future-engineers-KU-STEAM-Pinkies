@@ -46,6 +46,10 @@ This repository uses the [MIT License](LICENSE).
 - [Evaluation](docs/evaluation/reproducibility_checklist.md)
 - [Problems and Fixes](docs/Encountered_Problems_and_Solutions/solutions_fix_log.md)
 
+## Release Notes
+
+- [Changelog](CHANGELOG.md)
+
 ## Artifact Folders
 
 - `models/` - CAD exports and STL files.

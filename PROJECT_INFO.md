@@ -9,3 +9,4 @@
 ## Notes
 
 Keep this file in sync with the top-level README if the hardware stack changes.
+Use this as a quick reference for the current build baseline.
