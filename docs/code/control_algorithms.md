@@ -4,13 +4,14 @@
 
 The control logic should separate perception from actuation:
 
-- the Pi Zero interprets camera and sensor information;
+- the Pi Zero captures and forwards camera data;
+- the ESP32 interprets camera and sensor information and drives the hardware.
 - the ESP32 receives control commands and drives the hardware.
 
 ## Core Control Responsibilities
 
-- extract lane position or lane error from the perception input;
-- combine vision with `BNO085` and `VL53L5CX` support signals;
+- extract lane position or lane error from the camera input;
+- combine camera input with `BNO085` and `VL53L5CX` support signals;
 - convert the current error into a steering command;
 - limit steering changes so the robot does not oscillate;
 - reduce drive output when confidence is low or the robot is in recovery.
@@ -24,7 +25,7 @@ The control logic should separate perception from actuation:
 
 ## Preferred Behavior Stack
 
-- vision first for lane geometry;
+- camera input first for lane geometry;
 - inertial support for heading stability;
 - local distance sensing for obstacle confirmation;
 - state-machine logic for deciding whether to follow, avoid, slow down, or stop.

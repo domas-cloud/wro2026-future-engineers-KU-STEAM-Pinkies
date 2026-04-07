@@ -8,7 +8,7 @@ The navigation layer should combine camera data with `BNO085` and `VL53L5CX` inp
 
 ## High-Level Flow
 
-- sense the current scene;
+- sense the current scene on the `ESP32`;
 - decide whether lane following or obstacle handling has priority;
 - send steering and drive commands;
 - monitor for error conditions.
@@ -38,7 +38,7 @@ The navigation layer should combine camera data with `BNO085` and `VL53L5CX` inp
 
 ## Decision Inputs
 
-- camera for lane geometry and obstacle context;
+- camera data from the Raspberry Pi Zero;
 - `BNO085` for heading stability and motion awareness;
 - `VL53L5CX` for nearby obstacle confirmation;
 - communication health between the Raspberry Pi Zero and ESP32;

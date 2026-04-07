@@ -25,7 +25,8 @@ The expected wiring structure is:
 - the drive branch goes through the `L298N H-bridge` to the `N20` motor;
 - the logic branch feeds the `ESP32` and `Raspberry Pi Zero` through regulated rails;
 - the `MG90S` servo receives a stable supply rail sized for steering load;
-- the `BNO085` and `VL53L5CX` connect to the compute side through their sensor bus;
+- the `BNO085` and `VL53L5CX` connect to the `ESP32` through their sensor bus;
+- the Raspberry Pi Zero provides camera capture to the ESP32;
 - all grounds are tied together at a controlled common point.
 
 ## Documentation Expectation
@@ -45,5 +46,6 @@ The final diagram should label:
 - show regulator outputs;
 - show the `L298N` motor path separately from logic wiring;
 - show `ESP32` and `Raspberry Pi Zero` as separate compute nodes;
-- show `BNO085` and `VL53L5CX` as sensor inputs, not as power blocks;
+- show `Raspberry Pi Zero` as camera input only;
+- show `BNO085` and `VL53L5CX` as sensor inputs to the `ESP32`, not as power blocks;
 - show `MG90S` as the steering actuator.

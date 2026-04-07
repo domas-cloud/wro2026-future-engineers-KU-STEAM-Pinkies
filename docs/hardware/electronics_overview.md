@@ -4,14 +4,14 @@
 
 The robot uses two main compute layers:
 
-- ESP32 for low-level hardware control and timing-sensitive tasks;
-- Raspberry Pi Zero for camera processing and higher-level logic.
+- Raspberry Pi Zero for camera capture only;
+- ESP32 for calculations, control, and timing-sensitive tasks.
 
 ## Functional Boundaries
 
-- the `Raspberry Pi Zero` handles perception and high-level driving decisions;
-- the `ESP32` handles steering output, motor control, and fast safety response;
-- the sensor set is split between global perception (`camera`) and local confirmation (`BNO085`, `VL53L5CX`);
+- the `Raspberry Pi Zero` handles camera capture only;
+- the `ESP32` handles calculations, steering output, motor control, and fast safety response;
+- the camera feed is the Pi Zero input; the `BNO085` and `VL53L5CX` are read by the `ESP32`;
 - the battery and regulators provide clean power, not behavior.
 
 ## Main Electrical Blocks
@@ -27,9 +27,9 @@ The robot uses two main compute layers:
 
 The electronics architecture should keep the control stack understandable:
 
-- Pi Zero decides what the robot should do;
-- ESP32 executes fast actuator commands;
-- sensors provide navigation context and safety data;
+- Pi Zero provides camera input;
+- ESP32 makes the driving decisions and executes actuator commands;
+- sensors provide navigation context and safety data directly to the ESP32;
 - the battery pack supplies motor power while logic rails are regulated separately.
 
 ## Documentation Output

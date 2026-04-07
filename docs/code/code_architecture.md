@@ -2,49 +2,49 @@
 
 ## Intended Separation
 
-- perception layer on the Raspberry Pi Zero;
+- camera capture layer on the Raspberry Pi Zero;
 - control and actuation layer on the ESP32;
 - shared interface for commands, sensor readings, and safety states.
 
 ## Module Map
 
-- `perception`:
-  - camera capture and frame preprocessing;
-  - lane and obstacle interpretation;
-  - confidence handling when vision is unstable.
+- `camera`:
+  - camera capture on the Raspberry Pi Zero;
+  - frame forwarding to the ESP32;
+  - capture health handling.
 - `sensing`:
-  - `BNO085` orientation and motion input;
-  - `VL53L5CX` distance frames;
+  - `BNO085` orientation and motion input on the ESP32;
+  - `VL53L5CX` distance frames on the ESP32;
   - sensor health checks and simple filtering.
 - `control`:
   - steering correction;
   - drive output shaping;
-  - state-machine based behavior selection.
+  - state-machine based behavior selection;
+  - all calculations on the ESP32.
 - `communication`:
-  - Pi Zero to ESP32 command messages;
-  - acknowledgements or watchdog-style heartbeats if used;
+  - Pi Zero to ESP32 camera-data messages;
+  - acknowledgements or heartbeat messages if used;
   - safe fallback when the link pauses.
 
 ## Interface Contract
 
-The inter-board message should carry the minimum information needed for stable driving:
+The inter-board message should carry the minimum information needed to deliver camera data reliably:
 
-- requested behavior state;
-- steering target or correction value;
-- drive enable and drive level;
-- sensor or confidence flags that affect safety behavior;
+- camera frame or camera observation data;
+- frame timestamp or sequence counter;
+- capture status;
 - a short health indicator if the link supports it.
 
-The exact transport can vary, but the purpose should stay the same: the Pi Zero tells the ESP32 what to do, and the ESP32 confirms it can still execute safely.
+The exact transport can vary, but the purpose should stay the same: the Pi Zero supplies camera data and the ESP32 handles the calculations.
 
 ## Data Flow
 
-1. Camera and sensor data are captured on the Raspberry Pi Zero.
-2. The Pi Zero estimates the current state of the robot and field.
-3. The robot chooses a behavior state such as lane follow or obstacle handling.
-4. High-level commands are sent to the ESP32.
-5. The ESP32 converts those commands into `MG90S` steering output and `L298N` motor control.
-6. The robot keeps checking sensor validity and can drop into a safe state if the inputs are unreliable.
+1. Camera data is captured on the Raspberry Pi Zero.
+2. The Pi Zero forwards the camera data to the ESP32.
+3. The ESP32 processes camera, IMU, and distance sensor input.
+4. The ESP32 chooses a behavior state such as lane follow or obstacle handling.
+5. The ESP32 converts those decisions into `MG90S` steering output and `L298N` motor control.
+6. The ESP32 keeps checking sensor validity and can drop into a safe state if the inputs are unreliable.
 
 ## Why This Structure
 
@@ -61,15 +61,15 @@ It also makes the repository easier to reproduce because each layer has a clear 
 ## Startup Sequence
 
 - initialize compute boards;
-- bring up the camera and sensor buses;
-- check `BNO085` and `VL53L5CX` readiness;
-- confirm communication between `Raspberry Pi Zero` and `ESP32`;
+- bring up the camera capture path and sensor buses;
+- check `BNO085` and `VL53L5CX` readiness on the ESP32;
+- confirm camera data flow between `Raspberry Pi Zero` and `ESP32`;
 - set `MG90S` steering to center;
 - keep the `N20` drive output disabled until the system is ready.
 
 ## Error Handling
 
-- if perception confidence is low, reduce steering aggression or hold the robot in a conservative state;
+- if camera data is missing, keep the robot in a safe idle or hold state;
 - if sensor input is missing, use the safest available behavior instead of guessing;
-- if the command link drops, the ESP32 should stop or hold the last safe state according to the chosen safety policy;
+- if the camera link drops, the ESP32 should stop or hold the last safe state according to the chosen safety policy;
 - if the startup sequence does not complete, do not arm the drive motor.

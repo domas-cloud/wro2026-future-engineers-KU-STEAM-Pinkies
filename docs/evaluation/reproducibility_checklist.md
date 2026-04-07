@@ -9,7 +9,7 @@ Use this checklist to verify that another team could rebuild the robot from the 
 - the main robot concept is explained in the brainstorming docs;
 - the hardware stack is named with real component models;
 - the wiring and power path are described in text and diagrams;
-- the software architecture explains what runs on the `ESP32` and what runs on the `Raspberry Pi Zero`;
+- the software architecture explains that the `Raspberry Pi Zero` is used for camera capture only and the `ESP32` performs the calculations and control;
 - the sensor placement is explained in relation to the chassis and the field;
 - the CAD files are linked and match the written description;
 - the repository contains team photos, vehicle photos, and a video reference;

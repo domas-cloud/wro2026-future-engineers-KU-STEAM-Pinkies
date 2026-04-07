@@ -22,7 +22,7 @@ The robot uses a shared battery source but separates the load by function:
 
 - the drive motor is powered through the `L298N` motor path;
 - the `ESP32` handles low-level control on a regulated logic rail;
-- the `Raspberry Pi Zero` receives its own stable logic supply;
+- the `Raspberry Pi Zero` receives its own stable supply for camera capture;
 - the `MG90S` servo is powered from a rail that can handle steering transients;
 - the `BNO085` and `VL53L5CX` are powered from the sensor-side logic supply according to the breakout requirements.
 
@@ -35,7 +35,7 @@ It also makes troubleshooting easier, because any power issue can be traced to a
 
 1. battery connects to the power distribution path;
 2. logic rails stabilize first;
-3. `ESP32` and `Raspberry Pi Zero` boot and confirm internal readiness;
+3. `ESP32` boots calculations and control while the `Raspberry Pi Zero` boots camera capture;
 4. sensors initialize and report valid status;
 5. `MG90S` centers the steering;
 6. `N20` drive output is enabled only after the system is ready.

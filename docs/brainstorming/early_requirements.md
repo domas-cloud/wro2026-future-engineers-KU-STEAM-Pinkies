@@ -5,7 +5,7 @@
 - Follow the lane reliably.
 - Detect obstacles and react without losing the path.
 - Keep steering commands proportional and stable.
-- Support a clear separation between high-level perception and low-level actuation.
+- Support a clear separation between camera capture on the Raspberry Pi Zero and calculations on the ESP32.
 
 ## Non-Functional Requirements
 
@@ -17,7 +17,7 @@
 ## Early Design Targets
 
 - ESP32 handles real-time actuator control.
-- Raspberry Pi Zero handles camera-based decision logic.
+- Raspberry Pi Zero handles camera capture only.
 - IMU and ToF sensors provide extra context beyond vision alone.
 - The robot should be easy to inspect, tune, and maintain.
 

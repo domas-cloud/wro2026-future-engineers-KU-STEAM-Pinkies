@@ -6,7 +6,7 @@ The robot needs a safe fallback when a sensor fails, the control loop becomes un
 
 ## Examples
 
-- reduce speed when perception confidence is low;
+- reduce speed when camera confidence is low;
 - stop or hold state when sensor data is invalid;
 - return steering toward center if the command stream fails;
 - prevent unsafe motor output during startup.
@@ -20,10 +20,10 @@ The robot needs a safe fallback when a sensor fails, the control loop becomes un
 
 ## Build-Specific Failsafes
 
-- if `Raspberry Pi Zero` vision stalls, the robot should not keep applying stale steering commands;
+- if `Raspberry Pi Zero` camera capture stalls, the robot should not keep applying stale steering commands;
 - if `BNO085` data becomes invalid, heading-based corrections should be reduced or disabled;
 - if `VL53L5CX` readings jump unexpectedly, the robot should fall back to conservative motion or a stop state;
-- if the command link between `Raspberry Pi Zero` and `ESP32` is interrupted, the `ESP32` should enter a safe idle behavior.
+- if the camera data link between `Raspberry Pi Zero` and `ESP32` is interrupted, the `ESP32` should enter a safe idle behavior.
 
 ## Documentation Rule
 

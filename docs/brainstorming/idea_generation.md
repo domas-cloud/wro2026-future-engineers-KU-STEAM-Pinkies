@@ -20,11 +20,11 @@ The strongest concept combined:
 
 - servo-driven steering;
 - a gear transmission that keeps the front steering mechanism synchronized;
-- `Raspberry Pi Zero` for perception and planning;
-- `ESP32` for lower-level control and actuator handling;
+- `Raspberry Pi Zero` for camera capture;
+- `ESP32` for calculations, control, and actuator handling;
 - camera, `BNO085 9-DOF IMU`, and `VL53L5CX` for complementary sensing.
 
 ## Why This Was Promising
 
-This combination gave us a clear split between perception and control, while keeping the mechanics understandable and documentable.
+This combination keeps the camera pipeline separate from the calculations and control loop, while keeping the mechanics understandable and documentable.
 It also gave us a structure that can be iterated without redesigning the whole robot.

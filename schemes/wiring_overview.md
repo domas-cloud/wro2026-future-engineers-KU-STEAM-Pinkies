@@ -28,16 +28,17 @@
 
 ## Signal Paths
 
-- `Raspberry Pi Zero` handles camera-based perception.
-- `ESP32` receives behavior or steering commands from the Pi Zero.
+- `Raspberry Pi Zero` handles camera capture only.
+- `Raspberry Pi Zero` forwards camera data to the `ESP32`.
+- `ESP32` performs the calculations and generates behavior or steering decisions.
 - `ESP32` drives the `MG90S` steering servo with PWM.
 - `ESP32` controls the `L298N` input pins for the `N20` drive motor.
-- `BNO085` and `VL53L5CX` communicate through their sensor bus, typically I2C on the compute side.
+- `BNO085` and `VL53L5CX` communicate through their sensor bus, typically I2C on the `ESP32`.
 
 ## Recommended Control Responsibilities
 
-- Pi Zero owns perception, state estimation, and decision selection;
-- ESP32 owns real-time output shaping, PWM, and drive enable control;
+- Pi Zero owns camera capture only;
+- ESP32 owns state estimation, decision selection, real-time output shaping, PWM, and drive enable control;
 - the battery and regulators only provide power, not behavior;
 - the wiring diagram should make it obvious which board is the source of each control signal.
 
@@ -45,10 +46,10 @@
 
 | Subsystem | Connection Type | Notes |
 | --- | --- | --- |
-| Pi Zero camera | CSI / camera interface | Used for lane and obstacle perception |
+| Pi Zero camera | CSI / camera interface | Camera capture only |
+| Pi Zero to ESP32 | Camera data link | Carries frames or camera observations |
 | BNO085 | I2C | Must be mounted rigidly and calibrated |
 | VL53L5CX | I2C | Placement must match obstacle coverage |
-| Pi Zero to ESP32 | Serial / UART or equivalent link | Carries state and command data |
 | ESP32 to MG90S | PWM | Steering output |
 | ESP32 to L298N | Digital control + enable/PWM | Drive direction and speed |
 | Battery to L298N | Power input | Motor current path |

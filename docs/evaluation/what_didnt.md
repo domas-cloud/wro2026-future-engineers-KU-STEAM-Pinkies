@@ -11,7 +11,7 @@
 - sensor positions that created blind spots;
 - steering settings that caused overshoot;
 - power paths that introduced resets or noisy readings;
-- navigation logic that was too complex for the `Raspberry Pi Zero` to handle reliably.
+- navigation logic that was too complex for the `ESP32` to handle reliably.
 
 ## Why This Matters
 

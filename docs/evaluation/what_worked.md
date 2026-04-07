@@ -9,7 +9,7 @@
 
 ## Likely Successes To Report
 
-- `ESP32` and `Raspberry Pi Zero` split reduced workload confusion;
+- `ESP32` handling the calculations while the `Raspberry Pi Zero` handled camera capture kept the roles clear;
 - `BNO085` improved heading awareness when mounted rigidly;
 - `VL53L5CX` improved local obstacle awareness;
 - `MG90S` steering stayed simple enough to tune and explain.

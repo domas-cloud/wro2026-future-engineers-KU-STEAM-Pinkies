@@ -5,7 +5,7 @@ Documentation for our autonomous Future Engineers robot.
 ## Summary
 
 - Drive: `MG90S` steering servo, `N20` drive motor, `L298N H-bridge`.
-- Compute: `Raspberry Pi Zero` for perception, `ESP32` for low-level control.
+- Compute: `Raspberry Pi Zero` for camera capture, `ESP32` for all calculations and control.
 - Sensors: `BNO085 9-DOF IMU`, `VL53L5CX` ToF, camera.
 - Power: `2x 18650 Li-ion` battery pack with regulated logic rails.
 
