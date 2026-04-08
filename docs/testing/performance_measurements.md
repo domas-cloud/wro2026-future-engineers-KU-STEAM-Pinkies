@@ -7,15 +7,6 @@
 - kliūčių įveikimo patikimumą;
 - atsigavimą po klaidos arba nutrūkimo.
 
-## Siūlomas Įrašymo Šablonas
-
-- testavimo data;
-- roboto versija;
-- trasos konfigūracija;
-- jutiklių ir maitinimo būsena;
-- kokybinis rezultatas;
-- skaitinis rezultatas, jei toks yra.
-
 ## Rekomenduojami Rodikliai
 
 - vairo centro nuokrypis;
@@ -28,7 +19,3 @@
 
 Jei metrika pagerėja po konstrukcijos pakeitimo, užrašyk pakeitimą ir tikslią versiją, kuri tą pagerėjimą sukėlė.
 Jei metrika nepagerėja, rezultatą vis tiek palik, kad vėlesni palyginimai išliktų sąžiningi.
-
-## Dabartinis Požiūris
-
-Jei repozitoriume dar nėra skaitinių rezultatų, aprašyk matavimo metodą ir kitame testavimo seanse užrašyk skaičius vienodu formatu.

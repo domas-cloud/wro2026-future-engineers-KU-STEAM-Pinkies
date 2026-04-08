@@ -24,12 +24,10 @@
 
 ## Greitos Nuorodos Į Testavimą
 
-- [Testų žurnalo šablonas](testing/test_log_template.md)
 - [Testai trasoje](testing/track_testing.md)
 - [Našumo matavimai](testing/performance_measurements.md)
 
 ## Greitos Nuorodos Į Vertinimą
 
-- [Atkuriamumo kontrolinis sąrašas](evaluation/reproducibility_checklist.md)
 - [Galutinis našumas](evaluation/final_performance.md)
 - [Kas veikė](evaluation/what_worked.md)
