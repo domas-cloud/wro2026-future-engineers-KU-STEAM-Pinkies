@@ -9,8 +9,8 @@
 ## Ką Šie Failai Reiškia
 
 - `linkage.stl` palaiko vairo traukės kelią;
-- `middle gear_.stl` vaizduoja pagrindinį pavarų mechanizmo elementą;
-- `side gear.stl` vaizduoja šonines pavaras, kurios sinchronizuoja judesį.
+- `middle gear_.stl` vaizduoja centrinį dantratį, kurį tiesiogiai suka servo;
+- `side gear.stl` vaizduoja šoninius dantračius, ant kurių tvirtinamos vairo kojelės ir ratų laikikliai.
 
 ## Dokumentacijos Tikslas
 

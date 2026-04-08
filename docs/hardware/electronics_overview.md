@@ -21,6 +21,7 @@ Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
 - `OV5647 5Mpx wide-angle` kamera (`Waveshare 14037`) `Raspberry Pi Zero`;
 - `BNO085 9-DOF IMU`;
 - 2 `VL53L5CX` matriciniai ToF moduliai;
+- elektronikos mazgas ant perfboard tipo plokštės;
 - maitinimo reguliavimas ir paskirstymas.
 
 ## Projektavimo Tikslas
@@ -31,4 +32,5 @@ Elektronikos architektūra turi išlaikyti valdymo grandinę lengvai suprantamą
 - `ESP32` naudoja kameros įvestį situacijai priekyje įvertinti, todėl nereikia daug atskirų ToF jutiklių;
 - `ESP32` priima važiavimo sprendimus ir vykdo vykdiklių komandas;
 - jutikliai tiesiogiai teikia navigacijos kontekstą ir saugos duomenis `ESP32`;
+- pagrindiniai elektronikos sujungimai surinkti ant perfboard, kad mechaninis tvirtinimas ir laidų maršrutai būtų paprastesni;
 - akumuliatorių paketas tiekia variklio galią, o loginės šakos yra reguliuojamos atskirai.
