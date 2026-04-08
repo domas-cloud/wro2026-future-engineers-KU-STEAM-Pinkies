@@ -11,7 +11,7 @@
 
 - `N20` paleidimo srovė, kuri numuša baterijos šaką;
 - `L298N` įtampos kritimas, mažinantis variklio atsargą;
-- bendros maitinimo šakos triukšmas, veikiantis `BNO085`, `VL53L5CX` arba kamerą.
+- bendros maitinimo šakos triukšmas, veikiantis `BNO085`, 2 `VL53L5CX` matricinius ToF modulius arba kamerą.
 
 ## Kodėl Tai Svarbu
 

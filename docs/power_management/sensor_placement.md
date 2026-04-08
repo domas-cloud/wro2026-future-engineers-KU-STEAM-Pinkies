@@ -2,11 +2,11 @@
 
 ## Išdėstymo Logika
 
-Kamera, `BNO085` ir `VL53L5CX` turi būti išdėstyti pagal tai, ką jiems reikia matyti.
+Kamera, `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai turi būti išdėstyti pagal tai, ką jiems reikia matyti.
 
 - Kamera: orientuota taip, kad matytų juostą ir svarbias kliūtis.
 - `BNO085`: standžiai sumontuotas netoli roboto judėjimo centro.
-- `VL53L5CX`: padėtas taip, kad dengtų tikėtinas kliūčių zonas ir aklas vietas.
+- 2 `VL53L5CX` matriciniai ToF moduliai: padėti taip, kad dengtų tikėtinas kliūčių zonas ir aklas vietas.
 
 ## Ką Paaiškinti
 

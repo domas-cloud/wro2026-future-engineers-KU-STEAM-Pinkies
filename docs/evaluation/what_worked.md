@@ -11,7 +11,7 @@
 
 - `ESP32` atliekami skaičiavimai, o `Raspberry Pi Zero` naudojamas kameros gavimui, aiškiai atskyrė vaidmenis;
 - standžiai pritvirtintas `BNO085` pagerino krypties suvokimą;
-- `VL53L5CX` pagerino vietinį kliūčių suvokimą;
+- 2 `VL53L5CX` matriciniai ToF moduliai pagerino vietinį kliūčių patvirtinimą;
 - `MG90S` vairavimas liko pakankamai paprastas, kad jį būtų galima derinti ir paaiškinti.
 
 ## Dokumentacijos Taisyklė

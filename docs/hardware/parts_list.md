@@ -5,7 +5,7 @@
 - `ESP32`
 - `Raspberry Pi Zero`
 - `BNO085 9-DOF IMU`
-- `VL53L5CX` matricos ToF jutiklis
+- 2 `VL53L5CX` matriciniai ToF moduliai
 - kameros modulis
 
 ## Pavara ir Vairavimas

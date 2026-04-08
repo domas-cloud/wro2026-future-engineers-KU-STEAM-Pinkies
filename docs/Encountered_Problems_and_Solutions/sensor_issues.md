@@ -11,7 +11,7 @@
 ## Specifiniai Pavyzdžiai
 
 - `BNO085` sujungimo dreifas prieš kalibravimą;
-- `VL53L5CX` atstumo šuoliai dėl atspindinčių paviršių;
+- 2 `VL53L5CX` matricinių ToF modulių atstumo šuoliai dėl atspindinčių paviršių;
 - kameros kadras, kuris neapima juostos krašto;
 - jutiklių rodmenys, kuriuos veikia vibracija arba kabelių maršrutas.
 

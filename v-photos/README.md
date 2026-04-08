@@ -13,4 +13,4 @@ WRO paprastai tikisi šešių roboto nuotraukų iš skirtingų pusių ir kampų,
 - akumuliatoriaus vieta;
 - iteracijų palyginimo nuotraukos.
 
-Naudingiausios nuotraukos aiškiai parodo `MG90S`, `N20`, `L298N`, `BNO085`, `VL53L5CX` ir akumuliatoriaus vietą kėbulo atžvilgiu.
+Naudingiausios nuotraukos aiškiai parodo `MG90S`, `N20`, `L298N`, `BNO085`, 2 `VL53L5CX` matricinių ToF modulių ir akumuliatoriaus vietą kėbulo atžvilgiu.

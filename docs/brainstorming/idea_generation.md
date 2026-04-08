@@ -22,7 +22,7 @@ The strongest concept combined:
 - a gear transmission that keeps the front steering mechanism synchronized;
 - `Raspberry Pi Zero` for camera capture;
 - `ESP32` for calculations, control, and actuator handling;
-- camera, `BNO085 9-DOF IMU`, and `VL53L5CX` for complementary sensing.
+- camera, `BNO085 9-DOF IMU`, and 2 `VL53L5CX` matrix ToF modules for complementary sensing.
 
 ## Why This Was Promising
 

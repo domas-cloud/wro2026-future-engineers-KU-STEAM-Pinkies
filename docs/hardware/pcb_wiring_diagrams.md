@@ -25,7 +25,7 @@ Tikėtina laidų struktūra yra tokia:
 - pavaros šaka eina per `L298N H-bridge` į `N20` variklį;
 - loginė šaka per reguliuotas grandines maitina `ESP32` ir `Raspberry Pi Zero`;
 - `MG90S` servomechanizmas gauna stabilią šaką, tinkamą vairo apkrovai;
-- `BNO085` ir `VL53L5CX` prie `ESP32` jungiami per jų jutiklių magistralę;
+- `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai prie `ESP32` jungiami per jų jutiklių magistralę;
 - `Raspberry Pi Zero` tiekia kameros duomenis į `ESP32`;
 - visos žemės sujungiamos viename kontroliuojamame bendrame taške.
 
@@ -47,5 +47,5 @@ Galutinėje schemoje turi būti pažymėta:
 - `L298N` variklio kelias atskirtas nuo loginės laidų dalies;
 - `ESP32` ir `Raspberry Pi Zero` parodyti kaip atskiri skaičiavimo mazgai;
 - `Raspberry Pi Zero` parodyta tik kaip kameros įvestis;
-- `BNO085` ir `VL53L5CX` parodyti kaip jutiklių įvestys į `ESP32`, o ne kaip maitinimo blokai;
+- `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai parodyti kaip jutiklių įvestys į `ESP32`, o ne kaip maitinimo blokai;
 - `MG90S` parodytas kaip vairo vykdiklis.

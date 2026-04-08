@@ -11,7 +11,7 @@
 - visi elektroniniai komponentai;
 - visi varikliai ir vykdikliai;
 - maitinimo šakos ir reguliatoriai;
-- signalų ryšiai tarp `ESP32`, `Raspberry Pi Zero`, kameros, `BNO085`, `VL53L5CX`, `MG90S` ir `N20` pavaros.
+- signalų ryšiai tarp `ESP32`, `Raspberry Pi Zero`, kameros, `BNO085`, 2 `VL53L5CX` matricinių ToF modulių, `MG90S` ir `N20` pavaros.
 
 ## Kaip Naudoti
 

@@ -14,5 +14,5 @@ Palyginti galutinį robotą su pradiniais reikalavimais ir koncepcijos tikslais.
 ## Konkretaus Modelio Palyginimas
 
 - palyginti pradinę vairo idėją su galutiniu `MG90S` sprendimu;
-- palyginti planuotą jutiklių idėją su galutine `BNO085` ir `VL53L5CX` sąranka;
+- palyginti planuotą jutiklių idėją su galutine `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių sąranka;
 - palyginti planuotą važiavimo elgesį su `N20 + L298N` įgyvendinimu.

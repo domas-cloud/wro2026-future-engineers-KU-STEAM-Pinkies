@@ -24,7 +24,7 @@ Robotui naudojamas bendras baterijos šaltinis, bet apkrova išskirstoma pagal f
 - `ESP32` vykdo valdymą reguliuotoje loginėje šakoje;
 - `Raspberry Pi Zero` gauna atskirą stabilų maitinimą kameros darbui;
 - `MG90S` servomechanizmas maitinamas iš šakos, galinčios atlaikyti vairo apkrovos šuolius;
-- `BNO085` ir `VL53L5CX` maitinami iš jutiklių loginės šakos pagal jų breakout reikalavimus.
+- `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai maitinami iš jutiklių loginės šakos pagal jų breakout reikalavimus.
 
 ## Projektavimo Logika
 

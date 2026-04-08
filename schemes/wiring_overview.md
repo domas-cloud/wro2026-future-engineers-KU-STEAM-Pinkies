@@ -8,7 +8,7 @@
   -> L298N H-bridge -> N20 drive motor
   -> regulated logic rail -> ESP32
   -> regulated logic rail -> Raspberry Pi Zero
-  -> regulated sensor rail -> BNO085 + VL53L5CX
+-> regulated sensor rail -> BNO085 + 2x VL53L5CX
   -> steering supply rail -> MG90S
 ```
 
@@ -16,7 +16,7 @@
 
 - `motor domain`: battery to `L298N` to `N20`, with the highest current draw;
 - `logic domain`: regulated rail for `ESP32` and `Raspberry Pi Zero`;
-- `sensor domain`: `BNO085` and `VL53L5CX`, preferably kept on a clean logic supply;
+- `sensor domain`: `BNO085` and 2 `VL53L5CX` matrix ToF modules, preferably kept on a clean logic supply;
 - `servo domain`: `MG90S`, powered from a rail that can handle transient steering current.
 
 ## Grounding Strategy
@@ -33,7 +33,7 @@
 - `ESP32` performs the calculations and generates behavior or steering decisions.
 - `ESP32` drives the `MG90S` steering servo with PWM.
 - `ESP32` controls the `L298N` input pins for the `N20` drive motor.
-- `BNO085` and `VL53L5CX` communicate through their sensor bus, typically I2C on the `ESP32`.
+- `BNO085` and 2 `VL53L5CX` modules communicate through their sensor bus, typically I2C on the `ESP32`.
 
 ## Recommended Control Responsibilities
 
@@ -49,7 +49,7 @@
 | Pi Zero camera | CSI / camera interface | Camera capture only |
 | Pi Zero to ESP32 | Camera data link | Carries frames or camera observations |
 | BNO085 | I2C | Must be mounted rigidly and calibrated |
-| VL53L5CX | I2C | Placement must match obstacle coverage |
+| 2x VL53L5CX | I2C | Placement must match obstacle coverage |
 | ESP32 to MG90S | PWM | Steering output |
 | ESP32 to L298N | Digital control + enable/PWM | Drive direction and speed |
 | Battery to L298N | Power input | Motor current path |

@@ -15,7 +15,7 @@ Trasos testai patikrina visą robotą sąlygomis, artimesnėmis varžyboms.
 
 - ar `MG90S` nuosekliai grįžta į centrą;
 - ar `N20` variklis ir `L298N` išlaiko pakartojamą įsibėgėjimą;
-- ar `VL53L5CX` rodmenys išlieka naudingi šalia kliūčių ir atspindinčių paviršių;
+- ar 2 `VL53L5CX` matricinių ToF modulių rodmenys išlieka naudingi šalia kliūčių ir atspindinčių paviršių;
 - ar `BNO085` padeda stabilizuoti kryptį po kelių posūkių.
 
 ## Trasos Testų Scenarijai

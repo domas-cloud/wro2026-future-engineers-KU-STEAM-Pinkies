@@ -15,7 +15,7 @@ Vienetiniai testai naudojami mažoms logikos dalims patikrinti prieš bandymus t
 
 - vairo paklaidos vertimas į `MG90S` servomechanizmo padėtį;
 - `BNO085` kalibravimo būsenos interpretavimas;
-- `VL53L5CX` atstumo kadrų nuskaitymas;
+- 2 `VL53L5CX` matricinių ToF modulių atstumo kadrų nuskaitymas;
 - saugios būsenos parinkimas prieš siunčiant važiavimo komandas.
 
 ## Ką Reikia Išsaugoti

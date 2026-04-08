@@ -16,7 +16,7 @@ Skirtumas tas, kad ankstesnėje versijoje daugiau sprendimų buvo siejama su `Ar
 ## Pagrindinės Valdymo Atsakomybės
 
 - iš kamerų įvesties išskirti juostos padėtį arba juostos paklaidą;
-- kamerų įvestį sujungti su `BNO085` ir 2 `VL53L5CX` pagalbiniais signalais;
+- kamerų įvestį sujungti su `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių pagalbiniais signalais;
 - esamą paklaidą paversti vairo komanda;
 - riboti vairo pokyčius, kad robotas nesiūbuotų;
 - mažinti važiavimo išėjimą, kai pasitikėjimas mažas arba robotas yra atsigavimo būsenoje.

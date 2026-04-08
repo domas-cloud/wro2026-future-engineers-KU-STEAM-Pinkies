@@ -17,7 +17,7 @@ Kėbulas turi išlaikyti robotą pakankamai standų, kad vairavimas būtų tiksl
 - `N20` ir `L298N` turi būti sumontuoti taip, kad pavaros kelias išliktų mechaniškai tvarkingas;
 - `ESP32` ir `Raspberry Pi Zero` pageidautina išdėstyti kuo toliau nuo triukšmingiausios maitinimo šakos;
 - `BNO085` turi būti tvirtai pritvirtintas ir, kiek įmanoma, toliau nuo vibracijos šaltinių;
-- `VL53L5CX` turi turėti aiškų matymo lauką į sritį, kurią turi stebėti.
+- 2 `VL53L5CX` matriciniai ToF moduliai turi turėti aiškų matymo lauką į sritis, kurias turi stebėti.
 
 ## Kodėl Tai Svarbu
 

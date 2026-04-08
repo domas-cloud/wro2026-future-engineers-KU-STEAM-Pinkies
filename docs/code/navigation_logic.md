@@ -4,7 +4,7 @@
 
 Robotas turi sekti juostą, atpažinti svarbias kliūtis ir keisti elgseną, kai pasikeičia situacija trasoje.
 
-Navigacijos sluoksnis turi derinti kameros duomenis su `BNO085` ir `VL53L5CX` įvestimis, o ne pasikliauti tik vienu jutikliu.
+Navigacijos sluoksnis turi derinti kameros duomenis su `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių įvestimis, o ne pasikliauti tik vienu jutikliu.
 
 ## Aukšto Lygio Eiga
 
@@ -40,7 +40,7 @@ Navigacijos sluoksnis turi derinti kameros duomenis su `BNO085` ir `VL53L5CX` į
 
 - kameros duomenys iš `Raspberry Pi Zero`;
 - `BNO085` krypties stabilumui ir judėjimo suvokimui;
-- `VL53L5CX` artimų kliūčių patvirtinimui;
+- 2 `VL53L5CX` matriciniai ToF moduliai artimų kliūčių patvirtinimui;
 - ryšio būklė tarp `Raspberry Pi Zero` ir `ESP32`;
 - maitinimo arba paleidimo būsena, jei ją programinė įranga mato.
 

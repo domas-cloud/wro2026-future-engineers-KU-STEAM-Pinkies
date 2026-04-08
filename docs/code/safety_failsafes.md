@@ -22,7 +22,7 @@ Robotui reikia saugaus atsarginio elgesio tada, kai sugenda jutiklis, valdymo ci
 
 - jei `Raspberry Pi Zero` kameros gavimas sustoja, robotas neturi toliau taikyti senų vairo komandų;
 - jei `BNO085` duomenys tampa neteisingi, krypties korekcijas reikia sumažinti arba išjungti;
-- jei `VL53L5CX` rodmenys netikėtai šokinėja, robotas turi grįžti į atsargesnį judėjimą arba sustojimo būseną;
+- jei 2 `VL53L5CX` matricinių ToF modulių rodmenys netikėtai šokinėja, robotas turi grįžti į atsargesnį judėjimą arba sustojimo būseną;
 - jei kamerinių duomenų ryšys tarp `Raspberry Pi Zero` ir `ESP32` nutrūksta, `ESP32` turi pereiti į saugų tuščios būsenos režimą.
 
 ## Dokumentacijos Taisyklė

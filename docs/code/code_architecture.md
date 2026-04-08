@@ -14,7 +14,7 @@
   - kameros ryšio būklės stebėjimas.
 - `sensing`:
   - `BNO085` orientacijos ir judėjimo duomenys `ESP32` pusėje;
-  - `VL53L5CX` atstumo kadrai `ESP32` pusėje;
+  - 2 `VL53L5CX` matricinių ToF modulių atstumo kadrai `ESP32` pusėje;
   - jutiklių būklės tikrinimas ir paprastas filtravimas.
 - `control`:
   - vairo korekcija;
@@ -62,7 +62,7 @@ Be to, taip repozitoriumą lengviau atkurti, nes kiekvienas sluoksnis turi aišk
 
 - inicializuoti skaičiavimo plokštes;
 - aktyvuoti kameros gavimo kelią ir jutiklių magistrales;
-- `ESP32` pusėje patikrinti `BNO085` ir `VL53L5CX` pasirengimą;
+- `ESP32` pusėje patikrinti `BNO085` ir 2 `VL53L5CX` modulių pasirengimą;
 - patvirtinti kameros duomenų srautą tarp `Raspberry Pi Zero` ir `ESP32`;
 - nustatyti `MG90S` į centrinę padėtį;
 - `N20` išėjimą laikyti išjungtą, kol sistema bus pasiruošusi.

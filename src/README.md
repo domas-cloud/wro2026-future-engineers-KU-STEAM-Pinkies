@@ -12,7 +12,7 @@
 ## Atsakomybės
 
 - kameros interpretavimas ir kliūčių atpažinimas `Raspberry Pi Zero` pusėje;
-- `BNO085` ir `VL53L5CX` paruošimas tolimesniam naudojimui;
+- `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių paruošimas tolimesniam naudojimui;
 - komandų siuntimas į `ESP32` serijiniu ryšiu;
 - `MG90S` vairavimo valdymas ir `N20` variklio išėjimas `ESP32` pusėje.
 
