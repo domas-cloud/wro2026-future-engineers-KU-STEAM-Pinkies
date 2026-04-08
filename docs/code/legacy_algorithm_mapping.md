@@ -10,6 +10,7 @@ Iš senojo roboto perimama ne ta pati jutiklių realizacija, o ta pati valdymo l
 - kliūčių logika ir saugus sustojimas.
 
 Keičiasi įėjimų tipai ir aparatūra, bet ne pagrindinė valdymo idėja.
+Tai reiškia, kad neperkeliamas tas pats sensor reading sluoksnis, tik sprendimų priėmimo ir korekcinio valdymo logika.
 
 ## Kas Keičiasi
 
@@ -22,6 +23,15 @@ Keičiasi įėjimų tipai ir aparatūra, bet ne pagrindinė valdymo idėja.
 | `TCS34725` | nenaudojamas | Jei ši funkcija naujame robote nereikalinga, jos logikos neperkeliame. |
 | `SG90` | `MG90S` | Vairo servo principas išlieka toks pats, tik keičiasi konkretus servomechanizmas. |
 | DC variklis + perdavimas | `N20` + `L298N` | Važiavimo logika išlieka, tik hardware sprendimas kitoks. |
+
+## Pagrindiniai Skirtumai Tarp Robotų
+
+- Dabartinis robotas yra mažesnis ir paprastesnis už praėjusį, nes iš ankstesnės versijos supratome, kad per daug mazgų apsunkina derinimą.
+- Praėjusiame robote buvo daugiau atskirų aparatūrinių sluoksnių ir platesnė jutiklių kombinacija, o šiame robote architektūra sumažinta iki to, kas tiesiogiai padeda važiuoti stabiliau.
+- Dabartiniame robote `Raspberry Pi Zero` naudojamas tik kameros vaizdo gavimui, o visi sprendimai ir skaičiavimai perkelti į `ESP32`.
+- ToF jutiklių kiekis sumažintas iki 2 matricinių `VL53L5CX` modulių, nes priekinio atstumo vertinimą papildomai perima kameros informacija.
+- Mechanikoje dabartinis robotas orientuotas į trumpesnius mechaninius kelius, mažesnį laisvumą ir paprastesnę priežiūrą.
+- Dabartinis repo nelaiko kodo išoriniame `src` submodule; visa aktyvi programinė logika turi būti šiame repozitoriume.
 
 ## Kokia Logika Perkeliama
 

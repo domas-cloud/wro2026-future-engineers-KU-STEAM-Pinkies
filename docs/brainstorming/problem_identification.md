@@ -7,6 +7,14 @@ Taigi pagrindinė problema buvo ne tik sukurti važiuojantį automobilį, bet ir
 Dar viena aiški išvada atėjo iš praėjusio roboto: pernelyg sudėtinga ir didesnė konstrukcija apsunkina derinimą, didina mechaninio laisvumo riziką ir apsunkina pakartojamą važiavimą.
 Todėl šiame projekte iš karto siekėme paprastesnio ir mažesnio roboto, kuriame būtų mažiau nereikalingų mazgų, trumpesni mechaniniai keliai ir lengviau valdoma architektūra.
 
+## Kuo Šis Robotas Skiriasi Nuo Praėjusio
+
+- mažesnis bendras kėbulas ir kompaktiškesnis mazgų išdėstymas;
+- paprastesnė elektronikos architektūra, kur `ESP32` vykdo visą valdymą;
+- `Raspberry Pi Zero` paliktas tik kameros vaizdui;
+- mažesnis papildomų jutiklių kiekis ir mažesnės energijos sąnaudos;
+- didesnis dėmesys mechaniniam standumui ir mažesniam laisvumui.
+
 ## Pagrindiniai Apribojimai
 
 - Ribota robote esanti skaičiavimo galia ir energija.

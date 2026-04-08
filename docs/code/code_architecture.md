@@ -1,6 +1,6 @@
 # Programos Architektūra
 
-## Numatyta Atskirtis
+## Posistemių Atskirtis
 
 - kameros gavimo sluoksnis veikia `Raspberry Pi Zero`;
 - valdymo ir vykdiklių sluoksnis veikia `ESP32`;
@@ -8,23 +8,11 @@
 
 ## Modulių Žemėlapis
 
-- `camera`:
-  - kameros gavimas `Raspberry Pi Zero`;
-  - kadrų perdavimas į `ESP32`;
-  - kameros ryšio būklės stebėjimas.
-- `sensing`:
-  - `BNO085` orientacijos ir judėjimo duomenys `ESP32` pusėje;
-  - 2 `VL53L5CX` matricinių ToF modulių atstumo kadrai `ESP32` pusėje;
-  - jutiklių būklės tikrinimas ir paprastas filtravimas.
-- `control`:
-  - vairo korekcija;
-  - važiavimo išėjimo formavimas;
-  - būsenų mašinos pagrindu veikiantis elgsenos pasirinkimas;
-  - visi skaičiavimai `ESP32` pusėje.
-- `communication`:
-  - kamerinių duomenų žinutės iš Pi Zero į `ESP32`;
-  - patvirtinimo arba „heartbeat“ žinutės, jei jos naudojamos;
-  - saugus atsarginis elgesys nutrūkus ryšiui.
+- `camera`: kameros gavimas `Raspberry Pi Zero`, kadrų perdavimas į `ESP32`, kameros ryšio būklės stebėjimas.
+- `sensing`: `BNO085` orientacijos duomenys, 2 `VL53L5CX` matricinių ToF modulių įvestys ir jutiklių būklės tikrinimas `ESP32` pusėje.
+- `control`: paklaidos skaičiavimas, vairo korekcija, važiavimo išėjimo formavimas ir būsenų logika `ESP32` pusėje.
+- `safety`: įėjimų patikimumo tikrinimas, ryšio nutrūkimo elgsena ir saugus sustojimas.
+- `communication`: kameros duomenų perdavimas iš Pi Zero į `ESP32` ir būsenos palaikymo žinutės, jei jos naudojamos.
 
 ## Sąsajos Sutartis
 
@@ -36,6 +24,7 @@ Tarp plokščių siunčiama žinutė turi nešti tik tiek informacijos, kiek rei
 - trumpas būklės indikatorius, jei ryšys tai palaiko.
 
 Tikslus transportas gali skirtis, bet paskirtis turi likti ta pati: `Raspberry Pi Zero` tiekia kameros duomenis, o `ESP32` atlieka visus skaičiavimus.
+Šiame projekte kodas turi būti laikomas tame pačiame repozitoriume, o ne išoriniame submodule.
 
 ## Duomenų Srautas
 
@@ -50,13 +39,6 @@ Tikslus transportas gali skirtis, bet paskirtis turi likti ta pati: `Raspberry P
 
 Toks padalijimas padeda sistemą išlaikyti suprantamą ir sumažina riziką, kad viena funkcija bus atsakinga už viską.
 Be to, taip repozitoriumą lengviau atkurti, nes kiekvienas sluoksnis turi aiškią atsakomybę.
-
-## Ką Reikia Įtraukti
-
-- modulių sąrašą;
-- duomenų srauto diagramą;
-- paleidimo seką;
-- klaidų valdymą ir atsigavimo elgseną.
 
 ## Paleidimo Seką
 
