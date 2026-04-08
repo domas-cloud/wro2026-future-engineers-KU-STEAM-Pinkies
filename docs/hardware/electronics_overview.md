@@ -9,18 +9,18 @@ Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
 
 ## Funkcinės Ribos
 
-- `Raspberry Pi Zero` atlieka tik kameros gavimą;
+- `Raspberry Pi Zero` atlieka kameros gavimą ir pateikia kamerinę įvestį atstumo įvertinimui priekyje;
 - `ESP32` atlieka skaičiavimus, vairo išėjimą, variklio valdymą ir greitą saugos reakciją;
-- kameros srautas yra Pi Zero įvestis, o `BNO085` ir `VL53L5CX` skaito `ESP32`;
+- kameros srautas yra Pi Zero įvestis, o `BNO085` ir 2 `VL53L5CX` moduliai skaito `ESP32`;
 - baterija ir reguliatoriai tiekia švarią energiją, o ne elgseną.
 
 ## Pagrindiniai Elektriniai Blokai
 
 - `L298N H-bridge` skirtas `N20` varikliui;
 - `MG90S` vairo servomechanizmas;
-- kamera `Raspberry Pi Zero`;
+- `OV5647 5Mpx wide-angle` kamera (`Waveshare 14037`) `Raspberry Pi Zero`;
 - `BNO085 9-DOF IMU`;
-- `VL53L5CX` matricos ToF lidar;
+- 2 `VL53L5CX` matriciniai ToF moduliai;
 - maitinimo reguliavimas ir paskirstymas.
 
 ## Projektavimo Tikslas
@@ -28,6 +28,7 @@ Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
 Elektronikos architektūra turi išlaikyti valdymo grandinę lengvai suprantamą:
 
 - Pi Zero pateikia kameros įvestį;
+- kamera naudojama ir priekyje esančio atstumo įvertinimui, todėl nereikia daug atskirų ToF jutiklių;
 - `ESP32` priima važiavimo sprendimus ir vykdo vykdiklių komandas;
 - jutikliai tiesiogiai teikia navigacijos kontekstą ir saugos duomenis `ESP32`;
 - akumuliatorių paketas tiekia variklio galią, o loginės šakos yra reguliuojamos atskirai.

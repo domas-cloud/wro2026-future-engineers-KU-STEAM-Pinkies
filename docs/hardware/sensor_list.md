@@ -2,21 +2,22 @@
 
 ## Naudojami Jutikliai
 
-- Kamera juostos ir kliūčių matymui.
+- `OV5647 5Mpx wide-angle` kamera (`Waveshare 14037`) juostos, kliūčių ir priekyje esančio atstumo įvertinimui.
 - `BNO085 9-DOF IMU` orientacijai ir judėjimo stabilumui.
-- `VL53L5CX` matricos ToF lidarui atstumui ir kliūčių suvokimui.
+- 2 `VL53L5CX` matriciniai ToF moduliai artimo atstumo ir kliūčių patvirtinimui.
 
 ## Kiekvieno Jutiklio Vaidmuo
 
-- Kamera suteikia bendrą trasos vaizdą.
+- Kamera suteikia bendrą trasos vaizdą ir padeda įvertinti priekyje esantį atstumą.
 - IMU padeda stabilizuoti judėjimą ir nustatyti krypties pokyčius.
-- ToF jutiklis pateikia artimo atstumo informaciją, kuri papildo vaizdą.
+- 2 matriciniai ToF moduliai pateikia artimo atstumo informaciją ir patvirtina kliūtis, kai kamerinis įvertinimas nėra pakankamas.
 
 ## Surinkimo Pastabos
 
 - `BNO085` turi būti sumontuotas standžiai, kad sujungimo rezultatai atspindėtų roboto judėjimą, o ne plokštės lankstumą;
 - `VL53L5CX` padėtis turi atitikti kliūčių zonos geometriją ir neužstoti matymo linijų;
-- kameros kadras ir ToF aprėptis turi būti aprašyti kartu, nes jie sprendžia skirtingas tos pačios navigacijos problemos dalis.
+- kamera ir 2 matriciniai ToF moduliai turi būti aprašyti kartu, nes jie sprendžia skirtingas tos pačios navigacijos problemos dalis;
+- naudojant tik 2 ToF modulius sumažinamos energijos sąnaudos ir supaprastinama elektronikos architektūra.
 
 ## Dokumentacijos Reikalavimai
 
