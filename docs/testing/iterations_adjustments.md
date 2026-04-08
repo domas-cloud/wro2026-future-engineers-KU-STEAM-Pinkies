@@ -1,33 +1,33 @@
-# Iteracijos ir Koregavimai
+# Iterations And Adjustments
 
-Ši dalis aprašo, kaip robotas keitėsi per kelias pagrindines mechanikos ir jutiklių iteracijas.
+This section describes how the robot changed through several key mechanical and sensor iterations.
 
-## 1 Iteracija: Ankstyvas vairo prototipas
+## Iteration 1: Early Steering Prototype
 
-Pirmoje versijoje buvo bandomas ankstyvas vairo sprendimas su centriniu dantračiu ir šoniniais mazgais.
-Dar prieš dabartinę geometriją buvo pasireiškusi didelio rato peties problema, todėl servo apkrova buvo per didelė.
-Šis etapas parodė, kad vien tik veikiančios mechanikos nepakanka, jei ji apkrauna servo ir blogina pakartojamumą.
+The first version tested an early steering solution with a central gear and side assemblies.
+Before the current geometry, there was still a large wheel lever-arm problem, which placed too much load on the servo.
+This stage showed that working mechanics alone were not enough if they overloaded the servo and reduced repeatability.
 
-## 2 Iteracija: Vairo geometrijos pataisa
+## Iteration 2: Steering Geometry Correction
 
-Vėliau šoniniai mazgai buvo perdirbti taip, kad suktųsi apie savo ašį vietoje.
-Taip buvo pašalintas didelis petys, sumažinta apkrova servo mechanizmui ir pagerintas jėgos perdavimas į ratus.
-Po šio pakeitimo vairavimo sistema tapo stabilesnė ir tinkamesnė tolimesniems testams.
+Later, the side assemblies were redesigned to rotate around their own axis in place.
+This removed the large lever arm, reduced servo load, and improved force transfer to the wheels.
+After that change, the steering system became more stable and more suitable for further testing.
 
-## 3 Iteracija: Diferencialo išlaikymas
+## Iteration 3: Keeping The Differential
 
-Vienas svarbiausių sprendimų buvo neatsisakyti diferencialo galinėje ašyje.
-Ankstesnė patirtis su robotu be diferencialo parodė, kad posūkiuose labai padidėja pasipriešinimas sukimui.
-Paliktas diferencialas sumažino slydimą, apkrovas transmisijoje ir pagerino roboto elgesį trasoje.
+One of the most important decisions was to keep the differential on the rear axle.
+Previous experience with a robot without a differential showed that turning resistance increased strongly in corners.
+Keeping the differential reduced slipping, drivetrain load, and improved track behavior.
 
-## 4 Iteracija: Jutiklių vaidmenų aiškus paskirstymas
+## Iteration 4: Clear Separation Of Sensor Roles
 
-Jutiklių sistema buvo paprastinama ir aiškiau suskirstyta pagal funkciją.
-Kamera liko bendram trasos vaizdui, 2 `VL53L5CX` moduliai artimo atstumo patvirtinimui, o `BNO085` krypties stabilumui.
-Toks atskyrimas sumažino painiavą sistemoje ir leido lengviau suprasti, kuris jutiklis už ką atsakingas.
+The sensor system was simplified and divided more clearly by function.
+The camera remained responsible for the overall track view, the 2 `VL53L5CX` modules handled short-range confirmation, and the `BNO085` supported heading stability.
+This reduced ambiguity in the system and made it easier to understand which sensor was responsible for what.
 
-## 5 Iteracija: Tvirtinimo ir stabilumo gerinimas
+## Iteration 5: Improved Mounting And Stability
 
-Papildomas dėmesys buvo skirtas standesniam `BNO085` montavimui ir tvarkingesniam jutiklių išdėstymui.
-Tai sumažino vibracijos ir konstrukcijos lankstumo įtaką rodmenims.
-Po šių pakeitimų roboto judėjimo vertinimas tapo nuoseklesnis per kelis bandymus iš eilės.
+Additional attention was given to more rigid mounting of the `BNO085` and cleaner sensor placement.
+This reduced the influence of vibration and structural flex on the readings.
+After those changes, the robot's motion estimation became more consistent across repeated tests.

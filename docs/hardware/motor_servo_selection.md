@@ -1,30 +1,30 @@
-# Variklio ir Servomechanizmo Pasirinkimas
+# Motor And Servo Selection
 
-## Variklis
+## Motor
 
-Pavaros pusėje naudojamas variklis, kuris gali suteikti pakankamą sukimo momentą įsibėgėjimui ir pakartotiniams startams trasoje.
-Renkantis svarbiau buvo valdymas ir patikimumas, o ne vien maksimalus greitis.
+The drive side uses a motor that can provide enough torque for acceleration and repeated restarts on the track.
+During selection, controllability and reliability were more important than maximum top speed alone.
 
-## Vairo Servomechanizmas
+## Steering Servo
 
-Vairo servomechanizmas turi tiksliai nustatyti priekinių ratų padėtį ir pakartojamai grįžti į centrą.
-Kadangi vairo tikslumas tiesiogiai veikia važiavimą juosta, servo stabilumas yra svarbesnis už labai greitą judėjimą.
+The steering servo must position the front wheels accurately and return to center consistently.
+Because steering precision directly affects lane-following behavior, servo stability is more important than extremely fast motion.
 
-## Mechaninis Suderinamumas
+## Mechanical Compatibility
 
-Servomechanizmo pasirinkimas susietas su vairo traukėmis ir pavarų mechanizmu.
-Tai reiškia, kad servo nėra tik dalių sąrašo punktas; jis nusako, kiek posūkio gali naudoti vairo geometrija ir kokią apkrovą mechanizmas gali atlaikyti.
+The servo choice is closely tied to the steering linkages and gear mechanism.
+This means the servo is not just a parts-list item; it defines how much steering range the geometry can use and how much load the mechanism can tolerate.
 
-## Pasirinkimo Kriterijai
+## Selection Criteria
 
-- pakankamas sukimo momentas;
-- prognozuojamas atsakas;
-- suderinama įtampa ir srovės poreikis;
-- mechaninis suderinamumas su vairo geometrija;
-- paprastas pakeitimas, jei testai parodo geresnį variantą.
+- sufficient torque;
+- predictable response;
+- compatible voltage and current requirements;
+- mechanical compatibility with the steering geometry;
+- easy replacement if testing shows a better option.
 
-## Ką Reikia Dokumentuoti
+## What Should Be Documented
 
-- tikslius dalių pavadinimus;
-- kodėl dalys buvo pasirinktos;
-- bet kokį kompromisą tarp greičio, momento, tikslumo ir galios.
+- the exact part names;
+- why the parts were selected;
+- any trade-offs between speed, torque, accuracy, and power demand.

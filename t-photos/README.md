@@ -1,3 +1,3 @@
-# Komandos Nuotraukos
+# Team Photos
 
-Šiame aplanke saugomos komandos dokumentacinės nuotraukos.
+This folder stores the team's documentation photos.

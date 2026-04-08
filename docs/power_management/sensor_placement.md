@@ -1,15 +1,15 @@
-# Jutiklių Išdėstymo Strategija
+# Sensor Placement Strategy
 
-## Išdėstymo Logika
+## Placement Logic
 
-Kamera, `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai turi būti išdėstyti pagal tai, ką jiems reikia matyti.
+The camera, `BNO085`, and 2 `VL53L5CX` matrix ToF modules should be positioned according to what they need to observe.
 
-- Kamera: orientuota taip, kad matytų juostą ir svarbias kliūtis.
-- `BNO085`: standžiai sumontuotas netoli roboto judėjimo centro.
-- 2 `VL53L5CX` matriciniai ToF moduliai: padėti taip, kad dengtų tikėtinas kliūčių zonas ir aklas vietas.
+- Camera: aimed so it can see the lane and relevant obstacles.
+- `BNO085`: mounted rigidly near the robot's motion center.
+- 2 `VL53L5CX` matrix ToF modules: placed to cover expected obstacle zones and blind areas.
 
-## Ką Paaiškinti
+## What Should Be Explained
 
-- kodėl išdėstymas tinka trasos geometrijai;
-- kokios aklos zonos vis dar galimos;
-- kaip išdėstymas keitėsi iteracijų metu.
+- why the placement fits the track geometry;
+- which blind spots may still remain;
+- how the placement changed during iteration.

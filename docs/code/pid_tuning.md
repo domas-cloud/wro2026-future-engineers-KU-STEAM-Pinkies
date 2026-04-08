@@ -1,13 +1,13 @@
-# PID Derinimas
+# PID Tuning
 
-## Kodėl PID Svarbus
+## Why PID Matters
 
-PID derinimas tiesiogiai veikia važiavimo stabilumą trasoje ir vairo reakcijos kokybę.
+PID tuning directly affects driving stability on the track and the quality of steering response.
 
-## Derinimo Eiga
+## Tuning Process
 
-1. Nustatyti saugų pradžios tašką su konservatyviais parametrais.
-2. Pirmiausia derinti vairo atsaką, nes jis tiesiogiai veikia važiavimą juosta.
-3. Tikrinti persikirtimą, vėlavimą ir svyravimą.
-4. Važiavimo korekcijas reguliuoti tik tada, kai vairas jau stabilus.
-5. Testą kartoti toje pačioje trasos vietoje, kad palyginimai išliktų prasmingi.
+1. Start from a safe baseline with conservative parameters.
+2. Tune steering response first, because it directly affects lane following.
+3. Check for overshoot, delay, and oscillation.
+4. Adjust drive-related corrections only after the steering loop is stable.
+5. Repeat the test in the same part of the track so comparisons remain meaningful.

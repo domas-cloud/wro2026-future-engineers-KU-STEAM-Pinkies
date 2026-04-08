@@ -1,13 +1,13 @@
-# Ratų Tvirtinimas ir Pakabos Pasirinkimai
+# Wheel Mounting And Suspension Choices
 
-## Ratų Tvirtinimas
+## Wheel Mounting
 
-Ratai turi išlikti sulygiuoti veikiant apkrovai ir posūkių metu.
-Tvirtas tvirtinimas yra svarbus, nes ratų klibėjimas virsta vairavimo klaida.
-Galinėje ašyje naudojami `LEGO` ratai, prijungti prie diferencialo, kad pavara būtų mechaniškai paprasta ir patikima.
-Priekinėje ašyje naudojami custom silikoniniai lieti ratai, nes jų didesnis sukibimas padeda tiksliau išlaikyti vairo komandą posūkiuose.
+The wheels must remain aligned under load and while turning.
+Rigid mounting is important because wheel wobble turns directly into steering error.
+The rear axle uses `LEGO` wheels connected to the differential so the drivetrain remains mechanically simple and reliable.
+The front axle uses custom silicone-cast wheels because their higher grip helps the robot hold steering commands more accurately in turns.
 
-## Pakabos Pasirinkimas
+## Suspension Choice
 
-Ši konstrukcija orientuota į standžią ir prognozuojamą ratų geometriją, o ne į sudėtingą pakabos sistemą.
-Toks sprendimas sumažina papildomą mechaninį laisvumą ir padeda išlaikyti stabilesnį vairavimą.
+This design is focused on rigid and predictable wheel geometry rather than a complex suspension system.
+That choice reduces extra mechanical play and helps keep the steering behavior more stable.

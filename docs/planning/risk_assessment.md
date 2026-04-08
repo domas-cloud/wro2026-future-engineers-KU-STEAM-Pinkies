@@ -1,21 +1,21 @@
-# Rizikų Vertinimas
+# Risk Assessment
 
-## Pagrindinės Rizikos
+## Main Risks
 
-- Vairo laisvumas arba strigimas.
-- Jutiklių poslinkis arba aklos zonos.
-- Maitinimo nestabilumas veikiant varikliui.
-- Programinės įrangos delsimas `Raspberry Pi Zero`.
-- Mechaninis atsileidimas po pakartotinių važiavimų.
+- steering play or jamming;
+- sensor misalignment or blind spots;
+- power instability while the motor is active;
+- software delay related to the `Raspberry Pi Zero`;
+- mechanical loosening after repeated runs.
 
-## Mažinimo Priemonės
+## Mitigation Measures
 
-- Prieš galutinai užbaigiant kėbulą patikrinti vairo geometriją.
-- Jutiklius išdėstyti pagal trasos geometriją ir patikrinti jų aprėptį.
-- Kiek įmanoma atskirti variklio maitinimą nuo jautrios elektronikos.
-- Programinę įrangą laikyti moduline, kad viena klaida nesugriautų viso valdymo ciklo.
-- Kiekvieną gedimo tipą ir jo pataisymą įrašyti į problemų žurnalą.
+- verify steering geometry before finalizing the chassis;
+- place sensors according to track geometry and verify their coverage;
+- separate motor power from sensitive electronics as much as possible;
+- keep the software modular so one failure does not break the whole control loop;
+- record each failure type and fix in the problem log.
 
-## Dokumentacijos Taisyklė
+## Documentation Rule
 
-Jei kūrimo metu atsiranda rizika, ją reikia aprašyti kartu su simptomu, priežastimi, pataisymu ir vėlesniu testu.
+If a risk appears during development, it should be documented together with the symptom, cause, fix, and follow-up test.

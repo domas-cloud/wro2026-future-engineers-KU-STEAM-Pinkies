@@ -1,27 +1,27 @@
-# Jutiklių Sąrašas
+# Sensor List
 
-## Naudojami Jutikliai
+## Sensors In Use
 
-- `OV5647 5Mpx wide-angle` kamera (`Waveshare 14037`) juostos, kliūčių ir priekyje esančio atstumo įvertinimui.
-- `BNO085 9-DOF IMU` orientacijai ir judėjimo stabilumui.
-- 2 `VL53L5CX` matriciniai ToF moduliai artimo atstumo ir kliūčių patvirtinimui.
+- `OV5647 5Mpx wide-angle` camera (`Waveshare 14037`) for lane observation, obstacle detection, and forward distance estimation.
+- `BNO085 9-DOF IMU` for orientation tracking and motion stability.
+- 2 `VL53L5CX` matrix ToF modules for short-range distance sensing and obstacle confirmation.
 
-## Kiekvieno Jutiklio Vaidmuo
+## Role Of Each Sensor
 
-- Kamera suteikia bendrą trasos vaizdą ir padeda įvertinti priekyje esantį atstumą.
-- IMU padeda stabilizuoti judėjimą ir nustatyti krypties pokyčius.
-- 2 matriciniai ToF moduliai pateikia artimo atstumo informaciją ir patvirtina kliūtis, kai kamerinis įvertinimas nėra pakankamas.
+- The camera provides the general track view and helps estimate the situation in front of the robot.
+- The IMU helps stabilize motion and detect heading changes.
+- The 2 matrix ToF modules provide close-range distance data and confirm obstacles when camera-based estimation alone is not enough.
 
-## Surinkimo Pastabos
+## Mounting Notes
 
-- `BNO085` turi būti sumontuotas standžiai, kad sujungimo rezultatai atspindėtų roboto judėjimą, o ne plokštės lankstumą;
-- `VL53L5CX` padėtis turi atitikti kliūčių zonos geometriją ir neužstoti matymo linijų;
-- kamera ir 2 matriciniai ToF moduliai turi būti aprašyti kartu, nes jie sprendžia skirtingas tos pačios navigacijos problemos dalis;
-- naudojant tik 2 ToF modulius sumažinamos energijos sąnaudos ir supaprastinama elektronikos architektūra.
+- The `BNO085` must be mounted rigidly so sensor fusion reflects robot motion rather than board flex.
+- The `VL53L5CX` modules should be positioned to match the obstacle-zone geometry without blocking their field of view.
+- The camera and the 2 matrix ToF modules should be documented together because they solve different parts of the same navigation problem.
+- Using only 2 ToF modules reduces power consumption and keeps the electronics architecture simpler.
 
-## Dokumentacijos Reikalavimai
+## Documentation Requirements
 
-- išvardyti tikslius naudojamus modulius;
-- paaiškinti, kur sumontuotas kiekvienas jutiklis;
-- paaiškinti, ką kiekvienas jutiklis prisideda prie roboto sprendimų ciklo;
-- nurodyti bet kokius kalibravimo ar suderinimo reikalavimus.
+- List the exact modules used.
+- Explain where each sensor is mounted.
+- Describe how each sensor contributes to the robot's decision cycle.
+- Mention any calibration or alignment requirements.

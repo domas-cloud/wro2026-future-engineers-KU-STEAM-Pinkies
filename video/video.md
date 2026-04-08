@@ -1,13 +1,13 @@
-# Video Pateikimas
+# Video Submission
 
-- Varžybos: WRO 2026 Future Engineers
-- YouTube URL: bus pridėtas paskelbus galutinį video
-- Minimalus autonominio važiavimo segmentas: 30 sekundžių
+- Competition: WRO 2026 Future Engineers
+- YouTube URL: to be added after the final video is published
+- Minimum autonomous driving segment: 30 seconds
 
-## Pastabos
+## Notes
 
-- pavadinimas: bus įrašytas paskelbus galutinį video;
-- data: bus įrašyta paskelbus galutinį video;
-- trasos konfigūracija: bus trumpai aprašyta kartu su galutiniu video;
-- akcentuojamos posistemės: vairavimas, reakcija į kliūtis, važiavimas juosta ir atsigavimas;
-- ką tai įrodo: autonominį veikimą ir pasikartojantį elgesį.
+- title: to be added after the final video is published;
+- date: to be added after the final video is published;
+- track configuration: to be briefly described together with the final video;
+- highlighted subsystems: steering, obstacle response, lane following, and recovery;
+- what it demonstrates: autonomous operation and repeatable behavior.

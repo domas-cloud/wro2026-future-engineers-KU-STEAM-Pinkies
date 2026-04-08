@@ -1,18 +1,18 @@
-# Maitinimo Nestabilumas
+# Power Instability
 
-## Ką Registruoti
+## What To Record
 
-- įtampos kritimus;
-- persikrovimus veikiant apkrovai;
-- triukšmingus jutiklių rodmenis, kuriuos sukelia įtampos kritimai;
-- įtampos šakų problemas.
+- voltage drops;
+- resets under load;
+- noisy sensor readings caused by power dips;
+- problems in the power rails.
 
-## Specifiniai Įtariamieji
+## Specific Suspects
 
-- `N20` paleidimo srovė, kuri numuša baterijos šaką;
-- `L298N` įtampos kritimas, mažinantis variklio atsargą;
-- bendros maitinimo šakos triukšmas, veikiantis `BNO085`, 2 `VL53L5CX` matricinius ToF modulius arba kamerą.
+- `N20` startup current pulling down the battery rail;
+- `L298N` voltage drop reducing available motor headroom;
+- shared power-rail noise affecting the `BNO085`, the 2 `VL53L5CX` matrix ToF modules, or the camera.
 
-## Kodėl Tai Svarbu
+## Why This Matters
 
-Maitinimo nestabilumas yra vienas greičiausių būdų priversti robotą atrodyti taip, tarsi jis turėtų nesusijusių mechaninių ar programinių klaidų.
+Power instability is one of the fastest ways to make the robot look as if it has unrelated mechanical or software faults.

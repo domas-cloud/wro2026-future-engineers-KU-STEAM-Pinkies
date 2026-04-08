@@ -1,33 +1,33 @@
-# Kėbulo Konstrukcija
+# Chassis Design
 
-## Kėbulo Tikslas
+## Chassis Goal
 
-Kėbulas turi išlaikyti robotą pakankamai standų, kad vairavimas būtų tikslus, ir kartu palikti vietos elektronikai, jutikliams bei laidams.
+The chassis must keep the robot rigid enough for accurate steering while still leaving space for electronics, sensors, and wiring.
 
-## Konstrukcijos Medžiaga
+## Structural Material
 
-Rėmas pagamintas iš lazeriu pjautos faneros.
-Ties vairo mazgu naudojami du faneros sluoksniai, kad būtų galima tiksliai įstatyti guolius.
-Į tuos guolius remiasi varžtai, kurie sudaro vairo mechanizmo ašis ir palaiko steering mazgą.
+The frame is made from laser-cut plywood.
+Two plywood layers are used around the steering assembly so bearings can be fitted accurately.
+Those bearings support the bolts that form the steering pivots and hold the steering assembly in place.
 
-## Konstrukciniai Svarstymai
+## Structural Considerations
 
-- kuo mažesnis lankstumas aplink vairo tvirtinimą;
-- didesnis standumas ties vairo mazgu dėl dvigubo faneros sluoksnio;
-- pakankamas tarpas ratų judėjimui;
-- saugus akumuliatoriaus ir skaičiavimo plokščių tvirtinimas;
-- lengva prieiga priežiūrai ir patikrai.
+- minimize flex around the steering mounts;
+- increase stiffness around the steering assembly by using a double plywood layer;
+- provide enough clearance for wheel movement;
+- secure the battery and computing boards safely;
+- allow easy access for maintenance and inspection.
 
-## Komponentų Išdėstymo Logika
+## Component Layout Logic
 
-- `MG90S` turi būti ten, kur vairo traukė išlieka trumpa ir tiesi;
-- vairo mazgas turi remtis į guolius, kad varžtai ir steering ašys judėtų tiksliai ir su mažesniu laisvumu;
-- `N20` ir `L298N` turi būti sumontuoti taip, kad pavaros kelias išliktų mechaniškai tvarkingas;
-- `ESP32` ir `Raspberry Pi Zero` pageidautina išdėstyti kuo toliau nuo triukšmingiausios maitinimo šakos;
-- `BNO085` turi būti tvirtai pritvirtintas ir, kiek įmanoma, toliau nuo vibracijos šaltinių;
-- 2 `VL53L5CX` matriciniai ToF moduliai turi turėti aiškų matymo lauką į sritis, kurias turi stebėti.
+- the `MG90S` should be placed where the steering linkage stays short and direct;
+- the steering assembly should ride on bearings so the bolts and steering pivots move accurately with less play;
+- the `N20` and `L298N` should be mounted so the drivetrain path stays mechanically clean;
+- the `ESP32` and `Raspberry Pi Zero` should be positioned as far as practical from the noisiest power branch;
+- the `BNO085` must be mounted firmly and, as much as possible, away from vibration sources;
+- the 2 `VL53L5CX` matrix ToF modules must have a clear field of view toward the areas they are meant to observe.
 
-## Kodėl Tai Svarbu
+## Why This Matters
 
-Jei kėbulas per daug lankstosi, vairavimo geometrija ir jutiklių suderinimas judant pradeda kisti.
-Dvigubas faneros sluoksnis ties vairo mazgu ir guolių panaudojimas padeda išlaikyti tikslesnę steering geometriją.
+If the chassis flexes too much, the steering geometry and sensor alignment begin to change while the robot is moving.
+The double plywood layer around the steering area and the use of bearings help preserve more accurate steering geometry.

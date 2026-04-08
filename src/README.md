@@ -1,19 +1,19 @@
-# Valdymo Programinė Įranga
+# Control Software
 
-Šiame aplanke saugomas roboto valdymo kodas.
-Aktyvus projekto kodas turi būti laikomas šiame repozitoriume, ne išoriniame `src` submodule.
+This folder stores the robot control code.
+Active project code should remain in this repository, not in an external `src` submodule.
 
-## Kodo Struktūra
+## Code Structure
 
-- `perception/` kameros ir jutiklių duomenų gavimui `Raspberry Pi Zero`;
-- `control/` vairavimui, važiavimui ir būsenų logikai;
-- `communication/` žinutėms tarp Pi Zero ir `ESP32`;
-- `safety/` saugaus stabdymo ir klaidų valdymo logikai;
-- `tests/` programinės įrangos validacijai.
+- `perception/` for camera and sensor data capture on the `Raspberry Pi Zero`;
+- `control/` for steering, driving, and state logic;
+- `communication/` for messages between the Pi Zero and `ESP32`;
+- `safety/` for safe stop and error-handling logic;
+- `tests/` for software validation.
 
-## Atsakomybės
+## Responsibilities
 
-- kameros vaizdo gavimas `Raspberry Pi Zero` pusėje;
-- `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių duomenų naudojimas `ESP32` pusėje;
-- komandų ir kameros būsenos perdavimas į `ESP32`;
-- `MG90S` vairavimo valdymas ir `N20` variklio išėjimas `ESP32` pusėje.
+- camera capture on the `Raspberry Pi Zero` side;
+- use of `BNO085` and the 2 `VL53L5CX` matrix ToF modules on the `ESP32` side;
+- transfer of commands and camera status to the `ESP32`;
+- `MG90S` steering control and `N20` motor output on the `ESP32` side.

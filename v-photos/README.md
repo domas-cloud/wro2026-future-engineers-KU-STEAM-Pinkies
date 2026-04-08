@@ -1,3 +1,3 @@
-# Roboto Nuotraukos
+# Robot Photos
 
-Šiame aplanke saugomos roboto nuotraukos, dokumentuojančios surinkimą ir galutinę išvaizdą.
+This folder stores robot photos documenting the build and final appearance.

@@ -1,17 +1,17 @@
-# IMU ir Enkoderių Integracija
+# IMU And Encoder Integration
 
-## Paskirtis
+## Purpose
 
-IMU padeda robotui suprasti krypties ir judėjimo pokyčius.
-Jei naudojami enkoderiai, jie suteikia papildomą grįžtamąjį ryšį judėjimo vertinimui ir pastovumui.
+The IMU helps the robot understand heading and motion changes.
+If encoders are used, they provide additional feedback for movement estimation and consistency.
 
-## Integracijos Tikslas
+## Integration Goal
 
-Svarbiausia ne tik nuskaityti reikšmes, bet ir sujungti jas su vairavimo bei važiavimo logika, kad robotas elgtųsi nuspėjamiau.
+The goal is not only to read the values, but to connect them to steering and driving logic so the robot behaves more predictably.
 
-## Į Ką Sutelkti Dokumentaciją
+## What The Documentation Should Cover
 
-- kur sumontuotas IMU;
-- kaip jis kalibruotas;
-- ką programinė įranga daro su rodmenimis;
-- ar enkoderių duomenys naudojami grįžtamajam ryšiui, greičio vertinimui ar abiem tikslams.
+- where the IMU is mounted;
+- how it is calibrated;
+- what the software does with its readings;
+- whether encoder data is used for feedback, speed estimation, or both.

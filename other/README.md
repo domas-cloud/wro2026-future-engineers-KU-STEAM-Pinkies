@@ -1,10 +1,10 @@
-# Kiti Failai
+# Other Files
 
-Šiame aplanke laikomi pagalbiniai failai, kurie netelpa į pagrindines dokumentacijos kategorijas.
+This folder stores supporting files that do not fit into the main documentation categories.
 
-Pavyzdžiai:
+Examples:
 
-- laikinos nuorodos;
-- importuotos pastabos;
-- papildomi eksportai;
-- vienkartiniai pagalbiniai failai.
+- temporary references;
+- imported notes;
+- extra exports;
+- one-off helper files.

@@ -1,38 +1,38 @@
-# Valdymo Algoritmai
+# Control Algorithms
 
-## Architektūra
+## Architecture
 
-Valdymo logika turi atskirti suvokimą nuo vykdymo:
+The control logic separates perception from execution:
 
-- `Raspberry Pi Zero` fiksuoja ir perduoda `OV5647` kameros duomenis;
-- `ESP32` interpretuoja kameros ir jutiklių informaciją bei valdo techninę įrangą;
-- `ESP32` vykdo paklaidos skaičiavimą, būsenų logiką, saugos patikras ir techninės įrangos valdymą.
+- the `Raspberry Pi Zero` captures and forwards `OV5647` camera data;
+- the `ESP32` interprets camera and sensor information and controls the hardware;
+- the `ESP32` performs error calculation, state logic, safety checks, and low-level hardware control.
 
-## Ryšys Su Senu Roboto Modeliu
+## Relationship To The Older Robot Model
 
-Pagrindinė algoritmo idėja perimta iš ankstesnio KU STEAM Pinkies roboto: paklaidos skaičiavimas, korekcinis valdymas, vairo ir variklio išėjimas bei kliūčių logika.
-Skirtumas tas, kad naujame robote visa skaičiavimo dalis perkelta į `ESP32`, o `Raspberry Pi Zero` paliktas tik kameros vaizdo gavimui.
-Perkeliama tik algoritmo filosofija, o ne tas pats sensor reading sluoksnis ar tie patys aparatūriniai moduliai.
+The core algorithm idea comes from an earlier KU STEAM Pinkies robot: error calculation, corrective control, steering and motor output, and obstacle logic.
+The difference is that in the new robot all computation has been moved to the `ESP32`, while the `Raspberry Pi Zero` is used only for camera capture.
+What is transferred is the control philosophy, not the same sensor-reading layer or the same hardware modules.
 
-## Pagrindinės Valdymo Atsakomybės
+## Main Control Responsibilities
 
-- iš kamerų įvesties išskirti juostos padėtį arba juostos paklaidą;
-- kamerų įvestį sujungti su `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių pagalbiniais signalais;
-- pagal kameros vaizdą ir artimo atstumo įvestis įvertinti situaciją priekyje;
-- esamą paklaidą paversti vairo komanda;
-- riboti vairo pokyčius, kad robotas nesiūbuotų;
-- mažinti važiavimo išėjimą, kai pasitikėjimas mažas arba robotas yra atsigavimo būsenoje.
+- extract lane position or lane error from camera input;
+- combine camera input with supporting signals from the `BNO085` and the 2 `VL53L5CX` matrix ToF modules;
+- estimate the forward situation from camera and short-range inputs;
+- convert the current error into a steering command;
+- limit steering changes so the robot does not oscillate;
+- reduce drive output when confidence is low or when the robot is in a recovery state.
 
-## Algoritmų Tipai
+## Algorithm Types
 
-- važiavimo juosta valdymas;
-- vairo korekcija;
-- reakcija į kliūtis;
-- saugos perrašymai, kai jutiklio įvestis atrodo neteisinga.
+- lane-following control;
+- steering correction;
+- obstacle response;
+- safety overrides when sensor input appears invalid.
 
-## Aktyvus Valdymo Modelis
+## Active Control Model
 
-- kamera yra pagrindinė įvestis juostos geometrijai ir situacijai priekyje vertinti;
-- `BNO085` padeda krypties stabilumui;
-- 2 matriciniai `VL53L5CX` moduliai naudojami artimo atstumo kliūties patvirtinimui;
-- būsenų logika sprendžia, ar sekti juostą, apvažiuoti, sulėtinti ar sustoti.
+- the camera is the main input for lane geometry and forward-scene estimation;
+- the `BNO085` supports heading stability;
+- the 2 matrix `VL53L5CX` modules are used for short-range obstacle confirmation;
+- the state logic decides whether to follow the lane, avoid, slow down, or stop.

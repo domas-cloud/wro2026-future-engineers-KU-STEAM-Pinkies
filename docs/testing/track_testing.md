@@ -1,20 +1,20 @@
-# Testai Trasos Sąlygomis
+# Track Testing
 
-Trasos testuose reikia fiksuoti tikrus važiavimus sąlygomis, artimomis varžyboms.
-Svarbiausi stebėjimai:
+Track tests should record real runs under conditions similar to competition.
+The most important observations are:
 
-- važiavimo juosta pastovumas;
-- elgesys įveikiant kliūtis;
-- vairo stabilumas posūkiuose;
-- pakartojamumas per kelis važiavimus;
-- `MG90S` grįžimas į centrą;
-- `N20` ir `L298N` pakartojamas įsibėgėjimas;
-- 2 `VL53L5CX` matricinių ToF modulių naudingi rodmenys šalia kliūčių ir atspindinčių paviršių;
-- `BNO085` įtaka krypties stabilumui po kelių posūkių.
+- lane-following consistency;
+- behavior while handling obstacles;
+- steering stability in turns;
+- repeatability across multiple runs;
+- `MG90S` return-to-center behavior;
+- repeatable acceleration from the `N20` and `L298N`;
+- useful readings from the 2 `VL53L5CX` matrix ToF modules near obstacles and reflective surfaces;
+- the effect of the `BNO085` on heading stability after several turns.
 
-Kiekvienam trasos testui reikia išsaugoti:
+For each track test, the team should save:
 
-- trasos aprašą;
-- pakartojimų skaičių;
-- kas pagerėjo arba nepavyko;
-- nuotraukos arba video nuorodą, jei ji yra.
+- a track description;
+- the number of repetitions;
+- what improved or failed;
+- a photo or video reference, if available.

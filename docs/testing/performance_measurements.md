@@ -1,33 +1,33 @@
-# Našumo Matavimai
+# Performance Measurements
 
-Šiame skyriuje fiksuojami rodikliai, pagal kuriuos galima palyginti skirtingas roboto versijas.
-Kol kas didžioji dalis išvadų yra kokybinės, tačiau matavimo struktūra jau apibrėžta ir naudojama testuose.
+This section records the metrics that can be used to compare different versions of the robot.
+At the moment, most conclusions are still qualitative, but the measurement structure is already defined and used during testing.
 
-## Svarbiausi Stebimi Rodikliai
+## Main Metrics To Observe
 
-- vairo centro pakartojamumas po kelių ciklų;
-- kairės ir dešinės posūkio simetrija;
-- roboto stabilumas važiuojant juosta;
-- kliūčių įveikimo patikimumas;
-- roboto elgesys po staigesnio posūkio arba korekcijos.
+- steering center repeatability after several cycles;
+- left-right turning symmetry;
+- robot stability while following the lane;
+- obstacle-handling reliability;
+- robot behavior after a sharper turn or correction.
 
-## Kokybinės Išvados Iš Dabartinių Testų
+## Qualitative Conclusions From Current Tests
 
-- Po vairo geometrijos pakeitimo servo dirbo lengviau ir centras išliko stabilesnis.
-- Diferencialo naudojimas sumažino slydimą ir pasipriešinimą posūkiuose.
-- 2 `VL53L5CX` moduliai buvo pakankami artimo atstumo patvirtinimui, kai vien kameros informacijos neužteko.
-- Standžiau sumontuotas `BNO085` pagerino krypties stabilumo vertinimą.
+- After the steering-geometry correction, the servo worked with less load and the center position remained more stable.
+- Keeping the differential reduced slip and turning resistance in corners.
+- The 2 `VL53L5CX` modules were sufficient for short-range confirmation when camera information alone was not enough.
+- A more rigidly mounted `BNO085` improved heading-stability estimation.
 
-## Ką Dar Reikia Kaupti
+## What Still Needs To Be Collected
 
-Kad dokumentacija būtų stipresnė, prie šio skyriaus verta pridėti vienodomis sąlygomis surinktus skaitinius duomenis:
+To make the documentation stronger, this section should later include numerical data collected under consistent conditions:
 
-- kiek kartų iš eilės vairas grįžta į tą pačią neutralią padėtį;
-- kiek sėkmingų važiavimų iš eilės robotas atlieka toje pačioje trasoje;
-- kiek kartų kliūties patvirtinimui prireikia ToF modulio įsikišimo;
-- kiek kartų posūkiuose pasireiškia slydimas arba perteklinė korekcija.
+- how many times in a row the steering returns to the same neutral position;
+- how many successful runs in a row the robot completes on the same track;
+- how often obstacle confirmation requires intervention from a ToF module;
+- how often slipping or excessive correction appears in turns.
 
-## Matavimo Pastaba
+## Measurement Note
 
-Kol nėra pilnos kiekybinės lentelės, šiame skyriuje pateikiami tik tie stebėjimai, kurie buvo nuosekliai matomi per kelias iteracijas.
-Tokiu būdu išlaikoma sąžininga dokumentacija ir neįrašomi neišmatuoti skaičiai.
+Until a full quantitative table is available, this section includes only observations that were consistently seen across multiple iterations.
+That keeps the documentation honest and avoids inventing numbers that were not actually measured.

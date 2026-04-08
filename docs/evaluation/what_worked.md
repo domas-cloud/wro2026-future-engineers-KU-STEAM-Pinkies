@@ -1,26 +1,26 @@
-# Kas Veikė
+# What Worked
 
-Šiame skyriuje aprašomi sprendimai, kurie testuose pasiteisino ir buvo palikti vėlesnėse roboto versijose.
+This section describes the solutions that proved effective in testing and were kept in later robot versions.
 
-## Mechanika
+## Mechanics
 
-- Trijų dantračių vairo schema leido servo judesį perduoti abiem priekiniams ratams vienu metu.
-- Šoninių mazgų sukimas apie savo ašį vietoje sumažino didelio rato peties problemą ir servo apkrovą.
-- Diferencialo palikimas galinėje ašyje sumažino pasipriešinimą posūkiuose ir pagerino roboto elgesį trasoje.
+- the three-gear steering layout allowed the servo motion to be transferred to both front wheels at the same time;
+- rotating the side assemblies around their own axis reduced the large wheel lever-arm problem and the servo load;
+- keeping the differential on the rear axle reduced turning resistance and improved track behavior.
 
-## Jutikliai
+## Sensors
 
-- `OV5647 5Mpx wide-angle` kamera suteikė pakankamai platų trasos vaizdą juostos ir kliūčių vertinimui.
-- `BNO085 9-DOF IMU` padėjo išlaikyti stabilesnę kryptį po kelių posūkių ir sumažino vien kameros neapibrėžtumą.
-- 2 `VL53L5CX` matriciniai ToF moduliai pasiteisino kaip artimo atstumo patvirtinimo sluoksnis šalia kliūčių.
+- the `OV5647 5Mpx wide-angle` camera provided a wide enough track view for lane and obstacle evaluation;
+- the `BNO085 9-DOF IMU` helped maintain more stable heading after several turns and reduced uncertainty that would otherwise depend only on the camera;
+- the 2 `VL53L5CX` matrix ToF modules worked well as a short-range confirmation layer near obstacles.
 
-## Sistemos Architektūra
+## System Architecture
 
-- `ESP32` naudojimas valdymui leido išlaikyti paprastesnį ir greitesnį roboto sprendimų ciklą.
-- Ribotas ToF modulių skaičius sumažino energijos sąnaudas ir supaprastino elektronikos architektūrą.
-- Standus `BNO085` montavimas ir tvarkingesnis jutiklių išdėstymas sumažino vibracijos įtaką rodmenims.
+- using the `ESP32` for control kept the robot decision cycle simpler and faster;
+- limiting the number of ToF modules reduced power consumption and simplified the electronics architecture;
+- rigid `BNO085` mounting and cleaner sensor placement reduced the effect of vibration on the readings.
 
-## Bendras Vertinimas
+## Overall Evaluation
 
-Labiausiai pasiteisino tie sprendimai, kurie mažino mechaninę apkrovą ir paprastino sistemos struktūrą.
-Tai ypač matėsi vairo geometrijoje, diferencialo naudojime ir jutiklių tarpusavio vaidmenų atskyrime.
+The most effective decisions were those that reduced mechanical load and simplified the system structure.
+That was especially visible in the steering geometry, the use of the differential, and the clearer separation of sensor roles.

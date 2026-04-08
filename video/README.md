@@ -1,4 +1,4 @@
-# Vaizdo Įrašai
+# Videos
 
-Šiame aplanke saugoma su robotu ir jo kūrimu susijusi vaizdo medžiaga.
-Publikuoto video nuoroda pateikiama faile `video/video.md`.
+This folder stores video material related to the robot and its development.
+The published video link is provided in `video/video.md`.

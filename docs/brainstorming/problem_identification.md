@@ -1,37 +1,37 @@
-# Problemos Identifikavimas
+# Problem Identification
 
-## Ką Reikėjo Išspręsti
+## What Needed To Be Solved
 
-Robotas turėjo patikimai judėti struktūruota trasa, sekti juostą, atpažinti kliūtis ir išlikti valdomas per pakartotinius važiavimus.
-Taigi pagrindinė problema buvo ne tik sukurti važiuojantį automobilį, bet ir subalansuoti vairo tikslumą, važiavimo stabilumą, jutiklių aprėptį bei skaičiavimų delsą vienoje sistemoje.
-Dar viena aiški išvada atėjo iš praėjusio roboto: pernelyg sudėtinga ir didesnė konstrukcija apsunkina derinimą, didina mechaninio laisvumo riziką ir apsunkina pakartojamą važiavimą.
-Todėl šiame projekte iš karto siekėme paprastesnio ir mažesnio roboto, kuriame būtų mažiau nereikalingų mazgų, trumpesni mechaniniai keliai ir lengviau valdoma architektūra.
+The robot had to move reliably on a structured track, follow the lane, identify obstacles, and remain controllable over repeated runs.
+The main challenge was therefore not only to build a moving car, but to balance steering precision, driving stability, sensor coverage, and computation delay in one system.
+Another clear lesson came from the previous robot: a larger and more complex build makes tuning harder, increases the risk of mechanical play, and reduces repeatability.
+Because of that, this project aimed from the start for a smaller and simpler robot with fewer unnecessary subsystems, shorter mechanical paths, and easier-to-manage architecture.
 
-## Kuo Šis Robotas Skiriasi Nuo Praėjusio
+## How This Robot Differs From The Previous One
 
-- mažesnis bendras kėbulas ir kompaktiškesnis mazgų išdėstymas;
-- paprastesnė elektronikos architektūra, kur `ESP32` vykdo visą valdymą;
-- `Raspberry Pi Zero` paliktas tik kameros vaizdui;
-- mažesnis papildomų jutiklių kiekis ir mažesnės energijos sąnaudos;
-- didesnis dėmesys mechaniniam standumui ir mažesniam laisvumui.
+- smaller overall chassis and more compact subsystem layout;
+- simpler electronics architecture, with the `ESP32` handling all control;
+- the `Raspberry Pi Zero` kept only for camera input;
+- fewer extra sensors and lower power consumption;
+- stronger focus on structural rigidity and reduced mechanical play.
 
-## Pagrindiniai Apribojimai
+## Main Constraints
 
-- Ribota robote esanti skaičiavimo galia ir energija.
-- Reikia tikslaus vairavimo be per didelio mechaninio laisvumo.
-- Reikia aptikti kliūtis ir trasos ypatybes neapsunkinant konstrukcijos.
-- Reikia išlaikyti robotą pakankamai mažą ir paprastą, kad jį būtų lengva derinti ir pakartotinai atkurti.
-- Reikia dokumentacijos, kurią kita komanda galėtų realiai atkurti.
+- limited onboard computing power and energy;
+- a need for accurate steering without excessive mechanical play;
+- a need to detect obstacles and track features without overcomplicating the robot;
+- a need to keep the robot small and simple enough to tune and rebuild easily;
+- a need for documentation that another team could realistically follow.
 
-## Kodėl Tai Svarbu
+## Why This Matters
 
-Future Engineers varžybose maži vairo, jutiklių padėties ar valdymo laiko netikslumai gali baigtis praleistais posūkiais arba susidūrimais su kliūtimis.
-Todėl dokumentacijoje daugiau dėmesio skiriama sprendimams, o ne tik galutinei roboto formai.
-Praėjusio roboto patirtis parodė, kad paprastumas čia nėra kompromisas, o tiesioginė sąlyga stabilesniam ir lengviau pakartojamam rezultatui.
+In Future Engineers competition runs, even small errors in steering, sensor placement, or control timing can lead to missed turns or collisions.
+Because of that, the documentation focuses on the decisions behind the robot, not only on its final shape.
+The experience from the previous robot showed that simplicity is not a compromise here, but a direct requirement for a more stable and repeatable result.
 
-## Sėkmės Kriterijai
+## Success Criteria
 
-- Robotas gali pakartojamai sekti juostą ir įveikti kliūtis.
-- Vairavimas yra mechaniškai stabilus ir elektroniškai valdomas.
-- Maitinimo ir jutiklių išdėstymas palaiko visą sistemą be trikdžių.
-- Repozitoriumas parodo, kaip robotas vystėsi, o ne tik galutinę versiją.
+- the robot can repeatedly follow the lane and handle obstacles;
+- the steering is mechanically stable and electronically controlled;
+- the power and sensor layout supports the full system without interference;
+- the repository shows how the robot developed, not only the final version.

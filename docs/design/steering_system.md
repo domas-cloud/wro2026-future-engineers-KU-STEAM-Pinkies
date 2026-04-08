@@ -1,37 +1,37 @@
-# Vairo Sistema
+# Steering System
 
-## Mechanizmas
+## Mechanism
 
-Robotas naudoja servo pagrindu veikiantį vairavimą su pavaromis susietą priekinę ašį.
-Tikslas yra paversti servo judėjimą į simetrišką ratų judėjimą su prognozuojamais kampų pokyčiais.
-Vairo mechanizmą sudaro trys dantračiai. Servo suka vidurinį dantratį, o šis vienu metu perduoda judesį į abu šoninius dantračius.
-Ant abiejų šoninių dantračių pritvirtintos vairo kojelės, prie kurių tvirtinami ratai, todėl abu priekiniai ratai pasisuka kartu.
+The robot uses servo-based steering with a gear-coupled front axle.
+The goal is to turn servo motion into symmetric wheel movement with predictable angle changes.
+The steering mechanism consists of three gears. The servo rotates the middle gear, which simultaneously transfers motion to both side gears.
+Steering arms are attached to the two side gears, and the wheels are mounted to those arms, so both front wheels turn together.
 
-## Pirmoji Iteracija
+## First Iteration
 
-Pirmoji šio roboto vairo sistemos versija buvo ankstyvas prototipas, kuriame centrinis dantratis perduodavo judesį į du šoninius mazgus.
-Ankstesniuose bandymuose problema buvo didelis rato petys, todėl servo reikėdavo įveikti gerokai didesnę apkrovą.
-Šiame variante šoniniai mazgai sukosi apie savo ašį vietoje, todėl didelio peties nebeliko ir sukimo momentas buvo perduodamas efektyviau.
-Toks išdėstymas sumažino apkrovą servo mechanizmui ir leido efektyviau perduoti judesį į ratus.
-Vėlesnėse iteracijose ši idėja buvo toliau tikslinama, kad vairavimo sistema būtų standesnė ir patikimesnė.
+The first version of this robot's steering system was an early prototype in which the central gear transferred motion to two side assemblies.
+In earlier experiments, one problem was a large wheel lever arm, so the servo had to overcome a much higher load.
+In this version, the side assemblies rotated around their own axis, which removed that large lever arm and transferred torque more efficiently.
+This layout reduced the load on the servo and allowed motion to be delivered to the wheels more effectively.
+In later iterations, the same idea was refined further to make the steering system stiffer and more reliable.
 
-## Diferencialas
+## Differential
 
-Diferencialas buvo naudojamas prototipe ir buvo paliktas vėlesnėje roboto versijoje, nes pasitvirtino kaip svarbi važiuoklės dalis.
-Jo paskirtis yra leisti kairiajam ir dešiniajam ratui posūkio metu suktis skirtingu greičiu, nes vidinis ir išorinis ratas nuvažiuoja nevienodą kelią.
-Praeito roboto viena iš klaidų buvo diferencialo nenaudojimas, todėl posūkiuose pasipriešinimas sukimui labai padidėdavo, praktiškai net iki trigubo lygio.
-Dėl šios priežasties didėjo apkrova mechanikai, blogėjo posūkio tikslumas ir ratai buvo labiau linkę slysti.
-Paliktas diferencialas sumažino šias apkrovas, pagerino roboto elgesį posūkiuose ir leido važiuoti sklandžiau.
+The differential was used in the prototype and kept in the later robot version because it proved to be an important part of the drivetrain.
+Its purpose is to let the left and right wheels rotate at different speeds during a turn, since the inner and outer wheels travel different path lengths.
+One of the previous robot's mistakes was not using a differential, which made turning resistance much higher in corners, in practice almost up to triple.
+As a result, the mechanical load increased, turning accuracy worsened, and the wheels were more likely to slip.
+Keeping the differential reduced those loads, improved turning behavior, and made the robot drive more smoothly.
 
-## Inžinerinės Pastabos
+## Engineering Notes
 
-- išlaikyti vairavimo kelią kuo kompaktiškesnį;
-- kiek įmanoma sumažinti laisvumą;
-- išvengti pavarų sistemos ir kėbulo susikirtimo;
-- užtikrinti, kad servo nuosekliai grįžtų į centrą.
-- išlaikyti vienodą abiejų šoninių dantračių darbą, kad ratų kampai nesiskirtų.
+- keep the steering path as compact as possible;
+- minimize play wherever possible;
+- avoid interference between the gear train and the chassis;
+- ensure the servo returns to center consistently;
+- keep both side gears working evenly so the wheel angles stay matched.
 
-## Integracijos Pastabos
+## Integration Notes
 
-Vairo kampui tiesiogiai įtaką daro tvirtinimo aukštis, traukės ilgis ir trijų dantračių suderinimas.
-Todėl vairo mazgo geometrija turi sutapti su realiu kėbulo ir ratų išdėstymu.
+Steering angle is directly affected by mounting height, linkage length, and the alignment of the three gears.
+Because of that, the steering geometry must match the real chassis and wheel layout.

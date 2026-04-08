@@ -1,36 +1,36 @@
-# Elektronikos Apžvalga
+# Electronics Overview
 
-## Sistemos Padalijimas
+## System Split
 
-Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
+The robot uses two main computing layers:
 
-- `Raspberry Pi Zero` tik kameros duomenims;
-- `ESP32` visiems skaičiavimams, valdymui ir laikui jautrioms užduotims.
+- `Raspberry Pi Zero` for camera input only;
+- `ESP32` for control, decision-making, and time-sensitive tasks.
 
-## Funkcinės Ribos
+## Functional Boundaries
 
-- `Raspberry Pi Zero` atlieka tik kameros gavimą ir perduoda vaizdo įvestį;
-- `ESP32` atlieka skaičiavimus, vairo išėjimą, variklio valdymą ir greitą saugos reakciją;
-- kameros srautas yra Pi Zero įvestis, o `BNO085` ir 2 `VL53L5CX` moduliai skaito `ESP32`;
-- baterija ir reguliatoriai tiekia švarią energiją, o ne elgseną.
+- The `Raspberry Pi Zero` is responsible only for camera capture and passing visual input onward.
+- The `ESP32` handles computation, steering output, motor control, and fast safety reactions.
+- The camera feed comes through the Pi Zero, while the `BNO085` and 2 `VL53L5CX` modules are read by the `ESP32`.
+- The battery and regulators supply clean power; they are not part of the behavior logic.
 
-## Pagrindiniai Elektriniai Blokai
+## Main Electrical Blocks
 
-- `L298N H-bridge` skirtas `N20` varikliui;
-- `MG90S` vairo servomechanizmas;
-- `OV5647 5Mpx wide-angle` kamera (`Waveshare 14037`) `Raspberry Pi Zero`;
+- `L298N H-bridge` for the `N20` motor;
+- `MG90S` steering servo;
+- `OV5647 5Mpx wide-angle` camera (`Waveshare 14037`) connected to the `Raspberry Pi Zero`;
 - `BNO085 9-DOF IMU`;
-- 2 `VL53L5CX` matriciniai ToF moduliai;
-- elektronikos mazgas ant perfboard tipo plokštės;
-- maitinimo reguliavimas ir paskirstymas.
+- 2 `VL53L5CX` matrix ToF modules;
+- electronics assembly built on perfboard;
+- power regulation and distribution stage.
 
-## Projektavimo Tikslas
+## Design Goal
 
-Elektronikos architektūra turi išlaikyti valdymo grandinę lengvai suprantamą:
+The electronics architecture is intended to keep the control chain easy to understand:
 
-- Pi Zero pateikia kameros įvestį;
-- `ESP32` naudoja kameros įvestį situacijai priekyje įvertinti, todėl nereikia daug atskirų ToF jutiklių;
-- `ESP32` priima važiavimo sprendimus ir vykdo vykdiklių komandas;
-- jutikliai tiesiogiai teikia navigacijos kontekstą ir saugos duomenis `ESP32`;
-- pagrindiniai elektronikos sujungimai surinkti ant perfboard, kad mechaninis tvirtinimas ir laidų maršrutai būtų paprastesni;
-- akumuliatorių paketas tiekia variklio galią, o loginės šakos yra reguliuojamos atskirai.
+- The Pi Zero provides camera input.
+- The `ESP32` uses that visual input to estimate the forward situation, reducing the need for many separate ToF sensors.
+- The `ESP32` makes driving decisions and sends commands to the actuators.
+- The sensors feed navigation context and safety data directly into the `ESP32`.
+- The main electronics connections are assembled on perfboard to simplify mounting and wire routing.
+- The battery pack provides motor power, while the logic rails are regulated separately.

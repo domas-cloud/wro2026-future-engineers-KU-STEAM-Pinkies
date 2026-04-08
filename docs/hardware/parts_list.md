@@ -1,37 +1,37 @@
-# Dalių Sąrašas
+# Parts List
 
-## Pagrindinė Elektronika
+## Main Electronics
 
-- `ESP32` pagrindiniam valdymui ir sprendimų ciklui;
-- `Raspberry Pi Zero` kameros duomenų apdorojimui;
-- `BNO085 9-DOF IMU` orientacijai ir judėjimo stabilumui;
-- 2 `VL53L5CX` matriciniai ToF moduliai artimo atstumo ir kliūčių patvirtinimui;
-- `OV5647 5Mpx wide-angle` kamera (`Waveshare 14037`) trasos ir kliūčių stebėjimui.
+- `ESP32` for main control and the decision loop;
+- `Raspberry Pi Zero` for camera data processing;
+- `BNO085 9-DOF IMU` for orientation and motion stability;
+- 2 `VL53L5CX` matrix ToF modules for short-range distance sensing and obstacle confirmation;
+- `OV5647 5Mpx wide-angle` camera (`Waveshare 14037`) for track and obstacle observation.
 
-## Pavara ir Vairavimas
+## Drive And Steering
 
-- `MG90S` vairo servomechanizmas;
-- `N20` pavaros variklis;
-- `L298N H-bridge` variklio valdymui;
-- trijų dantračių vairo mechanizmas;
-- šoniniai vairo mazgai su ratų tvirtinimo detalėmis.
+- `MG90S` steering servo;
+- `N20` drive motor;
+- `L298N H-bridge` for motor control;
+- three-gear steering mechanism;
+- side steering assemblies with wheel mounting hardware.
 
-## Maitinimas
+## Power
 
-- `2x 18650 Li-ion` akumuliatorių paketas;
-- reguliuojama loginė maitinimo šaka;
-- maitinimo ir signalų laidų jungtys.
+- `2x 18650 Li-ion` battery pack;
+- regulated logic power rail;
+- power and signal wiring connections.
 
-## Mechanika
+## Mechanics
 
-- kėbulo konstrukcija;
-- pavarų rinkinys iš `models/`;
-- galinės ašies diferencialas;
-- galiniai `LEGO` ratai;
-- priekiniai individualiai lieti silikoniniai ratai;
-- ratų ašys, laikikliai ir tvirtinimo detalės.
+- chassis structure;
+- gear set from `models/`;
+- rear axle differential;
+- rear `LEGO` wheels;
+- front custom-cast silicone wheels;
+- wheel axles, brackets, and fastening hardware.
 
-## Pastaba
+## Note
 
-Šis sąrašas apima pagrindines roboto dalis, kurios tiesiogiai veikia važiavimą, jutimą ir valdymą.
-Jei vėliau bus ruošiama pilna gamybinė specifikacija, prie šio dokumento verta pridėti kiekius, įtampas, redukcijos santykius ir tikslias jungtis.
+This list includes the main robot components that directly affect driving, sensing, and control.
+If a full manufacturing specification is prepared later, this document should also include quantities, voltages, gear ratios, and exact connector details.

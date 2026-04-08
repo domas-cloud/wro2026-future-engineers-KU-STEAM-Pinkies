@@ -1,27 +1,27 @@
-# Mechaniniai Gedimai
+# Mechanical Failures
 
-Šiame skyriuje aprašomi svarbiausi mechaniniai trūkumai, pastebėti kuriant robotą, ir jų reikšmė tolimesnėms iteracijoms.
+This section describes the main mechanical weaknesses observed during robot development and their significance for later iterations.
 
-## 1. Per didelė vairo apkrova
+## 1. Excessive Steering Load
 
-Ankstyvuose bandymuose viena iš pagrindinių problemų buvo per didelė vairo mechanizmo apkrova.
-Ji atsirasdavo dėl didelio rato peties, todėl servo turėdavo perduoti per daug jėgos.
-Ši problema tiesiogiai paskatino vairo geometrijos perdirbimą.
+In early tests, one of the main problems was excessive load in the steering mechanism.
+It came from the large wheel lever arm, which forced the servo to deliver too much force.
+This problem directly led to a redesign of the steering geometry.
 
-## 2. Padidėjęs pasipriešinimas posūkiuose be diferencialo
+## 2. Increased Turning Resistance Without A Differential
 
-Ankstesnė patirtis parodė, kad be diferencialo galinėje ašyje robotas posūkiuose susiduria su gerokai didesniu pasipriešinimu.
-Dėl to blogėja trajektorijos tikslumas, didėja slydimo tikimybė ir apkrovos transmisijai.
-Todėl diferencialas buvo laikomas ne papildomu, o būtinu mechaniniu sprendimu.
+Previous experience showed that without a rear-axle differential, the robot experienced much higher resistance in turns.
+That reduced trajectory accuracy, increased the risk of slipping, and added load to the drivetrain.
+Because of that, the differential was treated not as an optional addition, but as a necessary mechanical solution.
 
-## 3. Pavarų ir tvirtinimų laisvumas
+## 3. Play In Gears And Mounts
 
-Mechanikoje ypač svarbu sumažinti nereikalingą laisvumą.
-Jei dantračių ar tvirtinimų grandinėje atsiranda per daug laisvos eigos, vairavimo judesys tampa mažiau tikslus ir sunkiau pakartojamas.
-Todėl konstrukcijoje buvo siekiama kompaktiško ir standaus jėgos perdavimo kelio.
+It is especially important to reduce unnecessary play in the mechanics.
+If too much free movement appears in the gear train or mounting chain, the steering motion becomes less precise and harder to repeat.
+Because of that, the design aimed for a compact and rigid force-transfer path.
 
-## 4. Konstrukcijos standumo įtaka
+## 4. Effect Of Structural Stiffness
 
-Net jei atskiros dalys veikia teisingai, per silpnas bendras konstrukcijos standumas gali pabloginti rezultatą.
-Tai ypač svarbu vairo sistemai ir jutiklių tvirtinimams, nes lankstumas gali iškraipyti tiek mechaniką, tiek matavimus.
-Dėl to vėlesnėse iteracijose daugiau dėmesio skirta standumui ir tikslesniam tvirtinimui.
+Even if individual parts work correctly, insufficient overall structural stiffness can still degrade performance.
+This matters especially for the steering system and sensor mounts, because flex can distort both mechanics and measurements.
+As a result, later iterations focused more on stiffness and more accurate mounting.

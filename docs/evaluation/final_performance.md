@@ -1,30 +1,30 @@
-# Galutinis Našumas
+# Final Performance
 
-Galutinė roboto versija buvo orientuota ne į maksimalų greitį, o į stabilesnį ir pakartojamą važiavimą trasoje.
-Pagrindiniai pagerėjimai buvo pasiekti sumažinus mechaninę vairo apkrovą, palikus diferencialą ir aiškiau atskyrus jutiklių vaidmenis.
+The final robot version was optimized not for maximum speed, but for more stable and repeatable track driving.
+The main improvements came from reducing mechanical steering load, keeping the differential, and separating sensor roles more clearly.
 
-## Vairavimo Elgsena
+## Steering Behavior
 
-Vairo sistema po geometrijos korekcijų veikė nuosekliau nei ankstesniuose bandymuose.
-Servo apkrova sumažėjo, nes buvo pašalinta didelio rato peties problema, o priekinių ratų judesys išliko simetriškesnis.
+After the geometry corrections, the steering system behaved more consistently than in earlier tests.
+Servo load decreased because the large wheel lever-arm problem was removed, and front-wheel motion remained more symmetric.
 
-## Posūkiai ir Trauka
+## Turning And Traction
 
-Galinės ašies diferencialas pagerino roboto elgesį posūkiuose.
-Palyginti su ankstesniu robotu be diferencialo, sumažėjo pasipriešinimas sukimui, todėl robotas posūkiuose judėjo sklandžiau ir mažiau slydo.
+The rear-axle differential improved the robot's behavior in turns.
+Compared with the earlier robot without a differential, turning resistance was reduced, so the robot cornered more smoothly and slipped less.
 
-## Jutiklių Darbas
+## Sensor Performance
 
-Kamera liko pagrindinis bendro trasos vaizdo šaltinis, o 2 `VL53L5CX` moduliai buvo naudojami artimo atstumo patvirtinimui.
-`BNO085` papildė sistemą krypties ir judėjimo stabilumo informacija, ypač po kelių iš eilės posūkių.
-Toks jutiklių vaidmenų paskirstymas padėjo sumažinti vieno jutiklio klaidos įtaką visam sprendimų ciklui.
+The camera remained the main source of overall track information, while the 2 `VL53L5CX` modules were used for short-range confirmation.
+The `BNO085` added heading and motion-stability information, especially after several consecutive turns.
+This distribution of sensor roles reduced the impact of any single-sensor error on the full decision cycle.
 
-## Likę Apribojimai
+## Remaining Limitations
 
-Tikslių skaitinių našumo rodiklių dar nėra surinkta tiek, kad būtų galima pateikti pilną kiekybinę lentelę.
-Todėl šiame etape galutinis našumas apibendrinamas pagal realius testus ir stebėtą roboto elgesį trasoje.
+Precise numerical performance data has not yet been collected in a complete enough form to present a full quantitative table.
+Because of that, final performance at this stage is summarized from real tests and observed robot behavior on the track.
 
-## Tolimesni Patobulinimai
+## Further Improvements
 
-Toliau verta rinkti vienodos metodikos testų rezultatus: vairo centro paklaidą, pakartojamumą per kelis važiavimus ir kliūčių įveikimo sėkmės procentą.
-Tai leistų šalia kokybinio vertinimo pateikti ir aiškią skaitinę pažangą tarp versijų.
+It would be useful to continue collecting results with one consistent method: steering-center deviation, repeatability across multiple runs, and obstacle-handling success rate.
+That would make it possible to present clear numerical progress alongside the qualitative evaluation.

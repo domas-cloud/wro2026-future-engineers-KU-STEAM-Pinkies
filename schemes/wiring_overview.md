@@ -14,33 +14,33 @@
 
 ## Power Domains
 
-- `motor domain`: baterija -> `L298N` -> `N20`, didžiausios srovės šaka;
-- `logic domain`: reguliuota šaka `ESP32` ir `Raspberry Pi Zero`;
-- `sensor domain`: `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai atskiroje švarioje loginėje šakoje;
-- `servo domain`: `MG90S` atskiroje šakoje, kuri atlaiko vairo srovės šuolius.
+- `motor domain`: battery -> `L298N` -> `N20`, the highest-current branch;
+- `logic domain`: regulated rail for the `ESP32` and `Raspberry Pi Zero`;
+- `sensor domain`: the `BNO085` and 2 `VL53L5CX` matrix ToF modules on a separate clean logic rail;
+- `servo domain`: the `MG90S` on a separate branch that can handle steering-current spikes.
 
 ## Grounding Strategy
 
-- naudoti vieną bendrą žemės atskaitos tašką visoms posistemėms;
-- variklio grįžtamąją šaką laikyti kuo toliau nuo jautrių signalinių laidų;
-- jutiklių laidų nevesti greta didelės srovės variklio šakos per ilgus ruožus;
-- bendrą grįžtamąjį tašką laikyti prie maitinimo įėjimo arba reguliatorių mazgo.
+- use one common ground reference point for all subsystems;
+- keep the motor return path as far as practical from sensitive signal wires;
+- avoid routing sensor wires next to the high-current motor branch over long distances;
+- keep the shared return point near the power input or regulator section.
 
 ## Signal Paths
 
-- `Raspberry Pi Zero` handles camera capture only.
-- `Raspberry Pi Zero` forwards camera data to the `ESP32`.
-- `ESP32` performs the calculations and generates behavior or steering decisions.
-- `ESP32` drives the `MG90S` steering servo with PWM.
-- `ESP32` controls the `L298N` input pins for the `N20` drive motor.
-- `BNO085` and 2 `VL53L5CX` modules communicate through their sensor bus, typically I2C on the `ESP32`.
+- the `Raspberry Pi Zero` handles camera capture only;
+- the `Raspberry Pi Zero` forwards camera data to the `ESP32`;
+- the `ESP32` performs the calculations and generates behavior or steering decisions;
+- the `ESP32` drives the `MG90S` steering servo with PWM;
+- the `ESP32` controls the `L298N` input pins for the `N20` drive motor;
+- the `BNO085` and 2 `VL53L5CX` modules communicate through their sensor bus, typically I2C on the `ESP32`.
 
-## Valdymo Atsakomybės
+## Control Responsibilities
 
-- Pi Zero atsakingas tik už kameros gavimą;
-- `ESP32` atsakingas už būsenos vertinimą, sprendimų pasirinkimą, realaus laiko išėjimų formavimą, PWM ir pavaros įjungimą;
-- baterija ir reguliatoriai tiekia energiją, bet nevykdo jokios valdymo logikos;
-- schema turi aiškiai parodyti, kuri plokštė generuoja kiekvieną valdymo signalą.
+- the Pi Zero is responsible only for camera capture;
+- the `ESP32` is responsible for state evaluation, decision selection, real-time output generation, PWM, and drive enable;
+- the battery and regulators provide power, but do not perform any control logic;
+- the scheme should clearly show which board generates each control signal.
 
 ## Connection Table
 
@@ -55,9 +55,9 @@
 | Battery to L298N | Power input | Motor current path |
 | Battery to regulators | Power input | Logic and sensor rails |
 
-## Galutinės Schemos Pastabos
+## Notes For The Final Schematic
 
-- galutinėje schemoje reikia nurodyti tikslius pin numerius pagal naudojamą plokštės versiją;
-- žemė turi būti pavaizduota kaip bendra atskaita net ir atskyrus maitinimo šakas;
-- schemoje reikia aiškiai atskirti didelės srovės variklio laidus nuo žemos srovės loginės dalies;
-- jei naudojami konektoriai arba gnybtų blokai, jie turi būti pažymėti.
+- the final schematic should show the exact pin numbers for the board version in use;
+- ground should be shown as a common reference even if the power rails are separated;
+- the schematic should clearly separate high-current motor wires from the low-current logic section;
+- if connectors or terminal blocks are used, they should be labeled.

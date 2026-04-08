@@ -1,33 +1,33 @@
-# Dokumentacijos Indeksas
+# Documentation Index
 
-Šiame aplanke saugoma roboto inžinerinė dokumentacija.
+This folder contains the robot's engineering documentation.
 
-## Pagrindiniai Skyriai
+## Main Sections
 
-- [Idėjų generavimas](brainstorming/problem_identification.md)
-- [Techninė įranga](hardware/electronics_overview.md)
-- [Mechaninė konstrukcija](design/chassis_design.md)
-- [Programinė įranga](code/code_architecture.md)
+- [Brainstorming](brainstorming/problem_identification.md)
+- [Hardware](hardware/electronics_overview.md)
+- [Mechanical Design](design/chassis_design.md)
+- [Software](code/code_architecture.md)
 
-## Greitos Nuorodos Į Techniką
+## Quick Links To Hardware
 
-- [Dalių sąrašas](hardware/parts_list.md)
-- [Jutiklių sąrašas](hardware/sensor_list.md)
-- [PCB / laidų schemos](hardware/pcb_wiring_diagrams.md)
+- [Parts List](hardware/parts_list.md)
+- [Sensor List](hardware/sensor_list.md)
+- [PCB / Wiring Diagrams](hardware/pcb_wiring_diagrams.md)
 
-## Greitos Nuorodos Į Kodą
+## Quick Links To Code
 
-- [Žinučių protokolas](code/message_protocol.md)
-- [Navigacijos logika](code/navigation_logic.md)
-- [Saugos ir apsaugos mechanizmai](code/safety_failsafes.md)
-- [Seno algoritmo pritaikymas](code/legacy_algorithm_mapping.md)
+- [Message Protocol](code/message_protocol.md)
+- [Navigation Logic](code/navigation_logic.md)
+- [Safety And Failsafes](code/safety_failsafes.md)
+- [Legacy Algorithm Mapping](code/legacy_algorithm_mapping.md)
 
-## Greitos Nuorodos Į Testavimą
+## Quick Links To Testing
 
-- [Testai trasoje](testing/track_testing.md)
-- [Našumo matavimai](testing/performance_measurements.md)
+- [Track Testing](testing/track_testing.md)
+- [Performance Measurements](testing/performance_measurements.md)
 
-## Greitos Nuorodos Į Vertinimą
+## Quick Links To Evaluation
 
-- [Galutinis našumas](evaluation/final_performance.md)
-- [Kas veikė](evaluation/what_worked.md)
+- [Final Performance](evaluation/final_performance.md)
+- [What Worked](evaluation/what_worked.md)

@@ -1,31 +1,31 @@
-# Vienetiniai Testai
+# Unit Testing
 
-## Paskirtis
+## Purpose
 
-Vienetiniai testai naudojami mažoms logikos dalims patikrinti prieš bandymus trasoje.
+Unit tests are used to verify small parts of the logic before track testing.
 
-## Tinkami Kandidatai
+## Suitable Candidates
 
-- vairo konvertavimo logika;
-- jutiklių reikšmių filtravimas;
-- būsenų perėjimo taisyklės;
-- komandų formatavimas tarp programinės įrangos sluoksnių.
+- steering conversion logic;
+- filtering of sensor values;
+- state-transition rules;
+- command formatting between software layers.
 
-## Specifiniai Šio Rinkinio Tikslai
+## Specific Goals For This System
 
-- vairo paklaidos vertimas į `MG90S` servomechanizmo padėtį;
-- `BNO085` kalibravimo būsenos interpretavimas;
-- 2 `VL53L5CX` matricinių ToF modulių atstumo kadrų nuskaitymas;
-- saugios būsenos parinkimas prieš siunčiant važiavimo komandas.
+- translation of steering error into `MG90S` servo position;
+- interpretation of `BNO085` calibration status;
+- reading distance frames from the 2 `VL53L5CX` matrix ToF modules;
+- choosing a safe state before sending drive commands.
 
-## Ką Reikia Išsaugoti
+## What Should Be Stored
 
-- testo pavadinimas;
-- tikėtinas rezultatas;
-- faktinis rezultatas;
-- ar testas pavyko;
-- bet kokia pastaba, kodėl tas atvejis svarbus.
+- test name;
+- expected result;
+- actual result;
+- whether the test passed;
+- any note about why the case matters.
 
-## Dokumentacijos Tikslas
+## Documentation Goal
 
-Repozitoriume turi būti aišku, kas buvo testuota ir kodėl tos dalys svarbios roboto patikimumui.
+The repository should make it clear what was tested and why those parts matter for robot reliability.

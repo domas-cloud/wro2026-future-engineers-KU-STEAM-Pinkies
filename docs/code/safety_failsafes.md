@@ -1,34 +1,34 @@
-# Saugos ir Apsaugos Mechanizmai
+# Safety And Failsafes
 
-## Paskirtis
+## Purpose
 
-Robotui reikia saugaus atsarginio elgesio tada, kai sugenda jutiklis, valdymo ciklas tampa nestabilus arba robotas praranda aplinkos suvokimą.
+The robot needs safe fallback behavior when a sensor fails, the control loop becomes unstable, or the robot loses awareness of its surroundings.
 
-## Pavyzdžiai
+## Examples
 
-- mažinti greitį, kai kameros pasitikėjimas mažas;
-- sustabdyti arba laikyti būseną, kai jutiklių duomenys neteisingi;
-- grąžinti vairą į centrą, jei komandų srautas sugenda;
-- neleisti nesaugaus variklio išėjimo paleidimo metu.
+- reduce speed when camera confidence is low;
+- stop or hold state when sensor data becomes invalid;
+- return steering to center if the command stream fails;
+- prevent unsafe motor output during startup.
 
-## Prioritetų Tvarka
+## Priority Order
 
-1. apsaugoti techninę įrangą;
-2. neleisti robotui judėti nesaugiai;
-3. išsaugoti pakankamai būsenos, kad būtų galima gražiai atsigauti;
-4. grįžti prie normalaus važiavimo tik tada, kai jutikliai ir ryšys yra sveiki.
+1. protect the hardware;
+2. prevent unsafe robot movement;
+3. keep enough state for graceful recovery;
+4. return to normal driving only when sensors and communication are healthy.
 
-## Specifiniai Apsaugos Mechanizmai
+## Specific Failsafes
 
-- jei `Raspberry Pi Zero` kameros gavimas sustoja, robotas neturi toliau taikyti senų vairo komandų;
-- jei `BNO085` duomenys tampa neteisingi, krypties korekcijas reikia sumažinti arba išjungti;
-- jei 2 `VL53L5CX` matricinių ToF modulių rodmenys netikėtai šokinėja, robotas turi grįžti į atsargesnį judėjimą arba sustojimo būseną;
-- jei kamerinių duomenų ryšys tarp `Raspberry Pi Zero` ir `ESP32` nutrūksta, `ESP32` turi pereiti į saugų tuščios būsenos režimą.
+- if camera capture on the `Raspberry Pi Zero` stops, the robot must not continue applying stale steering commands;
+- if `BNO085` data becomes invalid, heading corrections should be reduced or disabled;
+- if readings from the 2 `VL53L5CX` matrix ToF modules begin to jump unexpectedly, the robot should switch to more cautious motion or a stopped state;
+- if the camera-data link between the `Raspberry Pi Zero` and `ESP32` drops, the `ESP32` must switch to a safe no-command mode.
 
-## Dokumentacijos Taisyklė
+## Documentation Rule
 
-Kiekvienas saugos veiksmas turi būti susietas su tuo gedimo tipu, nuo kurio jis saugo.
+Each safety action should be tied to the specific failure type it protects against.
 
-## Testavimo Lūkestis
+## Testing Expectation
 
-Kiekvieną apsaugos mechanizmą reikia bent kartą išbandyti kontroliuojamame teste, kad komanda galėtų aprašyti, kas įvyko, ir patvirtinti, jog atsarginis elgesys veikia.
+Each failsafe should be tested at least once in a controlled scenario so the team can describe what happened and confirm that the fallback behavior works.

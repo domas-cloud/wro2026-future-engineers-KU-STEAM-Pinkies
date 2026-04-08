@@ -1,17 +1,17 @@
-# CAD Modeliai
+# CAD Models
 
-## Šiame Repozitoriume Esantys Failai
+## Files Included In This Repository
 
 - `models/linkage.stl`
 - `models/middle gear_.stl`
 - `models/side gear.stl`
 
-## Ką Šie Failai Reiškia
+## What These Files Represent
 
-- `linkage.stl` palaiko vairo traukės kelią;
-- `middle gear_.stl` vaizduoja centrinį dantratį, kurį tiesiogiai suka servo;
-- `side gear.stl` vaizduoja šoninius dantračius, ant kurių tvirtinamos vairo kojelės ir ratų laikikliai.
+- `linkage.stl` supports the steering linkage path;
+- `middle gear_.stl` represents the central gear driven directly by the servo;
+- `side gear.stl` represents the side gears that carry the steering arms and wheel mounts.
 
-## Dokumentacijos Tikslas
+## Documentation Goal
 
-CAD dalyje kiekvienas eksportuotas modelis turi būti susietas su fiziniu mechanizmu ir paaiškinta, kodėl geometrija yra svarbi.
+In the CAD section, each exported model should be linked to the physical mechanism and explained in terms of why its geometry matters.

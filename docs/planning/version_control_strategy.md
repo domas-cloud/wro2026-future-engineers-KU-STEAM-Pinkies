@@ -1,22 +1,22 @@
-# Versijų Valdymo Strategija
+# Version Control Strategy
 
-## Tikslas
+## Goal
 
-Naudok repozitoriumą kaip inžinerinį žurnalą, o ne tik kaip galutinių failų saugyklą.
+Use the repository as an engineering journal, not only as storage for final files.
 
-## Komitų Strategija
+## Commit Strategy
 
-- Komituoti prasmingais žingsniais, o ne tik pabaigoje.
-- Naudoti pranešimus, kurie aprašo pakeitimą, pavyzdžiui, `Pridėta vairo koncepcija` arba `Atnaujinta ToF vieta`.
-- Mechaninius, elektrinius ir programinius pakeitimus, kai įmanoma, laikyti atskirai.
+- commit in meaningful steps rather than only at the end;
+- use commit messages that describe the change, such as `Add steering concept` or `Update ToF placement`;
+- keep mechanical, electrical, and software changes separate when possible.
 
-## Šakų Strategija
+## Branch Strategy
 
-- Funkcinius darbus, kai įmanoma, laikyti atskirose šakose.
-- Sujungti tik tada, kai pakeitimas yra vientisas ir dokumentuotas.
-- Viename komite nesumaišyti valymo ir funkcinių pakeitimų.
+- keep feature work in separate branches when practical;
+- merge only when the change is coherent and documented;
+- avoid mixing cleanup and feature changes in the same commit.
 
-## Dokumentacijos Vertė
+## Documentation Value
 
-Komitų istorija turi rodyti iteraciją, o ne tik galutinę būseną.
-Ši istorija yra atkuriamumo įvertinimo dalis.
+The commit history should show iteration, not just the final state.
+That history is part of reproducibility assessment.

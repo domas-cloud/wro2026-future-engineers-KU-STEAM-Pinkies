@@ -1,27 +1,27 @@
-# Kas Neveikė
+# What Did Not Work
 
-Šiame skyriuje surašyti sprendimai ir situacijos, kurios nepasiteisino arba turėjo būti perdirbtos.
+This section lists solutions and situations that did not work well or had to be redesigned.
 
-## Per didelis rato petys vairavimo mechanikoje
+## Excessive Wheel Lever Arm In The Steering Mechanism
 
-Vienas iš svarbiausių ankstyvų trūkumų buvo didelis rato petys.
-Dėl jo servo turėdavo įveikti gerokai didesnę apkrovą, todėl sistema buvo mažiau efektyvi ir sunkiau pakartojama.
-Šis sprendimas nebuvo paliktas, nes realiuose testuose jis blogino vairavimo patikimumą.
+One of the most important early weaknesses was the large wheel lever arm.
+Because of it, the servo had to overcome a much larger load, which made the system less efficient and harder to repeat reliably.
+This solution was not kept because real tests showed that it reduced steering reliability.
 
-## Ankstesnio roboto sprendimas be diferencialo
+## Previous Robot Without A Differential
 
-Praeito roboto klaida buvo nenaudoti diferencialo.
-Posūkiuose tai labai padidindavo pasipriešinimą sukimui, blogino trajektoriją ir didino slydimo tikimybę.
-Dėl šios priežasties dabartiniame robote diferencialas buvo paliktas kaip būtina važiuoklės dalis.
+A mistake in the previous robot was not using a differential.
+In turns, that strongly increased turning resistance, worsened the trajectory, and increased the chance of slipping.
+Because of that, the current robot kept the differential as a necessary drivetrain element.
 
-## Per didelis pasikliovimas vienu jutiklių tipu
+## Over-Reliance On One Sensor Type
 
-Bandymų metu paaiškėjo, kad vien tik vieno tipo jutiklių nepakanka stabiliai navigacijai visose situacijose.
-Vien kamera arba vien artimo atstumo jutikliai negali patikimai išspręsti visų trasos scenarijų.
-Todėl buvo pasirinktas mišrus sprendimas su kamera, `BNO085` ir 2 `VL53L5CX` moduliais.
+Testing showed that one sensor type alone was not enough for stable navigation in all situations.
+Camera data alone or short-range sensors alone could not reliably solve all track scenarios.
+Because of that, a mixed solution was chosen using the camera, `BNO085`, and 2 `VL53L5CX` modules.
 
-## Nestandūs tvirtinimai
+## Insufficiently Rigid Mounting
 
-Jei `BNO085` arba kiti svarbūs komponentai montuojami nepakankamai standžiai, rodmenys tampa mažiau patikimi.
-Tai ypač svarbu tada, kai konstrukcija vibruoja arba šiek tiek lankstosi važiuojant.
-Dėl to buvo atsisakyta silpnesnių tvirtinimo sprendimų ir daugiau dėmesio skirta standumui.
+If the `BNO085` or other important components are mounted without enough rigidity, the readings become less reliable.
+This matters especially when the structure vibrates or flexes slightly while driving.
+Because of that, weaker mounting solutions were abandoned and more attention was given to stiffness.

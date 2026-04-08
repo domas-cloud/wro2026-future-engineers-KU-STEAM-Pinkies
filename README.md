@@ -1,55 +1,55 @@
 # KU STEAM Pinkies - WRO 2026 Future Engineers
 
-Autonominio Future Engineers roboto dokumentacija.
+Documentation for our autonomous Future Engineers robot.
 
-## Santrauka
+## Summary
 
-- Pavara: `MG90S` vairavimo servomechanizmas, `N20` variklis, `L298N H-bridge`.
-- Skaičiavimai: `Raspberry Pi Zero` tik kameros duomenims, `ESP32` visiems skaičiavimams ir valdymui.
-- Jutikliai: `BNO085 9-DOF IMU`, 2 `VL53L5CX` matriciniai ToF moduliai, kamera.
-- Maitinimas: `2x 18650 Li-ion` akumuliatorių paketas su reguliuotomis loginėmis šakomis.
+- Drive system: `MG90S` steering servo, `N20` motor, `L298N H-bridge`.
+- Computing: `Raspberry Pi Zero` for camera input only, `ESP32` for control and onboard decision-making.
+- Sensors: `BNO085 9-DOF IMU`, 2 `VL53L5CX` matrix ToF modules, and a camera.
+- Power: `2x 18650 Li-ion` battery pack with regulated logic rails.
 
-## Komanda
+## Team
 
 KU STEAM Pinkies.
 
-## Robotas
+## Robot
 
-Tai automobilio tipo robotas su servo vairavimu ir galiniu varikliu.
-Dokumentacijoje daugiausia dėmesio skiriama mechanikai, maitinimo ir jutiklių architektūrai, programinės įrangos elgsenai, testavimui ir atkuriamumui.
+This is a car-style robot with servo steering and a rear drive motor.
+The documentation focuses on mechanics, power and sensor architecture, software behavior, testing, and reproducibility.
 
-## Naujausi Mechanikos Atnaujinimai
+## Latest Mechanical Updates
 
-- Vairo sistemos dokumentacijoje pridėta pirmosios iteracijos santrauka su ankstyvu trijų dantračių prototipu.
-- Pažymėta, kad šoniniai vairo mazgai sukasi apie savo ašį vietoje, todėl servo mechanizmui nereikia didelio peties.
-- Įtrauktas diferencialo aprašas ir paaiškinta, kodėl jis buvo paliktas vėlesnėje versijoje.
-- Užfiksuota ankstesnio roboto klaida: diferencialo nenaudojimas posūkiuose stipriai padidindavo pasipriešinimą sukimui.
+- Added a first-iteration summary to the steering system documentation, including the early three-gear prototype.
+- Clarified that the side steering assemblies rotate around their own axis, so the servo does not require a long lever arm.
+- Added a differential description and explained why it was removed in a later version.
+- Documented an earlier robot issue: without a differential, turning resistance increased significantly during cornering.
 
-## Licencija
+## License
 
-Šiame repozitoriume naudojama [MIT licencija](LICENSE).
+This repository uses the [MIT License](LICENSE).
 
-## Judėjimo Valdymas
+## Motion And Chassis Documentation
 
-- [Kėbulo konstrukcija](docs/design/chassis_design.md)
-- [Vairo sistema](docs/design/steering_system.md)
-- [Ratų tvirtinimas ir pakabos sprendimai](docs/design/wheel_mounting_suspension.md)
-- [CAD modeliai](docs/design/cad_models.md)
-- [Dalių sąrašas](docs/hardware/parts_list.md)
+- [Chassis Design](docs/design/chassis_design.md)
+- [Steering System](docs/design/steering_system.md)
+- [Wheel Mounting And Suspension](docs/design/wheel_mounting_suspension.md)
+- [CAD Models](docs/design/cad_models.md)
+- [Parts List](docs/hardware/parts_list.md)
 
-## Surinkimo Dokumentacija
+## Build And Technical Documentation
 
-- [Dokumentacijos indeksas](docs/README.md)
-- [Idėjų generavimas](docs/brainstorming/problem_identification.md)
-- [Techninė įranga](docs/hardware/electronics_overview.md)
-- [Programinė įranga](docs/code/code_architecture.md)
+- [Documentation Index](docs/README.md)
+- [Problem Identification](docs/brainstorming/problem_identification.md)
+- [Hardware Overview](docs/hardware/electronics_overview.md)
+- [Code Architecture](docs/code/code_architecture.md)
 
-## Versijos Pastabos
+## Version Notes
 
-- [Pakeitimų žurnalas](CHANGELOG.md)
+- [Changelog](CHANGELOG.md)
 
-## Kaip Skaityti Repo
+## How To Read This Repository
 
-1. Pradėk nuo santraukos ir roboto skyriaus.
-2. Perskaityk judėjimo ir surinkimo dokumentaciją, kad suprastum techninius pasirinkimus.
-3. Perskaityk programinės įrangos skyrių, kad suprastum elgsenos logiką.
+1. Start with the summary and robot sections.
+2. Read the motion and build documentation to understand the main technical choices.
+3. Continue with the software section to understand the behavior and control logic.

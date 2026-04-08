@@ -1,33 +1,33 @@
-# Sprendimų ir Pataisymų Žurnalas
+# Solutions And Fix Log
 
-Šiame žurnale trumpai surašyti svarbiausi realūs pakeitimai, kurie buvo atlikti vystant robotą.
+This log briefly records the most important real changes that were made while developing the robot.
 
-## 1. Vairo geometrijos pataisa
+## 1. Steering Geometry Correction
 
-- Problema: ankstesniuose bandymuose buvo susidaręs didelis rato petys, todėl servo turėdavo įveikti per didelę apkrovą.
-- Pataisymas: šoniniai vairo mazgai buvo perdirbti taip, kad suktųsi apie savo ašį vietoje.
-- Patikrinimas: po pakeitimo vairavimas tapo lengvesnis, stabilesnis ir tinkamesnis tolimesnėms iteracijoms.
+- Problem: early tests showed a large wheel lever arm, which forced the servo to overcome too much load.
+- Fix: the side steering assemblies were redesigned to rotate around their own axis in place.
+- Verification: after the change, the steering became lighter, more stable, and better suited for later iterations.
 
-## 2. Diferencialo grąžinimas ir palikimas
+## 2. Returning To And Keeping The Differential
 
-- Problema: ankstesniame robote diferencialo nenaudojimas labai padidindavo pasipriešinimą sukimui posūkiuose.
-- Pataisymas: galinėje ašyje buvo paliktas diferencialas.
-- Patikrinimas: posūkiuose sumažėjo mechaninė apkrova, ratai mažiau slydo, o važiavimas tapo sklandesnis.
+- Problem: in the earlier robot, not using a differential greatly increased turning resistance in corners.
+- Fix: the differential was retained on the rear axle.
+- Verification: mechanical load in turns decreased, the wheels slipped less, and driving became smoother.
 
-## 3. Jutiklių vaidmenų atskyrimas
+## 3. Separation Of Sensor Roles
 
-- Problema: vien tik vieno tipo jutiklių nepakako visoms navigacijos situacijoms.
-- Pataisymas: kamera palikta bendram trasos vaizdui, o 2 `VL53L5CX` moduliai naudojami artimo atstumo ir kliūčių patvirtinimui.
-- Patikrinimas: jutiklių sistema tapo aiškesnė, o kliūčių aptikimas patikimesnis sudėtingesnėse situacijose.
+- Problem: one sensor type alone was not enough for all navigation situations.
+- Fix: the camera was kept for the overall track view, while the 2 `VL53L5CX` modules were used for short-range and obstacle confirmation.
+- Verification: the sensor system became easier to understand, and obstacle detection became more reliable in complex cases.
 
-## 4. `BNO085` montavimo standinimas
+## 4. Stiffening The `BNO085` Mount
 
-- Problema: jei IMU tvirtinimas nėra pakankamai standus, dalis judesio rodmenų gali atspindėti ne roboto, o plokštės lankstumą.
-- Pataisymas: `BNO085` buvo montuojamas standžiai ir kuo arčiau stabilios roboto konstrukcijos dalies.
-- Patikrinimas: krypties ir judėjimo vertinimas tapo nuoseklesnis per kelis posūkius.
+- Problem: if the IMU mount is not rigid enough, some of the motion readings may reflect board flex rather than robot motion.
+- Fix: the `BNO085` was mounted rigidly and placed as close as possible to a stable part of the structure.
+- Verification: heading and motion estimation became more consistent across several turns.
 
-## 5. Elektronikos supaprastinimas
+## 5. Simplifying The Electronics
 
-- Problema: didesnis jutiklių ir šakų skaičius komplikuoja elektroniką ir didina energijos sąnaudas.
-- Pataisymas: pasirinkta architektūra su 2 `VL53L5CX` moduliais vietoje perteklinio artimo atstumo jutiklių skaičiaus.
-- Patikrinimas: sistema liko paprastesnė, lengviau pakartojama ir patogesnė testuoti.
+- Problem: a larger number of sensors and branches makes the electronics more complicated and increases power consumption.
+- Fix: the architecture was simplified to use 2 `VL53L5CX` modules instead of an excessive number of short-range sensors.
+- Verification: the system remained simpler, easier to reproduce, and easier to test.
