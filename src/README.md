@@ -1,6 +1,7 @@
 # Valdymo Programinė Įranga
 
-Šiame aplanke saugomas roboto valdymo kodas ir viskas, ko reikia jam paleisti.
+Šiame aplanke bus saugomas roboto valdymo kodas.
+Šiuo metu čia dar nėra įkelto galutinio kodo, todėl šis aplankas veikia kaip būsimos struktūros aprašas.
 
 ## Numatyta Struktūra
 
@@ -9,17 +10,13 @@
 - `communication/` žinutėms tarp Pi Zero ir `ESP32`;
 - `tests/` programinės įrangos validacijai, jei to reikia.
 
-## Atsakomybės
+## Planuojamos Atsakomybės
 
-- kameros interpretavimas ir kliūčių atpažinimas `Raspberry Pi Zero` pusėje;
-- `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių paruošimas tolimesniam naudojimui;
-- komandų siuntimas į `ESP32` serijiniu ryšiu;
+- kameros vaizdo gavimas `Raspberry Pi Zero` pusėje;
+- `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių duomenų naudojimas `ESP32` pusėje;
+- komandų siuntimas į `ESP32`, jei naudojamas atskiras ryšio sluoksnis;
 - `MG90S` vairavimo valdymas ir `N20` variklio išėjimas `ESP32` pusėje.
 
-## Ko Tikimasi Dokumentacijoje
+## Dabartinė Paskirtis
 
-- aiškiai išvardyti modulius;
-- paaiškinti, kurios dalys veikia Pi Zero, o kurios `ESP32`;
-- komandų pavadinimus suderinti su `docs/code/message_protocol.md`;
-- aprašyti paleidimo seką;
-- nurodyti bet kokias prielaidas apie valdymo ciklo ar jutiklių atnaujinimo dažnį.
+Šis README aprašo numatomą kodo struktūrą, bet pats `src/` aplankas dar nėra submission-ready, kol neįkeltas realus valdymo kodas.

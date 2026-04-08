@@ -24,7 +24,7 @@ Dokumentacijoje daugiausia dėmesio skiriama mechanikai, maitinimo ir jutiklių 
 
 ## Varžybinis Vaizdo Įrašas
 
-- [Varžybinio video pastabos](video/video.md)
+Kol kas šiame repo dar nėra galutinio varžybinio video nuorodos.
 
 ## Judėjimo Valdymas
 
@@ -43,27 +43,32 @@ Dokumentacijoje daugiausia dėmesio skiriama mechanikai, maitinimo ir jutiklių 
 - [Techninė įranga](docs/hardware/electronics_overview.md)
 - [Maitinimas ir laidai](docs/power_management/power_distribution.md)
 - [Programinė įranga](docs/code/code_architecture.md)
-- [Testavimas](docs/testing/test_log_template.md)
-- [Vertinimas](docs/evaluation/reproducibility_checklist.md)
-- [Problemos ir sprendimai](docs/Encountered_Problems_and_Solutions/solutions_fix_log.md)
 
 ## Versijos Pastabos
 
 - [Pakeitimų žurnalas](CHANGELOG.md)
 
-## Artefaktų Aplankai
+## Paruošta Dabar
+
+- techninės architektūros aprašas;
+- mechanikos ir vairo dokumentacija;
+- pagrindinė valdymo logikos struktūra;
+- seno algoritmo perkėlimo paaiškinimas;
+- CAD failų nuorodos ir dalių sąrašas.
+
+## Laukiantys Įrodymai
 
 - `models/` - CAD eksportai ir STL failai.
-- `schemes/` - laidų ir elektromechaninės schemos.
-- `src/` - valdymo programinė įranga.
-- `t-photos/` - komandos nuotraukos.
-- `v-photos/` - roboto nuotraukos.
-- `video/` - vaizdo įrašų nuorodos ir pastabos.
+- `schemes/` - galutinė laidų schema ir pinout dar bus papildyti.
+- `src/` - tikras valdymo kodas dar neįkeltas.
+- `t-photos/` - komandos nuotraukos dar neįkeltos.
+- `v-photos/` - roboto nuotraukos dar neįkeltos.
+- `video/` - galutinė video nuoroda dar neįkelta.
 - `other/` - papildomi failai, kurie netinka kitur.
 
 ## Kaip Skaityti Repo
 
 1. Pradėk nuo santraukos ir roboto skyriaus.
 2. Perskaityk judėjimo ir surinkimo dokumentaciją, kad suprastum techninius pasirinkimus.
-3. Perskaityk programinės įrangos ir testavimo skyrius, kad suprastum elgseną ir validaciją.
-4. Naudok artefaktų aplankus, kad tekstą sulygintum su tikrais failais.
+3. Perskaityk programinės įrangos skyrių, kad suprastum elgsenos logiką.
+4. Laukiančius artefaktų aplankus naudok kaip vietą būsimiems įrodymams.

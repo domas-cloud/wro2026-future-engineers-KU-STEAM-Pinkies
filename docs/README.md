@@ -10,9 +10,6 @@
 - [Mechaninė konstrukcija](design/chassis_design.md)
 - [Maitinimo valdymas](power_management/power_distribution.md)
 - [Programinė įranga](code/code_architecture.md)
-- [Testavimas](testing/test_log_template.md)
-- [Vertinimas](evaluation/reproducibility_checklist.md)
-- [Problemos ir sprendimai](Encountered_Problems_and_Solutions/solutions_fix_log.md)
 
 ## Greitos Nuorodos Į Techniką
 
@@ -38,3 +35,7 @@
 - [Atkuriamumo kontrolinis sąrašas](evaluation/reproducibility_checklist.md)
 - [Galutinis našumas](evaluation/final_performance.md)
 - [Kas veikė](evaluation/what_worked.md)
+
+## Pastaba
+
+Testavimo, vertinimo, nuotraukų, video ir kodo skyriai šiame etape yra daugiau struktūra būsimiems įrodymams nei pilnai užpildyta galutinė medžiaga.

@@ -1,10 +1,11 @@
 # Roboto Nuotraukos
 
-Šiame aplanke saugomos roboto nuotraukos, kurios dokumentuoja surinkimą ir galutinę išvaizdą.
+Šiame aplanke bus saugomos roboto nuotraukos, kurios dokumentuoja surinkimą ir galutinę išvaizdą.
+Šiuo metu jų dar nėra įkelta.
 
 WRO paprastai tikisi šešių roboto nuotraukų iš skirtingų pusių ir kampų, įskaitant viršaus ir apačios vaizdus.
 
-## Naudojimas
+## Numatyta Medžiaga
 
 - kėbulo apžvalga;
 - vairo mechanizmo stambūs kadrai;

@@ -1,10 +1,11 @@
 # Komandos Nuotraukos
 
-Šiame aplanke saugomos komandos dokumentacinės nuotraukos.
+Šiame aplanke bus saugomos komandos dokumentacinės nuotraukos.
+Šiuo metu jų dar nėra įkelta.
 
 WRO paprastai tikisi dviejų komandos nuotraukų: vienos oficialios ir vienos neformalios arba linksmos.
 
-## Naudojimas
+## Numatyta Medžiaga
 
 - oficiali komandos nuotrauka;
 - viena neformali komandos nuotrauka;
