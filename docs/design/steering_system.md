@@ -10,7 +10,8 @@ Ant abiejų šoninių dantračių pritvirtintos vairo kojelės, prie kurių tvir
 ## Pirmoji Iteracija
 
 Pirmoji šio roboto vairo sistemos versija buvo ankstyvas prototipas, kuriame centrinis dantratis perduodavo judesį į du šoninius mazgus.
-Šie šoniniai mazgai sukosi apie savo ašį vietoje, todėl sukimo momentui nereikėjo didelio peties kaip ankstesniuose bandymuose.
+Ankstesniuose bandymuose problema buvo didelis rato petys, todėl servo reikėdavo įveikti gerokai didesnę apkrovą.
+Šiame variante šoniniai mazgai sukosi apie savo ašį vietoje, todėl didelio peties nebeliko ir sukimo momentas buvo perduodamas efektyviau.
 Toks išdėstymas sumažino apkrovą servo mechanizmui ir leido efektyviau perduoti judesį į ratus.
 Vėlesnėse iteracijose ši idėja buvo toliau tikslinama, kad vairavimo sistema būtų standesnė ir patikimesnė.
 
