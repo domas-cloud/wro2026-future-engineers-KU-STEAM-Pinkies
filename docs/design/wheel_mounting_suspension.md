@@ -4,14 +4,10 @@
 
 Ratai turi išlikti sulygiuoti veikiant apkrovai ir posūkių metu.
 Tvirtas tvirtinimas yra svarbus, nes ratų klibėjimas virsta vairavimo klaida.
+Galinėje ašyje naudojami `LEGO` ratai, prijungti prie diferencialo, kad pavara būtų mechaniškai paprasta ir patikima.
+Priekinėje ašyje naudojami custom silikoniniai lieti ratai, nes jų didesnis sukibimas padeda tiksliau išlaikyti vairo komandą posūkiuose.
 
 ## Pakabos Pasirinkimas
 
-Jei robotas naudoja ribotą pakabą arba jos nenaudoja, tai reikia aiškiai įvardyti ir pagrįsti.
-Varžybiniam robotui paprastumas gali būti teisingas pasirinkimas, jei jis pagerina standumą ir prognozuojamumą.
-
-## Ką Dokumentuoti
-
-- ratų tipą ir padėtį;
-- ar robotas yra standus, ar turi elastingumo;
-- kodėl toks sprendimas padeda važiavimui juosta ir kliūčių įveikimui.
+Ši konstrukcija orientuota į standžią ir prognozuojamą ratų geometriją, o ne į sudėtingą pakabos sistemą.
+Toks sprendimas sumažina papildomą mechaninį laisvumą ir padeda išlaikyti stabilesnį vairavimą.

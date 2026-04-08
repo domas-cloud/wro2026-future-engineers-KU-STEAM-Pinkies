@@ -24,4 +24,3 @@ Servo yra sujungtas su viduriniu dantračiu, o ant abiejų šoninių dantračių
 ## Dabartinė Būsena
 
 Ši koncepcija yra šios repozitoriumo mechaninės ir programinės dokumentacijos pagrindas.
-Jei vėlesni testai parodys laisvumą, per mažą diapazoną arba blogą grįžimą į centrą, tuos dalykus reikia įrašyti į problemų ir testavimo skyrius, o ne paslėpti.

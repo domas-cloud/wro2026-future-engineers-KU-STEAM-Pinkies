@@ -24,9 +24,6 @@
 - vairo traukės dalys
 - pavarų rinkinys iš `models/`
 - kėbulo struktūra
+- galiniai `LEGO` ratai ir diferencialas
+- priekiniai custom silikoniniai lieti ratai
 - ratų tvirtinimo detalės
-
-## Pastaba Dėl Dokumentacijos
-
-Šis sąrašas yra sąmoningai trumpas ir orientuotas į modelį.
-Jei pasikeičia konkreti detalės versija, atnaujink šį failą ir techninę dokumentaciją kartu, kad repo išliktų atkuriamas.

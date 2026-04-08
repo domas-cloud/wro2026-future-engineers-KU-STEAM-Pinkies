@@ -30,5 +30,4 @@ Ties vairo mazgu naudojami du faneros sluoksniai, kad būtų galima tiksliai įs
 ## Kodėl Tai Svarbu
 
 Jei kėbulas per daug lankstosi, vairavimo geometrija ir jutiklių suderinimas judant pradeda kisti.
-Todėl dokumentacijoje reikia aiškinti ne tik išvaizdą, bet ir konstrukcijos standumą.
 Dvigubas faneros sluoksnis ties vairo mazgu ir guolių panaudojimas padeda išlaikyti tikslesnę steering geometriją.

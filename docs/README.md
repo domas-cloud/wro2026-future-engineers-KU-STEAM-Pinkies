@@ -5,10 +5,8 @@
 ## Pagrindiniai Skyriai
 
 - [Idėjų generavimas](brainstorming/problem_identification.md)
-- [Planavimas](planning/timeline_deadlines.md)
 - [Techninė įranga](hardware/electronics_overview.md)
 - [Mechaninė konstrukcija](design/chassis_design.md)
-- [Maitinimo valdymas](power_management/power_distribution.md)
 - [Programinė įranga](code/code_architecture.md)
 
 ## Greitos Nuorodos Į Techniką
@@ -35,7 +33,3 @@
 - [Atkuriamumo kontrolinis sąrašas](evaluation/reproducibility_checklist.md)
 - [Galutinis našumas](evaluation/final_performance.md)
 - [Kas veikė](evaluation/what_worked.md)
-
-## Pastaba
-
-Testavimo, vertinimo, nuotraukų, video ir kodo skyriai šiame etape yra daugiau struktūra būsimiems įrodymams nei pilnai užpildyta galutinė medžiaga.

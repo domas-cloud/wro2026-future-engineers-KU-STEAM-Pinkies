@@ -15,4 +15,3 @@
 ## Dokumentacijos Tikslas
 
 CAD dalyje kiekvienas eksportuotas modelis turi būti susietas su fiziniu mechanizmu ir paaiškinta, kodėl geometrija yra svarbi.
-Repozitoriumas turi leisti kitai komandai atkurti mechanizmą iš rašytinio aprašymo ir modelių failų.

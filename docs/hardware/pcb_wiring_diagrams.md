@@ -19,7 +19,7 @@ Taip pat žr.: [Laidų apžvalgą](../../schemes/wiring_overview.md)
 
 ## Praktinė Laidų Struktūra
 
-Tikėtina laidų struktūra yra tokia:
+Laidų struktūra yra tokia:
 
 - `2x 18650 Li-ion` akumuliatorių paketas maitina pagrindinę įvestį;
 - pavaros šaka eina per `L298N H-bridge` į `N20` variklį;

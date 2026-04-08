@@ -22,15 +22,10 @@ Dokumentacijoje daugiausia dėmesio skiriama mechanikai, maitinimo ir jutiklių 
 
 Šiame repozitoriume naudojama [MIT licencija](LICENSE).
 
-## Varžybinis Vaizdo Įrašas
-
-Kol kas šiame repo dar nėra galutinio varžybinio video nuorodos.
-
 ## Judėjimo Valdymas
 
 - [Kėbulo konstrukcija](docs/design/chassis_design.md)
 - [Vairo sistema](docs/design/steering_system.md)
-- [Pavarų santykiai ir mechanika](docs/design/gear_ratios_mechanics.md)
 - [Ratų tvirtinimas ir pakabos sprendimai](docs/design/wheel_mounting_suspension.md)
 - [CAD modeliai](docs/design/cad_models.md)
 - [Dalių sąrašas](docs/hardware/parts_list.md)
@@ -39,36 +34,15 @@ Kol kas šiame repo dar nėra galutinio varžybinio video nuorodos.
 
 - [Dokumentacijos indeksas](docs/README.md)
 - [Idėjų generavimas](docs/brainstorming/problem_identification.md)
-- [Planavimas](docs/planning/timeline_deadlines.md)
 - [Techninė įranga](docs/hardware/electronics_overview.md)
-- [Maitinimas ir laidai](docs/power_management/power_distribution.md)
 - [Programinė įranga](docs/code/code_architecture.md)
 
 ## Versijos Pastabos
 
 - [Pakeitimų žurnalas](CHANGELOG.md)
 
-## Paruošta Dabar
-
-- techninės architektūros aprašas;
-- mechanikos ir vairo dokumentacija;
-- pagrindinė valdymo logikos struktūra;
-- seno algoritmo perkėlimo paaiškinimas;
-- CAD failų nuorodos ir dalių sąrašas.
-
-## Laukiantys Įrodymai
-
-- `models/` - CAD eksportai ir STL failai.
-- `schemes/` - galutinė laidų schema ir pinout dar bus papildyti.
-- `src/` - tikras valdymo kodas dar neįkeltas.
-- `t-photos/` - komandos nuotraukos dar neįkeltos.
-- `v-photos/` - roboto nuotraukos dar neįkeltos.
-- `video/` - galutinė video nuoroda dar neįkelta.
-- `other/` - papildomi failai, kurie netinka kitur.
-
 ## Kaip Skaityti Repo
 
 1. Pradėk nuo santraukos ir roboto skyriaus.
 2. Perskaityk judėjimo ir surinkimo dokumentaciją, kad suprastum techninius pasirinkimus.
 3. Perskaityk programinės įrangos skyrių, kad suprastum elgsenos logiką.
-4. Laukiančius artefaktų aplankus naudok kaip vietą būsimiems įrodymams.

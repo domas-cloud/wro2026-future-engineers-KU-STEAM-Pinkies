@@ -17,12 +17,5 @@ Ant abiejų šoninių dantračių pritvirtintos vairo kojelės, prie kurių tvir
 
 ## Integracijos Pastabos
 
-Vairo sistema turi būti dokumentuojama kartu su kėbulu, nes tvirtinimo aukštis, traukės ilgis ir pavarų suderinimas veikia tikrąjį vairo kampą.
-Jei pasikeičia servo išėjimas arba traukės geometrija, programinės įrangos vairo ribas reikia patikrinti iš naujo.
-
-## Ką Dokumentuoti
-
-- vairo geometriją;
-- judėjimo diapazoną;
-- kas buvo testuota prototipavimo metu;
-- bet kokias problemas, tokias kaip strigimas, laisvumas ar poslinkis.
+Vairo kampui tiesiogiai įtaką daro tvirtinimo aukštis, traukės ilgis ir trijų dantračių suderinimas.
+Todėl vairo mazgo geometrija turi sutapti su realiu kėbulo ir ratų išdėstymu.
