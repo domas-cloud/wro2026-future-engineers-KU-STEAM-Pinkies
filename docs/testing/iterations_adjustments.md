@@ -1,42 +1,33 @@
 # Iteracijos ir Koregavimai
 
-## Paskirtis
+Ši dalis aprašo, kaip robotas keitėsi per kelias pagrindines mechanikos ir jutiklių iteracijas.
 
-Ši dalis registruoja, kaip robotas keitėsi laikui bėgant.
+## 1 Iteracija: Ankstyvas vairo prototipas
 
-## Ką Įtraukti
+Pirmoje versijoje buvo bandomas ankstyvas vairo sprendimas su centriniu dantračiu ir šoniniais mazgais.
+Dar prieš dabartinę geometriją buvo pasireiškusi didelio rato peties problema, todėl servo apkrova buvo per didelė.
+Šis etapas parodė, kad vien tik veikiančios mechanikos nepakanka, jei ji apkrauna servo ir blogina pakartojamumą.
 
-- kas buvo bandoma 1 versijoje;
-- kas nepavyko arba veikė prasčiau;
-- kas pasikeitė 2 ar 3 versijoje;
-- koks testo rezultatas paskatino kiekvieną pakeitimą.
+## 2 Iteracija: Vairo geometrijos pataisa
 
-## Iteracijų Pavyzdžiai Šiam Robotui
+Vėliau šoniniai mazgai buvo perdirbti taip, kad suktųsi apie savo ašį vietoje.
+Taip buvo pašalintas didelis petys, sumažinta apkrova servo mechanizmui ir pagerintas jėgos perdavimas į ratus.
+Po šio pakeitimo vairavimo sistema tapo stabilesnė ir tinkamesnė tolimesniems testams.
 
-- vairo geometrija pakoreguota po servo judesio diapazono testų;
-- jutiklio padėtis perkelta po aklų zonų patikrinimų;
-- maitinimo maršrutas patobulintas po įtampos kritimų arba triukšmo stebėjimų;
-- programinės įrangos slenksčiai sureguliuoti po kelių važiavimų trasoje.
+## 3 Iteracija: Diferencialo išlaikymas
 
-## Kaip Atrodo Geras Iteracijos Įrašas
+Vienas svarbiausių sprendimų buvo neatsisakyti diferencialo galinėje ašyje.
+Ankstesnė patirtis su robotu be diferencialo parodė, kad posūkiuose labai padidėja pasipriešinimas sukimui.
+Paliktas diferencialas sumažino slydimą, apkrovas transmisijoje ir pagerino roboto elgesį trasoje.
 
-- versijos numeris arba surinkimo pavadinimas;
-- kas pasikeitė fiziškai arba programoje;
-- kodėl pakeitimas buvo atliktas;
-- kokia pastaba arba testo rezultatas jį paskatino;
-- ar kita versija pagerėjo, ar pablogėjo.
+## 4 Iteracija: Jutiklių vaidmenų aiškus paskirstymas
 
-## Siūlomas Įrašo Formatas
+Jutiklių sistema buvo paprastinama ir aiškiau suskirstyta pagal funkciją.
+Kamera liko bendram trasos vaizdui, 2 `VL53L5CX` moduliai artimo atstumo patvirtinimui, o `BNO085` krypties stabilumui.
+Toks atskyrimas sumažino painiavą sistemoje ir leido lengviau suprasti, kuris jutiklis už ką atsakingas.
 
-- surinkimo pavadinimas;
-- data;
-- pakeista posistemė;
-- pastebėta problema;
-- atliktas pakeitimas;
-- testo rezultatas po pakeitimo;
-- tolimesnis veiksmas, jei problema vis dar egzistuoja.
+## 5 Iteracija: Tvirtinimo ir stabilumo gerinimas
 
-## Kodėl Tai Svarbu
-
-Iteracijos yra vienas stipriausių tikros inžinerijos darbo ženklų.
-Repozitoriumas turėtų tą procesą padaryti matomą.
+Papildomas dėmesys buvo skirtas standesniam `BNO085` montavimui ir tvarkingesniam jutiklių išdėstymui.
+Tai sumažino vibracijos ir konstrukcijos lankstumo įtaką rodmenims.
+Po šių pakeitimų roboto judėjimo vertinimas tapo nuoseklesnis per kelis bandymus iš eilės.
