@@ -18,6 +18,13 @@ KU STEAM Pinkies.
 Tai automobilio tipo robotas su servo vairavimu ir galiniu varikliu.
 Dokumentacijoje daugiausia dėmesio skiriama mechanikai, maitinimo ir jutiklių architektūrai, programinės įrangos elgsenai, testavimui ir atkuriamumui.
 
+## Naujausi Mechanikos Atnaujinimai
+
+- Vairo sistemos dokumentacijoje pridėta pirmosios iteracijos santrauka su ankstyvu trijų dantračių prototipu.
+- Pažymėta, kad šoniniai vairo mazgai sukasi apie savo ašį vietoje, todėl servo mechanizmui nereikia didelio peties.
+- Įtrauktas diferencialo aprašas ir paaiškinta, kodėl jis buvo paliktas vėlesnėje versijoje.
+- Užfiksuota ankstesnio roboto klaida: diferencialo nenaudojimas posūkiuose stipriai padidindavo pasipriešinimą sukimui.
+
 ## Licencija
 
 Šiame repozitoriume naudojama [MIT licencija](LICENSE).
