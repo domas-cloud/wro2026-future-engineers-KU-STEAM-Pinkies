@@ -22,7 +22,7 @@ Dokumentacijoje daugiausia dėmesio skiriama mechanikai, maitinimo ir jutiklių 
 
 Šiame repozitoriume naudojama [MIT licencija](LICENSE).
 
-## Vaidavimo Vaizdo Įrašas
+## Varžybinis Vaizdo Įrašas
 
 - [Varžybinio video pastabos](video/video.md)
 

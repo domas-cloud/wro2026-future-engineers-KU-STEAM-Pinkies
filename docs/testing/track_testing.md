@@ -1,37 +1,20 @@
 # Testai Trasos Sąlygomis
 
-## Paskirtis
+Trasos testuose reikia fiksuoti tikrus važiavimus sąlygomis, artimomis varžyboms.
+Svarbiausi stebėjimai:
 
-Trasos testai patikrina visą robotą sąlygomis, artimesnėmis varžyboms.
+- važiavimo juosta pastovumas;
+- elgesys įveikiant kliūtis;
+- vairo stabilumas posūkiuose;
+- pakartojamumas per kelis važiavimus;
+- `MG90S` grįžimas į centrą;
+- `N20` ir `L298N` pakartojamas įsibėgėjimas;
+- 2 `VL53L5CX` matricinių ToF modulių naudingi rodmenys šalia kliūčių ir atspindinčių paviršių;
+- `BNO085` įtaka krypties stabilumui po kelių posūkių.
 
-## Ką Stebėti
+Kiekvienam trasos testui reikia išsaugoti:
 
-- važiavimo juosta pastovumą;
-- elgesį įveikiant kliūtis;
-- vairo stabilumą posūkiuose;
-- pakartojamumą per kelis važiavimus.
-
-## Specifiniai Surinkimo Stebėjimai
-
-- ar `MG90S` nuosekliai grįžta į centrą;
-- ar `N20` variklis ir `L298N` išlaiko pakartojamą įsibėgėjimą;
-- ar 2 `VL53L5CX` matricinių ToF modulių rodmenys išlieka naudingi šalia kliūčių ir atspindinčių paviršių;
-- ar `BNO085` padeda stabilizuoti kryptį po kelių posūkių.
-
-## Trasos Testų Scenarijai
-
-- tiesus važiavimas juosta aiškioje atkarpoje;
-- kairių ir dešinių posūkių kartojimas su pakartotine vairo korekcija;
-- kliūties atsiradimas ir atsigavimas trumpame ruože;
-- visas ratas, kuriame robotas turi kelis kartus pakartoti tą patį elgesį.
-
-## Ką Išsaugoti
-
-- trasos išdėstymą arba trumpą jos aprašą;
-- ratų skaičių arba pakartojimų skaičių;
-- kas nepavyko arba kas pagerėjo;
-- nuotraukas arba video laiką, jei tokie yra.
-
-## Dokumentacijos Taisyklė
-
-Užrašyk testų paruošimą, sąlygas ir stebėtą elgesį net tada, kai robotas dar nėra tobulas.
+- trasos aprašą;
+- pakartojimų skaičių;
+- kas pagerėjo arba nepavyko;
+- nuotraukos arba video nuorodą, jei ji yra.

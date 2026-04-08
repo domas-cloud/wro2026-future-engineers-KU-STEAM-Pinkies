@@ -9,7 +9,7 @@ Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
 
 ## Funkcinės Ribos
 
-- `Raspberry Pi Zero` atlieka kameros gavimą ir pateikia kamerinę įvestį atstumo įvertinimui priekyje;
+- `Raspberry Pi Zero` atlieka tik kameros gavimą ir perduoda vaizdo įvestį;
 - `ESP32` atlieka skaičiavimus, vairo išėjimą, variklio valdymą ir greitą saugos reakciją;
 - kameros srautas yra Pi Zero įvestis, o `BNO085` ir 2 `VL53L5CX` moduliai skaito `ESP32`;
 - baterija ir reguliatoriai tiekia švarią energiją, o ne elgseną.
@@ -28,11 +28,7 @@ Robotas naudoja du pagrindinius skaičiavimo sluoksnius:
 Elektronikos architektūra turi išlaikyti valdymo grandinę lengvai suprantamą:
 
 - Pi Zero pateikia kameros įvestį;
-- kamera naudojama ir priekyje esančio atstumo įvertinimui, todėl nereikia daug atskirų ToF jutiklių;
+- `ESP32` naudoja kameros įvestį situacijai priekyje įvertinti, todėl nereikia daug atskirų ToF jutiklių;
 - `ESP32` priima važiavimo sprendimus ir vykdo vykdiklių komandas;
 - jutikliai tiesiogiai teikia navigacijos kontekstą ir saugos duomenis `ESP32`;
 - akumuliatorių paketas tiekia variklio galią, o loginės šakos yra reguliuojamos atskirai.
-
-## Dokumentacijos Rezultatas
-
-Ši dalis turi būti pagrįsta laidų schemomis ir aiškiu ryšių sąrašu aplanke `schemes/`.

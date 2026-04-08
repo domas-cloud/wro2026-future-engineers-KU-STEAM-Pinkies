@@ -1,27 +1,22 @@
-# Early Requirements
+# Ankstyvieji Reikalavimai
 
-## Functional Requirements
+## Funkciniai Reikalavimai
 
-- Follow the lane reliably.
-- Detect obstacles and react without losing the path.
-- Keep steering commands proportional and stable.
-- Support a clear separation between camera capture on the Raspberry Pi Zero and calculations on the ESP32.
+- patikimai sekti juostą;
+- aptikti kliūtis ir sureaguoti neišvažiuojant iš trajektorijos;
+- išlaikyti proporcingas ir stabilias vairo komandas;
+- aiškiai atskirti kameros vaizdo gavimą `Raspberry Pi Zero` ir visus skaičiavimus `ESP32`.
 
-## Non-Functional Requirements
+## Nefunkciniai Reikalavimai
 
-- Reproducible by another team from the repository.
-- Mechanically rigid enough to survive repeated runs.
-- Power distribution must be safe for the compute board, sensors, and motors.
-- Software must be understandable through module names and architecture docs.
+- repozitoriumas turi būti pakankamai aiškus, kad kita komanda galėtų atkurti robotą;
+- konstrukcija turi išlikti standi per pakartotinius važiavimus;
+- maitinimo grandinė turi būti saugi valdikliams, jutikliams ir varikliams;
+- programinė architektūra turi būti suprantama iš modulių ir dokumentacijos.
 
-## Early Design Targets
+## Ankstyvieji Konstrukcijos Tikslai
 
-- ESP32 handles real-time actuator control.
-- Raspberry Pi Zero handles camera capture only.
-- IMU and ToF sensors provide extra context beyond vision alone.
-- The robot should be easy to inspect, tune, and maintain.
-
-## Documentation Requirement
-
-The documentation must explain why each subsystem exists and how it interacts with the others.
-That is the main way we show engineering quality in the absence of raw performance metrics.
+- `ESP32` vykdo realaus laiko valdymą;
+- `Raspberry Pi Zero` tiekia tik kameros vaizdą;
+- `BNO085` ir 2 `VL53L5CX` moduliai papildo kameros įvestį;
+- robotas turi būti lengvai patikrinamas, derinamas ir prižiūrimas.

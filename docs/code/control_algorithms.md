@@ -4,19 +4,20 @@
 
 Valdymo logika turi atskirti suvokimą nuo vykdymo:
 
-- `Raspberry Pi Zero` fiksuoja ir perduoda `OV5647` kamerų duomenis;
+- `Raspberry Pi Zero` fiksuoja ir perduoda `OV5647` kameros duomenis;
 - `ESP32` interpretuoja kameros ir jutiklių informaciją bei valdo techninę įrangą;
 - `ESP32` gauna valdymo komandas ir vykdo techninę įrangą.
 
 ## Ryšys Su Senu Roboto Modeliu
 
-Pagrindinė algoritmo idėja perimta iš ankstesnio KU STEAM Pinkies roboto: jutiklių nuskaitymas, paklaidos skaičiavimas, korekcinis valdymas, vairo/variklio išėjimas ir kliūčių logika.
-Skirtumas tas, kad ankstesnėje versijoje daugiau sprendimų buvo siejama su `Arduino Mega` ir `Raspberry Pi Zero 2`, o naujame robote visa skaičiavimo dalis perkelta į `ESP32`, o `Raspberry Pi Zero` paliktas kamerai ir kameriniam priekinio atstumo įvertinimui.
+Pagrindinė algoritmo idėja perimta iš ankstesnio KU STEAM Pinkies roboto: paklaidos skaičiavimas, korekcinis valdymas, vairo ir variklio išėjimas bei kliūčių logika.
+Skirtumas tas, kad naujame robote visa skaičiavimo dalis perkelta į `ESP32`, o `Raspberry Pi Zero` paliktas tik kameros vaizdo gavimui.
 
 ## Pagrindinės Valdymo Atsakomybės
 
 - iš kamerų įvesties išskirti juostos padėtį arba juostos paklaidą;
 - kamerų įvestį sujungti su `BNO085` ir 2 `VL53L5CX` matricinių ToF modulių pagalbiniais signalais;
+- pagal kameros vaizdą ir artimo atstumo įvestis įvertinti situaciją priekyje;
 - esamą paklaidą paversti vairo komanda;
 - riboti vairo pokyčius, kad robotas nesiūbuotų;
 - mažinti važiavimo išėjimą, kai pasitikėjimas mažas arba robotas yra atsigavimo būsenoje.
@@ -30,15 +31,11 @@ Skirtumas tas, kad ankstesnėje versijoje daugiau sprendimų buvo siejama su `Ar
 
 ## Pageidaujamas Elgsenos Rinkinys
 
-- pirmiausia kamerų įvestis, kad būtų matoma juostos geometrija ir priekyje esantis atstumas;
+- pirmiausia kameros įvestis, kad būtų matoma juostos geometrija ir galima įvertinti situaciją priekyje;
 - inercinė pagalba krypties stabilumui;
-- 2 matriciniai ToF moduliai kliūties patvirtinimui ir energijos taupymui;
+- 2 matriciniai ToF moduliai artimo atstumo kliūties patvirtinimui;
 - būsenų mašinos logika sprendimui, ar sekti juostą, apvažiuoti, sulėtinti ar sustoti.
 
-## Dokumentacijos Pastabos
+## Dokumentacijos Akcentas
 
-Jei komanda vėliau pasirinks kitą valdymo metodą, dokumente reikia paaiškinti, kodėl tas pasirinkimas buvo geresnis už ankstesnį ir kokie įrodymai lėmė pokytį.
-
-## Dokumentacijos Reikalavimas
-
-Paaiškink algoritmo pasirinkimą, kodėl jis tinka robotui, ir kokius gedimo atvejus jis turi valdyti.
+Šiame projekte svarbiausia aiškiai parodyti, kad kamera yra pagrindinė įvestis, o `BNO085` ir 2 `VL53L5CX` moduliai veikia kaip papildomas stabilumo ir artimo atstumo patvirtinimas.

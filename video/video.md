@@ -1,17 +1,13 @@
 # Video Pateikimas
 
 - Varžybos: WRO 2026 Future Engineers
-- YouTube URL: šiame repo dar nenurodytas
+- YouTube URL: bus pridėtas paskelbus galutinį video
 - Minimalus autonominio važiavimo segmentas: 30 sekundžių
 
 ## Pastabos
 
-- pavadinimas: dar nenurodytas;
-- data: dar nenurodyta;
-- trasos konfigūracija: dar nenurodyta;
+- pavadinimas: bus įrašytas paskelbus galutinį video;
+- data: bus įrašyta paskelbus galutinį video;
+- trasos konfigūracija: bus trumpai aprašyta kartu su galutiniu video;
 - akcentuojamos posistemės: vairavimas, reakcija į kliūtis, važiavimas juosta ir atsigavimas;
 - ką tai įrodo: autonominį veikimą ir pasikartojantį elgesį.
-
-## Naudojimas
-
-Laikyk šį failą suderintą su paskelbtu pateikimo video, kad teisėjai greitai rastų tikslų įrodymą.

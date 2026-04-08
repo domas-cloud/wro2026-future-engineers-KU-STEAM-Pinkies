@@ -14,17 +14,17 @@
 
 ## Power Domains
 
-- `motor domain`: battery to `L298N` to `N20`, with the highest current draw;
-- `logic domain`: regulated rail for `ESP32` and `Raspberry Pi Zero`;
-- `sensor domain`: `BNO085` and 2 `VL53L5CX` matrix ToF modules, preferably kept on a clean logic supply;
-- `servo domain`: `MG90S`, powered from a rail that can handle transient steering current.
+- `motor domain`: baterija -> `L298N` -> `N20`, didžiausios srovės šaka;
+- `logic domain`: reguliuota šaka `ESP32` ir `Raspberry Pi Zero`;
+- `sensor domain`: `BNO085` ir 2 `VL53L5CX` matriciniai ToF moduliai atskiroje švarioje loginėje šakoje;
+- `servo domain`: `MG90S` atskiroje šakoje, kuri atlaiko vairo srovės šuolius.
 
 ## Grounding Strategy
 
-- use one common ground reference for every subsystem;
-- keep the motor return path physically separate from sensitive signal wiring where possible;
-- avoid routing sensor wires alongside the high-current motor branch for long distances;
-- place the common return point near the power entry or regulator cluster.
+- naudoti vieną bendrą žemės atskaitos tašką visoms posistemėms;
+- variklio grįžtamąją šaką laikyti kuo toliau nuo jautrių signalinių laidų;
+- jutiklių laidų nevesti greta didelės srovės variklio šakos per ilgus ruožus;
+- bendrą grįžtamąjį tašką laikyti prie maitinimo įėjimo arba reguliatorių mazgo.
 
 ## Signal Paths
 
@@ -35,12 +35,12 @@
 - `ESP32` controls the `L298N` input pins for the `N20` drive motor.
 - `BNO085` and 2 `VL53L5CX` modules communicate through their sensor bus, typically I2C on the `ESP32`.
 
-## Recommended Control Responsibilities
+## Valdymo Atsakomybės
 
-- Pi Zero owns camera capture only;
-- ESP32 owns state estimation, decision selection, real-time output shaping, PWM, and drive enable control;
-- the battery and regulators only provide power, not behavior;
-- the wiring diagram should make it obvious which board is the source of each control signal.
+- Pi Zero atsakingas tik už kameros gavimą;
+- `ESP32` atsakingas už būsenos vertinimą, sprendimų pasirinkimą, realaus laiko išėjimų formavimą, PWM ir pavaros įjungimą;
+- baterija ir reguliatoriai tiekia energiją, bet nevykdo jokios valdymo logikos;
+- schema turi aiškiai parodyti, kuri plokštė generuoja kiekvieną valdymo signalą.
 
 ## Connection Table
 
@@ -55,9 +55,9 @@
 | Battery to L298N | Power input | Motor current path |
 | Battery to regulators | Power input | Logic and sensor rails |
 
-## Notes For Final Diagram
+## Galutinės Schemos Pastabos
 
-- Final pin numbers should be filled in on the electrical drawing for the exact board revision.
-- Grounds must be shown as a common reference even if power rails are separated.
-- The diagram should distinguish high-current motor wiring from low-current logic wiring.
-- If connector housings or terminal blocks are used, they should be labeled in the final drawing.
+- galutinėje schemoje reikia nurodyti tikslius pin numerius pagal naudojamą plokštės versiją;
+- žemė turi būti pavaizduota kaip bendra atskaita net ir atskyrus maitinimo šakas;
+- schemoje reikia aiškiai atskirti didelės srovės variklio laidus nuo žemos srovės loginės dalies;
+- jei naudojami konektoriai arba gnybtų blokai, jie turi būti pažymėti.
