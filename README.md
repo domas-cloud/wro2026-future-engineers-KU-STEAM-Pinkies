@@ -91,7 +91,7 @@ The drive motor is a:
 
 - **N20 motor**
 - **6 V**
-- **[SET_REAL_RPM] rpm**
+- **600 rpm**
 
 We tested three different motors before selecting the final one. After comparing them in practice, we chose the N20 motor because it matched our robot best in terms of size and performance.
 
