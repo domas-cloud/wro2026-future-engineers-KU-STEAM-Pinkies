@@ -18,7 +18,7 @@ This was an important engineering decision in our project: the simpler system wo
 
 ## Servo Choice
 
-We use an **MG90** servo for steering.
+We use an **MG90S** servo for steering.
 
 This servo was chosen because it is compact, widely available, easy to integrate, and easy to replace during development. It also fit well within the packaging limits of our robot.
 
