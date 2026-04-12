@@ -4,22 +4,22 @@
 
 The robot uses a split electronics architecture with two main computing boards:
 
-- **Raspberry Pi Zero** for camera input;
+- **Raspberry Pi Zero** for camera input and vision processing;
 - **ESP32** for control, decision-making, and fast response tasks.
 
 We selected this split because the two boards are better suited to different jobs.  
-The Raspberry Pi Zero is used only for handling the camera, while the ESP32 is responsible for the main robot behavior.
+The Raspberry Pi Zero handles camera-side perception, while the ESP32 is responsible for the main robot behavior.
 
 ## Why We Split The System
 
 We did not want one board to do everything.
 
-The Raspberry Pi Zero is useful for camera-related work, but the **ESP32 performs control tasks faster and is easier to use for actuator control and time-sensitive robot behavior**.  
+The Raspberry Pi Zero is useful for camera-related work, while the **ESP32 performs control tasks faster and is easier to use for actuator control and time-sensitive robot behavior**.  
 For this reason, the ESP32 was chosen as the main control unit.
 
 In practice, this means:
 
-- the **Pi Zero** handles visual input;
+- the **Pi Zero** handles visual input and vision processing;
 - the **ESP32** handles robot logic, steering, motor output, and sensor-based reactions.
 
 This separation also keeps the software architecture easier to understand and maintain.
@@ -33,8 +33,8 @@ The main electronics system includes:
 - **OV5647 5 MP wide-angle camera**
 - **BNO085 9-DOF IMU**
 - **2 VL53L5CX matrix ToF sensors**
-- **MG90 steering servo**
-- **N20 6 V 300 rpm motor**
+- **MG90S steering servo**
+- **N20 6 V [SET_REAL_RPM] rpm motor**
 - **L298N H-bridge**
 - **perfboard-based power and signal distribution**
 - **step-down voltage regulation**
@@ -107,4 +107,4 @@ The main goal of the electronics architecture was to create a system that is:
 - easy to reproduce;
 - suitable for sensor fusion between camera, IMU, and distance sensors.
 
-The final architecture reflects this goal: the camera is handled separately, the ESP32 performs the main control work, and power is distributed through a regulated and structured layout.
+The final architecture reflects this goal: the camera is handled on the Pi Zero side, the ESP32 performs the main control work, and power is distributed through a regulated and structured layout.
