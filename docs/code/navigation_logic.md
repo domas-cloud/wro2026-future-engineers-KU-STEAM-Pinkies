@@ -1,52 +1,106 @@
 # Navigation Logic
 
-## Expected Behavior
+## Core Navigation Principle
 
-The robot must follow the lane, identify relevant obstacles, and change behavior when the track situation changes.
+The core navigation method of our robot is **PD line following**.
 
-The navigation layer should combine camera data with input from the `BNO085` and the 2 `VL53L5CX` matrix ToF modules, rather than relying on only one sensor source.
+This means the robot does not rely on a large number of separate driving modes for normal behavior.  
+Instead, the main control loop continuously follows the selected driving line using a proportional-derivative style correction.
 
-## High-Level Flow
+This was an intentional design choice because a stable PD-based line-following system is simpler, faster, and easier to tune than a more complicated behavior tree for every situation.
 
-- estimate the current scene on the `ESP32`;
-- decide whether lane following or obstacle handling has higher priority;
-- send steering and drive commands;
-- monitor error conditions.
+## Main Idea
 
-## Proposed State Model
+The most important behavior is:
 
-- `INIT` for hardware and sensor startup;
-- `LANE_FOLLOW` for normal driving;
-- `OBSTACLE_CHECK` for local distance confirmation;
-- `AVOID_OR_STOP` when the path is blocked or uncertain;
-- `RECOVER` when the lane becomes visible again.
+- follow the line using **PD control**;
+- if an obstacle is detected, **change which lane or line reference the PD controller follows**.
 
-## Transition Rules
+So obstacle handling is not treated as a completely separate driving system.  
+It is treated as a **modification of the line-following target**.
 
-- `INIT -> LANE_FOLLOW` when the sensors and compute boards report ready;
-- `LANE_FOLLOW -> OBSTACLE_CHECK` when a nearby obstacle or boundary is detected;
-- `OBSTACLE_CHECK -> AVOID_OR_STOP` when the obstacle is confirmed;
-- `AVOID_OR_STOP -> RECOVER` when the path becomes safe again;
-- `RECOVER -> LANE_FOLLOW` when lane visibility and sensor reliability return to normal.
+That was an important engineering decision because it allowed us to keep one main control strategy and adapt it depending on the field situation.
 
-## Behavior Notes
+## Obstacle Handling Logic
 
-- lane following should be the default state;
-- obstacle handling should temporarily take priority over lane following;
-- the robot should return to lane following only when the path is clear and sensor input is stable;
-- when the robot is in recovery or uncertainty, steering commands should be limited.
+When the robot sees an obstacle, it changes the selected PD lane depending on the **obstacle color**.
 
-## Decision Inputs
+The obstacle color tells the robot whether it should drive:
 
-- camera data from the `Raspberry Pi Zero`;
-- `BNO085` for heading stability and motion awareness;
-- 2 `VL53L5CX` matrix ToF modules for nearby obstacle confirmation;
-- link status between the `Raspberry Pi Zero` and `ESP32`;
-- power or startup state if the software monitors it.
+- **closer to the wall**, or
+- **further from the wall**.
 
-## What The Documentation Should Show
+In other words, the color changes the target path that the PD controller follows.
 
-- the decision sequence;
-- state changes;
-- how obstacle handling interacts with lane following;
-- how the system recovers after an interruption.
+This is more efficient than abandoning line following completely, because the same controller can still be used while only the reference path changes.
+
+## Why This Strategy Was Chosen
+
+We selected this strategy because it keeps the control logic more consistent.
+
+Instead of switching from one full driving algorithm to another, the robot keeps the same main driving principle and only updates the path reference.
+
+This gave several advantages:
+
+- simpler control structure;
+- easier tuning;
+- smoother transitions;
+- more predictable behavior;
+- less risk of unstable mode switching.
+
+## Practical Interpretation
+
+The robot first uses camera-based processing to determine the relevant visual information.  
+The Raspberry Pi Zero runs the camera algorithm and produces the result needed for navigation.
+
+The ESP32 then uses that information to apply PD steering correction.
+
+Under normal conditions, the robot follows its normal line target.  
+When an obstacle is seen, the target is shifted according to the obstacle color so that the robot passes on the correct side.
+
+## Functional Logic
+
+The behavior can be described in the following simplified sequence:
+
+1. detect the line and compute the current line-following error;
+2. run PD control to generate steering correction;
+3. monitor obstacle information from the vision result;
+4. if no relevant obstacle is present, continue following the normal lane target;
+5. if a relevant obstacle is present, change the lane target according to obstacle color;
+6. continue PD control using the updated target;
+7. return to the default target when the obstacle situation is finished.
+
+## Color-Based Path Decision
+
+The obstacle color determines the path bias.
+
+The control system does not simply react to “obstacle yes/no”.  
+It reacts to the meaning of the obstacle.
+
+This is important because the robot must not only avoid objects physically, but also obey the challenge rule about which side to pass.
+
+Therefore, the controller changes the target line depending on whether the robot must move:
+
+- closer to the wall, or
+- further away from the wall.
+
+## Engineering Benefit
+
+This navigation strategy combines two important strengths:
+
+- the stability of PD line following;
+- the flexibility of color-based obstacle obedience.
+
+Instead of creating a disconnected obstacle-avoidance routine, we integrated obstacle logic directly into the line-following architecture.
+
+That made the overall system easier to understand and easier to reproduce in documentation.
+
+## Summary
+
+Our navigation logic is built around one main principle:  
+**PD line following remains the base behavior at all times.**
+
+Obstacle handling does not replace that behavior.  
+It changes the lane target that the PD controller follows.
+
+This gave us a control system that is simpler, more elegant, and more stable in practice than a heavily fragmented state-based approach.
