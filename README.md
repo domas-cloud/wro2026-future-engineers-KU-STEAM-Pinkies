@@ -69,6 +69,8 @@ For this reason, our chassis design focused on:
 
 The robot is intentionally small. A compact robot is easier to package inside the WRO size limits and can also reduce unnecessary rotational inertia.
 
+Our previous robot was larger and used a more complex steering system. Although that design was mechanically more advanced, in practice it introduced more friction, more resistance, and less repeatable steering behaviour. For this reason, we redesigned the robot around a simpler and more compact mechanical concept that performed better on the field.
+
 ### Base Material
 
 The base structure uses **plywood** as the main chassis material.  
@@ -89,9 +91,17 @@ The drive motor is a:
 
 - **N20 motor**
 - **6 V**
-- **600 rpm**
+- **[SET_REAL_RPM] rpm**
 
-We selected this motor because it is **small and fast**, which matched our goal of building a compact robot with enough speed while keeping the drivetrain simple.
+We tested three different motors before selecting the final one. After comparing them in practice, we chose the N20 motor because it matched our robot best in terms of size and performance.
+
+Other options were less suitable for our platform:
+
+- some motors had RPM that was too low,
+- while faster options did not provide enough torque,
+- and some alternatives were physically less suitable for our compact robot.
+
+The N20 gave the best balance between compact size, usable speed, and sufficient torque.
 
 ### Rear Differential
 
@@ -124,9 +134,11 @@ The servo drives the center gear, and the center gear transfers motion symmetric
 
 This was an important design decision because symmetric left-right steering behavior is critical for straight driving and repeatable turning.
 
-We use an **MG90 servo** for steering.
+We use an **MG90S servo** for steering.
 
 This servo was chosen because it is a common, compact, and easy-to-integrate steering solution. It also made development and replacement easier.
+
+In the final design, the servo is able to turn the steering system without any problems. This confirmed that the final steering geometry and friction level were suitable for reliable competition use.
 
 ### Steering Range
 
@@ -260,8 +272,8 @@ The robot uses a split architecture with two main computing boards:
 
 We separated these roles intentionally.
 
-The **Raspberry Pi Zero** handles the **camera and the camera algorithm**.  
-The **ESP32** handles the **main control tasks**, including steering and motor-related behavior.
+The **Raspberry Pi Zero** handles **camera input and vision processing**.  
+The **ESP32** handles the **main control tasks**, including steering, motor output, and real-time decision execution.
 
 This architecture was chosen because the ESP32 is better suited for fast control tasks and easier actuator handling, while the Raspberry Pi Zero is more suitable for camera-side processing.
 
@@ -309,7 +321,7 @@ This gave several advantages:
 ### Raspberry Pi And ESP32 Cooperation
 
 The Raspberry Pi Zero does not only capture the camera image.  
-It also runs the camera-side algorithm and sends the **algorithm result** to the ESP32.
+It also runs the camera-side algorithm and sends the **high-level visual result** to the ESP32.
 
 The ESP32 then combines that information with the rest of the control logic and sends output to the steering and drive system.
 
