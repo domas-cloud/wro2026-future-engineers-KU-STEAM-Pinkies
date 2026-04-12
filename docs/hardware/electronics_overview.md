@@ -34,7 +34,7 @@ The main electronics system includes:
 - **BNO085 9-DOF IMU**
 - **2 VL53L5CX matrix ToF sensors**
 - **MG90S steering servo**
-- **N20 6 V [SET_REAL_RPM] rpm motor**
+- **N20 6 V 600 rpm motor**
 - **L298N H-bridge**
 - **perfboard-based power and signal distribution**
 - **step-down voltage regulation**
