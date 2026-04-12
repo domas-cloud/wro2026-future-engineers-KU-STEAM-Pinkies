@@ -22,4 +22,4 @@ Active project code should remain in this repository, not in an external `src` s
 
 - steering servo: `MG90S`
 - drive motor: `N20`
-- drive motor rating: `6 V [SET_REAL_RPM] rpm`
+- drive motor rating: `6 V 600 rpm`
