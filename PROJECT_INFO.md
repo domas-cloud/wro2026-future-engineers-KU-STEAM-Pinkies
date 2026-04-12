@@ -15,7 +15,7 @@ Use this as a quick reference for the current build baseline.
 
 - Steering servo: `MG90S`
 - Drive motor: `N20`
-- Drive motor rating: `6 V [SET_REAL_RPM] rpm`
+- Drive motor rating: `6 V 600 rpm`
 - Main architecture:
   - `Raspberry Pi Zero` = camera input and vision processing
   - `ESP32` = control, decision-making, steering, and motor output
