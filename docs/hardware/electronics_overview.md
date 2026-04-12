@@ -1,36 +1,110 @@
 # Electronics Overview
 
-## System Split
+## System Architecture
 
-The robot uses two main computing layers:
+The robot uses a split electronics architecture with two main computing boards:
 
-- `Raspberry Pi Zero` for camera input only;
-- `ESP32` for control, decision-making, and time-sensitive tasks.
+- **Raspberry Pi Zero** for camera input;
+- **ESP32** for control, decision-making, and fast response tasks.
 
-## Functional Boundaries
+We selected this split because the two boards are better suited to different jobs.  
+The Raspberry Pi Zero is used only for handling the camera, while the ESP32 is responsible for the main robot behavior.
 
-- The `Raspberry Pi Zero` is responsible only for camera capture and passing visual input onward.
-- The `ESP32` handles computation, steering output, motor control, and fast safety reactions.
-- The camera feed comes through the Pi Zero, while the `BNO085` and 2 `VL53L5CX` modules are read by the `ESP32`.
-- The battery and regulators supply clean power; they are not part of the behavior logic.
+## Why We Split The System
 
-## Main Electrical Blocks
+We did not want one board to do everything.
 
-- `L298N H-bridge` for the `N20` motor;
-- `MG90S` steering servo;
-- `OV5647 5Mpx wide-angle` camera (`Waveshare 14037`) connected to the `Raspberry Pi Zero`;
-- `BNO085 9-DOF IMU`;
-- 2 `VL53L5CX` matrix ToF modules;
-- electronics assembly built on perfboard;
-- power regulation and distribution stage.
+The Raspberry Pi Zero is useful for camera-related work, but the **ESP32 performs control tasks faster and is easier to use for actuator control and time-sensitive robot behavior**.  
+For this reason, the ESP32 was chosen as the main control unit.
+
+In practice, this means:
+
+- the **Pi Zero** handles visual input;
+- the **ESP32** handles robot logic, steering, motor output, and sensor-based reactions.
+
+This separation also keeps the software architecture easier to understand and maintain.
+
+## Main Electrical Components
+
+The main electronics system includes:
+
+- **Raspberry Pi Zero**
+- **ESP32**
+- **OV5647 5 MP wide-angle camera**
+- **BNO085 9-DOF IMU**
+- **2 VL53L5CX matrix ToF sensors**
+- **MG90 steering servo**
+- **N20 6 V 300 rpm motor**
+- **L298N H-bridge**
+- **perfboard-based power and signal distribution**
+- **step-down voltage regulation**
+- **2 Li-ion batteries in one battery holder**
+
+## Power Distribution
+
+The robot is powered from **2 Li-ion batteries** mounted in a single holder.  
+The electrical power is distributed on a **perfboard**, where the supply is split into the required branches.
+
+A **step-down regulator** is used to provide the correct voltage to the logic systems.  
+Both the **Raspberry Pi Zero** and the **ESP32** are powered through step-down regulation rather than directly from the battery source.
+
+This was necessary because the robot contains boards with different voltage requirements, and stable regulated logic power is important for reliable operation.
+
+## Why We Used Regulated Power
+
+The robot combines logic electronics, sensors, steering actuation, and motor driving.  
+These parts do not all behave the same electrically.
+
+Using step-down regulation gave us a cleaner and more controlled supply for the computing boards.  
+That is especially important because unstable logic power could cause poor communication, sensor problems, or unstable robot behavior.
+
+The perfboard distribution also made the wiring layout easier to organize and easier to reproduce.
+
+## Sensor Integration
+
+The robot uses three main sensing sources:
+
+- **camera** for forward scene observation;
+- **BNO085 IMU** for motion and orientation awareness;
+- **2 VL53L5CX matrix ToF sensors** for local distance information.
+
+The sensors are mounted on the **perfboard assembly**, while the **camera is mounted at the front of the robot**.
+
+This placement was chosen because it provided the **best visibility** and made it easier to select the most useful matrix region or matrix point for the sensing algorithm.
+
+## Why Sensor Placement Matters
+
+We learned that sensor position affects the quality of the usable data.
+
+The camera had to be placed where it could see the field clearly in front of the robot.  
+The distance sensors had to be mounted where their matrix readings could be interpreted consistently and where the selected matrix area would provide the most useful result for the algorithm.
+
+So sensor placement was not random.  
+It was chosen for visibility, usable geometry, and better algorithm performance.
+
+## Calibration And Tuning Approach
+
+Our calibration approach was practical and result-based.
+
+Instead of relying only on a theoretical setup, we checked the real robot results and passed the sensor information through the algorithm, then tuned the system according to actual behavior.
+
+This means calibration was performed by observing real output quality and adjusting the processing until the robot behavior improved.
+
+In other words, we tuned the sensing system based on:
+
+- observed field results;
+- sensor output behavior;
+- algorithm response;
+- practical driving quality.
 
 ## Design Goal
 
-The electronics architecture is intended to keep the control chain easy to understand:
+The main goal of the electronics architecture was to create a system that is:
 
-- The Pi Zero provides camera input.
-- The `ESP32` uses that visual input to estimate the forward situation, reducing the need for many separate ToF sensors.
-- The `ESP32` makes driving decisions and sends commands to the actuators.
-- The sensors feed navigation context and safety data directly into the `ESP32`.
-- The main electronics connections are assembled on perfboard to simplify mounting and wire routing.
-- The battery pack provides motor power, while the logic rails are regulated separately.
+- fast enough for control;
+- clear in function separation;
+- electrically organized;
+- easy to reproduce;
+- suitable for sensor fusion between camera, IMU, and distance sensors.
+
+The final architecture reflects this goal: the camera is handled separately, the ESP32 performs the main control work, and power is distributed through a regulated and structured layout.
