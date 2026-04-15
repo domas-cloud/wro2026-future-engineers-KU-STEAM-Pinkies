@@ -1,114 +1,119 @@
 # Navigation Strategy
 
-## Core Navigation Idea
+## Core Idea
 
-The core navigation principle of our robot is **PD-based line following**.
+We built our navigation strategy around one main principle:
 
-This is one of the most important software decisions in the whole project. Instead of building one controller for normal driving and a completely different controller for obstacle behaviour, we kept one main control method and changed the **target path** when needed.
+- keep one continuous steering controller;
+- change the target path when the situation changes.
 
-In other words:
+This is stronger than using a different hard-coded maneuver for each case because the robot can still adapt to its actual position and heading.
 
-- the robot always keeps the same basic driving logic,
-- but obstacle information changes which line or lane target the controller follows.
+## What Is Already Visible in Code
 
-This made the robot simpler, smoother, and easier to tune.
+Our repository already shows the low-level version of this idea in `src/src/main.cpp`.
 
-## Why We Chose PD Control
+Real variables and functions:
 
-We chose PD line following because it gave us a practical balance between:
+- `read_lidar_data()`
+- `robotCompass.getYaw()`
+- `track_buffer`
+- `get_dominant_cluster_average(...)`
+- `error`
+- `Kp`
+- `Kd`
+- `final_servo_angle`
+- `engine.drive(255)`
+- `myservo.write(final_servo_angle)`
 
-- control simplicity,
-- smooth response,
-- and easier tuning.
+At the moment, our code implements corridor-centering with ToF and IMU data. The same control structure is the base for our wider final navigation architecture.
 
-A more fragmented control structure with many separate hard-coded manoeuvres would have made the behaviour more difficult to manage and less adaptable to random track situations.
+## Normal Line Following
 
-The PD controller allowed the robot to continuously correct its steering instead of relying on fixed-angle turns.
+In normal conditions, the robot tries to stay on the default target path through the drivable corridor.
 
-## Obstacle Handling Concept
+In the current `ESP32` implementation, that target is the center of the measured corridor:
 
-Obstacle handling is integrated into the same navigation system.
+```text
+error = track / 2 - distance
+```
 
-When the robot detects an obstacle, it does not abandon the main controller. Instead, it changes the path target depending on the obstacle colour.
+where:
 
-This was a very important engineering decision because the robot must not only avoid an object physically, but must also obey the WRO rule about which side to pass.
+- `track` is the filtered estimate of corridor width;
+- `distance` is the measured robot position relative to one side.
 
-## Colour-Based Target Selection
+The steering command is then calculated from this error with the PD equation.
 
-The obstacle colour tells the robot how to bias its path.
+## How the Target Line Is Calculated
 
-- A **red obstacle** changes the target so the robot passes on the required side.
-- A **green obstacle** changes the target in the opposite way.
+The implemented low-level target calculation is:
 
-The important point is that obstacle handling is not treated as a separate disconnected system. It is treated as a **modified form of the same lane-following logic**.
+1. read left and right distances into `SENSOR_DISTANCE[0]` and `SENSOR_DISTANCE[1]`;
+2. compensate for heading using `rad_angle = radians(angle)`;
+3. compute the current width estimate in `width`;
+4. store repeated width estimates in `track_buffer`;
+5. use `get_dominant_cluster_average(...)` to obtain `track`;
+6. define the nominal target as the center of that corridor, `track / 2`.
 
-This gave several advantages:
+This is useful because it avoids reacting to one noisy reading and instead follows the dominant stable width measurement.
 
-- smoother transitions,
-- fewer unstable mode changes,
-- easier tuning,
-- and easier documentation.
+## Obstacle Strategy
 
-## Practical Navigation Sequence
+In our final architecture, obstacle handling follows the same controller idea.
 
-The practical logic can be described in a simplified sequence:
+Sequence:
 
-1. read the camera-based navigation result,
-2. estimate the current path error,
-3. apply PD correction,
-4. check obstacle meaning,
-5. if needed, change the target path,
-6. continue PD control with the updated target,
-7. return to the normal target after the obstacle is passed.
+1. the `Pi Zero` detects an object ahead;
+2. the object is classified as red or green;
+3. color determines which passing side is legal;
+4. the target path is shifted left or right;
+5. the same PD controller follows this new target;
+6. after the obstacle is cleared, the target path returns to normal.
 
-This structure is simple, but it is also powerful because it keeps one stable control idea through multiple situations.
+## How Red and Green Change the Target
 
-## Why We Did Not Use Fixed Manoeuvres
+- a `red` obstacle shifts the target path so the robot passes on the required side;
+- a `green` obstacle shifts the target in the opposite direction.
 
-A fixed obstacle manoeuvre can look easier at first, but it becomes weaker when:
+The important point is not the color alone. The important point is that color changes the reference path, not the whole steering algorithm.
 
-- the robot approaches with a different angle,
-- the robot is slightly shifted inside the corridor,
-- or the track situation changes.
+## Why This Is Better Than Fixed Maneuvers
 
-For our project, a target-shift method was better because the robot could still adapt to its current position instead of forcing the same turn shape every time.
+We considered the alternative of using fixed obstacle turns, but we decided that approach was weaker because:
 
-## Relation to Straight Driving
+- the robot will not always approach from the same angle;
+- the robot may already be slightly offset before the obstacle;
+- fixed turns are harder to tune across different field layouts.
 
-The navigation strategy also supports straight driving.
+A target-shift approach is better because the controller still uses real-time error feedback. The robot adapts to where it actually is, not where we assumed it would be.
 
-Because the robot keeps a continuous correction method instead of sharp mode switching, the behaviour stays more predictable over longer movement. This is important because our testing showed that consistency matters more than aggressive steering.
+## Why Obstacle Logic Is Not a Separate Controller
 
-## Main Navigation Trade-off
+We deliberately treat obstacle logic as a target modification inside the same steering framework.
 
-The most important software trade-off was:
+That gives several engineering benefits:
 
-**simplicity and repeatability vs more aggressive behaviour**
+- smoother transitions;
+- less mode switching;
+- easier tuning because one controller remains active;
+- easier explanation in documentation;
+- easier recovery after the obstacle because the robot simply returns to the normal target.
 
-A very aggressive robot can look faster in one attempt, but it is often less stable across repeated runs. We learned that a slightly calmer but more repeatable control strategy gave better overall results.
+If obstacle logic became a fully separate controller, we would need to re-tune two unrelated behaviors and also manage unstable switching between them.
 
-## Why This Strategy Improved the Robot
+## Short Detection-to-Steering Sequence
 
-This navigation method improved the robot in three major ways:
+```text
+camera / sensors
+  -> detect line and obstacle
+  -> choose normal or shifted target path
+  -> calculate error from target path
+  -> PD steering correction
+  -> servo angle and drive output
+  -> repeat
+```
 
-### 1. Stability
+## Relation to the Current Repository State
 
-The robot stayed closer to one main control principle instead of jumping between many disconnected behaviours.
-
-### 2. Obstacle obedience
-
-Obstacle colour directly changed the path target, so the robot could obey the challenge rule while still using the same main controller.
-
-### 3. Easier tuning
-
-Because the same control logic stayed active most of the time, tuning became easier and more consistent.
-
-## Final Conclusion
-
-Our final navigation strategy is built around one key idea:
-
-**PD line following remains the base behaviour at all times.**
-
-Obstacle logic does not replace that behaviour. It changes the target that the same controller follows.
-
-This made the robot easier to understand, easier to tune, and more stable in practical driving.
+Our current repository contains the low-level centering controller and its real code references. We describe the camera-side obstacle classifier architecturally, but we do not yet include it as source code in this repository. For documentation quality, we should explain that clearly instead of pretending the missing modules are already visible in code.

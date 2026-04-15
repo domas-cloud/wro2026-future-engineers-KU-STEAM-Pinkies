@@ -1,127 +1,148 @@
 # PD Controller Explanation
 
-## Why We Used PD Control
+## Where the PD Controller Appears in Code
 
-In our robot, the main navigation method is based on **PD control**. We chose this approach because we wanted steering that would be:
+Our real low-level controller is visible in `src/src/main.cpp`.
 
-- simple enough to tune,
-- smooth in normal driving,
-- and adaptable to different track situations.
+Main variables:
 
-Instead of using many fixed turning commands, we wanted the robot to continuously correct its steering depending on how far it was from the target path.
+- `Kp`
+- `Kd`
+- `last_error`
+- `last_time`
+- `error`
+- `derivative_delta`
+- `turning_angle`
+- `final_servo_angle`
+- `STRAIGHT_ANGLE`
 
-## Main Idea
+The implemented formula is:
 
-The PD controller uses the current driving error and the change of that error over time.
+```text
+turning_angle = STRAIGHT_ANGLE + Kp * error + Kd * derivative_delta
+```
 
-In simple words:
+and the final steering command is limited with:
 
-- **P (proportional)** tells us how far the robot is from the desired line,
-- **D (derivative)** tells us how quickly that error is changing.
+```text
+final_servo_angle = constrain(turning_angle, STRAIGHT_ANGLE - 45, STRAIGHT_ANGLE + 45)
+```
 
-The steering output is then calculated from both of these terms.
+## What the Error Means on Our Robot
 
-## What the P Term Does
+In our current `ESP32` implementation, the robot estimates the corridor width and its own lateral position using two `VL53L5CX` sensors plus heading compensation from the `BNO085`.
 
-The proportional part reacts to the current error.
+The key calculations are:
 
-If the robot is far from the target line, the proportional term creates a larger steering correction. If the robot is already close to the target line, the correction becomes smaller.
+```text
+width = (SENSOR_DISTANCE[0] + SENSOR_DISTANCE[1]) * cos(rad_angle)
+track = get_dominant_cluster_average(buffer_size, track_buffer, 20)
+distance = SENSOR_DISTANCE[0] * cos(rad_angle)
+error = track / 2 - distance
+```
 
-This is the main reason the robot can move back toward the desired path instead of continuing to drift away from it.
+So in this robot, `error` means:
 
-## What the D Term Does
+- how far the robot is from the desired center of the measured corridor;
+- after compensating for heading angle with `cos(rad_angle)`.
 
-The derivative part reacts to how quickly the error is changing.
+If `error` is close to zero, the robot is near the intended center. If `error` becomes larger in magnitude, the robot has drifted away from that target line.
 
-This is important because the robot does not only need to return to the line. It also needs to avoid overreacting.
+## What P Does
 
-Without the D term, the robot can become too aggressive and start oscillating left and right. The derivative term helps reduce that effect by damping the steering response.
+The proportional part is `Kp * error`.
 
-## Why We Did Not Rely on P Only
+Its job is simple:
 
-Using only proportional control would make the robot simpler, but in practice it would often create more oscillation, especially during faster corrections or when exiting turns.
+- if the robot is far from the target line, steering correction should be larger;
+- if the robot is close to the target line, correction should be smaller.
 
-We wanted the steering to be more stable, so adding the derivative term was a practical improvement.
+This is the main steering force that pushes the robot back toward the desired path.
 
-## Simplified Formula
+## What D Does
 
-The controller can be written in the simplified form:
+The derivative part is `Kd * derivative_delta`, where:
 
-`steering_output = Kp * error + Kd * error_change`
+```text
+derivative_delta = (error - last_error) / delta_t
+```
 
-Where:
+Its job is to react to how quickly the error is changing.
 
-- `error` is the current offset from the target path,
-- `error_change` is how much that error changed since the previous step,
-- `Kp` is the proportional gain,
-- `Kd` is the derivative gain.
+- if the robot is moving away from the target very quickly, the derivative term increases the correction;
+- if the robot is already correcting too fast, the derivative term can damp the movement and reduce oscillation.
 
-## What Error Means in Our Robot
+In our current file, `Kd = 0`, so the visible implementation is effectively using only the proportional part at the moment. The code structure is still PD-ready because we already have the derivative calculation and variable names in place.
 
-In our robot, the error represents how far the robot is from the path we want it to follow.
+## Why We Chose PD Instead of a Simpler Method
 
-Under normal conditions, this path is the standard driving line. When we detect an obstacle, we do not replace the whole controller. Instead, we change the **target path** that the same PD controller follows.
+A simple fixed steering rule is easier to write, but weaker in practice.
 
-This is one of the most important parts of our software design:
+We chose the PD structure because it gives:
 
-- the controller stays the same,
-- but the reference line changes depending on the situation.
+- continuous correction instead of fixed-angle maneuvers;
+- better stability when the robot approaches the wall or target line at different offsets;
+- a cleaner path to tuning than many hard-coded cases.
 
-## How PD Fits Our Obstacle Strategy
+Even when the derivative term is small or temporarily zero, the PD structure is still valuable because it keeps the controller logic consistent and makes it easy to add damping when the mechanics become more responsive.
 
-When we detect a red or green obstacle, we change the lane target according to the correct passing side.
+## What Too Large or Too Small Kp Means
 
-That means PD control still remains the main steering method. We do not switch to a completely separate obstacle controller. We only change the target that the PD controller tries to follow.
+If `Kp` is too small:
 
-This gave us several benefits:
+- the robot reacts too weakly;
+- it drifts longer before returning to the target line;
+- turns look lazy and late;
+- recovery after disturbance is slow.
 
-- smoother transitions,
-- easier tuning,
-- simpler software structure,
-- and better repeatability.
+If `Kp` is too large:
 
-## Practical Tuning Logic
+- the robot oversteers;
+- it can wobble from side to side;
+- it may overshoot the target line;
+- steering becomes nervous and less repeatable.
 
-When tuning the controller, we looked for the following behaviours:
+## What Too Large or Too Small Kd Means
 
-### If Kp is too low
-- the robot reacts too weakly,
-- returns to the line too slowly,
-- may drift too much.
+If `Kd` is too small:
 
-### If Kp is too high
-- the robot reacts too aggressively,
-- steering becomes sharp,
-- oscillation becomes more likely.
+- oscillation is less controlled;
+- the robot may keep swinging after a correction;
+- fast approaches to the target line are less damped.
 
-### If Kd is too low
-- damping is too weak,
-- corrections can become unstable,
-- the robot may wobble after a turn.
+If `Kd` is too large:
 
-### If Kd is too high
-- steering can become too conservative,
-- the robot may react too slowly,
-- and turning can become less effective.
+- steering can feel hesitant or overly damped;
+- the robot may resist turning enough;
+- noise in the error signal can create unstable correction spikes.
 
-## Why PD Was a Good Choice for Us
+Because derivative action reacts to change, it is especially sensitive to noisy measurements and inconsistent mechanics.
 
-We chose PD control because it matched our robot well.
+## How Steering Output Is Produced
 
-Our robot needed a controller that was:
+The full steering path in our current code is:
 
-- clear enough to explain,
-- effective enough for repeated autonomous runs,
-- and flexible enough to work both in normal lane following and obstacle obedience.
+1. Read `SENSOR_DISTANCE[0]` and `SENSOR_DISTANCE[1]`.
+2. Read `newHeading = robotCompass.getYaw()`.
+3. Compute heading difference `angle = targetAngle - newHeading`.
+4. Estimate the corrected corridor width in `width`.
+5. Filter repeated width estimates into `track`.
+6. Estimate lateral position as `distance`.
+7. Compute `error = track / 2 - distance`.
+8. Compute `derivative_delta`.
+9. Compute `turning_angle = STRAIGHT_ANGLE + Kp * error + Kd * derivative_delta`.
+10. Clamp to `final_servo_angle`.
+11. Send to `myservo.write(final_servo_angle)`.
 
-PD control gave us exactly that balance.
+## Relation to Obstacle Avoidance
 
-## Final Conclusion
+The most important software idea in our project is that we do not want obstacle logic to become a completely separate steering controller. Instead, we let obstacle logic change the target path that the same controller follows.
 
-For us, PD control was not just a theoretical control method. It became the main steering principle of the whole robot.
+In practical terms, this means the PD controller stays the same:
 
-The most important idea is simple:
+- the meaning of `error` stays "distance from the current target line";
+- obstacle color changes where that target line should be.
 
-**we keep the same controller, but we change the target path depending on the track situation.**
+So the steering law does not need to switch to a completely different mode. The same PD structure can still generate the steering angle, but from a shifted target.
 
-That made the software easier to tune, easier to document, and more stable in practice.
+This is better than fixed obstacle maneuvers because the robot still adapts to its real position and heading. If it approaches the obstacle with a slightly different angle, the controller still computes a continuous correction instead of replaying the same rigid turn every time.

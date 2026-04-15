@@ -1,124 +1,176 @@
 # Software Architecture
 
-## Overview
+## Scope and Evidence
 
-Our software is designed as a **two-layer system**:
+In this document, we combine two levels of evidence:
 
-- **Raspberry Pi Zero** handles camera-based perception,
-- **ESP32** handles control, actuation, and fast reactions.
+- the implemented low-level controller that is visible in `src/src/main.cpp` and the libraries under `src/lib/`;
+- the final two-board system architecture described across the repository, where `Raspberry Pi Zero` is responsible for camera perception and `ESP32` for real-time control.
 
-We chose this architecture because perception and motion control have different requirements. Camera processing needs more flexible computation, while steering and motor control require fast and predictable execution.
+Our repository currently contains the `ESP32` control code in detail. We document the `Raspberry Pi Zero` side architecturally, but its source files are not included in this repository. For that reason, we use real file and variable names for the `ESP32` side and explain the `Pi Zero` role at module level.
 
-Instead of forcing one board to do everything, we separated the tasks and gave each controller a clear role.
+## Board Roles
 
-## Why We Split the System
+### Raspberry Pi Zero
 
-The most important reason for splitting the software was **stability**.
+In our final robot, the `Raspberry Pi Zero`:
 
-If image processing directly delays motion control, the robot can react too late and steering can become inconsistent. By separating the vision side from the real-time control side, we reduced the risk that perception delays would directly disturb driving behaviour.
+- reads the camera;
+- analyses the visible lane and obstacle region;
+- identifies obstacle color;
+- estimates the target driving path;
+- sends a simplified navigation result to the `ESP32`.
 
-This architecture also made the project easier to debug and improve:
+We used this board because:
 
-- visual logic could be improved separately,
-- motion control could be tuned separately,
-- and sensor / actuator reactions could stay fast and simple.
+- camera processing is more computationally flexible on the `Pi Zero`;
+- it is better suited for image-based perception than direct actuator timing;
+- keeping vision on a separate board prevents camera workload from disturbing steering timing.
 
-## High-Level Layer: Perception
+### ESP32
 
-The Raspberry Pi Zero is responsible for the camera-side logic.
+In our implemented controller, the `ESP32`:
 
-Its main tasks are:
+- reads local sensors through `read_lidar_data()`;
+- reads heading through `robotCompass.getYaw()`;
+- computes the control error and PD correction in `loop()`;
+- drives the motor through the `Engine` class;
+- writes the steering angle through `Servo myservo`.
 
-- reading the camera image,
-- detecting the relevant track information,
-- identifying obstacle colour,
-- estimating the target driving line,
-- sending simplified driving information to the ESP32.
+The visible implementation files are:
 
-A key design decision was that the Pi does **not** send raw image data to the ESP32. Instead, it sends a simplified result that is easier for the controller to use in real time.
+- `src/src/main.cpp`
+- `src/lib/Lidar/Lidar.cpp`
+- `src/lib/Lidar/Lidar.h`
+- `src/lib/Engine/Engine.h`
+- `src/lib/IMU/Compass.h`
+- `src/lib/utils/Sorting.cpp`
+- `src/lib/utils/Sorting.h`
 
-This makes the overall system cleaner and reduces unnecessary data handling on the control side.
+We used this board because:
 
-## Low-Level Layer: Control and Actuation
+- it provides predictable actuator control timing;
+- it interfaces directly with servo, motor driver, IMU, and ToF sensors;
+- it is a better place for the fast repeatable control loop.
 
-The ESP32 is responsible for the main control behaviour.
+## Why We Chose a Split Architecture
 
-Its main tasks are:
+We did not want one controller to do both image processing and low-level actuation. Those tasks have different engineering requirements.
 
-- receiving the processed visual result,
-- calculating steering output,
-- controlling the drive motor,
-- handling short-range corrective behaviour,
-- and executing the final motion commands.
+- Vision needs flexible processing and can tolerate slightly less deterministic timing.
+- Steering and motor control need short, repeatable loop timing.
 
-This role division matches the strengths of the board. The ESP32 is better suited for fast control work and direct actuator handling, so it became the main execution controller.
+If camera processing blocks the same controller that drives the servo, steering quality becomes less predictable. The split architecture reduces that risk and makes debugging easier because perception and actuation can be evaluated separately.
 
-## Modular Software Structure
+## Main Software Modules
 
-Our software is organised into several logical modules.
+### 1. Perception module on the Pi Zero
 
-### 1. Vision module
+In our final architecture, this module interprets the camera image and produces compact navigation information:
 
-This module processes the camera image and extracts the information needed for navigation.
+- line position or target path estimate;
+- obstacle presence;
+- obstacle color;
+- confidence or validity information.
 
-### 2. Obstacle interpretation module
+We already describe this boundary in `docs/code/message_protocol.md` as a proposed message contract between `Pi Zero` and `ESP32`.
 
-This module determines how the target path should change depending on obstacle colour.
+### 2. Sensor acquisition module on the ESP32
 
-### 3. Motion control module
+Real code:
 
-This module converts the target path into steering and drive output.
+- `read_lidar_data()` in `src/lib/Lidar/Lidar.cpp`
+- `robotCompass.getYaw()` from `src/lib/IMU/Compass.h`
 
-### 4. Recovery / correction module
+Important variables:
 
-This module handles situations where the robot needs to correct its position or recover from a less stable state.
+- `SENSOR_DISTANCE[2]`
+- `newHeading`
+- `angle`
+- `rad_angle`
 
-### 5. Parking logic
+In our architecture, this layer converts raw sensor values into the geometric quantities used by the controller.
 
-This module is responsible for the final parking behaviour after the required laps are completed.
+### 3. Track estimation and filtering
 
-This modular structure was chosen because it makes the robot behaviour easier to explain, easier to tune, and easier to extend.
+Real code:
 
-## Why We Did Not Use One Huge Control Loop
+- `track_buffer[buffer_size]`
+- `track_tracker`
+- `get_dominant_cluster_average(buffer_size, track_buffer, 20)`
 
-A simpler-looking alternative would have been to put everything into one large control loop.
+We do not use a single raw width reading directly on the `ESP32`. Instead, we store repeated corridor-width estimates in `track_buffer` and use `get_dominant_cluster_average()` from `src/lib/utils/Sorting.cpp` to select the dominant stable cluster. This reduces the effect of temporary sensor noise or invalid zones.
 
-We rejected that idea because it would make the project:
+### 4. Control module
 
-- harder to debug,
-- harder to tune,
-- and harder to document clearly.
+Real code in `src/src/main.cpp`:
 
-A modular system gave us better engineering clarity and helped us improve one part of the robot without breaking everything else.
+- `last_error`
+- `last_time`
+- `Kp`
+- `Kd`
+- `error`
+- `derivative_delta`
+- `turning_angle`
+- `final_servo_angle`
 
-## State-Based Behaviour
+In our control loop, this module computes the steering output from the measured tracking error.
 
-Although the robot keeps one main navigation principle, its behaviour can still be understood through a set of practical operating states, for example:
+### 5. Actuation module
 
-- normal lane following,
-- obstacle handling,
-- correction / recovery,
-- parking.
+Real code:
 
-This state-oriented view helped us structure the logic and explain the robot behaviour more clearly in documentation.
+- `Engine engine`
+- `engine.begin()`
+- `engine.drive(255)`
+- `engine.stop()`
+- `myservo.attach(33)`
+- `myservo.write(final_servo_angle)`
 
-## Main Benefit of This Architecture
+This layer converts our controller outputs into real motor and servo commands.
 
-The most important improvement from this architecture was that the robot became:
+## Data Flow from Sensors to Steering and Motor
 
-- more stable,
-- easier to tune,
-- easier to maintain,
-- and easier to justify as an engineering solution.
+The actual low-level data path that we can show from the repository is:
 
-## Final Conclusion
+1. `setup_lidar_sensors()` initializes the two `VL53L5CX` sensors.
+2. `read_lidar_data()` updates `SENSOR_DISTANCE[0]` and `SENSOR_DISTANCE[1]`.
+3. `robotCompass.getYaw()` returns the current yaw angle.
+4. `targetAngle - newHeading` gives the heading deviation.
+5. The code compensates geometry with `cos(rad_angle)`.
+6. Corridor width is estimated as `width = (SENSOR_DISTANCE[0] + SENSOR_DISTANCE[1]) * cos(rad_angle)`.
+7. Stable width is filtered with `get_dominant_cluster_average(...)` into `track`.
+8. Current lateral position is estimated as `distance = SENSOR_DISTANCE[0] * cos(rad_angle)`.
+9. Control error is computed as `error = track / 2 - distance`.
+10. Steering command is computed from `Kp * error + Kd * derivative_delta`.
+11. Servo output is limited with `constrain(...)` and sent using `myservo.write(final_servo_angle)`.
+12. Drive power is set by `engine.drive(255)` while the robot is running.
 
-Our final software architecture was selected because it matched the physical structure of the robot and supported more reliable autonomous driving.
+In the final full architecture, the `Pi Zero` provides the high-level target path and obstacle meaning, while the `ESP32` still executes the final control and actuation step.
 
-The core idea was simple:
+## Startup and Controller Ownership
 
-- perception should stay on the Pi,
-- control should stay on the ESP32,
-- and the communication between them should contain only the information needed for driving.
+The implemented startup logic in `src/src/main.cpp` is intentionally simple:
 
-This gave us a software structure that was clear, modular, and practical for repeated testing and improvement.
+- `setup()` initializes I2C, serial, lights, motor pins, lidar, IMU, and servo;
+- button input on `BUTTON_PIN` toggles the `started` flag;
+- when not started, `engine.stop()` keeps the robot inactive;
+- when started, `targetAngle` is initialized from the current heading and the loop begins closed-loop control.
+
+This means we leave the safety-critical "run or stop" decision to the `ESP32` at the actuator layer.
+
+## Why This Architecture Fits the Robot
+
+We chose this architecture because it matches the physical robot:
+
+- the front camera is useful for high-level scene understanding;
+- the `ESP32` is physically close to the motor, servo, IMU, and ToF sensors;
+- the control loop benefits from deterministic timing;
+- the separation makes testing easier because we can debug perception and motion separately.
+
+## Important Limitation
+
+Our current repository shows the low-level `ESP32` controller clearly, but it does not yet include the `Pi Zero` source code that would implement camera-based line detection, obstacle color classification, and parking transitions. In judging terms, we should describe that honestly as:
+
+- implemented low-level controller and sensor fusion are present in code;
+- final high-level perception architecture is documented and justified at system level.

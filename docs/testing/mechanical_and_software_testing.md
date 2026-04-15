@@ -1,170 +1,73 @@
 # Mechanical and Software Testing
 
-## Why Testing Was Important
+## Overview
 
-Our robot was not created in one final version. Both the mechanical system and the software improved through repeated testing.
+Our development process depended on repeated testing of the whole robot, not only isolated parts. Mechanical changes often changed our software behavior, and software tuning often revealed mechanical weaknesses.
 
-Testing was important because many decisions that looked reasonable in theory did not work equally well in practice. The real robot behaviour on the field showed us which solutions were actually better.
+This is why we evaluate the robot as one connected system.
 
-## Main Testing Philosophy
+## Mechanical Testing Summary
 
-We evaluated changes based on practical driving quality, not only on appearance or theory.
+The main mechanical comparison areas were:
 
-For us, a better version was the one that gave:
+- `300 rpm`, `600 rpm`, and `1000 rpm` `N20` motors;
+- steering `Version 1`, `Version 2`, and `Version 3`;
+- earlier front wheels versus silicone front wheels;
+- earlier differential solution versus the final `LEGO` differential.
 
-- more stable turning,
-- better straight driving,
-- less slipping,
-- lower steering resistance,
-- and more repeatable behaviour.
+Main practical criteria:
 
-This testing philosophy helped us avoid choosing solutions that only looked stronger or more complicated.
+- space needed for a 90-degree turn;
+- drift over a 3-meter straight drive;
+- steering smoothness;
+- repeatability between runs.
 
-## Mechanical Testing
+## Software Testing Summary
 
-A major part of our testing was focused on the drivetrain and steering system.
+We judged the software side by what our robot actually did on track:
 
-We compared several key mechanical choices:
+- did it wobble;
+- did it return to the target line;
+- did it overshoot after correction;
+- did obstacle transitions stay smooth;
+- did it return cleanly to the normal line after a turn or obstacle.
 
-- N20 motors with **300 rpm**, **600 rpm**, and **1000 rpm**,
-- steering **Version 1**, **Version 2**, and **Version 3**,
-- earlier front wheel solutions versus **silicone front wheels**,
-- and a previous differential solution versus the **LEGO differential**.
+The main low-level controller references are documented in:
 
-## Main Mechanical Test Criteria
+- `docs/code/pd_controller_explanation.md`
+- `docs/code/software_flow_and_state_logic.md`
+- `docs/code/software_testing_and_tuning.md`
+- `docs/code/navigation_strategy_improved.md`
 
-The two most important practical criteria were:
+## Software Criteria We Used
 
-1. **how much area the robot needed to complete a 90-degree turn**,
-2. **how much the robot drifted over a 3-meter straight drive**.
+We used simple but useful criteria:
 
-These criteria were useful because they measured the exact behaviours that mattered most in competition:
+- wobble present or not;
+- correction too weak or too aggressive;
+- stable return to target line or repeated overshoot;
+- smooth obstacle pass or abrupt path change;
+- stable recovery after a turn or disturbance.
 
-- turning precision,
-- straight-driving stability,
-- and repeatability.
+These criteria were practical because they directly matched competition behavior.
 
-## Motor Comparison
+## Why Mechanical and Software Testing Were Linked
 
-We tested three N20 motors.
+The controller could only be tuned well if the mechanics were predictable.
 
-### 300 rpm
-This motor was too slow and did not meet our speed expectations.
+For example:
 
-### 1000 rpm
-This motor was faster, but did not provide enough torque.
+- high steering friction made the software look weaker than it really was;
+- front-wheel slip reduced the effect of a correct steering command;
+- better grip and better steering symmetry made PD tuning easier and more repeatable.
 
-### 600 rpm
-This motor gave the best overall balance of speed and usable torque, so it became the final choice.
+So testing was not split into completely separate worlds. Software and mechanics influenced each other in every iteration.
 
-## Steering Testing
+## Main Conclusion
 
-### Steering Version 1
-Version 1 had a large force arm in the wheel support system. Because of that, the servo had to work much harder.
+The final robot improved because both areas were tuned together:
 
-### Steering Version 2
-In Version 2, we removed the large lever arm and made the wheels rotate more directly in place.
+- mechanics made the robot easier to control;
+- software made the robot use the improved mechanics more effectively.
 
-This was the biggest steering improvement because the servo could turn the system much more easily.
-
-### Steering Version 3
-Version 3 improved the V2 concept further by adding:
-
-- bearings in the frame,
-- silicone front wheels.
-
-This gave better smoothness, better grip, and better repeatability.
-
-## Differential Testing Result
-
-From earlier experience, we already knew that a differential was necessary. However, the differential type still mattered.
-
-After changing from a metal differential to a LEGO differential, the robot became:
-
-- more precise,
-- less likely to bind or jam,
-- and smoother in turning.
-
-## Front Wheel Testing Result
-
-Before the final version, the front wheels could slip.
-
-After switching to silicone front wheels:
-
-- the front wheels no longer slipped,
-- the robot could make stronger useful turns,
-- and steering became more effective on the track.
-
-## Straight Driving Result
-
-At different stages, the robot could drift slightly to either side.
-
-The biggest improvements for straight driving came from:
-
-- better steering geometry,
-- better wheel mounting,
-- improved front-wheel grip,
-- and the improved differential solution.
-
-After the final changes, the robot still drifted only minimally, which was a significant improvement compared to earlier versions.
-
-## Software Testing
-
-Software testing followed the same practical philosophy as mechanical testing.
-
-The goal was not to build the most complicated logic, but to build a navigation strategy that remained understandable, stable, and repeatable.
-
-We improved the software in stages:
-
-### Early software stage
-The robot could already drive, but turning behaviour was more reactive and less refined.
-
-### Intermediate software stage
-The obstacle logic was integrated into the line-following system by changing the target path instead of replacing the whole controller.
-
-This made the transitions smoother and the overall control easier to tune.
-
-### Later software stage
-The software architecture became clearer and more modular, with a cleaner separation between perception and control.
-
-This improved maintainability and reduced the risk that image processing delays would directly affect steering stability.
-
-## Approximate Testing Effort
-
-We performed approximately **10 test runs** while comparing mechanical versions.
-
-Even though this was not a laboratory-style measurement process, it was enough to reveal clear practical differences between the versions.
-
-## Most Important Testing Conclusion
-
-The most important improvement found through testing was:
-
-**the transition from steering Version 1 to Version 2**
-
-This change reduced steering resistance the most and improved the behaviour of the whole front system.
-
-## Engineering Lesson from Testing
-
-The biggest lesson from testing was that real performance depends on the interaction of multiple systems.
-
-For example, straight driving did not improve because of one single change. It improved because several changes worked together:
-
-- steering geometry,
-- wheel grip,
-- differential precision,
-- and assembly quality.
-
-This is why testing was essential. It allowed us to evaluate the robot as one connected system instead of only as separate parts.
-
-## Final Conclusion
-
-Testing was one of the most important parts of our engineering process.
-
-It helped us:
-
-- reject weak ideas,
-- confirm strong design decisions,
-- compare versions in practice,
-- and select the final robot based on repeatable behaviour instead of assumptions.
-
-The final robot is therefore not only a designed robot, but a **tested and iterated robot**.
+That combined testing process was one of the main reasons the final robot became more stable and more repeatable.

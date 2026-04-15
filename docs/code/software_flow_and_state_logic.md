@@ -1,134 +1,303 @@
 # Software Flow and State Logic
 
-## Why We Structured the Software This Way
+## Scope
 
-When we developed our robot, we wanted the software to stay understandable both for us and for other people reading the repository.
+In this document, we explain the full intended software pipeline and also mark which parts are already visible in our repository code.
 
-For that reason, we do not describe the software as one large block of code. We describe it as a sequence of connected stages that work together during a run.
+- Implemented in code now: `ESP32` startup, sensor readout, width estimation, center error calculation, proportional steering, servo and motor output.
+- Documented as final system behavior: camera input on `Pi Zero`, obstacle-color path shift, recovery logic, parking transition.
 
-This makes the logic easier to explain and also fits the way we thought about the system during development.
+## Main Software Pipeline
 
-## High-Level Flow
+We describe our full software pipeline like this:
 
-Our software can be understood through the following main flow:
+1. start and initialize boards and sensors;
+2. wait for run command;
+3. read environment input;
+4. estimate current target path;
+5. calculate line or path error;
+6. apply PD steering control;
+7. set speed output;
+8. check for obstacle, correction, or parking transitions;
+9. repeat until parking sequence begins.
 
-1. **read visual information**,
-2. **estimate the current path situation**,
-3. **decide which target path to follow**,
-4. **calculate steering correction using PD control**,
-5. **send final movement commands**,
-6. **repeat continuously during the run**.
+## Startup Flow
 
-This is the main control loop idea behind our robot.
+Our current `ESP32` startup sequence in `src/src/main.cpp` is:
 
-## Perception Stage
+1. `Wire.begin()` and `Wire.setClock(400000)`
+2. `Serial.begin(9600)`
+3. button setup with `pinMode(BUTTON_PIN, INPUT_PULLUP)`
+4. motor pin setup
+5. `setup_lidar_sensors()`
+6. `engine.begin()`
+7. `robotCompass.begin()`
+8. `myservo.attach(33)`
+9. wait until button press toggles `started`
 
-In the first stage, we use the camera-side system to observe the track in front of the robot.
+When `started` is false:
 
-At this stage, we are interested in information such as:
+- `engine.stop()` is called;
+- the loop exits early;
+- the robot stays in a safe idle state.
 
-- where the path is,
-- how the robot is positioned relative to it,
-- and whether there is a relevant obstacle with colour information.
+When the run button is pressed:
 
-We process this on the **Raspberry Pi Zero** side.
+- `started = !started`
+- `targetAngle = newHeading`
 
-## Decision Stage
+This stores our current heading as the reference direction.
 
-After perception, the robot must decide what the current target path should be.
+## Input Sources
 
-### Normal situation
-If there is no relevant obstacle, the target path is the normal driving line.
+### Pi Zero inputs in the final architecture
 
-### Obstacle situation
-If a red or green obstacle is detected, the target path changes according to the passing rule.
+- camera image;
+- line position estimate;
+- obstacle color;
+- obstacle position;
+- parking trigger after required laps.
 
-This is one of the most important ideas in our software:
+### ESP32 inputs in the implemented code
 
-- the controller does not change into a completely separate navigation system,
-- only the **target path** changes.
+- `SENSOR_DISTANCE[0]`
+- `SENSOR_DISTANCE[1]`
+- `newHeading = robotCompass.getYaw()`
+- `BUTTON_STATE`
 
-## Control Stage
+## How the Current Error Is Calculated
 
-Once the target path is known, the robot calculates the steering correction.
-
-At this stage, the **ESP32** uses PD control to transform the current path error into steering output.
-
-This means the control stage answers the question:
-
-**how much should we steer right now to move back toward the correct target path?**
-
-## Actuation Stage
-
-After the steering correction is calculated, the ESP32 sends the final output to:
-
-- the steering servo,
-- and the drive motor.
-
-This produces the real movement of the robot.
-
-## Continuous Loop Behaviour
-
-The whole process repeats continuously during driving. That is important because the robot does not solve the track in one large decision. It keeps updating its understanding of the situation and correcting its movement step by step.
-
-This is one of the reasons why the robot can adapt better than a system that relies only on fixed manoeuvres.
-
-## Practical State Logic
-
-Even though our robot keeps one main navigation principle, we can still describe its behaviour through several practical states.
-
-### 1. Normal lane following
-In this state, the robot follows the standard target line.
-
-### 2. Obstacle-adjusted following
-In this state, the robot still uses the same PD controller, but now it follows a shifted target path based on obstacle colour.
-
-### 3. Correction / recovery behaviour
-If the robot becomes less stable or less aligned, the controller behaviour focuses more on returning the robot to a safer state.
-
-### 4. Parking behaviour
-After the required laps are completed, the robot transitions into the final parking task.
-
-## Why This Is Useful for Documentation
-
-Describing the logic in these practical states helps in two ways:
-
-- it makes the software easier to explain,
-- and it makes the behaviour easier to connect to the actual robot performance.
-
-Even if the code itself is organised differently, the state-based explanation is still useful because it reflects what the robot is doing from an engineering point of view.
-
-## Suggested Simple Flowchart
-
-The logic can be shown in a simple flowchart like this:
+The actual error calculation visible in our repository is:
 
 ```text
-Camera input -> path / obstacle analysis -> target path selection -> PD steering calculation -> servo + motor output -> repeat
+angle = targetAngle - newHeading
+rad_angle = radians(angle)
+width = (SENSOR_DISTANCE[0] + SENSOR_DISTANCE[1]) * cos(rad_angle)
+track = get_dominant_cluster_average(buffer_size, track_buffer, 20)
+distance = SENSOR_DISTANCE[0] * cos(rad_angle)
+error = track / 2 - distance
 ```
 
-A more state-oriented version could be shown like this:
+Meaning:
+
+- `track / 2` is the estimated target center of the corridor;
+- `distance` is the robot's current lateral position relative to one side;
+- `error` is the difference between desired center and measured position.
+
+In the final full system, this same idea generalizes to visual path following:
+
+- normal mode uses the normal center line;
+- obstacle mode shifts the target line left or right;
+- parking mode changes the target behavior completely.
+
+## How Steering and Speed Output Are Produced
+
+Current steering output:
 
 ```text
-Start -> Normal follow -> Obstacle detected? -> shift target path -> continue PD control -> obstacle passed -> return to normal follow -> parking
+derivative_delta = (error - last_error) / delta_t
+turning_angle = STRAIGHT_ANGLE + Kp * error + Kd * derivative_delta
+final_servo_angle = constrain(turning_angle, STRAIGHT_ANGLE - 45, STRAIGHT_ANGLE + 45)
+myservo.write(final_servo_angle)
 ```
 
-## What Should Be Added from the Final Code
+Current speed output:
 
-To make this document even stronger, the next step would be to insert the real file or function names from the final implementation, for example:
+- while running, the present code uses `engine.drive(255)`;
+- while stopped or idle, it uses `engine.stop()`.
 
-- the perception function name,
-- the obstacle decision function name,
-- the PD calculation function name,
-- the parking logic function name.
+In the full architecture, speed would also depend on obstacle proximity, recovery state, and parking phase.
 
-That would make the explanation even more directly connected to the source code.
+## Obstacle Logic as Part of the Main Flow
 
-## Final Conclusion
+We describe the intended obstacle sequence like this:
 
-We structured our software so that the robot behaviour could be understood as a flow of perception, decision, control, and actuation.
+1. `Pi Zero` detects an object in the drivable corridor.
+2. Vision classifies the obstacle as red or green.
+3. The selected target line is shifted to the legally correct side.
+4. The same PD steering controller follows that shifted target.
+5. After passing the obstacle, the target returns to the normal line.
 
-For us, that structure was important because it helped us:
+This is important because the controller itself does not need to be replaced. Only the reference path changes.
 
-- keep the logic clear,
-- explain the code better,
-- and improve the robot in a more systematic way.
+## Behavior States
+
+Even without a formal state-machine class, we can describe our software through these logical states.
+
+### 1. Start / Idle
+
+Conditions:
+
+- system initialized;
+- waiting for user start command.
+
+Visible implementation:
+
+- `started == false`
+- `engine.stop()`
+
+### 2. Normal Follow
+
+Conditions:
+
+- no relevant obstacle;
+- line or corridor can be estimated normally.
+
+Behavior:
+
+- follow the normal target line;
+- keep steering correction continuous;
+- keep forward speed stable.
+
+### 3. Obstacle-Adjusted Follow
+
+Conditions:
+
+- obstacle detected and classified;
+- passing side is known.
+
+Behavior:
+
+- shift the target path left or right;
+- keep using the same steering controller;
+- return to normal target when the obstacle is cleared.
+
+### 4. Correction / Recovery
+
+Conditions:
+
+- line confidence drops;
+- wall distance becomes unsafe;
+- steering saturates for too long;
+- robot position becomes inconsistent.
+
+Behavior:
+
+- reduce speed or stop;
+- apply a short corrective steering action;
+- recover a valid path estimate before returning to normal follow.
+
+Our current code already contains a primitive version of protection through output limiting:
+
+- `constrain(turning_angle, STRAIGHT_ANGLE - 45, STRAIGHT_ANGLE + 45)`
+
+### 5. Parking
+
+Conditions:
+
+- required driving sequence is completed;
+- parking trigger is active.
+
+Behavior:
+
+- switch from lap-following target to final parking approach;
+- reduce speed;
+- prioritize final alignment over lap speed.
+
+We include parking in the final architecture description, but we do not yet have an explicit parking implementation in the repository code.
+
+## Edge Cases
+
+### Obstacle detection is uncertain
+
+Recommended behavior:
+
+- keep the normal target line until confidence is good enough;
+- avoid switching left-right rapidly on weak detections.
+
+### Line or corridor estimate is lost
+
+Recommended behavior:
+
+- reduce speed;
+- hold the last stable steering direction briefly;
+- fall back to recovery logic if the estimate does not return quickly.
+
+### Robot is too close to a wall
+
+Recommended behavior:
+
+- temporarily prioritize collision avoidance;
+- shift target away from the wall;
+- if needed, reduce speed before applying a stronger correction.
+
+### Steering correction becomes too large
+
+Current code response:
+
+- servo output is clamped by `constrain(...)`.
+
+Engineering meaning:
+
+- this avoids commanding unrealistic angles;
+- it also signals that the robot is outside its comfortable control region.
+
+### Just before parking
+
+Recommended behavior:
+
+- stop treating the situation like a normal lap;
+- lower speed;
+- reduce aggressive corrections;
+- prioritize correct final positioning.
+
+## Text Flowchart
+
+```text
+Power on
+  -> setup sensors and actuators
+  -> wait for start button
+  -> read camera / ToF / IMU inputs
+  -> estimate normal or obstacle-shifted target path
+  -> calculate error
+  -> PD steering calculation
+  -> send servo and motor output
+  -> check obstacle / recovery / parking conditions
+  -> repeat
+```
+
+## Mermaid Flowchart
+
+```mermaid
+flowchart TD
+    A[Power On] --> B[Setup: IMU, ToF, motor, servo]
+    B --> C[Wait For Start]
+    C --> D[Read Inputs]
+    D --> E[Estimate Target Path]
+    E --> F[Calculate Error]
+    F --> G[PD Steering]
+    G --> H[Motor And Servo Output]
+    H --> I{State Check}
+    I -->|Normal| D
+    I -->|Obstacle| J[Shift Target Path]
+    J --> F
+    I -->|Recovery| K[Reduce Speed And Correct]
+    K --> D
+    I -->|Parking| L[Parking Logic]
+```
+
+## Mermaid State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> StartIdle
+    StartIdle --> NormalFollow: start button
+    NormalFollow --> ObstacleAdjustedFollow: obstacle detected
+    ObstacleAdjustedFollow --> NormalFollow: obstacle cleared
+    NormalFollow --> Recovery: line lost / wall too close / unstable
+    Recovery --> NormalFollow: stable again
+    NormalFollow --> Parking: lap condition met
+    Parking --> [*]
+```
+
+## Why This State Logic Matters
+
+We do not need a complicated software framework to have state logic. What matters for judging is that our behavior is explainable:
+
+- what input is read;
+- what target is chosen;
+- how error becomes steering;
+- when the robot changes behavior;
+- how it handles non-ideal situations.
+
+This state-based explanation makes the software easier to justify, test, and reproduce.

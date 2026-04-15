@@ -1,114 +1,176 @@
 # Software Testing and Tuning
 
-## Why Software Testing Was Important for Us
+## Why Software Testing Mattered
 
-Our software was not finished in one version. We improved it step by step by watching how the robot behaved on the track and then changing the control logic when the result was not stable enough.
+We did not treat software as something that can be judged only by reading code. We evaluated it by what the robot actually did on the track.
 
-For us, software testing was closely connected to mechanical testing. A controller can look correct in theory, but the real question is whether the robot drives well on the actual field.
+The main software question was always:
 
-## What We Wanted from the Software
+- does the robot return to the target line smoothly and repeatably?
 
-When testing software, we mainly wanted the robot to be:
+That is more useful than asking whether the algorithm looks complicated.
 
-- stable in straight driving,
-- smooth in turning,
-- reliable in obstacle obedience,
-- and repeatable over multiple runs.
+## What We Tested
 
-We were not looking only for one fast attempt. We wanted behaviour that stayed understandable and controllable over repeated runs.
+We focused on the behaviors that were most visible during driving:
 
-## Main Tuning Philosophy
+- straight tracking stability;
+- how quickly the robot returned to the target line;
+- whether steering oscillated or wobble appeared;
+- whether the robot oversteered after a correction;
+- whether obstacle transitions were smooth;
+- whether the robot returned cleanly to the normal target after an obstacle;
+- whether software remained stable when mechanics were imperfect.
 
-Our most important software decision was to keep **one main navigation principle**:
+## Real Software References Used During Tuning
 
-- PD line following stays the base behaviour,
-- obstacle information changes the target path,
-- but the main controller remains the same.
+Our current low-level tuning references in code are in `src/src/main.cpp`:
 
-This made tuning easier because we did not need to tune many disconnected controllers. Instead, we could improve one main control method and then observe how it behaved in different situations.
+- `Kp`
+- `Kd`
+- `last_error`
+- `derivative_delta`
+- `turning_angle`
+- `final_servo_angle`
+- `track_buffer`
+- `get_dominant_cluster_average(...)`
 
-## What We Observed During Testing
+Useful sensor-side references:
 
-When we tested the software, we paid attention to practical driving behaviour, such as:
+- `SENSOR_DISTANCE[0]`
+- `SENSOR_DISTANCE[1]`
+- `target_status[...]` checks in `src/lib/Lidar/Lidar.cpp`
 
-- whether the robot returned to the target line smoothly,
-- whether it oscillated too much,
-- whether it turned too weakly or too aggressively,
-- whether obstacle transitions were smooth,
-- and whether the robot stayed predictable over repeated runs.
+Useful debug output:
 
-## PD Tuning Logic
+```text
+Serial.printf("Proportional: %.2f | Error: %.2f | Derivative: %.2f | Angle: %.2f | Width: %.2f \n", ...)
+```
 
-### If the robot reacted too weakly
-That usually meant the steering correction was not strong enough. In this type of situation, the robot could stay away from the target path for too long.
+This is important because we tuned best when we observed actual `error`, proportional contribution, derivative contribution, and final steering angle instead of relying only on visual impressions.
 
-### If the robot reacted too aggressively
-That usually meant the steering became too sharp and the robot could start oscillating left and right.
+## How We Judged Whether the Controller Was Good
 
-### If the robot recovered badly after a turn
-That usually meant the damping effect was not good enough, and the steering response needed to become smoother.
+We used simple practical criteria.
 
-These observations helped us understand whether the controller needed stronger proportional response or better damping.
+### Good behavior
 
-## Why Obstacle Logic Was Easier to Tune This Way
+- the robot stays near the target line;
+- corrections are smooth;
+- it returns after a disturbance without large overshoot;
+- steering does not keep swinging after the first correction;
+- obstacle passing transitions do not create a second unnecessary turn.
 
-Because we kept the same main controller and only changed the target path, obstacle behaviour became easier to tune than if we had used a completely separate obstacle routine.
+### Bad behavior
 
-This gave us several practical advantages:
+- visible wobble on straights;
+- late return to the target line;
+- strong overshoot after each correction;
+- repeated servo saturation near the steering limit;
+- unstable behavior when a sensor reading is briefly poor.
 
-- fewer abrupt transitions,
-- easier debugging,
-- more understandable behaviour,
-- and a clearer connection between normal driving and obstacle driving.
+## How We Tuned PD
 
-## Split Architecture and Testing
+Our tuning logic was iterative:
 
-Our split architecture also helped the tuning process.
+1. Start from a safe and conservative steering gain.
+2. Increase `Kp` until the robot returns to the target line fast enough.
+3. Stop increasing `Kp` when wobble or oversteer becomes visible.
+4. Add or reserve `Kd` only if the robot needs more damping.
+5. Re-test after any mechanical change because software and mechanics are strongly linked.
 
-- The **Pi Zero** handled perception,
-- the **ESP32** handled control and final actuation.
+This matters because our controller can look weak only because the front wheels slip, the steering sticks, or the geometry is asymmetric.
 
-This made it easier for us to think about the system in two layers:
+## How We Recognized Aggressive vs Weak Tuning
 
-1. is the perception result correct?
-2. is the control reaction correct?
+### Too aggressive
 
-That separation made debugging and tuning more structured.
+We judged the controller as too aggressive when:
 
-## What a Better Software Version Meant for Us
+- the robot oscillated around the target line;
+- the front wheels made large visible corrections;
+- after one correction the robot immediately needed a correction in the opposite direction;
+- steering hit its allowed range too often.
 
-When we said that a software version was better, we did not mean only that it worked once.
+### Too weak
 
-For us, a better version meant that the robot:
+We judged the controller as too weak when:
 
-- followed the path more smoothly,
-- reacted more predictably,
-- handled obstacle situations with less instability,
-- and stayed easier to tune after other changes.
+- the robot drifted for too long before correcting;
+- it stayed off-center after a disturbance;
+- turns and recovery looked delayed;
+- obstacle-shifted path following looked too slow to re-center.
+
+## How We Evaluated Obstacle Transitions
+
+In the final architecture, obstacle handling is judged by transition quality, not only by "did it miss the obstacle".
+
+The main criteria are:
+
+- does the robot shift target path early enough;
+- is the shift smooth rather than a sudden snap turn;
+- does it clear the obstacle without scraping the wall;
+- does it return to the normal line cleanly after the pass.
+
+This is one reason we preferred target shifting inside the same controller instead of fixed maneuvers.
+
+## Edge Cases We Considered
+
+### Unclear obstacle detection
+
+If obstacle meaning is uncertain, the safer behavior is to avoid rapid switching between left and right interpretations.
+
+### Lost line or weak corridor estimate
+
+The robot should reduce speed or enter recovery instead of continuing with blind aggressive steering.
+
+### Too close to the wall
+
+Collision avoidance must temporarily become more important than ideal line centering.
+
+### Steering output too large
+
+Our current code already limits output with `constrain(...)`, which prevents impossible commands and helps show when the controller has left its comfortable region.
+
+### Pre-parking transition
+
+Before parking, the robot should stop behaving like it is still optimizing lap speed. Stable final positioning becomes more important than aggressive correction.
+
+## Metrics and Practical Evaluation Criteria
+
+We did not rely on laboratory-grade metrics, but we still used clear evaluation criteria:
+
+- wobble present or not present;
+- return to target line fast or slow;
+- overshoot strong or mild;
+- obstacle pass smooth or abrupt;
+- after-turn recovery stable or unstable;
+- steering angle frequently saturated or mostly within comfortable range.
+
+These are simple metrics, but they are directly relevant to WRO driving quality.
 
 ## Relation Between Software and Mechanics
 
-One important lesson from testing was that software and mechanics had to support each other.
+Software tuning was never independent from the mechanical system.
 
-For example, if the steering mechanics had too much friction or if the front wheels slipped, the controller could not behave as well as expected. That means software tuning only became truly effective after the mechanics became more repeatable.
+The controller depended strongly on:
 
-Because of that, we treated software testing and mechanical testing as connected parts of the same engineering process.
+- steering friction;
+- front-wheel grip;
+- symmetry of left-right steering;
+- differential smoothness;
+- sensor mounting stability.
 
-## What Should Still Be Added from the Final Code
+This means a gain value that works on one mechanical version may become wrong after changing wheels, steering geometry, or grip.
 
-This documentation explains our tuning logic clearly, but it can still be improved further by inserting the final code-specific details such as:
+## What Improved After Tuning and Iteration
 
-- the actual variable name used for the line error,
-- the actual variable names for `Kp` and `Kd`,
-- the exact module or file where steering output is calculated,
-- and the exact obstacle-decision function names.
+The main improvements were:
 
-Once those names are inserted, this section will match the real implementation even more strongly.
+- cleaner return toward the target line;
+- less visible oscillation;
+- more repeatable steering response;
+- easier recovery from small disturbances;
+- better match between actuator command and actual vehicle movement.
 
-## Final Conclusion
-
-Software testing helped us keep the robot understandable and stable.
-
-Instead of creating many separate behaviours, we focused on improving one main navigation idea and tuning it until the robot became smoother, more repeatable, and easier to control.
-
-For us, that was one of the most important reasons why the final software became stronger than the earlier versions.
+The biggest software lesson was that good tuning is not only about finding larger or smaller gains. It is about matching the controller to the real mechanical behavior of the robot.
