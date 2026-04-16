@@ -52,7 +52,7 @@ The motor drives a gear, and that gear drives the **rear mechanical differential
 
 ## Motor Selection
 
-The drive motor is a **6 V N20 motor rated at [SET_REAL_RPM] rpm**.
+The drive motor is a **6 V N20 motor rated at 600 rpm**.
 
 We tested **three different motors** before selecting the final one.
 

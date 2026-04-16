@@ -421,6 +421,39 @@ Our goal is that another team should be able to understand:
 - what changed from one version to another;
 - how the final design was reached.
 
+### Build, Flash, And Run
+
+The active embedded controller is the `ESP32` project inside `src/`.
+
+1. install `PlatformIO`;
+2. open the `src/` folder as the PlatformIO project;
+3. build the environment `upesy_wroom` defined in `src/platformio.ini`;
+4. connect the `ESP32` board used in the robot;
+5. upload the firmware;
+6. verify that the IMU and both `VL53L5CX` sensors initialize successfully on serial output;
+7. place the robot on the field and use the physical start button to store the initial heading and begin the run.
+
+Important implementation details already visible in code:
+
+- start button: `GPIO13`
+- motor enable / PWM: `GPIO32`
+- motor direction pins: `GPIO26`, `GPIO25`
+- steering servo: `GPIO33`
+- ToF wake pins: `GPIO4`, `GPIO5`
+
+### Reproduction Checklist
+
+For a judge or another team, the minimum reproducible package in this repository is:
+
+- `README.md` for system overview and build logic;
+- `docs/design/` for chassis, steering, drivetrain, and trade-offs;
+- `docs/hardware/` plus `schemes/` for wiring and power structure;
+- `src/` for the active `ESP32` code;
+- `models/` for the steering-related printable parts;
+- `t-photos/`, `v-photos/`, and `video/` for visual evidence and autonomous-run proof.
+
+The current repository fully documents the `ESP32` control path and the mechanical/electrical system. The `Pi Zero` high-level perception side is documented architecturally and through the message boundary, and should be paired with the team's final perception code at submission time.
+
 ---
 
 ## Repository Structure

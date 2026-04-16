@@ -1,7 +1,11 @@
 # Performance Measurements
 
 This section records the metrics that can be used to compare different versions of the robot.
-At the moment, most conclusions are still qualitative, but the measurement structure is already defined and used during testing.
+The project does not yet include a full bench-measurement dataset, so this file separates three kinds of evidence:
+
+- direct observations repeated across multiple runs;
+- structured pass/fail or weak/strong comparisons;
+- future numeric data that could still be added before final submission.
 
 ## Main Metrics To Observe
 
@@ -10,6 +14,16 @@ At the moment, most conclusions are still qualitative, but the measurement struc
 - robot stability while following the lane;
 - obstacle-handling reliability;
 - robot behavior after a sharper turn or correction.
+
+## Comparison Template We Actually Used
+
+| Metric | How we checked it | Why it matters |
+| --- | --- | --- |
+| steering center repeatability | cycle steering left/right repeatedly and return to center | poor center repeatability creates software drift that is not caused by the controller |
+| left-right symmetry | compare left and right turn response under similar steering commands | asymmetric steering makes path-following inconsistent |
+| 3 m straight-drive drift | observe whether one version drifts more than another over the same distance | this is a direct competition-relevant stability check |
+| 90-degree turn space | compare how much floor area the robot uses in the same corner type | better turning efficiency improves obstacle and parking behavior |
+| repeated-run consistency | repeat the same run pattern several times | WRO rewards repeatability, not one lucky result |
 
 ## Qualitative Conclusions From Current Tests
 
@@ -26,6 +40,16 @@ To make the documentation stronger, this section should later include numerical 
 - how many successful runs in a row the robot completes on the same track;
 - how often obstacle confirmation requires intervention from a ToF module;
 - how often slipping or excessive correction appears in turns.
+
+## Current Engineering Conclusion
+
+Even before a larger numeric dataset is added, the current measurement structure already supports the major decisions documented elsewhere in the repository:
+
+- steering geometry correction reduced servo load and improved center repeatability;
+- the `LEGO` differential reduced cornering resistance;
+- silicone front wheels improved the conversion of steering command into real floor motion;
+- rigid `BNO085` mounting improved heading stability;
+- a simpler and calmer controller produced more repeatable runs than a more aggressive one.
 
 ## Measurement Note
 

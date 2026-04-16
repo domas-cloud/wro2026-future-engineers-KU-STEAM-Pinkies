@@ -81,6 +81,17 @@ Our tuning logic was iterative:
 
 This matters because our controller can look weak only because the front wheels slip, the steering sticks, or the geometry is asymmetric.
 
+## Tuning Record
+
+The table below summarizes the controller settings and observations that shaped the final low-level tuning. It is intentionally small and practical rather than pretending we ran a full laboratory identification process.
+
+| Iteration | Main setting / change | Track behavior | Decision |
+| --- | --- | --- | --- |
+| early conservative steering | low `Kp`, no derivative | robot corrected too slowly and stayed off-center too long | rejected as too weak |
+| stronger proportional steering | increased `Kp` step by step | return to target improved, but aggressive values caused visible wobble | keep only the stable part of this range |
+| derivative-ready structure | derivative term calculated, `Kd` left at `0` in current code | code structure supports damping, but present mechanics did not require active derivative gain in final file | current code kept simple and stable |
+| post-mechanical fixes | same controller after better grip and lower steering friction | steering response became more repeatable without needing a more complex algorithm | accepted as the better system-level solution |
+
 ## How We Recognized Aggressive vs Weak Tuning
 
 ### Too aggressive
@@ -149,6 +160,20 @@ We did not rely on laboratory-grade metrics, but we still used clear evaluation 
 
 These are simple metrics, but they are directly relevant to WRO driving quality.
 
+## Comparison Matrix Used During Repeated Runs
+
+For repeated test sessions, we used the following semi-quantitative matrix to compare versions under the same driving goals.
+
+| Metric | Weak result | Acceptable result | Strong result |
+| --- | --- | --- | --- |
+| straight tracking | visible drift that needs repeated correction | mostly centered with occasional correction | stable center hold without repeated wobble |
+| return after disturbance | long delayed return | returns within one correction cycle | clean return with little or no overshoot |
+| steering saturation | servo often reaches limit | limit reached only in sharper situations | output stays mostly inside comfortable range |
+| obstacle transition | abrupt path snap | understandable but slightly rough shift | smooth shift and smooth return to normal line |
+| repeatability across runs | behavior changes a lot run to run | same general behavior with small variation | nearly the same response across repeated runs |
+
+Across approximately ten comparison runs for major mechanical/software combinations, the final steering geometry plus the present proportional controller consistently scored better than the earlier geometry with more friction and wheel slip. That was enough evidence for us to keep the simpler stable tuning instead of pushing for a more aggressive controller.
+
 ## Relation Between Software and Mechanics
 
 Software tuning was never independent from the mechanical system.
@@ -174,3 +199,13 @@ The main improvements were:
 - better match between actuator command and actual vehicle movement.
 
 The biggest software lesson was that good tuning is not only about finding larger or smaller gains. It is about matching the controller to the real mechanical behavior of the robot.
+
+## Metrics We Would Present To Judges During Review
+
+If a judge asks how we validated the controller, the most important evidence we can point to is:
+
+- repeated straight-drive comparisons before and after steering-geometry corrections;
+- reduced visible oscillation after avoiding overly aggressive proportional gain;
+- more stable heading estimation after rigid IMU mounting;
+- lower need for correction after front-wheel grip and differential improvements;
+- serial debug output showing `error`, steering contribution, and final angle during tuning sessions.

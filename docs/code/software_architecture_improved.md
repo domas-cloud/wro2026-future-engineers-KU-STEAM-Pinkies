@@ -9,6 +9,21 @@ In this document, we combine two levels of evidence:
 
 Our repository currently contains the `ESP32` control code in detail. We document the `Raspberry Pi Zero` side architecturally, but its source files are not included in this repository. For that reason, we use real file and variable names for the `ESP32` side and explain the `Pi Zero` role at module level.
 
+## Evidence Map
+
+To keep the documentation honest and reproducible, we separate what is already visible in code from what is currently documented at interface level.
+
+| Area | Evidence level | Where the evidence exists |
+| --- | --- | --- |
+| ESP32 startup and control loop | implemented in code | `src/src/main.cpp` |
+| motor actuation | implemented in code | `src/lib/Engine/Engine.h` |
+| IMU yaw reading | implemented in code | `src/lib/IMU/Compass.h` |
+| dual-ToF initialization and reading | implemented in code | `src/lib/Lidar/Lidar.cpp` |
+| filtering / dominant cluster estimate | implemented in code | `src/lib/utils/Sorting.cpp` |
+| Pi Zero high-level perception role | documented architecture | this file and `docs/code/message_protocol.md` |
+| obstacle color interpretation | documented architecture | this file and `docs/code/navigation_strategy_improved.md` |
+| parking transition | documented architecture | this file and `docs/code/software_flow_and_state_logic.md` |
+
 ## Board Roles
 
 ### Raspberry Pi Zero
@@ -148,6 +163,25 @@ The actual low-level data path that we can show from the repository is:
 
 In the final full architecture, the `Pi Zero` provides the high-level target path and obstacle meaning, while the `ESP32` still executes the final control and actuation step.
 
+## Software State View
+
+The control structure is easier to judge as a state-based system than as one long loop.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> NormalFollow: start button pressed
+    NormalFollow --> ObstacleAdjustedFollow: obstacle meaning available
+    ObstacleAdjustedFollow --> NormalFollow: obstacle cleared
+    NormalFollow --> Recovery: bad path estimate or unsafe distance
+    ObstacleAdjustedFollow --> Recovery: confidence drop
+    Recovery --> NormalFollow: stable path returns
+    NormalFollow --> Parking: required sequence completed
+    Parking --> [*]
+```
+
+This state view is important because it shows that the robot behavior is not random branching. The same controller remains active, but the active target and safety policy change by state.
+
 ## Startup and Controller Ownership
 
 The implemented startup logic in `src/src/main.cpp` is intentionally simple:
@@ -174,3 +208,16 @@ Our current repository shows the low-level `ESP32` controller clearly, but it do
 
 - implemented low-level controller and sensor fusion are present in code;
 - final high-level perception architecture is documented and justified at system level.
+
+## Why The Current Repository Is Still Reproducible
+
+Even with the current limitation, another team can still reproduce several important layers reliably from this repository:
+
+- the complete ESP32 wiring and pin ownership;
+- the ToF startup sequence and address assignment;
+- the IMU yaw-reading method;
+- the corridor-centering controller and steering equation;
+- the servo and motor actuation path;
+- the intended message boundary between perception and control.
+
+The missing part is not the whole robot. The missing part is the Pi-side perception implementation. We document that boundary explicitly so the repository does not overclaim what is present.
