@@ -4,6 +4,63 @@ This repository contains the engineering documentation, design reasoning, and te
 
 Our goal was to build a compact autonomous self-driving robot that is mechanically stable, easy to control, and strong in straight driving and obstacle obedience. During the season, we improved the robot through several mechanical and software iterations. The final version reflects not only the final design, but also the engineering decisions that helped us solve practical problems.
 
+## Quick Navigation For Judges
+
+If you read only a small part of the repository, we recommend this order:
+
+1. [Start Here](START_HERE.md)
+2. [Main Documentation Index](docs/README.md)
+3. [System Overview](docs/design/system_overview.md)
+4. [Engineering Decisions](docs/design/engineering_decisions.md)
+5. [Software Architecture](docs/code/software_architecture_improved.md)
+6. [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
+
+## Direct Links By Rubric Area
+
+### 1. Mobility And Mechanical Design
+
+- [Chassis Design](docs/design/chassis_design_improved.md)
+- [Drivetrain and Steering](docs/design/drivetrain_and_steering.md)
+- [Engineering Decisions](docs/design/engineering_decisions.md)
+- [Risk and Failures](docs/design/risk_and_failures.md)
+- [CAD Models](models/README.md)
+
+### 2. Power And Sensor Architecture
+
+- [Electronics Overview](docs/hardware/electronics_overview.md)
+- [PCB and Wiring Diagrams](docs/hardware/pcb_wiring_diagrams.md)
+- [Sensor List](docs/hardware/sensor_list.md)
+- [Parts List](docs/hardware/parts_list.md)
+- [Schemes Index](schemes/README.md)
+- [Wiring Overview](schemes/wiring_overview.md)
+
+### 3. Software Architecture And Obstacle Strategy
+
+- [Software Architecture](docs/code/software_architecture_improved.md)
+- [Navigation Strategy](docs/code/navigation_strategy_improved.md)
+- [Software Flow and State Logic](docs/code/software_flow_and_state_logic.md)
+- [Message Protocol](docs/code/message_protocol.md)
+- [ESP32 Source Code](src/src/main.cpp)
+- [PlatformIO Project](src/README.md)
+
+### 4. Systems Thinking And Engineering Decisions
+
+- [System Overview](docs/design/system_overview.md)
+- [Engineering Decisions](docs/design/engineering_decisions.md)
+- [Risk and Failures](docs/design/risk_and_failures.md)
+- [Comparison to Initial Goals](docs/evaluation/comparison_initial_goals.md)
+- [What Worked](docs/evaluation/what_worked.md)
+- [What Didn't Work](docs/evaluation/what_didnt.md)
+
+### 5. Reproducibility And Submission Evidence
+
+- [Build, Flash, and Run Information](src/README.md)
+- [CAD Models](models/README.md)
+- [Robot Photos Folder](v-photos/README.md)
+- [Team Photos Folder](t-photos/README.md)
+- [Video Submission](video/video.md)
+- [Video Folder](video/README.md)
+
 ---
 
 ## Team
@@ -445,12 +502,12 @@ Important implementation details already visible in code:
 
 For a judge or another team, the minimum reproducible package in this repository is:
 
-- `README.md` for system overview and build logic;
-- `docs/design/` for chassis, steering, drivetrain, and trade-offs;
-- `docs/hardware/` plus `schemes/` for wiring and power structure;
-- `src/` for the active `ESP32` code;
-- `models/` for the steering-related printable parts;
-- `t-photos/`, `v-photos/`, and `video/` for visual evidence and autonomous-run proof.
+- [README.md](README.md) for system overview and build logic;
+- [docs/design/](docs/design/) for chassis, steering, drivetrain, and trade-offs;
+- [docs/hardware/](docs/hardware/) plus [schemes/](schemes/) for wiring and power structure;
+- [src/](src/) for the active `ESP32` code;
+- [models/](models/) for the steering-related printable parts;
+- [t-photos/](t-photos/), [v-photos/](v-photos/), and [video/](video/) for visual evidence and autonomous-run proof.
 
 The current repository fully documents the `ESP32` control path and the mechanical/electrical system. The `Pi Zero` high-level perception side is documented architecturally and through the message boundary, and should be paired with the team's final perception code at submission time.
 
@@ -460,13 +517,13 @@ The current repository fully documents the `ESP32` control path and the mechanic
 
 Important documentation sections in this repository include:
 
-- `docs/design/chassis_design.md`
-- `docs/design/steering_system.md`
-- `docs/design/wheel_mounting_suspension.md`
-- `docs/hardware/electronics_overview.md`
-- `docs/hardware/pcb_wiring_diagrams.md`
-- `docs/code/code_architecture.md`
-- `docs/code/navigation_logic.md`
+- [Chassis Design](docs/design/chassis_design.md)
+- [Steering System](docs/design/steering_system.md)
+- [Wheel Mounting and Suspension](docs/design/wheel_mounting_suspension.md)
+- [Electronics Overview](docs/hardware/electronics_overview.md)
+- [PCB and Wiring Diagrams](docs/hardware/pcb_wiring_diagrams.md)
+- [Code Architecture](docs/code/code_architecture.md)
+- [Navigation Logic](docs/code/navigation_logic.md)
 
 Additional sections continue to document the engineering process, testing results, software decisions, and final performance.
 
