@@ -15,7 +15,7 @@ Compared with the earlier robot without a differential, turning resistance was r
 
 ## Sensor Performance
 
-The camera remained the main source of overall track information, while the 2 `VL53L5CX` modules were used for short-range confirmation.
+The camera remained the main source of overall track information, while the 2 `VL53L4CD` modules were used for short-range confirmation.
 The `BNO085` added heading and motion-stability information, especially after several consecutive turns.
 This distribution of sensor roles reduced the impact of any single-sensor error on the full decision cycle.
 

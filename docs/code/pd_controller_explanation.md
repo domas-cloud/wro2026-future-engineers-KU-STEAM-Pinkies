@@ -30,7 +30,7 @@ final_servo_angle = constrain(turning_angle, STRAIGHT_ANGLE - 45, STRAIGHT_ANGLE
 
 ## What the Error Means on Our Robot
 
-In our current `ESP32` implementation, the robot estimates the corridor width and its own lateral position using two `VL53L5CX` sensors plus heading compensation from the `BNO085`.
+In our current `ESP32` implementation, the robot estimates the corridor width and its own lateral position using two distance sensors plus heading compensation from the `BNO085`.
 
 The key calculations are:
 

@@ -18,7 +18,7 @@ Because of that, the current robot kept the differential as a necessary drivetra
 
 Testing showed that one sensor type alone was not enough for stable navigation in all situations.
 Camera data alone or short-range sensors alone could not reliably solve all track scenarios.
-Because of that, a mixed solution was chosen using the camera, `BNO085`, and 2 `VL53L5CX` modules.
+Because of that, a mixed solution was chosen using the camera, `BNO085`, and 2 `VL53L4CD` modules.
 
 ## Insufficiently Rigid Mounting
 

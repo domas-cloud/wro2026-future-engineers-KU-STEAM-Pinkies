@@ -3,7 +3,7 @@
 - Team: KU STEAM Pinkies
 - Competition: WRO 2026 Future Engineers
 - Main repository purpose: engineering documentation and robot reproducibility
-- Core hardware: `ESP32`, `Raspberry Pi Zero`, `MG90S`, `N20`, `L298N`, `BNO085`, `VL53L5CX`, `2x 18650 Li-ion`
+- Core hardware: `ESP32`, `Raspberry Pi Zero`, `MG90S`, `N20`, `L298N`, `BNO085`, `VL53L4CD`, `2x 18650 Li-ion`
 - Main repo: public GitHub repository for documentation, reproducibility, and build evidence
 
 ## Notes

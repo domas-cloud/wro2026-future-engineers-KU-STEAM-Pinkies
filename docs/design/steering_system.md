@@ -46,6 +46,18 @@ A key design goal was to make both sides behave as equally as possible. If one s
 
 The steering system went through three main versions.
 
+### Visual Comparison of V1 and V3
+
+We compared the first and final steering versions not only by driving tests, but also by looking at the mechanical layout itself.
+
+![Steering Version 1](images/steering-v1.jpg)
+
+Version 1 used the same three-gear principle, but the side attachments created a larger effective lever arm and a less efficient load path.
+
+![Steering Version 3](images/steering-v3.png)
+
+Version 3 kept the same steering idea but refined the geometry into a cleaner and more compact layout with better support for precise movement.
+
 ### Version 1
 
 The first version used the same three-gear principle, but the side steering attachments were mounted in a way that created a **large turning lever arm**.
@@ -74,6 +86,17 @@ This final version improved the steering system in several practical ways:
 - lower servo load,
 - more precise steering,
 - more repeatable steering response.
+
+## V1 vs V3 Steering Comparison
+
+Compared directly, **V3 was mechanically better than V1**.
+
+- `V1` had a larger lever arm, so the servo had to fight more mechanical load;
+- `V1` was enough to prove the idea, but it was less efficient and less stable;
+- `V3` had a more controlled geometry, which reduced unnecessary resistance;
+- `V3` gave lower servo load, better precision, and more repeatable steering behavior.
+
+In practice, the final result was that **V3 was more stable than V1**, especially in straight driving and in repeated turning.
 
 ## Why We Chose the Final Steering Version
 

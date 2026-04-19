@@ -12,7 +12,7 @@ This section describes the solutions that proved effective in testing and were k
 
 - the `OV5647 5Mpx wide-angle` camera provided a wide enough track view for lane and obstacle evaluation;
 - the `BNO085 9-DOF IMU` helped maintain more stable heading after several turns and reduced uncertainty that would otherwise depend only on the camera;
-- the 2 `VL53L5CX` matrix ToF modules worked well as a short-range confirmation layer near obstacles.
+- the 2 `VL53L4CD` distance sensors worked well as a short-range confirmation layer near obstacles.
 
 ## System Architecture
 

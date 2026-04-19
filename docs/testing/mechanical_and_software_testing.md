@@ -1,10 +1,40 @@
 # Mechanical and Software Testing
 
-## Overview
+## Why This Section Matters
 
-Our development process depended on repeated testing of the whole robot, not only isolated parts. Mechanical changes often changed our software behavior, and software tuning often revealed mechanical weaknesses.
+Our development process depended on repeated testing of the whole robot, not only isolated parts. Mechanical changes often changed software behavior, and software tuning often revealed mechanical weaknesses.
 
-This is why we evaluate the robot as one connected system.
+For that reason, we tested the robot as one connected system.
+
+This file is written in a judge-facing way. The goal is to show:
+
+- what we compared;
+- how we judged one version against another;
+- which criteria mattered in competition-like conditions;
+- why the final version was selected.
+
+## Testing Philosophy
+
+We did not accept a version just because it completed one successful run.
+
+For important decisions, we looked for:
+
+- repeated behavior across multiple runs;
+- lower drift, not only higher aggressiveness;
+- easier tuning after a mechanical change;
+- fewer failure patterns that repeated in the same way.
+
+That approach fits WRO well because the competition rewards reproducible engineering, not one lucky attempt.
+
+## Main Test Categories
+
+| Test category | What we were checking | Why it mattered |
+| --- | --- | --- |
+| motor comparison | speed versus usable torque | the robot needed both movement and controllability |
+| steering geometry comparison | servo load, turning quality, straight driving | weak steering mechanics make all later tuning worse |
+| wheel-grip comparison | whether the front wheels really followed the steering command | slipping reduces the value of good control logic |
+| differential comparison | cornering resistance and smoothness | poor rear-wheel behavior makes turns less repeatable |
+| sensor-mounting checks | heading stability and short-range sensing consistency | unstable sensing makes tuning misleading |
 
 ## Mechanical Testing Summary
 
@@ -15,6 +45,8 @@ The main mechanical comparison areas were:
 - earlier front wheels versus silicone front wheels;
 - earlier differential solution versus the final `LEGO` differential.
 
+For the differential comparison specifically, the key practical result was clear: the `LEGO` differential was more stable than the earlier metal differential.
+
 Main practical criteria:
 
 - space needed for a 90-degree turn;
@@ -22,9 +54,21 @@ Main practical criteria:
 - steering smoothness;
 - repeatability between runs.
 
+## Repeated Comparison Method
+
+For major comparisons, we reused the same evaluation pattern:
+
+1. prepare one version of the robot or one changed subsystem;
+2. run the same basic scenario several times;
+3. observe whether the same weakness appears again;
+4. compare the result to the previous version using the same criteria;
+5. keep the version that improved repeatability, not only peak behavior.
+
+We documented the steering comparison especially carefully. In that area, we performed about `10` practical comparison runs while deciding between major versions.
+
 ## Comparison Table Used For Final Selection
 
-We used the following comparison structure when choosing between major versions. The ratings are not laboratory measurements; they are condensed engineering observations from repeated side-by-side testing under the same goals.
+The ratings below are not laboratory measurements. They are condensed engineering observations from repeated side-by-side testing under the same goals.
 
 | Comparison area | Earlier version | Final version | What changed in practice |
 | --- | --- | --- | --- |
@@ -34,9 +78,32 @@ We used the following comparison structure when choosing between major versions.
 | rear differential | earlier less suitable differential solution | `LEGO` differential | smoother cornering and less binding |
 | sensor mounting | less rigid IMU / less refined placement | rigid IMU plus cleaner sensor layout | heading estimate and repeated behavior became more stable |
 
+### Differential Comparison Evidence
+
+![Metal differential version](../design/images/metal-differential.jpg)
+
+Earlier version with the metal differential.
+
+![LEGO differential version](../design/images/lego-differential.png)
+
+Final version with the LEGO differential that gave the more stable result in repeated testing.
+
+## What Counted As A Better Version
+
+For us, a version was considered better if it improved several of these at once:
+
+- lower drift on straight driving;
+- less visible steering overload;
+- more stable return after a turn;
+- smoother cornering;
+- fewer repeated failures in the same scenario;
+- easier tuning after installation.
+
+This matters because some changes can improve one behavior while making the robot harder to control overall. We kept only the changes that improved the system as a whole.
+
 ## Software Testing Summary
 
-We judged the software side by what our robot actually did on track:
+We judged the software side by what the robot actually did on track:
 
 - did it wobble;
 - did it return to the target line;
@@ -53,7 +120,7 @@ The main low-level controller references are documented in:
 
 ## Software Criteria We Used
 
-We used simple but useful criteria:
+We used simple but competition-relevant criteria:
 
 - wobble present or not;
 - correction too weak or too aggressive;
@@ -61,18 +128,7 @@ We used simple but useful criteria:
 - smooth obstacle pass or abrupt path change;
 - stable recovery after a turn or disturbance.
 
-These criteria were practical because they directly matched competition behavior.
-
-## Run-to-Run Evaluation Method
-
-For the most important comparisons, we did not judge one lucky run. We repeated the same scenario several times and looked for:
-
-- whether the result stayed similar across repeated attempts;
-- whether one version failed in the same way more than once;
-- whether a mechanical change made software tuning easier instead of harder;
-- whether the robot became easier to explain as a system, not only easier to drive once.
-
-This was important because WRO rewards repeatable engineering, not only one successful demonstration.
+These criteria were practical because they directly matched what we wanted on the track.
 
 ## Why Mechanical and Software Testing Were Linked
 
@@ -86,6 +142,16 @@ For example:
 
 So testing was not split into completely separate worlds. Software and mechanics influenced each other in every iteration.
 
+## Judge-Facing Evidence Summary
+
+If a judge wants the short testing conclusion, it is this:
+
+- the final motor was chosen because it gave the best speed-torque balance in practical use;
+- the steering geometry was kept only after repeatability improved and servo load dropped;
+- the silicone front wheels were kept because they improved real steering effect on the floor;
+- the `LEGO` differential was kept because it was more stable than the metal differential, and turning became smoother and less resistant;
+- the final robot was selected through repeated comparison, not by one successful run.
+
 ## Main Conclusion
 
 The final robot improved because both areas were tuned together:
@@ -94,9 +160,3 @@ The final robot improved because both areas were tuned together:
 - software made the robot use the improved mechanics more effectively.
 
 That combined testing process was one of the main reasons the final robot became more stable and more repeatable.
-
-## Short Judge-Facing Summary
-
-If we had to summarize our testing in one sentence, it would be:
-
-> we selected the final robot version by comparing repeated runs and keeping the combination that reduced drift, reduced steering load, and made the controller more repeatable instead of simply more aggressive.

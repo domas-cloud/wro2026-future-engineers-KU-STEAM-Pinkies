@@ -23,11 +23,15 @@ This was an important decision because it shows a key engineering principle:
 
 Our previous robot was larger and used a more complicated engineering solution, including a stronger motor and gearbox.
 
+This previous robot came from our earlier competition work, and it taught us an important lesson: when the whole system becomes too complex, it becomes harder to make the robot stable and repeatable on the field.
+
 At first glance, that older robot looked powerful and advanced. However, in practice it had important disadvantages:
 
 - it was harder to turn,
 - the engineering solution was more complicated,
 - and it was less practical for the final driving behaviour we wanted.
+
+So one of our key lessons from the previous year's robot was that we should make the new robot simpler instead of trying to make every subsystem more complex.
 
 We therefore chose a smaller final robot with dimensions of approximately:
 
@@ -46,6 +50,8 @@ The smaller robot gave us several practical benefits:
 ### Engineering conclusion
 
 We chose the smaller robot because it gave a better balance of turning ability, controllability, and suitability for the challenge.
+
+In other words, experience from the previous robot taught us that **simpler engineering gave a better competition robot**.
 
 ## Decision 2: Middle Motor Option Instead of Extreme Motor Options
 

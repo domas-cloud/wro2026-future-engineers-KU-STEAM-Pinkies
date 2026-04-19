@@ -4,6 +4,27 @@ This repository contains the engineering documentation, design reasoning, and te
 
 Our goal was to build a compact autonomous self-driving robot that is mechanically stable, easy to control, and strong in straight driving and obstacle obedience. During the season, we improved the robot through several mechanical and software iterations. The final version reflects not only the final design, but also the engineering decisions that helped us solve practical problems.
 
+## What This Repository Proves
+
+This repository is intended to show five things clearly:
+
+- how the robot is built mechanically;
+- how power and sensors are organized;
+- how the robot behavior is organized;
+- which engineering trade-offs led to the final version;
+- how another team or judge can reproduce and evaluate the robot.
+
+## Fastest Judge Path
+
+If a judge has only a few minutes, this is the shortest high-value reading path:
+
+1. [Start Here](START_HERE.md)
+2. [Evidence Map](docs/reproducibility/evidence_map.md)
+3. [Drivetrain and Steering](docs/design/drivetrain_and_steering.md)
+4. [Electronics Overview](docs/hardware/electronics_overview.md)
+5. [Engineering Decisions](docs/design/engineering_decisions.md)
+6. [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
+
 ## Quick Navigation For Judges
 
 If you read only a small part of the repository, we recommend this order:
@@ -14,6 +35,30 @@ If you read only a small part of the repository, we recommend this order:
 4. [Engineering Decisions](docs/design/engineering_decisions.md)
 5. [Software Architecture](docs/code/software_architecture_improved.md)
 6. [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
+
+## Final Submission Pack
+
+For final WRO evaluation, the most submission-relevant files are:
+
+- [Start Here](START_HERE.md)
+- [Evidence Map](docs/reproducibility/evidence_map.md)
+- [Final Submission Checklist](docs/reproducibility/submission_checklist.md)
+- [Electronics Schematic PDF](schemes/Wro_customPCBs.pdf)
+- [CAD Models](models/README.md)
+- [Embedded Controller README](src/README.md)
+- [Robot Photos](v-photos/README.md)
+- [Team Photos](t-photos/README.md)
+- [Video Submission](video/video.md)
+
+## Repository At A Glance
+
+| Area | Main evidence |
+| --- | --- |
+| Mechanical design | `docs/design/` and `models/` |
+| Power and sensors | `docs/hardware/` and `schemes/` |
+| Robot behavior | `docs/code/` |
+| Testing and iteration | `docs/testing/` and `docs/evaluation/` |
+| Submission evidence | `t-photos/`, `v-photos/`, and `video/` |
 
 ## Direct Links By Rubric Area
 
@@ -40,8 +85,6 @@ If you read only a small part of the repository, we recommend this order:
 - [Navigation Strategy](docs/code/navigation_strategy_improved.md)
 - [Software Flow and State Logic](docs/code/software_flow_and_state_logic.md)
 - [Message Protocol](docs/code/message_protocol.md)
-- [ESP32 Source Code](src/src/main.cpp)
-- [PlatformIO Project](src/README.md)
 
 ### 4. Systems Thinking And Engineering Decisions
 
@@ -54,7 +97,6 @@ If you read only a small part of the repository, we recommend this order:
 
 ### 5. Reproducibility And Submission Evidence
 
-- [Build, Flash, and Run Information](src/README.md)
 - [CAD Models](models/README.md)
 - [Robot Photos Folder](v-photos/README.md)
 - [Team Photos Folder](t-photos/README.md)
@@ -69,9 +111,9 @@ We are **KU STEAM Pinkies**, a team participating in the **WRO 2026 Future Engin
 
 ### Team Members And Main Responsibilities
 
-- **Marius** – software development and mechanical design  
-- **Domas** – project coordination, testing, and documentation  
-- **Jonas** – electronics and hardware design  
+- **Marius** - software development and mechanical design  
+- **Domas** - project coordination, testing, and documentation  
+- **Jonas** - electronics and hardware design  
 
 Although each member had a main responsibility area, all major design decisions were discussed together and tested as one system.
 
@@ -100,7 +142,7 @@ The robot uses:
 - **Raspberry Pi Zero**
 - **ESP32**
 - **BNO085 9-DOF IMU**
-- **2 VL53L5CX matrix ToF sensors**
+- **2 VL53L4CD distance sensors**
 - **camera-based vision processing**
 
 The chassis base is made mainly from **plywood**.
@@ -126,7 +168,7 @@ For this reason, our chassis design focused on:
 
 The robot is intentionally small. A compact robot is easier to package inside the WRO size limits and can also reduce unnecessary rotational inertia.
 
-Our previous robot was larger and used a more complex steering system. Although that design was mechanically more advanced, in practice it introduced more friction, more resistance, and less repeatable steering behaviour. For this reason, we redesigned the robot around a simpler and more compact mechanical concept that performed better on the field.
+Our previous robot from the earlier competition season was larger and used a more complex steering and drivetrain concept. Although that design was mechanically more advanced, in practice it introduced more friction, more resistance, and less repeatable steering behaviour. From that robot, we learned that making the whole system too complex made it harder to tune and control reliably. For this reason, we redesigned the robot around a simpler and more compact mechanical concept that performed better on the field.
 
 ### Base Material
 
@@ -176,7 +218,7 @@ In practical development, we observed that without an effective differential the
 - experienced more mechanical stress;
 - produced less predictable motion.
 
-By keeping a mechanical differential in the drivetrain, the robot cornered more smoothly and with lower resistance.
+We also compared an earlier metal differential solution with the final LEGO differential. In practice, the **LEGO differential was more stable than the metal differential**, so the robot cornered more smoothly, with lower resistance and better repeatability.
 
 ---
 
@@ -241,6 +283,8 @@ The final version improved:
 - repeatability.
 
 In practice, the final steering system gave **lower mechanical load** and a **more precise result**.
+
+Compared directly, **Version 3 was more stable than Version 1**. The first version had a larger lever arm and higher servo load, while the final version gave better precision, lower friction, and more repeatable steering behaviour.
 
 ---
 
@@ -337,7 +381,7 @@ This architecture was chosen because the ESP32 is better suited for fast control
 The robot also uses:
 
 - **BNO085 IMU**
-- **2 VL53L5CX matrix ToF sensors**
+- **2 VL53L4CD distance sensors**
 - front-mounted camera
 
 The detailed power architecture and sensor placement are documented further in the hardware section and will be expanded as the documentation is refined.
@@ -399,11 +443,11 @@ Main sensing elements:
 
 - camera;
 - IMU;
-- 2 matrix ToF sensors.
+- 2 distance sensors.
 
 The camera is placed at the **front of the robot** to achieve the best possible visibility of the track.
 
-The general idea behind sensor placement was to maximize useful field visibility and choose the most effective matrix point or matrix region for the algorithm.
+The general idea behind sensor placement was to maximize useful field visibility and choose the most useful short-range sensing area for the algorithm.
 
 The final sensor and calibration section will be expanded further in the documentation files.
 
@@ -446,7 +490,7 @@ The most important improvements came from observing real behavior and then chang
 For example:
 
 - steering versions were compared based on load and precision;
-- the differential decision was validated through smoother turning behavior;
+- the differential decision was validated through the LEGO differential being more stable than the earlier metal differential;
 - custom silicone front wheels were kept because they improved grip;
 - bearings were added because earlier steering versions could sometimes stick and lacked enough precision.
 
@@ -487,7 +531,7 @@ The active embedded controller is the `ESP32` project inside `src/`.
 3. build the environment `upesy_wroom` defined in `src/platformio.ini`;
 4. connect the `ESP32` board used in the robot;
 5. upload the firmware;
-6. verify that the IMU and both `VL53L5CX` sensors initialize successfully on serial output;
+6. verify that the IMU and both distance sensors initialize successfully on serial output;
 7. place the robot on the field and use the physical start button to store the initial heading and begin the run.
 
 Important implementation details already visible in code:
@@ -517,13 +561,13 @@ The current repository fully documents the `ESP32` control path and the mechanic
 
 Important documentation sections in this repository include:
 
-- [Chassis Design](docs/design/chassis_design.md)
+- [Chassis Design](docs/design/chassis_design_improved.md)
 - [Steering System](docs/design/steering_system.md)
 - [Wheel Mounting and Suspension](docs/design/wheel_mounting_suspension.md)
 - [Electronics Overview](docs/hardware/electronics_overview.md)
 - [PCB and Wiring Diagrams](docs/hardware/pcb_wiring_diagrams.md)
-- [Code Architecture](docs/code/code_architecture.md)
-- [Navigation Logic](docs/code/navigation_logic.md)
+- [Software Architecture](docs/code/software_architecture_improved.md)
+- [Navigation Strategy](docs/code/navigation_strategy_improved.md)
 
 Additional sections continue to document the engineering process, testing results, software decisions, and final performance.
 

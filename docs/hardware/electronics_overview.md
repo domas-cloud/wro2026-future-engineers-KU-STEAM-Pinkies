@@ -1,162 +1,248 @@
 # Electronics Overview
 
-## System Architecture
+This section was written to match the expectations in the WRO 2026 documentation rubric for **Power and Sensor Architecture** and the general rules for **Future Engineers Self-Driving Cars**.
 
-The robot uses a split electronics architecture with two main computing boards:
+The rubric expects more than a component list. It asks for:
 
-- **Raspberry Pi Zero** for camera input and vision processing;
-- **ESP32** for control, decision-making, and fast response tasks.
+- power system architecture;
+- current draw reasoning and distribution;
+- sensor selection and placement justification;
+- calibration method;
+- wiring diagrams;
+- failure-point considerations;
+- documentation that another team can reproduce.
 
-We selected this split because the two boards are better suited to different jobs.  
-The Raspberry Pi Zero handles camera-side perception, while the ESP32 is responsible for the main robot behavior.
+The `WRO-2026-Future-Engineers-Documentation-Rubric.pdf` and `WRO-2026-Future-Engineers-Self-Driving-Cars-General-Rules.pdf` both point toward the same idea: electronics must be explained as an engineering system, not only shown as a finished assembly.
+
+## Documentation Consistency Note
+
+The electronics schematic PDF included in this repository labels the two distance sensors as `VL53L4CD`. Some older software-side files in the repository still refer to `VL53L5CX` from an earlier documentation branch. For the electronics documentation in this section, we follow the actual schematic file that is provided as evidence in the repository.
+
+## Architecture Goal
+
+Our robot uses a split electronics architecture with two computing boards:
+
+- `Raspberry Pi Zero` for camera input and vision processing;
+- `ESP32` for fast control, sensor reading, and actuator output.
+
+We selected this architecture because the robot needs both:
+
+- image-based interpretation of the field and obstacles;
+- deterministic real-time control of steering, motor output, and sensor polling.
+
+The WRO rules describe a typical Future Engineers architecture as a single-board computer together with a microcontroller or motor-control board, a wide-angle camera, two distance sensors, a steering servo, a DC motor, an IMU, batteries, and stabilized power. Our electronics follow that same structure, even though our exact implementation uses `ESP32`, `Raspberry Pi Zero`, sensor breakout boards, and a perfboard-based distribution board rather than a manufactured custom PCB.
+
+## Main Electronic Components
+
+The final electronics system includes:
+
+- `Raspberry Pi Zero`;
+- `ESP32-WROOM-32`;
+- `OV5647 5 MP wide-angle camera`;
+- `BNO085 9-DOF IMU`;
+- `2x VL53L4CD` distance sensors;
+- `MG90S` steering servo;
+- `N20 6 V 600 rpm` DC drive motor;
+- `L298N` H-bridge motor driver;
+- `2x 18650 Li-ion` battery supply;
+- step-down regulation and perfboard-based power distribution;
+- start button and power switching.
 
 ## Why We Split The System
 
-We did not want one board to do everything.
+We did not want a single board to do everything.
 
-The Raspberry Pi Zero is useful for camera-related work, while the **ESP32 performs control tasks faster and is easier to use for actuator control and time-sensitive robot behavior**.  
-For this reason, the ESP32 was chosen as the main control unit.
+The `Raspberry Pi Zero` is more suitable for camera-side processing, while the `ESP32` is more suitable for:
 
-In practice, this means:
+- reading I2C sensors reliably;
+- generating steering PWM;
+- controlling the motor driver;
+- reacting quickly to changing vehicle state.
 
-- the **Pi Zero** handles visual input and vision processing;
-- the **ESP32** handles robot logic, steering, motor output, and sensor-based reactions.
+This division reduces software complexity on the control side and makes the robot easier to debug. If camera processing is changed, the actuator-control side can remain stable.
 
-This separation also keeps the software architecture easier to understand and maintain.
+## Power Architecture
 
-## Main Electrical Components
+The robot is powered from a 2-cell `18650` battery pack. In the schematic and documentation this source is treated as approximately `7.5 V` nominal input under normal use.
 
-The main electronics system includes:
+From this source, power is split into separate functional branches:
 
-- **Raspberry Pi Zero**
-- **ESP32**
-- **OV5647 5 MP wide-angle camera**
-- **BNO085 9-DOF IMU**
-- **2 VL53L5CX matrix ToF sensors**
-- **MG90S steering servo**
-- **N20 6 V 600 rpm motor**
-- **L298N H-bridge**
-- **perfboard-based power and signal distribution**
-- **step-down voltage regulation**
-- **2 Li-ion batteries in one battery holder**
+- a motor branch for the DC drive motor through the `L298N`;
+- a regulated logic branch for the `ESP32`;
+- a regulated logic branch for the `Raspberry Pi Zero`;
+- a regulated sensor branch for the `BNO085` and both distance sensors;
+- a steering branch for the `MG90S` servo.
 
-## Power Distribution
+We used branch separation because the drive motor, servo, logic boards, and sensors do not create the same electrical disturbances. In practical robot development, high-current motor loads and servo spikes can disturb low-voltage logic if everything is treated as one undivided power line.
 
-The robot is powered from **2 Li-ion batteries** mounted in a single holder.  
-The electrical power is distributed on a **perfboard**, where the supply is split into the required branches.
+## Current Draw Reasoning And Power Budget
 
-A **step-down regulator** is used to provide the correct voltage to the logic systems.  
-Both the **Raspberry Pi Zero** and the **ESP32** are powered through step-down regulation rather than directly from the battery source.
+We did not claim a laboratory-grade current measurement for every subsystem. Instead, we documented a conservative engineering budget so that the wiring and regulators would not be undersized.
 
-This was necessary because the robot contains boards with different voltage requirements, and stable regulated logic power is important for reliable operation.
-
-## Design Power Budget
-
-We did not use a laboratory power analyzer during every test session, but we still planned the power system with a conservative engineering budget. The table below is the **design budget** we used to make sure the regulators and wiring were not undersized.
-
-| Subsystem | Main parts | Nominal rail | Design current assumption | Why we budgeted it this way |
+| Subsystem | Main parts | Rail type | Design current assumption | Engineering reason |
 | --- | --- | --- | --- | --- |
-| Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `0.8 A` continuous budget | Enough margin for camera-side compute peaks plus ESP32 control loop activity |
-| Sensors | `BNO085`, `2x VL53L5CX` | regulated sensor rail | `0.25 A` continuous budget | Keeps I2C sensors on a cleaner branch and leaves margin for startup/current spikes |
-| Steering | `MG90S` servo | dedicated steering branch | `1.0 A` peak budget | Steering current rises sharply near end-stop or under friction, so this branch needs headroom |
-| Drive | `N20` motor through `L298N` | battery / motor branch | `1.5 A` peak budget | Covers acceleration, restart, and corner-exit loading better than a no-margin estimate |
-| Total system | all branches together | battery source | about `3.5 A` peak budget | Gives practical headroom instead of sizing the wiring only for average load |
+| Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `0.8 A` continuous | headroom for camera-side compute and control-loop activity |
+| Sensors | `BNO085`, `2x VL53L4CD` | regulated sensor rail | `0.25 A` continuous | allows stable sensor startup and margin for bus activity |
+| Steering | `MG90S` servo | dedicated steering branch | `1.0 A` peak | servo current rises sharply near hard steering or friction |
+| Drive | `N20` + `L298N` | battery / motor branch | `1.5 A` peak | covers acceleration and restart load better than average-current sizing |
+| Total | all branches together | battery input | about `3.5 A` peak | practical system headroom for combined transient loads |
 
-This table is intentionally conservative. We preferred to document a safe branch-sizing assumption rather than claim a more precise number that we did not measure with dedicated bench instrumentation.
+This budget exists because the rubric explicitly asks for current-draw reasoning, not only a battery name. Our design goal was to make sure:
+
+- regulators were not selected too close to average load;
+- logic power stayed stable during drive and steering transients;
+- the system remained reproducible for another team.
 
 ## Why We Used Regulated Power
 
-The robot combines logic electronics, sensors, steering actuation, and motor driving.  
-These parts do not all behave the same electrically.
+The WRO documentation guidance expects evidence that the team planned power distribution instead of just connecting parts. Our regulated power strategy addresses that requirement directly.
 
-Using step-down regulation gave us a cleaner and more controlled supply for the computing boards.  
-That is especially important because unstable logic power could cause poor communication, sensor problems, or unstable robot behavior.
+We used regulated power because:
 
-The perfboard distribution also made the wiring layout easier to organize and easier to reproduce.
+- the `ESP32` and `Raspberry Pi Zero` should not be fed from raw battery voltage;
+- sensor readings become less trustworthy when the logic rail is noisy;
+- the servo and drive motor can create voltage drops during dynamic movement;
+- a separated power structure is easier to troubleshoot and rebuild.
 
-## Sensor Integration
+The schematic in [Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf) and the explanation in [custom_pcb_description.md](../../schemes/custom_pcb_description.md) document this structure.
 
-The robot uses three main sensing sources:
+## Sensor Selection Strategy
 
-- **camera** for forward scene observation;
-- **BNO085 IMU** for motion and orientation awareness;
-- **2 VL53L5CX matrix ToF sensors** for local distance information.
+The WRO rubric asks for sensor choice justification, not just a list. Our sensor set was selected so that each sensor solves a different part of the navigation problem.
 
-The sensors are mounted on the **perfboard assembly**, while the **camera is mounted at the front of the robot**.
+### Camera
 
-This placement was chosen because it provided the **best visibility** and made it easier to select the most useful matrix region or matrix point for the sensing algorithm.
+We use an `OV5647` wide-angle camera because the robot needs early information from farther ahead on the field. The camera is responsible for:
 
-## Placement Reasoning Using Field Geometry
+- observing lane direction;
+- seeing obstacle color;
+- seeing the approach geometry before the robot reaches the obstacle.
 
-We did not place the sensors only where they physically fit. We placed them according to what each sensor needed to see on the WRO field.
+This is difficult to replace using only short-range sensors.
 
-- the **camera** is mounted at the front so the robot can observe the lane direction, obstacle color, and approach geometry early enough to plan the target path;
-- the **ToF sensors** are used for short-range corridor and side-distance information, so they are placed where their 8x8 grids can sample the near side regions rather than only the far front view;
-- the **IMU** is mounted rigidly near the main structure because yaw stability is only useful if the board itself is not wobbling or flexing relative to the chassis.
+### IMU
 
-In practice, this means each sensor covers a different distance scale:
+We use a `BNO085` because steering robots benefit from heading awareness. The IMU helps us:
 
-- camera: early interpretation of the scene;
-- ToF: short-range geometric confirmation;
-- IMU: heading correction and motion consistency.
+- maintain straight driving;
+- detect heading drift;
+- support repeatable turns.
 
-## Why Sensor Placement Matters
+Without IMU feedback, the robot would depend too much on momentary vision or distance readings.
 
-We learned that sensor position affects the quality of the usable data.
+### Two Distance Sensors
 
-The camera had to be placed where it could see the field clearly in front of the robot.  
-The distance sensors had to be mounted where their matrix readings could be interpreted consistently and where the selected matrix area would provide the most useful result for the algorithm.
+We use `2x VL53L4CD` modules as short-range distance sensors. This matches the general rules appendix, which presents two distance sensors as part of a typical Future Engineers hardware set.
 
-So sensor placement was not random.  
-It was chosen for visibility, usable geometry, and better algorithm performance.
+We selected two distance sensors because they provide:
 
-## Calibration And Tuning Approach
+- short-range confirmation near the robot;
+- left-right geometry information that the camera alone cannot guarantee at close range;
+- simpler wiring and lower power demand than adding many more modules.
 
-Our calibration approach was practical and result-based.
+We did not try to solve the full navigation task with distance sensors alone. Their role is local geometric confirmation, not whole-track interpretation.
 
-Instead of relying only on a theoretical setup, we checked the real robot results and passed the sensor information through the algorithm, then tuned the system according to actual behavior.
+## Why We Moved Away From `VL53L5CX`
 
-This means calibration was performed by observing real output quality and adjusting the processing until the robot behavior improved.
+During development, we also considered and tested `VL53L5CX` matrix sensors. In theory, the matrix output gives more spatial information, but in our robot this advantage did not justify the extra complexity.
 
-In other words, we tuned the sensing system based on:
+In our tests, the `VL53L5CX` option was weaker for our final design for two main reasons:
 
-- observed field results;
-- sensor output behavior;
-- algorithm response;
-- practical driving quality.
+- the matrix-based data was more complex to process consistently in a small fast robot;
+- the practical results were not better enough to justify that added complexity.
 
-## Practical Calibration Workflow
+For our task, we did not need a dense matrix as much as we needed repeatable short-range confirmation. The simpler `VL53L4CD` modules were easier to integrate, easier to explain, and more practical for stable obstacle-side confirmation in the final robot.
 
-The sensor calibration workflow that we actually used during development was:
+This is an example of an engineering trade-off that matches the WRO rubric: a technically richer sensor is not automatically the better choice if it makes the system harder to tune without improving real driving performance enough.
 
-1. mount the `BNO085` rigidly and verify that the reported yaw does not jump while the chassis is standing still;
-2. initialize the two `VL53L5CX` sensors one by one and assign unique I2C addresses so both modules remain stable on the same bus;
-3. check that the selected ToF zones produce consistent left-right readings when the robot is placed approximately centered in a corridor;
-4. set the current heading as `targetAngle` at start, then verify that straight driving keeps the heading error small instead of drifting immediately;
-5. re-check all of the above after any change to wheel grip, steering geometry, or sensor mounting.
+## Sensor Trade-Offs
 
-This workflow mattered because software tuning became unreliable whenever the mechanical mounting changed first and the sensing alignment was not re-checked afterward.
+The rubric expects trade-offs, so our final sensor architecture can be summarized as follows:
 
-## Failure Points And Mitigations
+- camera gives long-range scene understanding but depends more on lighting and perspective;
+- ToF sensors give local distance information but only over a limited physical region;
+- IMU gives heading stability but cannot identify field objects by itself.
 
-The power and sensing system was also documented as a risk area, not only as a parts list.
+The final robot uses all three because the field changes between rounds and no single sensor type gives enough reliability on its own.
 
-| Failure point | Likely effect | Mitigation used in the robot |
+## Sensor Placement Justified By Field Geometry
+
+The rubric explicitly asks for placement justification using field geometry. Our sensor positions were chosen according to what happens on the WRO self-driving track:
+
+- straight sections require early lane and obstacle interpretation;
+- corners require stable heading control;
+- obstacle challenge sections require side obedience around red and green pillars;
+- parking and approach maneuvers require short-range confirmation near the robot.
+
+Based on that geometry:
+
+- the camera is mounted at the front to see the lane and obstacle arrangement before the robot reaches the decision area;
+- one distance sensor looks toward the front interaction area for short-range obstacle approach information;
+- one distance sensor looks toward the side region for local wall or obstacle spacing;
+- the IMU is mounted rigidly near the main structure so yaw measurements reflect the chassis, not a vibrating bracket.
+
+This placement was not chosen because the components only fit there physically. It was chosen because each sensor had to cover a different part of the track geometry.
+
+## Calibration Method
+
+The rubric also asks for calibration, so we documented the actual procedure we use when preparing the robot:
+
+1. mount the `BNO085` rigidly and verify that yaw is stable while the robot is standing still;
+2. initialize the two distance sensors one by one so identical modules can coexist reliably on the same bus;
+3. verify that both distance sensors produce repeatable readings when the robot is placed in a controlled position relative to a wall or corridor;
+4. set the robot heading reference at startup and verify that straight driving does not drift immediately;
+5. re-check the sensing system after any change to wheel grip, steering geometry, sensor mount position, or wiring layout.
+
+This process matters because the sensing system is only useful if mechanical and electrical changes are reflected in calibration.
+
+## Wiring And Reproducibility
+
+The repository includes the following reproducibility files for the electronics:
+
+- [PCB And Wiring Diagrams](pcb_wiring_diagrams.md);
+- [Wiring Overview](../../schemes/wiring_overview.md);
+- [Custom Electronics Schematic PDF](../../schemes/Wro_customPCBs.pdf);
+- [Custom Electronics Schematic Description](../../schemes/custom_pcb_description.md).
+
+These files show:
+
+- board responsibilities;
+- power branches;
+- actuator connections;
+- sensor bus structure;
+- the actual documented schematic for the robot.
+
+This supports the rubric requirement that another team should be able to rebuild the electronics with reasonable effort.
+
+## Failure Points And Mitigation
+
+The rubric asks for failure-point considerations, so we documented the main electrical and sensing risks:
+
+| Failure point | Likely effect | Mitigation |
 | --- | --- | --- |
-| Motor current spikes on the same rail as logic | ESP32 or Pi instability, bad sensor data | separate regulated logic branch and separate motor branch |
-| Servo current spikes during hard steering | voltage sag and steering inconsistency | dedicated steering branch with current headroom |
-| ToF bus conflicts from two identical sensors | random sensor failure or no readings | wake sensors one by one and reassign I2C addresses |
-| IMU vibration or flexible mounting | unstable yaw estimate | rigid mounting and repeated straight-line verification |
-| Sensor wires near high-current motor wiring | noisy or inconsistent readings | keep logic/sensor routing separate from motor path as much as practical |
+| Motor and logic sharing one noisy rail | control instability or sensor errors | split motor and regulated logic branches |
+| Servo current spike during hard steering | voltage sag and steering inconsistency | separate steering branch with current headroom |
+| Two identical distance sensors on one bus | address conflict or no readings | staged startup and software address assignment |
+| IMU mounted on flexible structure | unstable heading estimate | rigid mounting and repeated straight-line checks |
+| Sensor wires routed near motor current path | noisy or inconsistent readings | keep sensor and logic wiring away from high-current path as much as practical |
 
-## Design Goal
+## Iteration Evidence
 
-The main goal of the electronics architecture was to create a system that is:
+The WRO evaluation pages ask for evidence that the team iterated rather than only listed the final hardware. In electronics, our iterations were mainly about stability and usability:
 
-- fast enough for control;
-- clear in function separation;
-- electrically organized;
-- easy to reproduce;
-- suitable for sensor fusion between camera, IMU, and distance sensors.
+- we moved away from `VL53L5CX` matrix sensing because the matrix processing was more complex while test results were not better enough for our final robot;
+- we refined the sensor startup process so two identical distance modules could be used reliably on the same bus;
+- we treated sensor mounting as part of calibration rather than a one-time placement decision;
+- we documented separate power branches because unstable mixed wiring would make software tuning less reliable;
+- we updated the repository to include both the wiring overview and the actual schematic PDF so the design is more reproducible.
 
-The final architecture reflects this goal: the camera is handled on the Pi Zero side, the ESP32 performs the main control work, and power is distributed through a regulated and structured layout.
+## Engineering Conclusion
+
+Our electronics were designed as a system with four goals:
+
+- reliable power distribution;
+- complementary sensing rather than duplicated sensing;
+- fast and stable actuator control;
+- documentation that judges and other teams can follow.
+
+That is why this section includes architecture, power budget, sensor trade-offs, field-based placement reasoning, calibration, wiring references, and failure analysis instead of only a parts list.

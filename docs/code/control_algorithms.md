@@ -59,7 +59,7 @@ The `BNO085` is used to support heading stability.
 Its role is not to replace vision, but to improve consistency when visual information changes quickly or when the robot is turning.
 
 ### 3. Short-range ToF confirmation
-The 2 `VL53L5CX` matrix ToF sensors are used as supporting short-range inputs.  
+The 2 `VL53L4CD` distance sensors are used as supporting short-range inputs.  
 They help confirm close-range wall or obstacle situations and improve safety decisions.
 
 ---
@@ -97,11 +97,11 @@ We selected PD control because:
 
 ## Path Target Strategy
 
-The robot does not only ask:  
-“Is there an obstacle or not?”
+The robot does not only ask:
+"Is there an obstacle or not?"
 
-Instead, it asks:  
-“Which target path should I follow right now?”
+Instead, it asks:
+"Which target path should I follow right now?"
 
 This is one of the most important control decisions in our project.
 

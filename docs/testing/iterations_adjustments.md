@@ -23,7 +23,7 @@ Keeping the differential reduced slipping, drivetrain load, and improved track b
 ## Iteration 4: Clear Separation Of Sensor Roles
 
 The sensor system was simplified and divided more clearly by function.
-The camera remained responsible for the overall track view, the 2 `VL53L5CX` modules handled short-range confirmation, and the `BNO085` supported heading stability.
+The camera remained responsible for the overall track view, the 2 `VL53L4CD` modules handled short-range confirmation, and the `BNO085` supported heading stability.
 This reduced ambiguity in the system and made it easier to understand which sensor was responsible for what.
 
 ## Iteration 5: Improved Mounting And Stability
@@ -31,3 +31,22 @@ This reduced ambiguity in the system and made it easier to understand which sens
 Additional attention was given to more rigid mounting of the `BNO085` and cleaner sensor placement.
 This reduced the influence of vibration and structural flex on the readings.
 After those changes, the robot's motion estimation became more consistent across repeated tests.
+
+## Iteration 6: Rejecting The More Complex Distance-Sensor Option
+
+During development, we also considered the more complex `VL53L5CX` matrix-sensor route.
+In theory it could provide richer spatial data, but in our tests it made processing more complex without giving enough practical improvement for the final robot.
+
+Because of that, we kept the simpler `VL53L4CD`-based short-range confirmation approach in the final documentation.
+
+## Why These Iterations Matter
+
+The important point is not only that the robot changed, but that each kept change improved one of the following:
+
+- repeatability;
+- steering efficiency;
+- sensing stability;
+- ease of tuning;
+- clarity of subsystem roles.
+
+That is why the final robot is better described as the result of repeated engineering selection rather than one finished idea from the beginning.

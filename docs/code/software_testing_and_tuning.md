@@ -160,6 +160,18 @@ We did not rely on laboratory-grade metrics, but we still used clear evaluation 
 
 These are simple metrics, but they are directly relevant to WRO driving quality.
 
+## Validation Logic Behind These Metrics
+
+We chose these metrics because they match what judges and teams actually observe on the field:
+
+- wobble reveals that the controller is reacting too aggressively or too late;
+- slow return shows that the robot is not using the lane information efficiently;
+- repeated overshoot means the control output is not well matched to the mechanics;
+- abrupt obstacle transition means the target-change logic is too harsh;
+- frequent servo saturation shows that either the gain or the mechanics are outside the comfortable operating region.
+
+This matters because our testing process was not arbitrary. Each metric was selected because it corresponds to a visible driving-quality problem.
+
 ## Comparison Matrix Used During Repeated Runs
 
 For repeated test sessions, we used the following semi-quantitative matrix to compare versions under the same driving goals.
@@ -209,3 +221,14 @@ If a judge asks how we validated the controller, the most important evidence we 
 - more stable heading estimation after rigid IMU mounting;
 - lower need for correction after front-wheel grip and differential improvements;
 - serial debug output showing `error`, steering contribution, and final angle during tuning sessions.
+
+## Engineering Conclusion
+
+Our software tuning was not about maximizing aggressiveness. It was about finding the narrow region where:
+
+- the controller is fast enough to stay competitive;
+- the robot remains stable over repeated runs;
+- the output still fits the real mechanical behavior of the chassis;
+- obstacle handling stays understandable and reproducible.
+
+That is why our final software evidence is stronger than just showing gain variables. It shows the reasoning process that selected the stable final behavior.

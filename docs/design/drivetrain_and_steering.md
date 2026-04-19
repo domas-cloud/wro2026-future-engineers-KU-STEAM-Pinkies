@@ -42,6 +42,18 @@ The motor choice was a classic engineering trade-off between **speed and usable 
 
 This is important because a self-driving robot does not only need speed. It also needs predictable motion and reliable response during turning and correction.
 
+## Motor Selection Reasoning
+
+We did not use a laboratory dyno, so we do not claim exact torque curves. Our selection was based on practical engineering behavior under the same robot mass and drivetrain layout.
+
+| Motor option | Practical strength | Practical weakness | Why it was not final |
+| --- | --- | --- | --- |
+| `300 rpm` | easy to control at low speed | too slow for competitive lap pace | sacrificed too much track speed |
+| `600 rpm` | balanced speed and usable torque | required normal tuning effort | best overall compromise |
+| `1000 rpm` | high theoretical speed | weaker usable pull under load and less controllable exits | speed gain was not worth the loss in stability |
+
+The final decision therefore followed the same principle as the rest of the robot: choose the option that gives the best repeatable field performance, not the highest theoretical specification.
+
 ## Differential Choice
 
 From our earlier experience, using a differential in the rear axle was a **must-do design choice**.
@@ -49,6 +61,18 @@ From our earlier experience, using a differential in the rear axle was a **must-
 We already knew that a robot without a good differential becomes harder to turn and gives less control in corners. For this reason, we designed the drivetrain around a differential from the start.
 
 In the final robot, we used a **LEGO differential**.
+
+### Differential Comparison
+
+We compared an earlier **metal differential** solution with the final **LEGO differential**.
+
+![Metal differential version](images/metal-differential.jpg)
+
+Earlier drivetrain version with the metal differential.
+
+![LEGO differential version](images/lego-differential.png)
+
+Final drivetrain version with the LEGO differential.
 
 ## Why the Differential Was Important
 
@@ -65,6 +89,8 @@ After changing from a **metal differential** to a **LEGO differential**, the rob
 - **more precise**,
 - **less likely to jam or bind**,
 - and overall **more predictable** in turning.
+
+Most importantly, in our practical comparison the **LEGO differential was more stable than the metal differential**. It gave smoother cornering, less binding, and more repeatable behavior between runs.
 
 That change was one of the important drivetrain improvements in the project.
 
@@ -183,6 +209,19 @@ The most important evaluation points were:
 
 These criteria were useful because they measured exactly the behaviours we cared about most: cornering quality and straight-driving precision.
 
+## Mechanical Validation Matrix
+
+To avoid choosing parts only by feeling, we used a small decision matrix during repeated tests.
+
+| Mechanical area | Weak result | Acceptable result | Strong result |
+| --- | --- | --- | --- |
+| motor choice | robot too slow or obviously under torque stress | completes turns and straights reliably | keeps pace while remaining controllable |
+| differential behavior | binding, rough corner exits, inconsistent wheel behavior | cornering works with minor resistance | smooth cornering with low resistance and repeatable exits |
+| steering geometry | heavy servo load, visible sticking, poor symmetry | mostly usable with some correction cost | low resistance, symmetric response, stable straight driving |
+| front-wheel grip | wheels slip before command is transferred | steering works with occasional slip | steering command translates directly into real movement |
+
+This matrix matters for the rubric because it shows how we judged the engineering result, not only what parts we ended up with.
+
 ## Testing Effort
 
 We did approximately **10 test runs** while comparing mechanical versions.
@@ -195,7 +234,7 @@ The most important result from this testing was clear:
 | Element | Tested options | Final choice | Why |
 |--------|----------------|--------------|-----|
 | Drive motor | N20 300 / 600 / 1000 rpm | 600 rpm N20 | Best balance of speed and torque |
-| Differential | Earlier unsuitable/metal setup vs LEGO differential | LEGO differential | More precise and less likely to bind |
+| Differential | Earlier metal differential vs LEGO differential | LEGO differential | More stable, more precise, and less likely to bind |
 | Steering geometry | V1 large lever arm / V2 reduced lever arm / V3 refined version | V3 | Best precision, lowest resistance, best grip |
 | Front wheels | Earlier wheels vs silicone wheels | Silicone wheels | No slipping, better turning grip |
 | Steering range | Large possible range vs limited usable range | Limited to ~60° | Better stability |

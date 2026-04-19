@@ -15,7 +15,7 @@ Unit tests are used to verify small parts of the logic before track testing.
 
 - translation of steering error into `MG90S` servo position;
 - interpretation of `BNO085` calibration status;
-- reading distance frames from the 2 `VL53L5CX` matrix ToF modules;
+- reading distance frames from the 2 `VL53L4CD` distance sensors;
 - choosing a safe state before sending drive commands.
 
 ## What Should Be Stored

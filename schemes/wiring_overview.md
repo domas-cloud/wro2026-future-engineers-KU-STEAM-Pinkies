@@ -8,7 +8,7 @@
   -> L298N H-bridge -> N20 drive motor
   -> regulated logic rail -> ESP32
   -> regulated logic rail -> Raspberry Pi Zero
--> regulated sensor rail -> BNO085 + 2x VL53L5CX
+-> regulated sensor rail -> BNO085 + 2x distance sensors
   -> steering supply rail -> MG90S
 ```
 
@@ -16,7 +16,7 @@
 
 - `motor domain`: battery -> `L298N` -> `N20`, the highest-current branch;
 - `logic domain`: regulated rail for the `ESP32` and `Raspberry Pi Zero`;
-- `sensor domain`: the `BNO085` and 2 `VL53L5CX` matrix ToF modules on a separate clean logic rail;
+- `sensor domain`: the `BNO085` and 2 distance sensor modules on a separate clean logic rail;
 - `servo domain`: the `MG90S` on a separate branch that can handle steering-current spikes.
 
 ## Grounding Strategy
@@ -33,7 +33,7 @@
 - the `ESP32` performs the calculations and generates behavior or steering decisions;
 - the `ESP32` drives the `MG90S` steering servo with PWM;
 - the `ESP32` controls the `L298N` input pins for the `N20` drive motor;
-- the `BNO085` and 2 `VL53L5CX` modules communicate through their sensor bus, typically I2C on the `ESP32`.
+- the `BNO085` and 2 distance sensor modules communicate through their sensor bus, typically I2C on the `ESP32`.
 
 ## Control Responsibilities
 
@@ -49,7 +49,11 @@
 | Pi Zero camera | CSI / camera interface | Camera capture only |
 | Pi Zero to ESP32 | Camera data link | Carries frames or camera observations |
 | BNO085 | I2C | Must be mounted rigidly and calibrated |
-| 2x VL53L5CX | I2C | Placement must match obstacle coverage |
+| 2x distance sensors | I2C | Placement must match obstacle coverage |
+
+## Consistency Note
+
+The schematic PDF included in this folder labels the distance sensors as `VL53L4CD`. Some other repository files still use older `VL53L5CX` wording. This overview keeps the wording generic where the exact hardware name is not necessary.
 | ESP32 to MG90S | PWM | Steering output |
 | ESP32 to L298N | Digital control + enable/PWM | Drive direction and speed |
 | Battery to L298N | Power input | Motor current path |
@@ -61,3 +65,12 @@
 - ground should be shown as a common reference even if the power rails are separated;
 - the schematic should clearly separate high-current motor wires from the low-current logic section;
 - if connectors or terminal blocks are used, they should be labeled.
+
+## Current Repository Reference
+
+The current repository already includes a schematic export:
+
+- [Custom Electronics Schematic PDF](Wro_customPCBs.pdf)
+- [Custom Electronics Schematic Description](custom_pcb_description.md)
+
+This file shows the exact board-level structure for the current robot electronics and should be used together with this overview page.

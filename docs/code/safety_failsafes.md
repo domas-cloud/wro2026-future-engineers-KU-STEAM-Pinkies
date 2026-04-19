@@ -68,7 +68,7 @@ These actions are chosen to make the robot predictable rather than aggressive in
 
 ## Specific Failsafe Cases
 
-## Camera Data Timeout
+### Camera Data Timeout
 If the ESP32 does not receive fresh camera-based navigation data within the allowed time window, it must assume that the previous command is no longer safe.
 
 In that case the robot should:
@@ -79,7 +79,7 @@ In that case the robot should:
 
 This prevents the robot from continuing with stale visual information.
 
-## IMU Invalidity
+### IMU Invalidity
 If the `BNO085` produces invalid data, heading-based support must be reduced or disabled.
 
 In that case the robot should:
@@ -89,8 +89,8 @@ In that case the robot should:
 
 This prevents the robot from applying false stabilisation commands.
 
-## ToF Instability
-If the 2 `VL53L5CX` matrix ToF sensors begin to produce unstable or obviously inconsistent short-range data, the robot should switch to more cautious behaviour.
+### ToF Instability
+If the 2 `VL53L4CD` distance sensors begin to produce unstable or obviously inconsistent short-range data, the robot should switch to more cautious behaviour.
 
 In that case the robot should:
 - reduce speed;
@@ -99,7 +99,7 @@ In that case the robot should:
 
 This is important because false short-range readings can create unnecessary steering or collision risk.
 
-## Communication Loss Between Pi And ESP32
+### Communication Loss Between Pi And ESP32
 If the camera result link between the Raspberry Pi Zero and ESP32 fails, the ESP32 must not keep driving as if navigation were still valid.
 
 The robot should:
@@ -108,7 +108,7 @@ The robot should:
 - keep steering in a safe direction;
 - wait for valid messages again.
 
-## Startup Safety
+### Startup Safety
 During startup, the robot must not produce unexpected motion before all required parts of the control loop are ready.
 
 The startup safety rule is:
@@ -139,11 +139,11 @@ We included this because track testing showed that some unstable situations can 
 
 The logic can be summarised like this:
 
-- **fresh input available + robot stable** → normal driving;
-- **input uncertain** → slower or limited driving;
-- **input invalid or missing** → safe stop / no-command mode;
-- **robot trapped or badly aligned** → recovery behaviour;
-- **system not ready** → no drive output.
+- **fresh input available + robot stable** -> normal driving;
+- **input uncertain** -> slower or limited driving;
+- **input invalid or missing** -> safe stop / no-command mode;
+- **robot trapped or badly aligned** -> recovery behaviour;
+- **system not ready** -> no drive output.
 
 This structure helps keep the robot behaviour understandable and reproducible.
 
@@ -191,3 +191,4 @@ Our answer is:
 - return to normal driving only when the system is healthy again.
 
 This makes the robot safer, more stable, and more robust for competition use.
+

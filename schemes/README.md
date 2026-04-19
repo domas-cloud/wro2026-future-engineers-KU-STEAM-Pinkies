@@ -5,14 +5,38 @@ This folder stores the robot's electrical and mechanical schematic material.
 ## Main Files
 
 - [Wiring Overview](wiring_overview.md)
+- [Custom Electronics Schematic PDF](Wro_customPCBs.pdf)
+- [Custom Electronics Schematic Description](custom_pcb_description.md)
+
+## Schematic Preview
+
+The images below give a quick visual preview of the main schematic so a reader can understand the structure before opening the full PDF.
+
+### Main System Page
+
+![Main component schematic](images/schematic-overview.png)
+
+This page shows the main relationship between the `ESP32`, `Raspberry Pi Zero`, `L298N`, steering servo, and the DC drive motor.
+
+### Sensor Bus Detail
+
+![Sensor bus detail](images/sensor-bus-detail.png)
+
+This view shows the `BNO085` and both `VL53L4CD` modules on the shared sensor bus, including the separate shutdown lines used for sensor startup control.
+
+### Power Regulator Reference
+
+![Power regulator reference](images/power-regulator-reference.jpg)
+
+This reference image shows the step-down converter used to reduce the `2x 18650` battery voltage to the regulated `5 V` logic supply for the computing electronics.
 
 ## What The Scheme Should Show
 
 - all electronic components;
 - all motors and actuators;
 - power rails and regulators;
-- signal connections between the `ESP32`, `Raspberry Pi Zero`, camera, `BNO085`, 2 `VL53L5CX` matrix ToF modules, `MG90S`, and the `N20` drive system.
+- signal connections between the `ESP32`, `Raspberry Pi Zero`, camera, `BNO085`, 2 distance sensor modules, `MG90S`, and the `N20` drive system.
 
 ## How To Use It
 
-Start with the [Wiring Overview](wiring_overview.md) so the textual system map is clear before final schematic diagrams are added.
+Start with the [Wiring Overview](wiring_overview.md) for the block-level map, then open the [Custom Electronics Schematic PDF](Wro_customPCBs.pdf) and the [Custom Electronics Schematic Description](custom_pcb_description.md) for the exact board-to-board wiring that is documented for this robot.

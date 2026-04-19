@@ -50,7 +50,7 @@ The steering system needs:
 - low friction,
 - and good geometric precision.
 
-If the chassis allows too much play, bending, or asymmetry, straight driving becomes worse. That means the frame does not only hold the steering system — it also affects the quality of the steering result.
+If the chassis allows too much play, bending, or asymmetry, straight driving becomes worse. That means the frame does not only hold the steering system - it also affects the quality of the steering result.
 
 This was one of the reasons why better wheel mounting and better steering geometry improved straight driving.
 
@@ -119,6 +119,19 @@ During development, the most important constraints were:
 - and **repeatability across runs**.
 
 Most of our design decisions came from balancing these constraints against each other.
+
+## Judge-Facing Systems Summary
+
+If we had to summarize the robot as one engineering system, the key relationships are:
+
+- chassis precision determines whether steering geometry can work as intended;
+- steering quality determines whether the controller can produce repeatable motion;
+- wheel grip determines whether steering commands become real movement;
+- drivetrain smoothness determines whether turns remain controllable;
+- sensing quality determines whether the controller is correcting the right problem;
+- software logic determines how safely and consistently all of these subsystems are used together.
+
+This summary is important because it makes the subsystem interaction visible in one place instead of spreading it only across separate documents.
 
 ## Example of Whole-System Improvement
 

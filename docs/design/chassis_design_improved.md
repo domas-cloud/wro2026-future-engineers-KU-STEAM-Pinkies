@@ -21,6 +21,16 @@ These dimensions were selected intentionally. In our opinion, this size was clos
 
 Before building the final robot, we had an older and larger robot with a more powerful motor and gearbox.
 
+The photos below show the previous-season robot concept that taught us an important lesson about complexity.
+
+![Previous robot overall view](images/previous-robot-overall.jpg)
+
+Overall view of the previous robot from the earlier competition season.
+
+![Previous robot drivetrain view](images/previous-robot-drivetrain.jpg)
+
+Close-up of the previous robot drivetrain and steering-related mechanical layout.
+
 Although that robot was mechanically impressive, in practice it had important disadvantages:
 
 - it was harder to turn,
@@ -28,6 +38,8 @@ Although that robot was mechanically impressive, in practice it had important di
 - and the steering system was less practical for stable autonomous driving.
 
 This was one of our most important engineering lessons: **a more complex robot is not automatically a better robot**.
+
+From the previous year's competition robot, we learned that too much mechanical complexity made the system harder to tune, harder to control, and less repeatable in real driving. Because of that lesson, we decided that the new robot should be built in a simpler and more practical way.
 
 For the final version, we deliberately moved toward a simpler, smaller, and more controllable chassis concept.
 

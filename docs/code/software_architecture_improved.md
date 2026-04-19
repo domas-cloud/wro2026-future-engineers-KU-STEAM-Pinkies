@@ -148,7 +148,7 @@ This layer converts our controller outputs into real motor and servo commands.
 
 The actual low-level data path that we can show from the repository is:
 
-1. `setup_lidar_sensors()` initializes the two `VL53L5CX` sensors.
+1. `setup_lidar_sensors()` initializes the two distance sensors.
 2. `read_lidar_data()` updates `SENSOR_DISTANCE[0]` and `SENSOR_DISTANCE[1]`.
 3. `robotCompass.getYaw()` returns the current yaw angle.
 4. `targetAngle - newHeading` gives the heading deviation.
@@ -182,6 +182,17 @@ stateDiagram-v2
 
 This state view is important because it shows that the robot behavior is not random branching. The same controller remains active, but the active target and safety policy change by state.
 
+## Why This State Structure Was Chosen
+
+We used this state structure because different parts of the challenge require different priorities:
+
+- in `NormalFollow`, the priority is stable lane-centering and repeatable lap driving;
+- in `ObstacleAdjustedFollow`, the priority is obeying obstacle meaning while preserving smooth control;
+- in `Recovery`, the priority is preventing unstable continuation when the robot is no longer in a trustworthy state;
+- in `Parking`, the priority is precise final positioning rather than lap-speed efficiency.
+
+This is important for the rubric because it shows not only that states exist, but why each state exists and what engineering responsibility it has.
+
 ## Startup and Controller Ownership
 
 The implemented startup logic in `src/src/main.cpp` is intentionally simple:
@@ -192,6 +203,20 @@ The implemented startup logic in `src/src/main.cpp` is intentionally simple:
 - when started, `targetAngle` is initialized from the current heading and the loop begins closed-loop control.
 
 This means we leave the safety-critical "run or stop" decision to the `ESP32` at the actuator layer.
+
+## Edge Cases And Software Responsibilities
+
+The final software architecture was designed to stay understandable under imperfect conditions, not only in ideal laps.
+
+| Edge case | Main risk | Architecture response |
+| --- | --- | --- |
+| camera result missing or delayed | stale path command | `ESP32` keeps authority over safe stop / safe output |
+| ToF reading unstable | false short-range geometry | filtering and cautious fallback behavior |
+| heading support becomes unreliable | false correction bias | controller can reduce dependence on IMU support |
+| obstacle meaning uncertain | rapid left-right switching | keep target logic conservative instead of snapping states |
+| approach to parking endgame | lap-speed behavior no longer appropriate | separate parking-oriented state responsibility |
+
+This table strengthens reproducibility because another team can see how the system should behave when conditions are not ideal.
 
 ## Why This Architecture Fits the Robot
 
@@ -208,6 +233,8 @@ Our current repository shows the low-level `ESP32` controller clearly, but it do
 
 - implemented low-level controller and sensor fusion are present in code;
 - final high-level perception architecture is documented and justified at system level.
+
+This honesty is intentional. We prefer a repository that is explicit about evidence boundaries over one that appears more complete than it really is.
 
 ## Why The Current Repository Is Still Reproducible
 

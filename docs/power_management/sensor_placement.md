@@ -2,11 +2,11 @@
 
 ## Placement Logic
 
-The camera, `BNO085`, and 2 `VL53L5CX` matrix ToF modules should be positioned according to what they need to observe.
+The camera, `BNO085`, and 2 `VL53L4CD` distance sensors should be positioned according to what they need to observe.
 
 - Camera: aimed so it can see the lane and relevant obstacles.
 - `BNO085`: mounted rigidly near the robot's motion center.
-- 2 `VL53L5CX` matrix ToF modules: placed to cover expected obstacle zones and blind areas.
+- 2 `VL53L4CD` distance sensors: placed to cover expected obstacle zones and blind areas.
 
 ## What Should Be Explained
 
