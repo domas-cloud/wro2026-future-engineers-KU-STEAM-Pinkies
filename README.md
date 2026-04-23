@@ -2,6 +2,62 @@
 
 This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
 
+![Main schematic overview](schemes/images/schematic-overview.png)
+
+## Table Of Contents
+
+- [Challenge Overview](#challenge-overview)
+- [Team](#team)
+- [Robot At A Glance](#robot-at-a-glance)
+- [Quick Visual Overview](#quick-visual-overview)
+- [What Makes This Repository Judge-Friendly](#what-makes-this-repository-judge-friendly)
+- [What The Code Shows](#what-the-code-shows)
+- [How The Full System Is Intended To Work](#how-the-full-system-is-intended-to-work)
+- [System Modules](#system-modules)
+- [Assembly And Rebuild Path](#assembly-and-rebuild-path)
+- [Code Structure](#code-structure)
+- [How The Software Relates To The Hardware](#how-the-software-relates-to-the-hardware)
+- [Build, Compile, And Upload](#build-compile-and-upload)
+- [Main Engineering Files](#main-engineering-files)
+- [Technical Drawings And Fabrication Evidence](#technical-drawings-and-fabrication-evidence)
+- [Where To Start](#where-to-start)
+- [Repository Layout](#repository-layout)
+- [Photo Gallery](#photo-gallery)
+- [Video Submission](#video-submission)
+- [Submission Media](#submission-media)
+- [Submission Status](#submission-status)
+- [Cost Analysis](#cost-analysis)
+- [Reproducibility Note](#reproducibility-note)
+
+## Challenge Overview
+
+In WRO Future Engineers, the robot must drive autonomously, stay mechanically reliable, and show clear engineering reasoning across hardware, software, and testing.
+
+For our team, the central engineering problem was not only making the robot move, but making it move in a controlled and repeatable way despite steering friction, wheel grip changes, power variation, and sensor noise. Because of that, this repository documents the robot as one integrated system rather than as isolated components.
+
+## Team
+
+We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
+
+### Marius
+
+- software development;
+- mechanical design;
+- controller refinement and integration work.
+
+### Domas
+
+- project coordination;
+- testing and iteration tracking;
+- documentation structure and submission preparation.
+
+### Jonas
+
+- electronics and hardware design;
+- wiring, component layout, and implementation support.
+
+We divided responsibilities, but the final robot was developed and tested as one shared engineering project.
+
 ## Robot At A Glance
 
 Our robot is a compact self-driving car with:
@@ -37,6 +93,18 @@ Rear drivetrain with the `LEGO` differential that gave the most stable result in
 ![Main schematic overview](schemes/images/schematic-overview.png)
 
 Main electronics overview showing the control boards, motor driver, and power structure.
+
+## What Makes This Repository Judge-Friendly
+
+This repository is organized so that a judge can quickly verify:
+
+- what the final robot is made of;
+- how the steering, drivetrain, sensors, and control system connect;
+- where the active embedded code lives;
+- which files provide rebuild evidence;
+- where the required submission media is stored.
+
+If you want the quickest entry path, start with [START_HERE.md](START_HERE.md), then continue into [docs/README.md](docs/README.md) and [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md).
 
 ## What The Code Shows
 
@@ -120,6 +188,19 @@ The repository itself is also part of the final solution. It contains:
 - testing notes;
 - team, robot, and video submission material.
 
+## Assembly And Rebuild Path
+
+If another team wanted to understand or rebuild the robot efficiently, we would suggest this order:
+
+1. [README.md](README.md)
+2. [docs/hardware/parts_list.md](docs/hardware/parts_list.md)
+3. [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md)
+4. [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf)
+5. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+6. [models/README.md](models/README.md)
+
+This path is intentionally practical: parts first, wiring second, mechanics third, and only then the deeper design trade-off documents.
+
 ## Code Structure
 
 The active embedded controller project is inside [src/README.md](src/README.md).
@@ -201,6 +282,17 @@ If you want the fastest high-value reading path, these are the most important fi
 - [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
 - [Embedded Controller README](src/README.md)
 
+## Technical Drawings And Fabrication Evidence
+
+The main build evidence is distributed across:
+
+- `models/` for custom part exports and CAD-related material;
+- `schemes/` for schematics, PCB, and wiring evidence;
+- `docs/design/` for steering, drivetrain, and chassis explanations;
+- `docs/hardware/` for parts, sensors, and electronics decisions.
+
+These files are important because the robot cannot be reproduced from source code alone.
+
 ## Where To Start
 
 If you want the fastest overview, start here:
@@ -223,6 +315,62 @@ If you want the fastest overview, start here:
 - `src/` - published embedded controller project
 - `t-photos/`, `v-photos/`, `video/` - submission media
 
+## Photo Gallery
+
+### Team Photos
+
+<table>
+  <tr>
+    <td align="center"><strong>Official Team Photo</strong></td>
+    <td align="center"><strong>Team Fun Photo</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="t-photos/oficial.jpg" alt="Official team photo" width="360"></td>
+    <td align="center"><img src="t-photos/funny.jpg" alt="Team fun photo" width="360"></td>
+  </tr>
+</table>
+
+### Robot Photos
+
+<table>
+  <tr>
+    <td align="center"><strong>Front View</strong></td>
+    <td align="center"><strong>Back View</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="v-photos/front.jpg" alt="Robot front view" width="360"></td>
+    <td align="center"><img src="v-photos/back.jpg" alt="Robot back view" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Left View</strong></td>
+    <td align="center"><strong>Right View</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="v-photos/left.jpg" alt="Robot left view" width="360"></td>
+    <td align="center"><img src="v-photos/right.jpg" alt="Robot right view" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Top View</strong></td>
+    <td align="center"><strong>Bottom View</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="v-photos/top.jpg" alt="Robot top view" width="360"></td>
+    <td align="center"><img src="v-photos/bottom.jpg" alt="Robot bottom view" width="360"></td>
+  </tr>
+</table>
+
+## Video Submission
+
+The final driving video link is stored in [video/video.md](video/video.md).
+
+Current state:
+
+- competition: `WRO 2026 Future Engineers`
+- YouTube URL: pending final publication
+- minimum autonomous segment target: `30 seconds`
+
+The final published video should show stable autonomous driving, obstacle response, and repeatable behavior without manual assistance.
+
 ## Submission Media
 
 The repository also includes the media required for the final submission package:
@@ -232,6 +380,42 @@ The repository also includes the media required for the final submission package
 - `video/` for the published driving video link
 
 These media files matter because the rules require that the repository includes both technical documentation and final competition evidence.
+
+## Submission Status
+
+Current repository submission status based on the internal checklist:
+
+| Item | Status | Main reference |
+|---|---|---|
+| Team photo folder | Ready | `t-photos/` |
+| Robot photo folder | Ready | `v-photos/` |
+| Embedded controller project | Ready | `src/` |
+| Electronics and wiring documentation | Ready | `docs/hardware/`, `schemes/` |
+| Mechanical design documentation | Ready | `docs/design/` |
+| Testing and evaluation notes | Ready | `docs/testing/`, `docs/evaluation/` |
+| Video link | Pending final link | `video/video.md` |
+| Cost analysis summary in root README | Not yet added | `docs/hardware/parts_list.md` |
+
+For the full submission check path, see [docs/reproducibility/submission_checklist.md](docs/reproducibility/submission_checklist.md).
+
+## Cost Analysis
+
+The repository already contains the main hardware list in [docs/hardware/parts_list.md](docs/hardware/parts_list.md). A full itemized price table is still pending, but the major cost groups are already clear:
+
+| Cost group | Main items | Status |
+|---|---|---|
+| Control electronics | `ESP32`, `Raspberry Pi Zero`, camera | Identified |
+| Sensors | `BNO085`, `3x VL53L4CD` | Identified |
+| Motion components | `MG90S`, `N20`, `L298N` | Identified |
+| Power system | `2x 18650`, regulators, wiring | Identified |
+| Mechanical parts | chassis, printed parts, drivetrain, wheels | Identified |
+| Manufacturing extras | fasteners, connectors, support materials | Partially documented |
+
+Current note:
+
+- the component groups are documented;
+- the final numeric budget summary is not yet published in the root `README`;
+- we prefer stating this directly rather than implying a finished cost table that is not yet in the repository.
 
 ## Reproducibility Note
 

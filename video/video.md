@@ -4,6 +4,12 @@
 - YouTube URL: to be added after the final video is published
 - Minimum autonomous driving segment: 30 seconds
 
+## Status
+
+- current state: pending final upload;
+- link status: not yet added;
+- intended purpose: final public competition video reference for judges.
+
 ## Notes
 
 - title: to be added after the final video is published;
