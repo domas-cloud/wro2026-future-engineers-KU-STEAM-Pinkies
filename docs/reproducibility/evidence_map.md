@@ -60,6 +60,10 @@ What they show:
 - published controller layout
 - Pi-to-ESP32 software interface
 
+Key tuning result:
+
+- straight drift improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, `3`-lap success from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`
+
 ## Criterion 4: Systems Thinking And Engineering Decisions
 
 Main files:

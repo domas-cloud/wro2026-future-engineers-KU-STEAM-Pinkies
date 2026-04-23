@@ -2,6 +2,8 @@
 
 This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
 
+One clear software tuning result was that straight-line drift after `2 m` improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, `3`-lap success from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`.
+
 ## Quick Navigation
 
 If you want the fastest route through the repository, use one of these paths:
