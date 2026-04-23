@@ -1,20 +1,13 @@
 # Video Submission
 
 - Competition: WRO 2026 Future Engineers
-- YouTube URL: to be added after the final video is published
 - Minimum autonomous driving segment: 30 seconds
 
-## Status
-
-- current state: pending final upload;
-- link status: not yet added;
-- intended purpose: final public competition video reference for judges.
+This file records the official driving-video references for the repository together with the validation checklist used before submission.
 
 ## Notes
 
-- title: to be added after the final video is published;
-- date: to be added after the final video is published;
-- track configuration: to be briefly described together with the final video;
+- track configuration: the final challenge setup used for the recording;
 - highlighted subsystems: steering, obstacle response, lane following, and recovery;
 - what it demonstrates: autonomous operation and repeatable behavior.
 

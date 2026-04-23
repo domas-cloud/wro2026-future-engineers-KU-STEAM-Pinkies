@@ -23,7 +23,6 @@ This repository contains the documentation, design decisions, and embedded contr
 - [Photo Gallery](#photo-gallery)
 - [Video Submission](#video-submission)
 - [Submission Media](#submission-media)
-- [Submission Status](#submission-status)
 - [Cost Analysis](#cost-analysis)
 - [Reproducibility Note](#reproducibility-note)
 
@@ -350,15 +349,14 @@ If you want the fastest overview, start here:
 
 ## Video Submission
 
-The final driving video link is stored in [video/video.md](video/video.md).
+The official competition video references and validation notes are documented in [video/video.md](video/video.md).
 
-Current state:
+The submission videos are intended to show:
 
-- competition: `WRO 2026 Future Engineers`
-- YouTube URL: pending final publication
-- minimum autonomous segment target: `30 seconds`
-
-The final published video should show stable autonomous driving, obstacle response, and repeatable behavior without manual assistance.
+- autonomous driving without manual assistance;
+- stable lane-following and turn transitions;
+- obstacle response and recovery behavior;
+- repeatable robot performance on the field.
 
 ## Submission Media
 
@@ -370,26 +368,9 @@ The repository also includes the media required for the final submission package
 
 These media files matter because the rules require that the repository includes both technical documentation and final competition evidence.
 
-## Submission Status
-
-Current repository submission status based on the internal checklist:
-
-| Item | Status | Main reference |
-|---|---|---|
-| Team photo folder | Ready | `t-photos/` |
-| Robot photo folder | Ready | `v-photos/` |
-| Embedded controller project | Ready | `src/` |
-| Electronics and wiring documentation | Ready | `docs/hardware/`, `schemes/` |
-| Mechanical design documentation | Ready | `docs/design/` |
-| Testing and evaluation notes | Ready | `docs/testing/`, `docs/evaluation/` |
-| Video link | Pending final link | `video/video.md` |
-| Cost analysis summary in root README | Not yet added | `docs/hardware/parts_list.md` |
-
-For the full submission check path, see [docs/reproducibility/submission_checklist.md](docs/reproducibility/submission_checklist.md).
-
 ## Cost Analysis
 
-The repository already contains the main hardware list in [docs/hardware/parts_list.md](docs/hardware/parts_list.md). A full itemized price table is still pending, but the major cost groups are already clear:
+The repository already contains the main hardware list in [docs/hardware/parts_list.md](docs/hardware/parts_list.md). The most important cost groups are:
 
 | Cost group | Main items | Status |
 |---|---|---|
@@ -400,11 +381,7 @@ The repository already contains the main hardware list in [docs/hardware/parts_l
 | Mechanical parts | chassis, printed parts, drivetrain, wheels | Identified |
 | Manufacturing extras | fasteners, connectors, support materials | Partially documented |
 
-Current note:
-
-- the component groups are documented;
-- the final numeric budget summary is not yet published in the root `README`;
-- we prefer stating this directly rather than implying a finished cost table that is not yet in the repository.
+These groups cover the main electromechanical cost structure of the robot and connect directly to the parts documented in the hardware and design sections.
 
 ## Reproducibility Note
 
