@@ -2,8 +2,6 @@
 
 This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
 
-![Main schematic overview](schemes/images/schematic-overview.png)
-
 ## Table Of Contents
 
 - [Challenge Overview](#challenge-overview)
