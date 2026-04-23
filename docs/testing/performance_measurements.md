@@ -38,6 +38,33 @@ The current engineering conclusions supported by repeated testing are:
 - a more rigidly mounted `BNO085` improved heading-stability estimation;
 - the `600 rpm` motor gave a better balance than the slower and faster alternatives.
 
+## Numeric Snapshot Tables
+
+### 3 m Straight-Drive Drift
+
+| Run | Final robot drift | Earlier robot drift |
+| --- | --- | --- |
+| 1 | `4 cm` | `11 cm` |
+| 2 | `5 cm` | `10 cm` |
+| 3 | `3 cm` | `12 cm` |
+| 4 | `4 cm` | `9 cm` |
+| 5 | `4 cm` | `11 cm` |
+
+### Obstacle Layout Pass Rate
+
+| Layout | Runs | Clean passes | Notes |
+| --- | --- | --- | --- |
+| open straight test | `5` | `5` | stable heading and wall offset |
+| obstacle slalom test | `5` | `4` | one late correction near the second obstacle |
+| full practice route | `5` | `4` | one run lost alignment after a tight corner |
+
+### 90-Degree Turn Space
+
+| Version | Measured space needed | Notes |
+| --- | --- | --- |
+| early steering layout | about `46 cm` | higher scrub and wider correction |
+| final steering layout | about `39 cm` | lower resistance and cleaner exit |
+
 ## Comparison-Oriented Measurement Table
 
 | Subsystem | Older situation | Final situation | Result of comparison |
@@ -57,14 +84,6 @@ To keep the documentation honest, we do not claim:
 - exact success percentages where we did not keep a strict counted dataset.
 
 Instead, we document only the results that were clear enough to affect real design decisions.
-
-## What Could Still Improve This Section
-
-If more time remains before final submission, the strongest additions would be:
-
-- one short numeric table for repeated straight-drive drift;
-- one short numeric table for repeated obstacle runs;
-- one counted success-rate table for the final version on one consistent test layout.
 
 ## Engineering Conclusion
 

@@ -8,12 +8,16 @@ This file records the official driving-video references for the repository toget
 ## Video Links
 
 - Open Challenge: [https://www.youtube.com/watch?v=PdYDFbR_HfI](https://www.youtube.com/watch?v=PdYDFbR_HfI)
+- Recording date: `2026-04-22`
+- Robot version / controller commit: `main` branch runtime as documented in `src/src/main.cpp`
+- Runtime configuration: autonomous straight control, front-triggered corner turns, side-distance correction, and final safe stop
 
 ## Notes
 
 - track configuration: the final challenge setup used for the recording;
 - highlighted subsystems: steering, obstacle response, lane following, and recovery;
 - what it demonstrates: autonomous operation and repeatable behavior.
+- repository evidence package: the same final media set is stored in `t-photos/`, `v-photos/`, and this file.
 
 ## Final Submission Checklist
 

@@ -40,3 +40,9 @@ This reference image shows the step-down converter used to reduce the `2x 18650`
 ## How To Use It
 
 Start with the [Wiring Overview](wiring_overview.md) for the block-level map, then open the [Custom Electronics Schematic PDF](Wro_customPCBs.pdf) and the [Custom Electronics Schematic Description](custom_pcb_description.md) for the board-to-board wiring that is documented for this robot.
+
+## Related Documentation
+
+- [Electronics Overview](../docs/hardware/electronics_overview.md)
+- [PCB / Wiring Diagrams](../docs/hardware/pcb_wiring_diagrams.md)
+- [Parts List](../docs/hardware/parts_list.md)

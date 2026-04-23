@@ -46,7 +46,7 @@ Main files:
 
 Checks:
 
-1. `t-photos/` contains at least one clear final team photo
+1. `t-photos/` contains the single final team photo `team.jpg`
 2. `v-photos/` contains front, rear, left, right, top, and bottom views
 3. `video/video.md` contains the final public or accessible-by-link YouTube URL
 4. the autonomous driving segment is at least 30 seconds long

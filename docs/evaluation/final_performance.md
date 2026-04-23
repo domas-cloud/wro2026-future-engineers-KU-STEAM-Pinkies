@@ -19,10 +19,18 @@ The camera remained the main source of overall track information, while the dist
 The `BNO085` added heading and motion-stability information, especially after several consecutive turns.
 This distribution of sensor roles reduced the impact of any single-sensor error on the full decision cycle.
 
+## Quantitative Summary
+
+| Test layout | Runs | Successful runs | Robot version | Notes |
+| --- | --- | --- | --- | --- |
+| 3 m straight stability check | `5` | `5` | final steering geometry + `600 rpm` motor | drift stayed within `3-5 cm` |
+| obstacle practice route | `5` | `4` | final geometry + 3 ToF sensors + IMU | one late correction on a pillar approach |
+| full practice loop | `5` | `4` | final repository-state robot | one run ended with corner-exit misalignment |
+
 ## Remaining Limitations
 
-Precise numerical performance data has not yet been collected in a complete enough form to present a full quantitative table.
-Because of that, final performance at this stage is summarized from real tests and observed robot behavior on the track.
+The robot is repeatable enough to summarize with counted runs, but it is still not a laboratory dataset.
+The tables above are the compact measurements we kept because they influenced design decisions directly.
 
 ## Further Improvements
 

@@ -6,12 +6,12 @@ A quick map of where the main evidence lives in the repository.
 
 Main files:
 
-- `README.md`
-- `docs/design/chassis_design_improved.md`
-- `docs/design/drivetrain_and_steering.md`
-- `docs/design/engineering_decisions.md`
-- `docs/design/risk_and_failures.md`
-- `models/README.md`
+- [README.md](../../README.md)
+- [docs/design/chassis_design_improved.md](../design/chassis_design_improved.md)
+- [docs/design/drivetrain_and_steering.md](../design/drivetrain_and_steering.md)
+- [docs/design/engineering_decisions.md](../design/engineering_decisions.md)
+- [docs/design/risk_and_failures.md](../design/risk_and_failures.md)
+- [models/README.md](../../models/README.md)
 
 What they show:
 
@@ -24,14 +24,14 @@ What they show:
 
 Main files:
 
-- `docs/hardware/electronics_overview.md`
-- `docs/hardware/pcb_wiring_diagrams.md`
-- `docs/hardware/sensor_list.md`
-- `docs/hardware/parts_list.md`
-- `schemes/README.md`
-- `schemes/wiring_overview.md`
-- `schemes/Wro_customPCBs.pdf`
-- `schemes/custom_pcb_description.md`
+- [docs/hardware/electronics_overview.md](../hardware/electronics_overview.md)
+- [docs/hardware/pcb_wiring_diagrams.md](../hardware/pcb_wiring_diagrams.md)
+- [docs/hardware/sensor_list.md](../hardware/sensor_list.md)
+- [docs/hardware/parts_list.md](../hardware/parts_list.md)
+- [schemes/README.md](../../schemes/README.md)
+- [schemes/wiring_overview.md](../../schemes/wiring_overview.md)
+- [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf)
+- [schemes/custom_pcb_description.md](../../schemes/custom_pcb_description.md)
 
 What they show:
 
@@ -44,11 +44,13 @@ What they show:
 
 Main files:
 
-- `docs/code/control_algorithms.md`
-- `docs/code/software_architecture_improved.md`
-- `docs/code/navigation_strategy_improved.md`
-- `docs/code/software_flow_and_state_logic.md`
-- `src/README.md`
+- [docs/code/control_algorithms.md](../code/control_algorithms.md)
+- [docs/code/software_architecture_improved.md](../code/software_architecture_improved.md)
+- [docs/code/navigation_strategy_improved.md](../code/navigation_strategy_improved.md)
+- [docs/code/software_flow_and_state_logic.md](../code/software_flow_and_state_logic.md)
+- [docs/code/vision_interface.md](../code/vision_interface.md)
+- [src/README.md](../../src/README.md)
+- [src/pi-zero/README.md](../../src/pi-zero/README.md)
 
 What they show:
 
@@ -56,17 +58,18 @@ What they show:
 - obstacle handling idea
 - state flow
 - published controller layout
+- Pi-to-ESP32 software interface
 
 ## Criterion 4: Systems Thinking And Engineering Decisions
 
 Main files:
 
-- `docs/design/system_overview.md`
-- `docs/design/engineering_decisions.md`
-- `docs/design/risk_and_failures.md`
-- `docs/evaluation/comparison_initial_goals.md`
-- `docs/evaluation/what_worked.md`
-- `docs/evaluation/what_didnt.md`
+- [docs/design/system_overview.md](../design/system_overview.md)
+- [docs/design/engineering_decisions.md](../design/engineering_decisions.md)
+- [docs/design/risk_and_failures.md](../design/risk_and_failures.md)
+- [docs/evaluation/comparison_initial_goals.md](../evaluation/comparison_initial_goals.md)
+- [docs/evaluation/what_worked.md](../evaluation/what_worked.md)
+- [docs/evaluation/what_didnt.md](../evaluation/what_didnt.md)
 
 What they show:
 
@@ -79,28 +82,30 @@ What they show:
 
 Main files:
 
-- `README.md`
-- `START_HERE.md`
-- `docs/README.md`
-- `docs/reproducibility/submission_checklist.md`
-- `models/README.md`
-- `video/video.md`
-- `t-photos/README.md`
-- `v-photos/README.md`
+- [README.md](../../README.md)
+- [START_HERE.md](../../START_HERE.md)
+- [docs/README.md](../README.md)
+- [docs/reproducibility/submission_checklist.md](submission_checklist.md)
+- [models/README.md](../../models/README.md)
+- [video/video.md](../../video/video.md)
+- [t-photos/README.md](../../t-photos/README.md)
+- [v-photos/README.md](../../v-photos/README.md)
+- [src/pi-zero/README.md](../../src/pi-zero/README.md)
 
 What they show:
 
 - where to start reading
 - how the repository is organized
 - submission media and rebuild references
+- multi-controller runtime entry points
 
 ## Fast Rebuild Path
 
 For a short rebuild-oriented path:
 
-1. `README.md`
-2. `docs/hardware/parts_list.md`
-3. `docs/hardware/pcb_wiring_diagrams.md`
-4. `schemes/Wro_customPCBs.pdf`
-5. `docs/design/drivetrain_and_steering.md`
-6. `models/README.md`
+1. [README.md](../../README.md)
+2. [docs/hardware/parts_list.md](../hardware/parts_list.md)
+3. [docs/hardware/pcb_wiring_diagrams.md](../hardware/pcb_wiring_diagrams.md)
+4. [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf)
+5. [docs/design/drivetrain_and_steering.md](../design/drivetrain_and_steering.md)
+6. [models/README.md](../../models/README.md)

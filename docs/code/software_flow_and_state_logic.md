@@ -83,7 +83,8 @@ Conditions:
 Behavior:
 
 - stop the motor;
-- restart the controller.
+- center the steering;
+- return to the idle state without restarting the controller.
 
 ## Obstacle-Layer Extension
 
@@ -127,6 +128,6 @@ Power on
       no  -> heading + distance correction
   -> write servo
   -> finished?
-      yes -> stop and restart
+      yes -> stop and wait for the next start
       no  -> continue
 ```

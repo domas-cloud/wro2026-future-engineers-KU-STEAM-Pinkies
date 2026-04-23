@@ -41,6 +41,7 @@ The controller code in `src/src/main.cpp` confirms these pin assignments:
 | `ESP32` | steering servo PWM | `GPIO33` |
 | `ESP32` | distance-sensor shutdown lines | `GPIO15`, `GPIO5`, `GPIO18` |
 | `ESP32` I2C bus | clock speed | `400 kHz` |
+| `ESP32` UART RX/TX for Pi link | controller bridge | `GPIO16` / `GPIO17` |
 | `BNO085` | IMU I2C address | `0x4A`, fallback `0x4B` |
 | front distance sensor | configured address | `0x30` |
 | left distance sensor | configured address | `0x31` |
@@ -62,7 +63,7 @@ The controller code in `src/src/main.cpp` confirms these pin assignments:
 
 Raspberry Pi Zero
   -> camera module
-  -> perception result / reference link to ESP32
+  -> UART perception packet to ESP32 (`115200 baud`, `3.3 V` TTL)
 
 ESP32
   -> reads BNO085 and all three VL53L4CD sensors

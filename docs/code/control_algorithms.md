@@ -90,6 +90,9 @@ The clean way to connect that with the current controller is:
 
 ## Important Current Detail
 
-There is one implementation detail worth documenting honestly: the code currently measures `rightDistance`, but the distance-correction branch still uses `leftDistance` in both cases.
+The distance-correction branch now switches between the two side sensors:
 
-So the controller is closest to a left-wall-based regulator in its present form, even though the intended logic suggests a wider use of both side sensors.
+- clockwise sectors use `leftDistance`;
+- counterclockwise sectors use `rightDistance`.
+
+That keeps the controller closer to the intended outer-wall regulator described in the rest of the documentation.

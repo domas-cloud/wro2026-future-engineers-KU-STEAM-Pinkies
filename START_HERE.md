@@ -18,12 +18,12 @@ We split responsibilities, but the important decisions were made together and te
 
 If you only have a few minutes, read these files first:
 
-1. `README.md`
-2. `docs/reproducibility/evidence_map.md`
-3. `docs/design/drivetrain_and_steering.md`
-4. `docs/hardware/electronics_overview.md`
-5. `docs/design/engineering_decisions.md`
-6. `docs/testing/mechanical_and_software_testing.md`
+1. [README.md](README.md)
+2. [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
+3. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+4. [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
+5. [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md)
+6. [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
 
 ## Full Reading Order
 
@@ -31,45 +31,47 @@ If you want the full story of the robot, this order works well:
 
 ### 1. Overview
 
-- `README.md`
-- `docs/design/system_overview.md`
-- `docs/reproducibility/evidence_map.md`
+- [README.md](README.md)
+- [docs/design/system_overview.md](docs/design/system_overview.md)
+- [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
 
 ### 2. Mechanical Design
 
-- `docs/design/chassis_design_improved.md`
-- `docs/design/drivetrain_and_steering.md`
-- `docs/design/engineering_decisions.md`
-- `docs/design/risk_and_failures.md`
+- [docs/design/chassis_design_improved.md](docs/design/chassis_design_improved.md)
+- [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+- [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md)
+- [docs/design/risk_and_failures.md](docs/design/risk_and_failures.md)
 
 ### 3. Electronics
 
-- `docs/hardware/electronics_overview.md`
-- `docs/hardware/pcb_wiring_diagrams.md`
-- `schemes/Wro_customPCBs.pdf`
+- [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
+- [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md)
+- [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf)
 
 ### 4. Software
 
-- `docs/code/software_architecture_improved.md`
-- `docs/code/navigation_strategy_improved.md`
-- `docs/code/software_flow_and_state_logic.md`
+- [docs/code/software_architecture_improved.md](docs/code/software_architecture_improved.md)
+- [docs/code/navigation_strategy_improved.md](docs/code/navigation_strategy_improved.md)
+- [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md)
 
 ### 5. Testing
 
-- `docs/testing/mechanical_and_software_testing.md`
-- `docs/testing/track_testing.md`
-- `docs/testing/performance_measurements.md`
+- [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
+- [docs/testing/track_testing.md](docs/testing/track_testing.md)
+- [docs/testing/performance_measurements.md](docs/testing/performance_measurements.md)
+
+If you prefer a section-based index instead of a reading order, open [docs/README.md](docs/README.md).
 
 ## Rebuild Path
 
 If another team wanted the shortest rebuild-oriented path, we would suggest:
 
-1. `README.md`
-2. `docs/hardware/parts_list.md`
-3. `docs/hardware/pcb_wiring_diagrams.md`
-4. `schemes/Wro_customPCBs.pdf`
-5. `docs/design/drivetrain_and_steering.md`
-6. `models/README.md`
+1. [README.md](README.md)
+2. [docs/hardware/parts_list.md](docs/hardware/parts_list.md)
+3. [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md)
+4. [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf)
+5. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+6. [models/README.md](models/README.md)
 
 ## Note
 

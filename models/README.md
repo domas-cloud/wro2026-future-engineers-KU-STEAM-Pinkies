@@ -2,11 +2,15 @@
 
 This folder stores exported models for the steering mechanism and related parts.
 
-## Files
+## What Is Stored Here
 
-- `linkage.stl`
-- `middle gear_.stl`
-- `side gear.stl`
+This folder contains the exported STL files and related fabrication assets used to document the custom parts of the robot.
+
+The exact file set may evolve during development, but the purpose stays the same:
+
+- steering-related geometry;
+- supporting structural parts;
+- fabrication evidence for reproducibility.
 
 ## Purpose
 
@@ -17,8 +21,8 @@ If the geometry changes, update the related design documents as well so the text
 
 For another team, these files are not standalone instructions. They should be used together with:
 
-- `docs/design/drivetrain_and_steering.md`
-- `docs/design/chassis_design_improved.md`
-- `docs/reproducibility/evidence_map.md`
+- [docs/design/drivetrain_and_steering.md](../docs/design/drivetrain_and_steering.md)
+- [docs/design/chassis_design_improved.md](../docs/design/chassis_design_improved.md)
+- [docs/reproducibility/evidence_map.md](../docs/reproducibility/evidence_map.md)
 
 The STL files are evidence of the steering-part geometry, while the design documents explain why those parts exist and how they fit the final steering concept.

@@ -5,7 +5,7 @@ The software is easiest to understand as two layers:
 - a perception layer on the `Raspberry Pi Zero`;
 - a low-level control layer on the `ESP32`.
 
-The code included directly in this repository shows the `ESP32` side most clearly.
+The repository now documents both the `ESP32` runtime and the Pi-side perception interface, with the `ESP32` remaining the clearest view of the real-time controller.
 
 ## What The `ESP32` Controller Does
 
@@ -75,6 +75,11 @@ The `ESP32` still does the real-time part:
 - steering calculation;
 - hard-turn execution;
 - final actuation.
+
+The Pi-side interface is documented in:
+
+- `src/pi-zero/protocol.md`
+- `docs/code/vision_interface.md`
 
 ## Data Flow
 

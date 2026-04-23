@@ -60,7 +60,7 @@ The code already includes these practical protections:
 - halt on startup if a critical sensor fails;
 - limited side-distance correction window;
 - constrained servo output;
-- stop and restart after the finish condition.
+- stop and return to idle after the finish condition.
 
 ## Camera-Layer Safety
 

@@ -93,7 +93,7 @@ The robot was developed as one system, not as a collection of separate parts. Du
     <td align="center"><strong>Electronics Structure</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/design/images/steering-v1.jpg" alt="Final steering geometry" width="300"></td>
+    <td align="center"><img src="docs/design/images/steering-v1.png" alt="Final steering geometry" width="300"></td>
     <td align="center"><img src="docs/design/images/lego-differential.png" alt="LEGO differential" width="300"></td>
     <td align="center"><img src="schemes/images/schematic-overview.png" alt="Main schematic overview" width="300"></td>
   </tr>
@@ -151,7 +151,7 @@ The `ESP32` remains responsible for:
 - generating steering and motor output;
 - executing the real-time control loop.
 
-This is why some hardware documents describe a broader `Pi Zero + camera + ESP32` system while the published code shows mainly the `ESP32` side.
+This is why the repository documents both the low-level `ESP32` controller and the Pi-side perception architecture, with the `ESP32` still holding the real-time control responsibility.
 
 ## System Modules
 
@@ -232,6 +232,7 @@ The main software pieces are:
 - `src/lib/Engine/Engine.h` - motor control wrapper
 - `src/lib/Lights/` - status lights
 - `src/platformio.ini` - PlatformIO project configuration
+- `docs/code/vision_interface.md` - Pi-to-ESP32 interface definition
 
 Together, these files show how the code is split into sensing, control, and actuation responsibilities.
 
@@ -345,7 +346,7 @@ If you want the broader documentation map instead of a reading order, open [docs
     <td align="center"><strong>Official Team Photo</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="t-photos/oficial.jpg" alt="Official team photo" width="720"></td>
+    <td align="center"><img src="t-photos/team.jpg" alt="Official team photo" width="720"></td>
   </tr>
 </table>
 

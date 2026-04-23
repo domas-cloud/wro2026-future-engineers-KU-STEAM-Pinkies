@@ -67,15 +67,14 @@ Once the controller decides to turn, it:
 
 This keeps the corner logic separate from the straight-line regulation.
 
-## One Honest Note About The Current Code
+## Current Side-Correction Logic
 
-The code comment suggests that the right sensor should be used in one branch of the wall correction, but the current implementation still uses the left sensor in both branches of `outerDistance`.
+The current controller uses:
 
-So the navigation logic is best described honestly as:
+- `leftDistance` when the robot is turning clockwise;
+- `rightDistance` when the robot is turning counterclockwise.
 
-- front sensor for turn timing;
-- heading hold from the compass;
-- left-wall-based correction in the current implementation.
+That keeps the wall-correction term aligned with the outer side of the sector instead of hard-coding one sensor for both directions.
 
 ## Run Completion
 
@@ -85,3 +84,4 @@ The run ends when:
 - and the steering error has settled near center again.
 
 At that point the controller stops and restarts.
+At that point the controller stops, centers the steering, and waits for the next start command.
