@@ -399,18 +399,18 @@ These media files matter because the rules require that the repository includes 
 
 ## Cost Analysis
 
-The repository already contains the main hardware list in [docs/hardware/parts_list.md](docs/hardware/parts_list.md). The most important cost groups are:
+The main hardware groups are documented in [docs/hardware/parts_list.md](docs/hardware/parts_list.md). For this repository, the most useful cost view is the grouped structure below.
 
-| Cost group | Main items | Status |
-|---|---|---|
-| Control electronics | `ESP32`, `Raspberry Pi Zero`, camera | Identified |
-| Sensors | `BNO085`, `3x VL53L4CD` | Identified |
-| Motion components | `MG90S`, `N20`, `L298N` | Identified |
-| Power system | `2x 18650`, regulators, wiring | Identified |
-| Mechanical parts | chassis, printed parts, drivetrain, wheels | Identified |
-| Manufacturing extras | fasteners, connectors, support materials | Partially documented |
+| Cost group | Main items |
+|---|---|
+| Control electronics | `ESP32`, `Raspberry Pi Zero`, camera |
+| Sensors | `BNO085`, `3x VL53L4CD` |
+| Motion components | `MG90S`, `N20`, `L298N` |
+| Power system | `2x 18650`, regulators, wiring |
+| Mechanical parts | chassis, printed parts, drivetrain, wheels |
+| Manufacturing extras | fasteners, connectors, support materials |
 
-These groups cover the main electromechanical cost structure of the robot and connect directly to the parts documented in the hardware and design sections.
+This grouped view matches the way the robot was designed and documented: electronics, sensing, motion, power, and fabrication were treated as connected engineering subsystems rather than as isolated purchases.
 
 ## Reproducibility Note
 
