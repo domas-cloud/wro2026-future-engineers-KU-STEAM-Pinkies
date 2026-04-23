@@ -12,7 +12,7 @@ Our track testing was not only a final demonstration stage. It was the place whe
 - repeatability across multiple runs;
 - `MG90S` return-to-center behavior;
 - repeatable acceleration from the `N20` and `L298N`;
-- useful readings from the 2 `VL53L4CD` distance sensors near obstacles and reflective surfaces;
+- useful readings from the distance sensors near obstacles and reflective surfaces;
 - the effect of the `BNO085` on heading stability after several turns.
 
 ## Core Track-Test Scenarios

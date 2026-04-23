@@ -1,221 +1,120 @@
 # Engineering Decisions
 
-## Purpose of This Section
+These were the main trade-offs that shaped the final robot.
 
-This section explains not only what we built, but **why we built it this way**.
+## The Main Idea
 
-During the season, many of our most important improvements came from choosing between competing priorities. In other words, our robot was shaped by engineering trade-offs, not by random part selection.
+During development, the best solution was usually not the most powerful or the most complex one. The best solution was the one that made the robot more stable, more repeatable, and easier to control on the field.
 
-## Main Mechanical Trade-off
+## 1. Steering Angle Versus Stability
 
-The biggest mechanical trade-off in our robot was:
+At first, a larger steering angle looked attractive because it suggested tighter turns. In practice, too much steering angle made the robot less stable.
 
-**steering angle vs stability**
+So even though the servo itself could rotate further, we limited the useful steering range to about `60` degrees on the robot.
 
-At first, a larger steering angle seemed attractive because it suggested sharper turning. However, in practice we found that increasing the steering range too much made the robot less stable.
+This was one of the clearest lessons of the season: the maximum possible movement was not the best movement.
 
-For this reason, although the servo itself could rotate about **90 degrees**, we limited the robot to about **60 degrees** of usable steering angle.
+## 2. Smaller Robot Instead Of A Larger One
 
-This was an important decision because it shows a key engineering principle:  
-**maximum movement is not always the best movement**.
+Our previous robot was larger and mechanically more complicated. It taught us an important lesson: when the whole system becomes too complex, it becomes harder to make the robot stable and repeatable.
 
-## Decision 1: Smaller Robot Instead of Larger Robot
+That is why we chose a smaller final robot, about:
 
-Our previous robot was larger and used a more complicated engineering solution, including a stronger motor and gearbox.
+- `21 cm` long
+- `10 cm` wide
+- `8 cm` high
 
-This previous robot came from our earlier competition work, and it taught us an important lesson: when the whole system becomes too complex, it becomes harder to make the robot stable and repeatable on the field.
+The smaller robot was easier to package, easier to turn, and easier to control.
 
-At first glance, that older robot looked powerful and advanced. However, in practice it had important disadvantages:
+## 3. The `600 rpm` Motor Instead Of Extreme Options
 
-- it was harder to turn,
-- the engineering solution was more complicated,
-- and it was less practical for the final driving behaviour we wanted.
+We tested three N20 motor options:
 
-So one of our key lessons from the previous year's robot was that we should make the new robot simpler instead of trying to make every subsystem more complex.
+- `300 rpm`
+- `600 rpm`
+- `1000 rpm`
 
-We therefore chose a smaller final robot with dimensions of approximately:
+The `300 rpm` option was too slow. The `1000 rpm` option did not give enough torque. The `600 rpm` motor gave the best balance between speed and usable torque, so that became the final choice.
 
-- **21 cm length**
-- **10 cm width**
-- **8 cm height**
+## 4. Differential As A Required Part
 
-### Why this was the better choice
+From earlier work, we already knew that a differential was not optional for this kind of robot.
 
-The smaller robot gave us several practical benefits:
+Without a good differential, the robot became:
 
-- it could turn more easily,
-- it better matched our parking goals,
-- and it allowed a simpler and more controllable mechanical design.
+- harder to turn;
+- less smooth in corners;
+- less predictable.
 
-### Engineering conclusion
+We also compared a metal differential with the final `LEGO` differential. The `LEGO` version was more reliable and gave smoother, more repeatable cornering in practice.
 
-We chose the smaller robot because it gave a better balance of turning ability, controllability, and suitability for the challenge.
+## 5. Fixing Steering Geometry Instead Of Buying A Stronger Servo
 
-In other words, experience from the previous robot taught us that **simpler engineering gave a better competition robot**.
+We used an `MG90S` servo. A stronger servo was possible, but that would have treated the symptom instead of the cause.
 
-## Decision 2: Middle Motor Option Instead of Extreme Motor Options
+The real problem in steering `Version 1` was geometry. A holder and screw arrangement created a large force arm, so the servo had to work much harder than it should.
 
-We tested three N20 motors:
+In `Version 2`, we removed that force arm. The wheels turned more directly, the mechanism became lighter to move, and the servo could do its job much more easily.
 
-- **300 rpm**
-- **600 rpm**
-- **1000 rpm**
+So the right fix was not "buy a stronger servo". The right fix was to improve the mechanical geometry first.
 
-### Why 300 rpm was rejected
+## 6. Front Grip Was More Important Than Matching Wheel Types
 
-The 300 rpm motor was too slow and did not satisfy our speed expectations.
+We intentionally used different wheel strategies on the front and rear axles.
 
-### Why 1000 rpm was rejected
+At the front, the main goal was steering grip. Earlier front wheels could slip, which reduced the real effect of the steering command. After switching to silicone front wheels:
 
-The 1000 rpm motor did not provide enough torque.
+- front slip decreased;
+- useful steering effect increased;
+- turning became more effective.
 
-### Why 600 rpm was selected
+The lesson here was simple: wheel choice should match the job of the axle.
 
-The 600 rpm motor provided the best balance between:
+## 7. Precision Was More Valuable Than Complexity
 
-- usable speed,
-- and enough torque.
+Several final decisions followed the same pattern:
 
-### Engineering conclusion
+- we moved from a larger robot to a smaller one;
+- we rejected the weakest and fastest motor extremes;
+- we limited steering angle;
+- we improved steering geometry instead of increasing servo power;
+- we changed to a better differential;
+- we improved front-wheel grip.
 
-We did not choose the fastest motor or the slowest motor. We chose the one that gave the best total result.
+All of these choices favored precision and repeatability over complexity.
 
-## Decision 3: Differential as a Must-Have Element
+## How We Compared Versions
 
-From earlier experience, we already knew that integrating a differential was essential.
+We compared versions through practical testing, not only by looking at parts on the table.
 
-Without a good differential solution, the robot became:
+The main checks were:
 
-- harder to turn,
-- less controlled,
-- and less smooth in corners.
+- how much space the robot needed to complete a `90` degree turn;
+- how much it drifted over a `3 m` straight drive.
 
-In the final robot, after changing from a metal differential to a **LEGO differential**, the drivetrain became:
+We performed about `10` test runs while comparing versions. The change from steering `V1` to `V2` produced the clearest improvement.
 
-- more precise,
-- less likely to jam,
-- and more repeatable.
-
-### Engineering conclusion
-
-The differential was not just an extra part. It was a required element for predictable turning behaviour.
-
-## Decision 4: Improving the Steering Mechanics Instead of Using a Stronger Servo
-
-We used an **MG90S servo**.
-
-A stronger servo would have been possible, but it would also have required more energy. Instead of solving the problem by increasing actuator size, we reduced the mechanical resistance of the steering system.
-
-This was especially important after we saw the weakness of steering **Version 1**.
-
-### Why V1 steering was rejected
-
-In Version 1, a holder was attached to the side of the gear, and a screw extended from that holder to support the wheel. This created a **large force arm**.
-
-As a result:
-
-- the servo had to work much harder,
-- steering was less efficient,
-- and the system was mechanically worse than it looked in theory.
-
-### Why V2 steering was better
-
-In Version 2, we removed that large force arm. The wheels rotated more directly in place.
-
-This gave a major practical benefit:
-
-- the servo could turn the wheels much more easily.
-
-### Engineering conclusion
-
-The correct decision was not “buy a stronger servo”. The correct decision was **fix the mechanical geometry first**.
-
-## Decision 5: Front Grip Was More Important Than Using the Same Wheels Everywhere
-
-We intentionally chose different wheel strategies for different axles.
-
-### Front axle goal
-
-At the front, the priority was steering grip.
-
-Earlier front wheels could slip, which reduced the real effect of the steering command.
-
-### Final choice
-
-We switched to **silicone front wheels**.
-
-After this change:
-
-- the front wheels stopped slipping,
-- the robot could use larger useful steering angles,
-- and turning became more effective.
-
-### Engineering conclusion
-
-Wheel choice should match the function of the axle. The steering axle needed grip more than the drive axle needed matching wheel type.
-
-## Decision 6: Better Precision Over More Complexity
-
-One of our repeated lessons during development was that **precision and repeatability mattered more than complexity**.
-
-This was visible in several decisions:
-
-- moving from the larger complicated robot to the smaller one,
-- rejecting steering V1,
-- limiting steering angle,
-- choosing the 600 rpm motor instead of the extreme options,
-- and replacing the differential with a LEGO differential.
-
-All of these decisions followed the same engineering idea:
-
-> choose the solution that performs better in real runs, not the one that only looks better on paper.
-
-## Testing-Based Decision Making
-
-We compared mechanical versions through practical testing.
-
-The most important criteria were:
-
-- how much area the robot needed to complete a 90-degree turn,
-- and how much it drifted over a 3-meter straight drive.
-
-We performed approximately **10 test runs** when comparing versions.
-
-The most important result from these tests was that the change from **steering V1 to V2** gave the biggest improvement.
-
-## Risk and Failure Thinking
-
-Several of our decisions were made because we identified practical risks in the earlier versions.
+## Main Risks And How We Answered Them
 
 | Risk / weakness | Effect on robot | Mitigation |
-|-----------------|----------------|------------|
-| Large steering lever arm | Servo overload, inefficient steering | Redesigned steering geometry in V2 |
-| Too much steering angle | Less stable behaviour | Limited steering range to ~60° |
-| Front wheel slipping | Weak real steering effect | Switched to silicone front wheels |
-| Unsuitable differential behaviour | Less precise turning, more binding | Switched to LEGO differential |
-| Extreme motor selection | Too slow or not enough torque | Selected 600 rpm N20 |
+| --- | --- | --- |
+| Large steering lever arm | servo overload, weak steering efficiency | redesigned steering geometry in `V2` |
+| Too much steering angle | unstable behavior | limited steering range to about `60` degrees |
+| Front wheel slip | weak real steering effect | switched to silicone front wheels |
+| Poor differential behavior | rougher, less precise turning | switched to `LEGO` differential |
+| Extreme motor choice | too slow or not enough torque | selected `600 rpm` N20 |
 
-## Final Engineering Summary
+## Final Summary
 
-The final robot is the result of repeated trade-off decisions.
+The final robot is the result of repeated trade-offs, not one big idea.
 
 The most important ones were:
 
-- **smaller chassis instead of larger complex chassis**,
-- **balanced motor instead of extreme motor**,
-- **usable steering range instead of maximum steering range**,
-- **better steering geometry instead of stronger servo**,
-- **high front-wheel grip instead of slipping wheels**,
-- **LEGO differential instead of a less suitable differential solution**.
+- smaller chassis instead of a larger, heavier one;
+- balanced motor instead of an extreme option;
+- useful steering range instead of maximum steering range;
+- better geometry instead of a stronger servo;
+- more front grip instead of matching wheel type everywhere;
+- a better differential instead of a less reliable one.
 
-## Final Conclusion
-
-Our engineering process showed that the best robot was not the one with the most aggressive specifications. It was the one with the best practical balance.
-
-The final design was selected because it was:
-
-- easier to control,
-- more precise in turning,
-- more stable in straight driving,
-- less mechanically resistant,
-- and more suitable for real competition performance.
+In the end, the final design was chosen because it was easier to control, more repeatable, and more suitable for real competition driving.

@@ -82,9 +82,9 @@ The 600 rpm motor worked best because it balanced speed and torque. The LEGO dif
 
 Software performance depended on mechanical quality.
 
-For example, PD-based navigation works best when the robot responds predictably to steering commands. If the mechanics introduce slipping, sticking, or asymmetry, then the controller has to fight unstable behaviour.
+For example, sensor-regulated navigation works best when the robot responds predictably to steering commands. If the mechanics introduce slipping, sticking, or asymmetry, then the controller has to fight unstable behaviour.
 
-This means software quality depended partly on:
+So software quality depended partly on:
 
 - steering smoothness,
 - wheel grip,
@@ -120,7 +120,7 @@ During development, the most important constraints were:
 
 Most of our design decisions came from balancing these constraints against each other.
 
-## Judge-Facing Systems Summary
+## System Summary
 
 If we had to summarize the robot as one engineering system, the key relationships are:
 

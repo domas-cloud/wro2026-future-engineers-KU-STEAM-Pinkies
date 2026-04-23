@@ -8,7 +8,7 @@
   -> L298N H-bridge -> N20 drive motor
   -> regulated logic rail -> ESP32
   -> regulated logic rail -> Raspberry Pi Zero
--> regulated sensor rail -> BNO085 + 2x distance sensors
+  -> regulated sensor rail -> BNO085 + distance sensors
   -> steering supply rail -> MG90S
 ```
 
@@ -16,7 +16,7 @@
 
 - `motor domain`: battery -> `L298N` -> `N20`, the highest-current branch;
 - `logic domain`: regulated rail for the `ESP32` and `Raspberry Pi Zero`;
-- `sensor domain`: the `BNO085` and 2 distance sensor modules on a separate clean logic rail;
+- `sensor domain`: the `BNO085` and distance sensor modules on a clean logic rail;
 - `servo domain`: the `MG90S` on a separate branch that can handle steering-current spikes.
 
 ## Grounding Strategy
@@ -28,36 +28,36 @@
 
 ## Signal Paths
 
-- the `Raspberry Pi Zero` handles camera capture only;
-- the `Raspberry Pi Zero` forwards camera data to the `ESP32`;
-- the `ESP32` performs the calculations and generates behavior or steering decisions;
+- the `Raspberry Pi Zero` handles camera capture and higher-level perception;
+- the `ESP32` reads the `BNO085` and distance sensors for real-time control;
+- the `ESP32` performs the low-level control calculations and generates steering decisions;
 - the `ESP32` drives the `MG90S` steering servo with PWM;
 - the `ESP32` controls the `L298N` input pins for the `N20` drive motor;
-- the `BNO085` and 2 distance sensor modules communicate through their sensor bus, typically I2C on the `ESP32`.
+- the sensors communicate through the controller sensor bus, typically I2C on the `ESP32`.
 
 ## Control Responsibilities
 
-- the Pi Zero is responsible only for camera capture;
 - the `ESP32` is responsible for state evaluation, decision selection, real-time output generation, PWM, and drive enable;
+- the `Raspberry Pi Zero` is responsible for the camera-side perception layer;
 - the battery and regulators provide power, but do not perform any control logic;
-- the scheme should clearly show which board generates each control signal.
+- the scheme should clearly show which subsystem generates each control signal.
 
 ## Connection Table
 
 | Subsystem | Connection Type | Notes |
 | --- | --- | --- |
-| Pi Zero camera | CSI / camera interface | Camera capture only |
-| Pi Zero to ESP32 | Camera data link | Carries frames or camera observations |
-| BNO085 | I2C | Must be mounted rigidly and calibrated |
-| 2x distance sensors | I2C | Placement must match obstacle coverage |
+| Pi Zero camera | CSI / camera interface | Camera capture and perception input |
+| Pi Zero to `ESP32` | Data link | Carries higher-level perception results |
+| `BNO085` | I2C | Must be mounted rigidly and calibrated |
+| `front`, `left`, `right` distance sensors | I2C + shutdown control | Published `ESP32` code uses three modules for local coverage |
+| `ESP32` to `MG90S` | PWM | Steering output |
+| `ESP32` to `L298N` | Digital control + enable/PWM | Drive direction and speed |
+| battery to `L298N` | Power input | Motor current path |
+| battery to regulators | Power input | Logic and sensor rails |
 
 ## Consistency Note
 
-The schematic PDF included in this folder labels the distance sensors as `VL53L4CD`. Some other repository files still use older `VL53L5CX` wording. This overview keeps the wording generic where the exact hardware name is not necessary.
-| ESP32 to MG90S | PWM | Steering output |
-| ESP32 to L298N | Digital control + enable/PWM | Drive direction and speed |
-| Battery to L298N | Power input | Motor current path |
-| Battery to regulators | Power input | Logic and sensor rails |
+The schematic PDF shows the full electrical layout of the robot. `src/src/main.cpp` is the easiest place to confirm the low-level `ESP32` controller behavior and the active three-sensor setup.
 
 ## Notes For The Final Schematic
 
@@ -73,4 +73,4 @@ The current repository already includes a schematic export:
 - [Custom Electronics Schematic PDF](Wro_customPCBs.pdf)
 - [Custom Electronics Schematic Description](custom_pcb_description.md)
 
-This file shows the exact board-level structure for the current robot electronics and should be used together with this overview page.
+Use this overview together with those files and with the controller code under `src/`.

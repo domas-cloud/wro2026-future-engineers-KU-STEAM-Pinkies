@@ -1,78 +1,82 @@
 # Custom Electronics Schematic Description
 
-This page explains the provided `Wro_customPCBs.pdf` schematic in plain engineering language.
+This file explains what is shown in `Wro_customPCBs.pdf` in plain engineering language.
 
-The PDF was drawn in KiCad and documents the electronics that are used in our robot even though the real assembly is soldered on a perfboard rather than manufactured as a custom PCB. The purpose of the schematic is therefore reproducibility: it shows how power is split, which board controls which subsystem, and how the main modules are connected.
+Even though the robot is assembled on perfboard, the schematic is still useful because it shows the electrical structure clearly: power branches, board roles, sensors, actuators, and the links between them.
 
-## What The Schematic Contains
+## Main Blocks In The Schematic
 
-The drawing shows these main electronic blocks:
+The drawing includes:
 
-- `ESP32-WROOM-32` as the main control board;
-- `Raspberry Pi Zero` as the camera-side computing board;
+- `ESP32-WROOM-32` as the low-level control board;
+- `Raspberry Pi Zero` as the camera-side board;
 - `BNO085` IMU;
-- two `VL53L4CD` distance sensor modules, marked as `FRONT` and `SIDE`;
-- `L298N` full motor-driver board;
-- steering servo motor;
+- `VL53L4CD` distance sensing;
+- `L298N` motor driver;
+- steering servo;
 - DC drive motor;
-- 2-cell `18650` battery supply and step-down power conversion.
+- 2-cell `18650` battery supply and step-down regulation.
 
-## Power Architecture
+## What The Code Confirms
 
-The schematic shows a battery input of about `7.5 V` coming directly from two `18650` cells. From this source, the system is split into separate power branches:
+The controller code in `src/src/main.cpp` makes a few things very clear:
 
-- raw battery voltage goes to the `L298N` motor driver for the DC drive motor;
-- a regulated `5 V` rail feeds the `ESP32`;
-- the sensor modules are also supplied from `5 V` because their breakout boards include their own local regulation;
-- logic communication still operates at `3.3 V` on the sensor side.
+- the `ESP32` runs the low-level control loop;
+- it reads front, left, and right distance sensors;
+- it reads yaw from the `BNO085`;
+- it drives the servo and motor output.
 
-This is important because it documents that the robot was not wired as one uncontrolled battery rail. The motor path and the logic path were separated on purpose.
+So the schematic should be read together with the code: the PDF shows the full electrical layout, while `main.cpp` shows the control side directly.
 
-## Control Responsibilities
+## Power Structure
 
-The schematic confirms the system split used across the rest of the documentation:
+The battery pack feeds several branches:
 
-- the `Raspberry Pi Zero` is the companion compute board;
-- the `ESP32` is the real-time control board;
+- raw battery voltage to the `L298N` and drive motor;
+- regulated `5 V` for the `ESP32`;
+- regulated `5 V` for the `Raspberry Pi Zero`;
+- regulated power for the sensing hardware.
+
+That separation matters because the motor path and the logic path do not behave the same electrically.
+
+## Board Responsibilities
+
+The intended split is straightforward:
+
+- the `Raspberry Pi Zero` handles camera-side perception;
+- the `ESP32` handles real-time control;
 - the `ESP32` reads the IMU and distance sensors;
-- the `ESP32` drives the steering servo and the motor driver;
-- the `Raspberry Pi Zero` is kept separate from the motor-control wiring.
+- the `ESP32` drives the steering servo and the motor driver.
 
-## Sensor Bus Layout
+## Sensor Bus
 
-The `BNO085` and both distance sensors are connected to the same `SDA` and `SCL` buses. The schematic also shows separate shutdown or enable handling for the distance modules through `GPIO4` and `GPIO5`, which matches the idea of powering up the sensors one by one and assigning unique I2C addresses in software.
+The `BNO085` and distance sensors share the main sensor bus. The distance sensors also use separate shutdown lines so identical modules can be started one by one and assigned different addresses.
 
-In practice, this bus structure supports:
+That is one of the most practical details in the whole design, because without it the three ToF sensors would conflict on the bus.
 
-- one shared I2C-style sensor bus;
-- individual startup control for the two distance sensors;
-- compact wiring from the sensor area back to the `ESP32`.
+## Actuation Path
 
-## Actuator And Motor Path
+The actuator side is split into two very different outputs:
 
-The actuator side is separated into two different outputs:
+- PWM steering control from the `ESP32` to the servo;
+- drive-control signals from the `ESP32` to the `L298N`, then to the motor.
 
-- a PWM steering output from the `ESP32` to the servo motor;
-- drive-control signals from the `ESP32` to the `L298N`, then from the `L298N` to the DC motor.
+This is why the schematic should not be read as a random wiring map. It reflects the fact that steering and drive actuation need different handling.
 
-This matters because the steering and drive systems do not behave the same electrically. The servo is a position-controlled actuator, while the DC motor needs a dedicated H-bridge path.
+## Why The Schematic Matters
 
-## Why This Schematic Helps The Documentation
+The PDF helps for three reasons:
 
-The PDF is useful for judges and rebuilders because it shows more than a component list. It shows:
+- it shows the planned electrical structure in one place;
+- it makes the power and signal layout easier to follow than a photo alone;
+- it gives another team a realistic starting point for rebuilding the system.
 
-- how the robot is powered;
-- which board is responsible for sensing and control;
-- how the sensors share the communication bus;
-- how the drive motor is isolated behind a motor-driver board;
-- that the real robot electronics were planned as a system, even though the final implementation uses perfboard.
+## Practical Rebuild Notes
 
-## Rebuild Notes Based On The Drawing
+If another team wanted to follow this layout, the most important points would be:
 
-If another team uses this schematic as a rebuild reference, the most important practical points are:
-
-1. keep the battery-to-motor path separate from the sensitive logic and sensor wiring;
-2. feed the `ESP32` and sensor boards from regulated power, not directly from the battery pack;
-3. use the sensor shutdown lines so identical distance modules can be initialized one by one;
-4. keep one common ground between the `ESP32`, `Raspberry Pi Zero`, sensors, servo, and motor driver;
-5. treat the PDF as the electrical reference, while the perfboard layout is the physical implementation.
+1. keep the motor-current path away from logic and sensor wiring;
+2. use regulated power for the control and perception boards;
+3. initialize identical ToF sensors one by one;
+4. keep a common ground across the whole system;
+5. treat the PDF as the electrical reference and the perfboard as the physical implementation.

@@ -1,12 +1,12 @@
 # Performance Measurements
 
-This section records the metrics we used to compare different versions of the robot.
+This section records the metrics we used while comparing different versions of the robot.
 
-The project does not yet include a full bench-measurement dataset, so this file separates three kinds of evidence:
+We did not build a full laboratory-style dataset. Instead, we kept the measurements that were actually useful during development:
 
-- direct observations repeated across multiple runs;
-- structured comparisons between older and newer versions;
-- numerical checks that were simple enough to matter during development.
+- repeated observations across several runs;
+- direct comparisons between older and newer versions;
+- a few simple numerical checks that helped us decide what to keep.
 
 ## Main Metrics We Used
 
@@ -18,9 +18,9 @@ The project does not yet include a full bench-measurement dataset, so this file 
 | left-right symmetry | compare left and right turn response under similar steering commands | asymmetric steering makes path-following inconsistent |
 | repeated-run consistency | repeat the same run pattern several times | WRO rewards repeatability, not one lucky result |
 
-## Evidence Type Used In This Repository
+## Evidence Types We Used
 
-We intentionally keep the evidence honest. For that reason, our current repository uses these evidence levels:
+To keep the measurements honest, we used these evidence levels:
 
 | Evidence type | What it means |
 | --- | --- |
@@ -34,7 +34,7 @@ The current engineering conclusions supported by repeated testing are:
 
 - after the steering-geometry correction, the servo worked with less load and the center position remained more stable;
 - keeping the differential reduced slip and turning resistance in corners;
-- the 2 `VL53L4CD` modules were sufficient for short-range confirmation when camera information alone was not enough;
+- the 3 `VL53L4CD` modules gave enough short-range information for front and side control;
 - a more rigidly mounted `BNO085` improved heading-stability estimation;
 - the `600 rpm` motor gave a better balance than the slower and faster alternatives.
 
@@ -68,7 +68,7 @@ If more time remains before final submission, the strongest additions would be:
 
 ## Engineering Conclusion
 
-Even without a large numeric dataset, the current measurement structure already supports the main design decisions in the repository:
+Even without a large numeric dataset, these measurements still support the main design decisions:
 
 - steering geometry correction reduced servo load and improved center repeatability;
 - the `LEGO` differential reduced cornering resistance;

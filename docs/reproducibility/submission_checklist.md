@@ -1,12 +1,10 @@
 # Final Submission Checklist
 
-This page is a final repository-quality checklist for WRO submission.
+Use this checklist before the final WRO submission.
 
-Its purpose is to reduce ambiguity and help us confirm that the repository is not only complete, but also easy for judges to evaluate.
+## Entry Path
 
-## Repository Entry Path
-
-Confirm that these files are present and readable:
+Make sure these files are present and easy to read:
 
 - `README.md`
 - `START_HERE.md`
@@ -20,8 +18,8 @@ Confirm that the repository includes:
 - electronics overview and wiring explanation
 - at least one schematic file
 - parts list
-- CAD or STL evidence for custom parts
-- embedded controller project README
+- CAD or STL files for custom parts
+- embedded controller README
 
 Main files:
 
@@ -34,11 +32,11 @@ Main files:
 
 ## Visual Submission Evidence
 
-Confirm that these are present and final:
+Confirm that these are final:
 
 - team photo folder
 - robot photo folder
-- final video link file
+- video link file
 
 Main files:
 
@@ -46,42 +44,27 @@ Main files:
 - `v-photos/README.md`
 - `video/video.md`
 
-Rules-based final evidence check:
+Checks:
 
 1. `t-photos/` contains at least one clear final team photo
-2. `v-photos/` contains robot photos from front, rear, left, right, top, and bottom
+2. `v-photos/` contains front, rear, left, right, top, and bottom views
 3. `video/video.md` contains the final public or accessible-by-link YouTube URL
-4. the autonomous driving part shown in video is at least 30 seconds long
-5. if separate challenge videos are required by the event, both links are clearly provided
+4. the autonomous driving segment is at least 30 seconds long
 
-## GitHub Timing And History Check
+## Repository Quality
 
-Before final submission, verify:
+Before submission, verify:
 
 1. the repository is public
-2. the repository will remain public for at least 12 months after the event
-3. the commit history includes the required milestone commits before the competition
-4. the important commits have meaningful messages, not only generic placeholders
-5. the README reflects the actual final robot state at the evaluation deadline
-
-## Judge-Facing Quality Check
-
-Before final submission, verify:
-
-1. a judge can understand where to start in less than one minute
-2. a judge can find files for each rubric criterion without searching blindly
-3. final hardware names are consistent across the main documentation
-4. older files do not look like the primary submission path
-5. links between major files still work
+2. the README matches the final robot state
+3. hardware names are consistent across the main documents
+4. major links still work
+5. a judge can understand where to start in less than one minute
 
 ## Honest Scope Check
 
-Before final submission, verify that:
+Before submission, verify that:
 
 1. the repository does not claim evidence that is missing
-2. measured values are only stated where we really observed them
-3. diagrams, CAD, and text describe the same final robot version
-
-## Final Goal
-
-If this checklist can be answered with yes, the repository is much closer to a strong `Criterion 5` score because it becomes easier to navigate, easier to trust, and easier to reproduce.
+2. measurements are only stated where they were really observed
+3. diagrams, CAD, photos, and text describe the same final robot version

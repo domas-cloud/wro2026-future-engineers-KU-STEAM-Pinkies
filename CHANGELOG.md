@@ -10,7 +10,7 @@
 
 ## Notes
 
-Use this file to record future build and documentation milestones.
+Use this changelog to record future build and documentation milestones.
 
 ## 2026-04-19
 

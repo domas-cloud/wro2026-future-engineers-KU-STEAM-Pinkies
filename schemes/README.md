@@ -22,21 +22,21 @@ This page shows the main relationship between the `ESP32`, `Raspberry Pi Zero`, 
 
 ![Sensor bus detail](images/sensor-bus-detail.png)
 
-This view shows the `BNO085` and both `VL53L4CD` modules on the shared sensor bus, including the separate shutdown lines used for sensor startup control.
+This view shows the `BNO085` and the `VL53L4CD` sensor bus structure. In the published `ESP32` code, the visible sensing layout is `front`, `left`, and `right` distance sensing together with yaw feedback.
 
 ### Power Regulator Reference
 
 ![Power regulator reference](images/power-regulator-reference.jpg)
 
-This reference image shows the step-down converter used to reduce the `2x 18650` battery voltage to the regulated `5 V` logic supply for the computing electronics.
+This reference image shows the step-down converter used to reduce the `2x 18650` battery voltage to the regulated `5 V` logic supply for the computing and sensing electronics.
 
 ## What The Scheme Should Show
 
 - all electronic components;
 - all motors and actuators;
 - power rails and regulators;
-- signal connections between the `ESP32`, `Raspberry Pi Zero`, camera, `BNO085`, 2 distance sensor modules, `MG90S`, and the `N20` drive system.
+- signal connections between the `ESP32`, `Raspberry Pi Zero`, camera, `BNO085`, distance sensors, `MG90S`, and the `N20` drive system.
 
 ## How To Use It
 
-Start with the [Wiring Overview](wiring_overview.md) for the block-level map, then open the [Custom Electronics Schematic PDF](Wro_customPCBs.pdf) and the [Custom Electronics Schematic Description](custom_pcb_description.md) for the exact board-to-board wiring that is documented for this robot.
+Start with the [Wiring Overview](wiring_overview.md) for the block-level map, then open the [Custom Electronics Schematic PDF](Wro_customPCBs.pdf) and the [Custom Electronics Schematic Description](custom_pcb_description.md) for the board-to-board wiring that is documented for this robot.

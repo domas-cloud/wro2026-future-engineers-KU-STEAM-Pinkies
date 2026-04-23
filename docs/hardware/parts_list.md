@@ -3,10 +3,10 @@
 ## Main Electronics
 
 - `ESP32` for main control and the decision loop;
-- `Raspberry Pi Zero` for camera data processing;
+- `Raspberry Pi Zero` for camera-side perception;
+- camera module for scene interpretation;
 - `BNO085 9-DOF IMU` for orientation and motion stability;
-- 2 `VL53L4CD` distance sensors for short-range distance sensing and obstacle confirmation;
-- `OV5647 5Mpx wide-angle` camera (`Waveshare 14037`) for track and obstacle observation.
+- 3 `VL53L4CD` distance sensors for front and side distance sensing;
 
 ## Drive And Steering
 
@@ -24,7 +24,6 @@
 - separated motor power path through the `L298N`;
 - steering power branch sized for servo current spikes;
 - step-down voltage regulation;
-- regulated logic power rail;
 - power and signal wiring connections.
 
 ## Mechanics
