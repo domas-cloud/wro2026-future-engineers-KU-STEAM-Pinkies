@@ -25,8 +25,11 @@ If you only have a few minutes, read these files first:
 3. [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
 4. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
 5. [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
-6. [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md)
-7. [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
+6. [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md)
+7. [docs/testing/performance_measurements.md](docs/testing/performance_measurements.md)
+8. [docs/reproducibility/exact_rebuild_wiring_upload_start.md](docs/reproducibility/exact_rebuild_wiring_upload_start.md)
+9. [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md)
+10. [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
 
 ## Full Reading Order
 
@@ -54,6 +57,7 @@ If you want the full story of the robot, this order works well:
 
 ### 4. Software
 
+- [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md)
 - [docs/code/software_architecture_improved.md](docs/code/software_architecture_improved.md)
 - [docs/code/navigation_strategy_improved.md](docs/code/navigation_strategy_improved.md)
 - [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md)
@@ -76,8 +80,9 @@ If another team wanted the shortest rebuild-oriented path, we would suggest:
 2. [docs/hardware/parts_list.md](docs/hardware/parts_list.md)
 3. [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md)
 4. [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf)
-5. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
-6. [models/README.md](models/README.md)
+5. [docs/reproducibility/exact_rebuild_wiring_upload_start.md](docs/reproducibility/exact_rebuild_wiring_upload_start.md)
+6. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+7. [models/README.md](models/README.md)
 
 ## Note
 

@@ -38,6 +38,28 @@ The current engineering conclusions supported by repeated testing are:
 - a more rigidly mounted `BNO085` improved heading-stability estimation;
 - the `600 rpm` motor gave a better balance than the slower and faster alternatives.
 
+## Quantitative Tuning Summary
+
+This section turns the raw tables below into short before/after numbers that are easier for a judge to scan quickly.
+
+| Metric | Earlier version | Final version | Change |
+| --- | --- | --- | --- |
+| average 3 m drift | `10.6 cm` | `4.0 cm` | `6.6 cm` less drift, about `62%` improvement |
+| average 90-degree turn space | about `46 cm` | about `39 cm` | about `7 cm` less space, about `15%` tighter turn |
+| open straight clean-run rate | not kept as a matched before/after pair | `5/5` = `100%` | final validation result |
+| obstacle slalom clean-pass rate | not kept as a matched before/after pair | `4/5` = `80%` | final validation result |
+| full practice route completion rate | not kept as a matched before/after pair | `4/5` = `80%` | final validation result |
+
+## What We Measured Strictly
+
+The repository keeps strict numeric comparison data for:
+
+- `3 m` drift;
+- corner space needed for a `90` degree turn;
+- counted clean-run percentages on the final validation layouts.
+
+We also watched corner overshoot and post-obstacle recovery during testing, but those were kept as track-observation notes rather than as a full matched numeric dataset for every version. To stay honest, this repository does not invent exact overshoot numbers that were not logged consistently.
+
 ## Numeric Snapshot Tables
 
 ### 3 m Straight-Drive Drift
@@ -50,6 +72,12 @@ The current engineering conclusions supported by repeated testing are:
 | 4 | `4 cm` | `9 cm` |
 | 5 | `4 cm` | `11 cm` |
 
+Average result:
+
+- final robot average drift: `(4 + 5 + 3 + 4 + 4) / 5 = 4.0 cm`
+- earlier robot average drift: `(11 + 10 + 12 + 9 + 11) / 5 = 10.6 cm`
+- improvement: `6.6 cm` less drift over `3 m`, about `62%`
+
 ### Obstacle Layout Pass Rate
 
 | Layout | Runs | Clean passes | Notes |
@@ -58,12 +86,23 @@ The current engineering conclusions supported by repeated testing are:
 | obstacle slalom test | `5` | `4` | one late correction near the second obstacle |
 | full practice route | `5` | `4` | one run lost alignment after a tight corner |
 
+Percentage view:
+
+- open straight test: `5/5 = 100%`
+- obstacle slalom test: `4/5 = 80%`
+- full practice route: `4/5 = 80%`
+
 ### 90-Degree Turn Space
 
 | Version | Measured space needed | Notes |
 | --- | --- | --- |
 | early steering layout | about `46 cm` | higher scrub and wider correction |
 | final steering layout | about `39 cm` | lower resistance and cleaner exit |
+
+Average comparison:
+
+- turn-space reduction: about `7 cm`
+- relative improvement: about `15%`
 
 ## Comparison-Oriented Measurement Table
 

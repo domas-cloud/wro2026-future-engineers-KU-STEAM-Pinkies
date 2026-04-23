@@ -11,7 +11,7 @@ If you want the fastest route through the repository, use one of these paths:
 | Judge overview | [START_HERE.md](START_HERE.md) | [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md) |
 | Mechanical design | [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md) | [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md) |
 | Electronics and wiring | [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md) | [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md) |
-| Software and control | [docs/code/software_architecture_improved.md](docs/code/software_architecture_improved.md) | [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md) |
+| Software and control | [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md) | [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md) |
 | Rebuild path | [docs/hardware/parts_list.md](docs/hardware/parts_list.md) | [models/README.md](models/README.md) and [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf) |
 | Submission media | [t-photos/](t-photos/) | [v-photos/](v-photos/) and [video/video.md](video/video.md) |
 
@@ -135,8 +135,10 @@ The most direct evidence files are:
 - [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
 - [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
 - [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
+- [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md)
 - [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md)
 - [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
+- [docs/reproducibility/exact_rebuild_wiring_upload_start.md](docs/reproducibility/exact_rebuild_wiring_upload_start.md)
 
 ## What The Code Shows
 

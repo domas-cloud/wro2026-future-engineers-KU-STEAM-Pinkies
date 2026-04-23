@@ -102,6 +102,8 @@ The rule itself stays simple:
 
 ## State Diagram
 
+For the clearest single-picture judge view, see [Software State Machine And Obstacle Flow](software_state_machine_and_obstacle_flow.md).
+
 ```mermaid
 stateDiagram-v2
     [*] --> Idle
