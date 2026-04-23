@@ -5,6 +5,10 @@
 
 This file records the official driving-video references for the repository together with the validation checklist used before submission.
 
+## Video Links
+
+- Open Challenge: [https://www.youtube.com/watch?v=PdYDFbR_HfI](https://www.youtube.com/watch?v=PdYDFbR_HfI)
+
 ## Notes
 
 - track configuration: the final challenge setup used for the recording;

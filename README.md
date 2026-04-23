@@ -380,6 +380,10 @@ These photos are placed here as the fastest visual reference to the final robot 
 
 The official competition video references and validation notes are documented in [video/video.md](video/video.md).
 
+Current published link:
+
+- Open Challenge: [YouTube video](https://www.youtube.com/watch?v=PdYDFbR_HfI)
+
 The submission videos are intended to show:
 
 - autonomous driving without manual assistance;
