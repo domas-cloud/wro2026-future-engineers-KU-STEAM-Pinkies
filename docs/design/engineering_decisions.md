@@ -94,6 +94,21 @@ The main checks were:
 
 We performed about `10` test runs while comparing versions. The change from steering `V1` to `V2` produced the clearest improvement.
 
+## Trade-Off Summary
+
+| Decision | Option A | Option B | Chosen | Evidence |
+| --- | --- | --- | --- | --- |
+| Drive motor speed | `300 rpm` | `600 rpm` | `600 rpm` | `300 rpm` was too slow in long sections; `600 rpm` kept enough speed while remaining controllable |
+| Steering concept | complex custom steering | simplified low-friction steering | simplified steering | More repeatable, less friction, easier servo load |
+| Front wheel tires | low-grip wheels | silicone wheels | silicone wheels | Better corner hold and less random slip |
+| Sensor role | distance-only | fused distance + `IMU` + camera | fused | More robust against single-sensor error |
+
+We did not select parts only by availability.
+
+We compared alternatives and kept the solution that gave the best balance between speed, stability, and repeatability.
+
+In most cases, we preferred the option that reduced random behavior, even if it was not the fastest on a single run.
+
 ## Main Risks And How We Answered Them
 
 | Risk / weakness | Effect on robot | Mitigation |
@@ -103,6 +118,21 @@ We performed about `10` test runs while comparing versions. The change from stee
 | Front wheel slip | weak real steering effect | switched to silicone front wheels |
 | Poor differential behavior | rougher, less precise turning | switched to `LEGO` differential |
 | Extreme motor choice | too slow or not enough torque | selected `600 rpm` N20 |
+
+## Failure Modes, Mitigation, And Evidence
+
+| Failure mode | Cause | Mitigation | Result after fix |
+| --- | --- | --- | --- |
+| Robot drifts to one side | steering asymmetry / wheel grip difference | steering neutral recalibration + `PD` retune | straighter lane holding |
+| Servo jitter near center | friction + unstable small corrections | reduced mechanical resistance + deadband tuning | smoother steering |
+| False wall/obstacle reaction | noisy distance readings | filtering + confidence threshold | fewer unnecessary corrections |
+| Unstable heading after turn | aggressive exit correction | turn-exit damping | less oscillation after corners |
+
+We used this risk-based approach during iteration.
+
+Instead of only reacting to failures, we tried to identify likely failure points early and document how each change affected behavior.
+
+This helped us improve reproducibility and reduced random performance drops between runs.
 
 ## Final Summary
 

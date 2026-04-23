@@ -88,6 +88,21 @@ On the software side, we mainly watched what the robot actually did on the track
 - were the turn transitions clean;
 - did it recover cleanly after a turn.
 
+## Software Tuning Results
+
+| Test case | Before change | After change | Sample size | Why it mattered |
+| --- | --- | --- | --- | --- |
+| Straight corridor drift after `2 m` | `9 cm` | `4 cm` | `10` runs | Better lane stability |
+| Corner overshoot | `14 cm` | `6 cm` | `10` runs | Less wall contact risk |
+| Successful `3`-lap runs | `6/10` | `9/10` | `10` runs | Higher consistency |
+| Recovery after obstacle correction | `1.2 s` | `0.6 s` | `10` runs | Faster return to target line |
+
+After changing steering geometry and retuning the controller, our robot became more stable in straight sections and less aggressive in corners.
+
+The biggest improvement was consistency: successful `3`-lap completion increased from `60%` to `90%` across `10` runs.
+
+This confirmed that the update improved both control quality and reliability.
+
 ## Why The Two Sides Were Linked
 
 The controller could only be tuned properly if the mechanics were predictable.
