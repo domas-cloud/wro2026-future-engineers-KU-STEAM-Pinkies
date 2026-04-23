@@ -319,45 +319,13 @@ If you want the fastest overview, start here:
 
 ### Team Photos
 
-<table>
-  <tr>
-    <td align="center"><strong>Official Team Photo</strong></td>
-    <td align="center"><strong>Team Fun Photo</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="t-photos/oficial.jpg" alt="Official team photo" width="360"></td>
-    <td align="center"><img src="t-photos/funny.jpg" alt="Team fun photo" width="360"></td>
-  </tr>
-</table>
+![Official team photo](t-photos/oficial.jpg)
 
 ### Robot Photos
 
-<table>
-  <tr>
-    <td align="center"><strong>Front View</strong></td>
-    <td align="center"><strong>Back View</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="v-photos/front.jpg" alt="Robot front view" width="360"></td>
-    <td align="center"><img src="v-photos/back.jpg" alt="Robot back view" width="360"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Left View</strong></td>
-    <td align="center"><strong>Right View</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="v-photos/left.jpg" alt="Robot left view" width="360"></td>
-    <td align="center"><img src="v-photos/right.jpg" alt="Robot right view" width="360"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Top View</strong></td>
-    <td align="center"><strong>Bottom View</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="v-photos/top.jpg" alt="Robot top view" width="360"></td>
-    <td align="center"><img src="v-photos/bottom.jpg" alt="Robot bottom view" width="360"></td>
-  </tr>
-</table>
+The official robot submission photos are stored in [`v-photos/`](v-photos/).
+
+We keep those files in the repository for submission completeness, but we do not embed all of them directly here because some of them work better as documentation files than as front-page preview images.
 
 ## Video Submission
 
