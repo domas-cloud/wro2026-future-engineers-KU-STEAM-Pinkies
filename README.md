@@ -18,6 +18,7 @@ If you want the fastest route through the repository, use one of these paths:
 ## Table Of Contents
 
 - [Challenge Overview](#challenge-overview)
+- [Version Milestones](#version-milestones)
 - [Team](#team)
 - [Robot At A Glance](#robot-at-a-glance)
 - [Quick Visual Overview](#quick-visual-overview)
@@ -44,6 +45,18 @@ If you want the fastest route through the repository, use one of these paths:
 In WRO Future Engineers, the robot must drive autonomously, stay mechanically reliable, and show clear engineering reasoning across hardware, software, and testing.
 
 For our team, the central engineering problem was not only making the robot move, but making it move in a controlled and repeatable way despite steering friction, wheel grip changes, power variation, and sensor noise. Because of that, this repository documents the robot as one integrated system rather than as isolated components.
+
+## Version Milestones
+
+To make the development path easier to judge, we track a small set of repository milestones instead of only keeping undated edits.
+
+| Version | Status | Meaning |
+|---|---|---|
+| `v0.8` | regional-ready | Robot and documentation stable enough for regional presentation and validation runs |
+| `v1.0` | documentation submission | Main repository package aligned for official submission and evidence review |
+| `v1.1` | final improvements | Small post-submission refinements, wording cleanups, and non-structural improvements |
+
+The current documentation package should be read as **`v1.0 documentation submission`** unless a later milestone is explicitly referenced in [CHANGELOG.md](CHANGELOG.md).
 
 ## Team
 

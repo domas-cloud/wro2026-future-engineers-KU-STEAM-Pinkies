@@ -10,6 +10,7 @@ Make sure these files are present and easy to read:
 - `START_HERE.md`
 - `docs/README.md`
 - `docs/reproducibility/evidence_map.md`
+- `docs/testing/tests.md`
 
 ## Hardware And Rebuild Evidence
 
@@ -60,6 +61,7 @@ Before submission, verify:
 3. hardware names are consistent across the main documents
 4. major links still work
 5. a judge can understand where to start in less than one minute
+6. the testing workflow explains how versions are validated and marked stable
 
 ## Honest Scope Check
 

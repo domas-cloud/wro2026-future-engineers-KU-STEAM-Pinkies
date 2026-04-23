@@ -1,22 +1,44 @@
-# Parts List
+# Bill Of Materials (BOM)
 
-This table lists the final robot package used for the current repository state.
+This BOM is written as a rebuild guide, not only as a summary of what we used.
+Another team should be able to use this page as a shopping and fabrication checklist for a functionally equivalent robot.
 
-| Qty | Part | Exact model / material | Voltage / RPM / interface | Function | Replacement / fallback | Source / note |
+## How To Read This BOM
+
+- `Exact part name` is the preferred item to buy or fabricate.
+- `Manufacturer / model` uses the exact vendor when it is known from the final build documentation.
+- `Generic` means the repository documents the part class and key specification, but not a single locked vendor.
+- `Custom` means the part must be made from the files in `models/` or by matching the documented geometry.
+- If an alternative is used, the team should re-check mounting, power budget, and control tuning.
+
+## Rebuild BOM
+
+| Category | Exact part name | Manufacturer / model | Qty | Key specification | Used for | Alternative |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | main controller | `ESP32-WROOM-32` dev board | `3.3 V` logic, `Wi-Fi/BLE`, I2C, UART | low-level control loop, sensor polling, steering and motor output | any stable `ESP32` dev board with the same pin map | active firmware under `src/` |
-| 1 | perception controller | `Raspberry Pi Zero` | `5 V` logic computer | camera-side perception and reference output | `Raspberry Pi Zero 2 W` if power budget allows | interface documented in `src/pi-zero/protocol.md` |
-| 1 | camera | `OV5647 5 MP` wide-angle module | CSI camera interface | lane and obstacle interpretation | any Pi-compatible wide-angle camera with retuned parameters | used by the Pi-side process |
-| 1 | IMU | `BNO085 9-DOF` | I2C, `0x4A` / `0x4B` | yaw reference and heading stabilization | `BNO086` with matching driver support | rigid mounting matters more than raw spec sheet |
-| 3 | distance sensors | `VL53L4CD` | I2C, `0x30`, `0x31`, `0x32` | front turn trigger and side-distance correction | equivalent short-range ToF only with retuned thresholds | startup sequencing uses separate shutdown pins |
-| 1 | steering servo | `MG90S` metal gear servo | `5 V` PWM servo | front-wheel steering actuation | higher-torque micro servo if geometry changes | final steering geometry kept servo load acceptable |
-| 1 | drive motor | `N20 6 V 600 rpm` geared motor | `6 V`, `600 rpm` | rear-wheel propulsion | slower `300 rpm` and faster `1000 rpm` were tested and rejected | `600 rpm` gave the best speed/torque balance |
-| 1 | motor driver | `L298N` module | motor rail + PWM/direction inputs | drive motor switching | smaller H-bridge if current and cooling remain sufficient | simple and robust during testing |
-| 1 | battery pack | `2x 18650 Li-ion` holder | about `7.4 V` nominal | main robot energy source | equivalent protected 2-cell pack | powers all branches through regulated splits |
-| 2 | regulators | buck regulators for logic and sensors | `5 V` regulated outputs | stable logic and sensor rails | equivalent step-down modules with enough current margin | separate branches reduce motor/servo noise coupling |
-| 1 | drivetrain differential | `LEGO` differential | mechanical | reduces rear-axle resistance in turns | fixed axle only with major handling tradeoffs | kept after testing because it improved turning |
-| 1 | steering gear set | printed gears from `models/` | mechanical | transfers servo motion to both front wheels | regenerated STL if geometry changes | final set corresponds to current CAD folder |
-| 2 | rear wheels | `LEGO` wheels | mechanical | driven rear axle contact | equivalent diameter wheels with retuned controller gains | chosen for robustness and repeatability |
-| 2 | front wheels | custom silicone wheels | mechanical | steering response and front grip | re-cast wheels from the same mould set | gave better steering authority than earlier options |
-| 1 | chassis set | printed body and brackets from `models/` | mechanical | holds drivetrain, boards, sensors, and servo | revised prints if packaging changes | see `models/README.md` for the exported parts |
-| assorted | wiring and connectors | jumper wires, headers, fasteners | signal and power interconnects | joins modules into the final robot | same-gauge wiring with clear labeling | exact lengths are adjusted during assembly |
+| compute board | Low-level controller board | Espressif `ESP32-WROOM-32` development board | 1 | `3.3 V` logic, I2C, UART, PWM-capable GPIO | Real-time control, sensor polling, servo PWM, motor-driver control | Another `ESP32` dev board with the same voltage level and a remapped pinout |
+| compute board | Perception board | Raspberry Pi `Raspberry Pi Zero` | 1 | `5 V` SBC, CSI camera connector, UART link to controller | Camera processing and high-level lane / obstacle decisions | `Raspberry Pi Zero 2 W` if power budget and thermal behavior are re-checked |
+| camera | Wide-angle camera module | Generic `OV5647 5 MP` Pi camera | 1 | CSI interface, wide field of view, Pi-compatible | Forward scene perception for lane and obstacle interpretation | Another Pi-compatible wide-angle CSI camera with recalibrated vision parameters |
+| IMU | 9-DOF inertial measurement unit | CEVA / Hillcrest Labs `BNO085` breakout | 1 | I2C IMU with fused yaw output, address `0x4A` or `0x4B` | Heading reference and straight-line stabilization | `BNO086` with matching firmware support and the same rigid mounting quality |
+| ToF sensor | Front distance sensor | STMicroelectronics `VL53L4CD` breakout | 1 | Short-range ToF, I2C, uses XSHUT for address assignment | Front wall detection and turn trigger | Equivalent short-range ToF only after retuning thresholds and startup sequence |
+| ToF sensor | Left distance sensor | STMicroelectronics `VL53L4CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Left-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
+| ToF sensor | Right distance sensor | STMicroelectronics `VL53L4CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Right-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
+| motor driver | DC motor driver module | Generic `L298N` module | 1 | H-bridge driver, PWM + direction control, battery motor rail input | Drives the rear DC motor | Smaller H-bridge module only if stall current, voltage drop, and cooling are still acceptable |
+| motor | Rear drive motor | Generic `N20 6 V 600 rpm` geared DC motor | 1 | `6 V`, about `600 rpm`, metal gearbox form factor | Rear-wheel propulsion | Another `N20`-format motor near the same speed/torque range, followed by control retuning |
+| servo | Steering servo | Tower Pro `MG90S` metal-gear micro servo | 1 | `5 V` micro servo, metal gears, PWM control | Front-wheel steering actuation | Higher-torque micro servo if the steering geometry or wheel load changes |
+| batteries | Main battery pack | Generic `2x 18650 Li-ion` holder + 2 matched cells | 1 | 2-cell pack, about `7.4 V` nominal, sized for about `3.7 A` system peak budget | Main robot power source | Protected 2-cell Li-ion or LiPo pack with similar voltage and equal or better current margin |
+| regulators | Logic / sensor step-down regulator | Generic buck regulator module | 2 | `5 V` regulated output, enough margin for logic and sensor rails | Stable supply for `ESP32`, `Raspberry Pi Zero`, IMU, and ToF sensors | Equivalent buck converter modules with verified current headroom and low-noise output |
+| connectors | Perfboard power / signal distribution set | Generic perfboard, pin headers, Dupont leads, JST-style leads, screw terminals | 1 set | Common-ground distribution, separate logic / sensor / motor / servo branches | Interconnects and power distribution between all modules | Any equivalent connector set if wire gauge, labeling, and strain relief remain clear |
+| structural part | Main chassis plate and mounting structure | Custom wood frame | 1 set | Approx. `21 x 10 x 8 cm` robot package, supports compact rear-drive layout | Holds drivetrain, electronics, sensors, and camera in final geometry | Another rigid chassis with the same wheelbase and mounting geometry, followed by mechanical retuning |
+| structural part | Rear differential | LEGO differential element | 1 | Mechanical differential for rear axle | Reduces drag in turns and improves handling consistency | Fixed rear axle only with major handling tradeoffs and controller retuning |
+| structural part | Rear wheels | LEGO wheels | 2 | Matching rear-wheel diameter and width for the published drivetrain | Rear traction on the driven axle | Equivalent wheels with similar diameter and grip, followed by tuning updates |
+| structural part | Front wheels | Custom silicone wheels | 2 | Lightweight steering wheels with stable grip and matching steering geometry | Front steering contact and grip | Recast wheels from the same mold or equivalent wheels with matching diameter and scrub behavior |
+| custom printed part | Steering gear set | Custom 3D-printed parts from `models/` | 1 set | STL-based steering transmission geometry matched to `MG90S` servo output | Transfers servo motion to the front steering system | Reprint from the provided CAD files or regenerate matching geometry if the servo horn or linkage changes |
+| custom printed part | Brackets and sensor / board mounts | Custom 3D-printed parts from `models/` | 1 set | Mounts for steering-related geometry and supporting structure | Keeps boards, sensors, and steering parts aligned in the documented layout | Reprint from the provided CAD files or redesign with the same sensor positions and stiffness |
+
+## Notes For Rebuild Teams
+
+- The three `VL53L4CD` modules share one I2C bus, so each one needs a separate shutdown line during startup before addresses are assigned.
+- Keep the motor-current path separate from sensor and logic wiring, then join all subsystems at a common ground point.
+- The repository documents a perfboard-based implementation, so teams do not need a fabricated PCB to reproduce the electrical architecture.
+- Custom printed parts should be taken from `models/` and checked together with `docs/design/drivetrain_and_steering.md` and `docs/design/chassis_design_improved.md`.
+- If a substitute part is used in compute, sensing, steering, or drivetrain hardware, expect to recalibrate software thresholds and steering / speed gains.

@@ -2,6 +2,8 @@
 
 Start here if you want the quickest way into the repository.
 
+Current repository milestone: **`v1.0 documentation submission`**. Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
+
 ## Team
 
 We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
@@ -19,11 +21,12 @@ We split responsibilities, but the important decisions were made together and te
 If you only have a few minutes, read these files first:
 
 1. [README.md](README.md)
-2. [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
-3. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
-4. [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
-5. [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md)
-6. [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
+2. [docs/reproducibility/final_submission_pack.md](docs/reproducibility/final_submission_pack.md)
+3. [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
+4. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+5. [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
+6. [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md)
+7. [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
 
 ## Full Reading Order
 
@@ -32,6 +35,7 @@ If you want the full story of the robot, this order works well:
 ### 1. Overview
 
 - [README.md](README.md)
+- [docs/reproducibility/final_submission_pack.md](docs/reproducibility/final_submission_pack.md)
 - [docs/design/system_overview.md](docs/design/system_overview.md)
 - [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
 
@@ -61,6 +65,8 @@ If you want the full story of the robot, this order works well:
 - [docs/testing/performance_measurements.md](docs/testing/performance_measurements.md)
 
 If you prefer a section-based index instead of a reading order, open [docs/README.md](docs/README.md).
+
+If you want a single judge-oriented navigation page for the complete package, open [docs/reproducibility/final_submission_pack.md](docs/reproducibility/final_submission_pack.md).
 
 ## Rebuild Path
 

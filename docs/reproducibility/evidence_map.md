@@ -86,6 +86,7 @@ Main files:
 - [START_HERE.md](../../START_HERE.md)
 - [docs/README.md](../README.md)
 - [docs/reproducibility/submission_checklist.md](submission_checklist.md)
+- [docs/testing/tests.md](../testing/tests.md)
 - [models/README.md](../../models/README.md)
 - [video/video.md](../../video/video.md)
 - [t-photos/README.md](../../t-photos/README.md)
@@ -96,6 +97,7 @@ What they show:
 
 - where to start reading
 - how the repository is organized
+- how testing workflow and version stability are documented
 - submission media and rebuild references
 - multi-controller runtime entry points
 

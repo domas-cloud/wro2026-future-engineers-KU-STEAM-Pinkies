@@ -12,7 +12,7 @@ Use these routes if you want to navigate by purpose instead of by folder:
 | Mechanical design | [Drivetrain and Steering](design/drivetrain_and_steering.md) | [Engineering Decisions](design/engineering_decisions.md) |
 | Electronics | [Electronics Overview](hardware/electronics_overview.md) | [PCB / Wiring Diagrams](hardware/pcb_wiring_diagrams.md) |
 | Software | [Software Architecture](code/software_architecture_improved.md) | [Software Flow and State Logic](code/software_flow_and_state_logic.md) |
-| Testing and validation | [Mechanical and Software Testing](testing/mechanical_and_software_testing.md) | [Performance Measurements](testing/performance_measurements.md) |
+| Testing and validation | [Testing Workflow](testing/tests.md) | [Performance Measurements](testing/performance_measurements.md) |
 
 ## Best First Files
 
@@ -28,10 +28,12 @@ Use these routes if you want to navigate by purpose instead of by folder:
 - [Hardware](hardware/electronics_overview.md)
 - [Software](code/software_architecture_improved.md)
 - [Testing](testing/mechanical_and_software_testing.md)
+- [Testing Workflow](testing/tests.md)
 - [Evaluation](evaluation/final_performance.md)
 
 ## Reproducibility Files
 
+- [Final Submission Pack](reproducibility/final_submission_pack.md)
 - [Final Submission Checklist](reproducibility/submission_checklist.md)
 - [Parts List](hardware/parts_list.md)
 - [PCB / Wiring Diagrams](hardware/pcb_wiring_diagrams.md)

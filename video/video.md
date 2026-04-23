@@ -9,7 +9,8 @@ This file records the official driving-video references for the repository toget
 
 - Open Challenge: [https://www.youtube.com/watch?v=PdYDFbR_HfI](https://www.youtube.com/watch?v=PdYDFbR_HfI)
 - Recording date: `2026-04-22`
-- Robot version / controller commit: `main` branch runtime as documented in `src/src/main.cpp`
+- Robot version / repository milestone: `v1.0 documentation submission`
+- Controller reference: `main` branch runtime as documented in `src/src/main.cpp`
 - Runtime configuration: autonomous straight control, front-triggered corner turns, side-distance correction, and final safe stop
 
 ## Notes
