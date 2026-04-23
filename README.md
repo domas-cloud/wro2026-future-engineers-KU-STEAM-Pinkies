@@ -2,6 +2,19 @@
 
 This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
 
+## Quick Navigation
+
+If you want the fastest route through the repository, use one of these paths:
+
+| Goal | Start here | Then continue to |
+|---|---|---|
+| Judge overview | [START_HERE.md](START_HERE.md) | [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md) |
+| Mechanical design | [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md) | [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md) |
+| Electronics and wiring | [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md) | [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md) |
+| Software and control | [docs/code/software_architecture_improved.md](docs/code/software_architecture_improved.md) | [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md) |
+| Rebuild path | [docs/hardware/parts_list.md](docs/hardware/parts_list.md) | [models/README.md](models/README.md) and [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf) |
+| Submission media | [t-photos/](t-photos/) | [v-photos/](v-photos/) and [video/video.md](video/video.md) |
+
 ## Table Of Contents
 
 - [Challenge Overview](#challenge-overview)
@@ -73,23 +86,23 @@ The robot was developed as one system, not as a collection of separate parts. Du
 
 ## Quick Visual Overview
 
-### Steering Layout
-
-![Final steering geometry](docs/design/images/steering-v1.jpg)
-
-Final steering version with the refined geometry used in the robot.
-
-### Rear Drivetrain
-
-![LEGO differential](docs/design/images/lego-differential.png)
-
-Rear drivetrain with the `LEGO` differential that gave the most stable result in our tests.
-
-### Electronics Structure
-
-![Main schematic overview](schemes/images/schematic-overview.png)
-
-Main electronics overview showing the control boards, motor driver, and power structure.
+<table>
+  <tr>
+    <td align="center"><strong>Steering Layout</strong></td>
+    <td align="center"><strong>Rear Drivetrain</strong></td>
+    <td align="center"><strong>Electronics Structure</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/design/images/steering-v1.jpg" alt="Final steering geometry" width="250"></td>
+    <td align="center"><img src="docs/design/images/lego-differential.png" alt="LEGO differential" width="250"></td>
+    <td align="center"><img src="schemes/images/schematic-overview.png" alt="Main schematic overview" width="250"></td>
+  </tr>
+  <tr>
+    <td align="center">Final steering geometry used in the robot.</td>
+    <td align="center">Rear drivetrain with the <code>LEGO</code> differential.</td>
+    <td align="center">Main power and control structure.</td>
+  </tr>
+</table>
 
 ## What Makes This Repository Judge-Friendly
 
@@ -102,6 +115,15 @@ This repository is organized so that a judge can quickly verify:
 - where the required submission media is stored.
 
 If you want the quickest entry path, start with [START_HERE.md](START_HERE.md), then continue into [docs/README.md](docs/README.md) and [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md).
+
+The most direct evidence files are:
+
+- [README.md](README.md)
+- [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
+- [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
+- [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
+- [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md)
+- [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
 
 ## What The Code Shows
 
@@ -301,6 +323,8 @@ If you want the fastest overview, start here:
 5. [Software Architecture](docs/code/software_architecture_improved.md)
 6. [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
 
+If you want the broader documentation map instead of a reading order, open [docs/README.md](docs/README.md).
+
 ## Repository Layout
 
 - `docs/design/` - mechanical design, trade-offs, and system-level decisions
@@ -316,36 +340,41 @@ If you want the fastest overview, start here:
 
 ### Team Photos
 
-![Official team photo](t-photos/oficial.jpg)
+<table>
+  <tr>
+    <td align="center"><strong>Official Team Photo</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="t-photos/oficial.jpg" alt="Official team photo" width="720"></td>
+  </tr>
+</table>
 
 ### Robot Photos
 
 <table>
   <tr>
     <td align="center"><strong>Front View</strong></td>
+    <td align="center"><strong>Right View</strong></td>
     <td align="center"><strong>Back View</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="v-photos/front.jpg" alt="Robot front view" width="360"></td>
-    <td align="center"><img src="v-photos/back.jpg" alt="Robot back view" width="360"></td>
+    <td align="center"><img src="v-photos/front.jpg" alt="Robot front view" width="240"></td>
+    <td align="center"><img src="v-photos/right.jpg" alt="Robot right view" width="240"></td>
+    <td align="center"><img src="v-photos/back.jpg" alt="Robot back view" width="240"></td>
   </tr>
   <tr>
     <td align="center"><strong>Left View</strong></td>
-    <td align="center"><strong>Right View</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="v-photos/left.jpg" alt="Robot left view" width="360"></td>
-    <td align="center"><img src="v-photos/right.jpg" alt="Robot right view" width="360"></td>
-  </tr>
-  <tr>
     <td align="center"><strong>Top View</strong></td>
     <td align="center"><strong>Bottom View</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="v-photos/top.jpg" alt="Robot top view" width="360"></td>
-    <td align="center"><img src="v-photos/bottom.jpg" alt="Robot bottom view" width="360"></td>
+    <td align="center"><img src="v-photos/left.jpg" alt="Robot left view" width="240"></td>
+    <td align="center"><img src="v-photos/top.jpg" alt="Robot top view" width="240"></td>
+    <td align="center"><img src="v-photos/bottom.jpg" alt="Robot bottom view" width="240"></td>
   </tr>
 </table>
+
+These photos are placed here as the fastest visual reference to the final robot layout. The same files remain in `v-photos/` as part of the submission package.
 
 ## Video Submission
 
