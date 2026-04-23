@@ -93,7 +93,7 @@ The robot was developed as one system, not as a collection of separate parts. Du
     <td align="center"><strong>Electronics Structure</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/design/images/steering-v1.png" alt="Final steering geometry" width="300"></td>
+    <td align="center"><img src="docs/design/images/steering-v3.png" alt="Final steering geometry" width="300"></td>
     <td align="center"><img src="docs/design/images/lego-differential.png" alt="LEGO differential" width="300"></td>
     <td align="center"><img src="schemes/images/schematic-overview.png" alt="Main schematic overview" width="300"></td>
   </tr>
