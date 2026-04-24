@@ -29,17 +29,14 @@ Our final robot did not appear immediately. Before this version, we used a large
   <tr>
     <td align="center"><strong>Previous Robot Overall View</strong></td>
     <td align="center"><strong>Previous Robot Drivetrain / Steering Area</strong></td>
-    <td align="center"><strong>Final Compact Direction</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/design/images/previous-robot-overall.jpg" alt="Previous robot overall view" width="260"></td>
-    <td align="center"><img src="docs/design/images/previous-robot-drivetrain.jpg" alt="Previous robot drivetrain and steering area" width="260"></td>
-    <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering version" width="260"></td>
+    <td align="center"><img src="docs/design/images/previous-robot-overall.jpg" alt="Previous robot overall view" width="520"></td>
+    <td align="center"><img src="docs/design/images/previous-robot-drivetrain.jpg" alt="Previous robot drivetrain and steering area" width="520"></td>
   </tr>
   <tr>
     <td align="center">The older robot was larger and mechanically more complex.</td>
     <td align="center">The drivetrain and steering area helped us identify friction, resistance, and tuning problems.</td>
-    <td align="center">The final concept became smaller, simpler, and lower-friction.</td>
   </tr>
 </table>
 
@@ -92,12 +89,23 @@ Our final robot is a compact self-driving car with:
   <tr>
     <td align="center"><strong>Final Steering Layout</strong></td>
     <td align="center"><strong>Rear Drivetrain</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering geometry" width="520"></td>
+    <td align="center"><img src="docs/design/images/lego-differential.png" alt="LEGO differential" width="520"></td>
+  </tr>
+  <tr>
+    <td align="center">The final steering geometry became lower-friction and easier for the servo to control.</td>
+    <td align="center">The selected differential gave smoother and more repeatable cornering.</td>
+  </tr>
+</table>
+
+<table>
+  <tr>
     <td align="center"><strong>Electronics Structure</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering geometry" width="300"></td>
-    <td align="center"><img src="docs/design/images/lego-differential.png" alt="LEGO differential" width="300"></td>
-    <td align="center"><img src="schemes/images/schematic-overview.png" alt="Main schematic overview" width="300"></td>
+    <td align="center"><img src="schemes/images/schematic-overview.png" alt="Main schematic overview" width="800"></td>
   </tr>
 </table>
 
@@ -142,7 +150,38 @@ The final mechanical philosophy was:
 - improve front-wheel grip so steering commands become real movement;
 - keep the robot small enough for easier turning and parking.
 
-### 5.2 Motor Choice
+### 5.2 Mechanical Comparison Photos
+
+These additional photos show the drivetrain and steering evidence used during the design comparison.
+
+<table>
+  <tr>
+    <td align="center"><strong>Earlier Metal Differential</strong></td>
+    <td align="center"><strong>Final LEGO Differential</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/design/images/metal-differential.jpg" alt="Earlier metal differential" width="520"></td>
+    <td align="center"><img src="docs/design/images/lego-differential.png" alt="Final LEGO differential" width="520"></td>
+  </tr>
+  <tr>
+    <td align="center">The metal differential looked stronger, but it was not the best practical choice for smooth turning.</td>
+    <td align="center">The LEGO differential stayed because it gave smoother, more repeatable corner exits.</td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center"><strong>Final Steering Detail</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering detail" width="760"></td>
+  </tr>
+  <tr>
+    <td align="center">The final steering version reduced mechanical load and improved real steering response.</td>
+  </tr>
+</table>
+
+### 5.3 Motor Choice
 
 We tested three `N20` motor options:
 
@@ -154,7 +193,7 @@ We tested three `N20` motor options:
 
 The `600 rpm` motor became the final choice because it gave the best practical balance between speed and torque.
 
-### 5.3 Differential Choice
+### 5.4 Differential Choice
 
 We compared differential behaviour because cornering consistency depended strongly on drivetrain resistance. The earlier metal differential looked stronger, but the final `LEGO` differential gave smoother and more repeatable cornering.
 
@@ -165,7 +204,7 @@ The final differential helped with:
 - more repeatable behaviour between runs;
 - easier controller tuning.
 
-### 5.4 Steering Iterations
+### 5.5 Steering Iterations
 
 The steering system went through three main versions:
 
@@ -177,7 +216,7 @@ The steering system went through three main versions:
 
 Instead of buying a stronger servo, we improved the steering geometry. That fixed the real cause of the problem: excessive mechanical load.
 
-### 5.5 Steering Range
+### 5.6 Steering Range
 
 The servo can rotate further, but we limited the useful steering range to about `60` degrees. Too much steering angle made the robot less stable, while a controlled steering range made behaviour more predictable.
 
@@ -355,7 +394,7 @@ Fast rebuild path:
 
 <table>
   <tr>
-    <td align="center"><img src="t-photos/team.jpg" alt="Official team photo" width="720"></td>
+    <td align="center"><img src="t-photos/team.jpg" alt="Official team photo" width="900"></td>
   </tr>
 </table>
 
@@ -365,22 +404,26 @@ Fast rebuild path:
   <tr>
     <td align="center"><strong>Front</strong></td>
     <td align="center"><strong>Right</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="v-photos/front.jpg" alt="Robot front view" width="520"></td>
+    <td align="center"><img src="v-photos/right.jpg" alt="Robot right view" width="520"></td>
+  </tr>
+  <tr>
     <td align="center"><strong>Back</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="v-photos/front.jpg" alt="Robot front view" width="240"></td>
-    <td align="center"><img src="v-photos/right.jpg" alt="Robot right view" width="240"></td>
-    <td align="center"><img src="v-photos/back.jpg" alt="Robot back view" width="240"></td>
-  </tr>
-  <tr>
     <td align="center"><strong>Left</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="v-photos/back.jpg" alt="Robot back view" width="520"></td>
+    <td align="center"><img src="v-photos/left.jpg" alt="Robot left view" width="520"></td>
+  </tr>
+  <tr>
     <td align="center"><strong>Top</strong></td>
     <td align="center"><strong>Bottom</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="v-photos/left.jpg" alt="Robot left view" width="240"></td>
-    <td align="center"><img src="v-photos/top.jpg" alt="Robot top view" width="240"></td>
-    <td align="center"><img src="v-photos/bottom.jpg" alt="Robot bottom view" width="240"></td>
+    <td align="center"><img src="v-photos/top.jpg" alt="Robot top view" width="520"></td>
+    <td align="center"><img src="v-photos/bottom.jpg" alt="Robot bottom view" width="520"></td>
   </tr>
 </table>
 
