@@ -84,6 +84,12 @@ Main related files:
 
 ## Preview Images
 
+### As-Built Perfboard Wiring
+
+![As-built perfboard wiring](../../schemes/images/perfboard-wiring.jpg)
+
+This photo documents the real perfboard layout used on the robot. It is included as build evidence so the schematic can be checked against the actual wiring, connector placement, regulator, motor driver, battery input, and controller wiring.
+
 ### Main System View
 
 ![Main component schematic](../../schemes/images/schematic-overview.png)

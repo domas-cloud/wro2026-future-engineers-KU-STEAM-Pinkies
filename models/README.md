@@ -17,6 +17,19 @@ The exact file set may evolve during development, but the purpose stays the same
 These files support the steering-system documentation and the reproducibility checklist.
 If the geometry changes, update the related design documents as well so the text and models stay aligned.
 
+## Model Index
+
+| File | Description |
+| --- | --- |
+| `steering-column-housing-short.stl` | Steering column housing. |
+| `steering-gear-cover-disc.stl` | Cover disc for the steering gear. |
+| `steering-gear-hub.stl` | Main steering gear hub. |
+| `steering-gear-plate.stl` | Thin steering gear plate. |
+| `steering-linkage-bracket.stl` | Steering linkage bracket. |
+| `motor-mount-block.stl` | Motor mount block. |
+| `steering-pin-adapter.stl` | Small steering pin adapter. |
+| `motor-shaft-spacer.stl` | Motor shaft spacer. |
+
 ## Rebuild Notes
 
 For another team, these files are not standalone instructions. They should be used together with:

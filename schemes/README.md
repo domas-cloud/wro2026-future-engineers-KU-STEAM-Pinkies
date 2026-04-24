@@ -30,6 +30,12 @@ This view shows the `BNO085` and the `VL53L4CD` sensor bus structure. In the pub
 
 This reference image shows the step-down converter used to reduce the `2x 18650` battery voltage to the regulated `5 V` logic supply for the computing and sensing electronics.
 
+### As-Built Perfboard Wiring
+
+![As-built perfboard wiring](images/perfboard-wiring.jpg)
+
+This photo shows the actual perfboard assembly used in the robot. It is useful as build evidence because it connects the clean schematic view to the physical wiring layout.
+
 ## What The Scheme Should Show
 
 - all electronic components;
