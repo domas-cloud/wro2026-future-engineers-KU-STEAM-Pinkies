@@ -25,6 +25,12 @@ We divided responsibilities, but the final robot was developed and tested as one
 
 This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
 
+## Single DOCX Report
+
+For a continuous, judge-friendly Word version of the repository documentation, use:
+
+- [KU-STEAM-Pinkies-repo-viename-dokumente.docx](output/doc/KU-STEAM-Pinkies-repo-viename-dokumente.docx)
+
 ## Robot At A Glance
 
 Our robot is a compact self-driving car with:
