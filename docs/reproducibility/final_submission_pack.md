@@ -85,7 +85,7 @@ If you are a judge and want the fastest route, open these first:
 
 - [video/video.md](../../video/video.md)
 - Open Challenge video: [YouTube](https://www.youtube.com/watch?v=PdYDFbR_HfI)
-- Second final submission video: not currently linked in this repository
+- Separate Obstacle Challenge video: not currently linked in this repository
 
 ## Code Directories
 

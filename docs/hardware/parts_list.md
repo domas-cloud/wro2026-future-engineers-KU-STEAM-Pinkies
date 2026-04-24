@@ -20,8 +20,8 @@ Another team should be able to use this page as a shopping and fabrication check
 | camera | Wide-angle camera module | Generic `OV5647 5 MP` Pi camera | 1 | CSI interface, wide field of view, Pi-compatible | Forward scene perception for lane and obstacle interpretation | Another Pi-compatible wide-angle CSI camera with recalibrated vision parameters |
 | IMU | 9-DOF inertial measurement unit | CEVA / Hillcrest Labs `BNO085` breakout | 1 | I2C IMU with fused yaw output, address `0x4A` or `0x4B` | Heading reference and straight-line stabilization | `BNO086` with matching firmware support and the same rigid mounting quality |
 | ToF sensor | Front distance sensor | STMicroelectronics `VL53L1X` breakout | 1 | ToF sensor, I2C, used as the forward trigger sensor | Front wall detection and turn trigger | Equivalent front ToF only after retuning thresholds and startup sequence |
-| ToF sensor | Left distance sensor | STMicroelectronics `VL53L4CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Left-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
-| ToF sensor | Right distance sensor | STMicroelectronics `VL53L4CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Right-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
+| ToF sensor | Left distance sensor | STMicroelectronics `VL53L1CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Left-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
+| ToF sensor | Right distance sensor | STMicroelectronics `VL53L1CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Right-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
 | motor driver | DC motor driver module | Generic `L298N` module | 1 | H-bridge driver, PWM + direction control, battery motor rail input | Drives the rear DC motor | Smaller H-bridge module only if stall current, voltage drop, and cooling are still acceptable |
 | motor | Rear drive motor | Generic `N20 6 V 250 rpm` geared DC motor | 1 | `6 V`, about `250 rpm`, metal gearbox form factor | Rear-wheel propulsion | Another `N20`-format motor near the same speed/torque range, followed by control retuning |
 | servo | Steering servo | Tower Pro `MG90S` metal-gear micro servo | 1 | `5 V` micro servo, metal gears, PWM control | Front-wheel steering actuation | Higher-torque micro servo if the steering geometry or wheel load changes |
@@ -37,7 +37,7 @@ Another team should be able to use this page as a shopping and fabrication check
 
 ## Notes For Rebuild Teams
 
-- The two `VL53L4CD` modules and the front `VL53L1X` share one I2C bus, so the shutdown / startup sequence still matters during initialization.
+- The two `VL53L1CD` modules and the front `VL53L1X` share one I2C bus, so the shutdown / startup sequence still matters during initialization.
 - Keep the motor-current path separate from sensor and logic wiring, then join all subsystems at a common ground point.
 - The repository documents a perfboard-based implementation, so teams do not need a fabricated PCB to reproduce the electrical architecture.
 - Custom printed parts should be taken from `models/` and checked together with `docs/design/drivetrain_and_steering.md` and `docs/design/chassis_design_improved.md`.

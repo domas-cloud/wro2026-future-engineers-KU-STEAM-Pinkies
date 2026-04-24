@@ -7,27 +7,69 @@
 #include <Wire.h>
 #include <Lidar.h>
 
-int BUTTON_PIN = 13;
-int BUTTON_STATE = 1;
+#define RXD2 16
+#define TXD2 17
 
-/*
-Motor PINS
-*/
+// Constants
+const int BUTTON_PIN = 14;
+const bool OBSTACLE_ROUND = false;
 const int ENABLE_MOTOR = 32;
 const int MOTOR_1 = 26;
 const int MOTOR_2 = 25;
-const int ROBOT_WIDTH = 82;
+const int ROBOT_WIDTH = 150;
+const int MIN_ANGLE = 60;
+const int MAX_ANGLE = 120;
+const int STRAIGHT_ANGLE = 88;
+const int TARGET_DISTANCE = 300;
+const int WIDTH_THRESHOLD = 150;
+const int VISION_MAX_AGE_MS = 250;
+const float VISION_MIN_CONFIDENCE = 0.40;
 
+// PPD Constants
+const float Kp = 0.09; // 0.1
+const float Kg = 0.95;
+const float Kd = 0.05; // 0.1
+
+// Global variables
+bool started = false;
+float last_error = 0;
+float last_time = 0;
+float targetAngle = 0;
+int edge = 0;
+bool isClockwise = true;
+bool sideLock = false;
+int sectorWidth[4] = { 0 };
+int cumulativeWidth = 0;
+int measurementCount = 0;
+int clockStop = 0;
+bool button_state = 1;
 auto engine = Engine(MOTOR_1, MOTOR_2, ENABLE_MOTOR);
+
+struct VisionGuidance {
+  bool fresh = false;
+  int laneShiftMm = 0;
+  int obstacleSide = 0; // -1 left, 0 none, 1 right
+  float confidence = 0;
+  unsigned long receivedAt = 0;
+};
+
+VisionGuidance vision;
+
+// Class variables
 Compass robotCompass;
 Servo myservo;
-
+HardwareSerial camera_serial(2);
 Distance_Sensor leftSensor;
 Distance_Sensor rightSensor;
 Distance_Sensor frontSensor;
 
 void setup() {
   Serial.begin(115200);
+
+  if (OBSTACLE_ROUND) {
+    camera_serial.begin(9600, SERIAL_8N1, RXD2, TXD2);
+    camera_serial.setTimeout(5);
+  }
 
   Wire.begin();
 
@@ -82,32 +124,67 @@ void setup() {
   set_light_state(2, 3);
 };
 
-bool started = false;
-float last_error = 0;
-float last_time = millis();
-int targetAngle = 0;
-int edge = 0;
-bool isClockwise = false;
+bool parseVisionPacket(const String &line, VisionGuidance &out) {
+  if (!line.startsWith("VISION,")) {
+    return false;
+  }
 
-const int MIN_ANGLE = 60;
-const int MAX_ANGLE = 120;
-const int STRAIGHT_ANGLE = 88;
-const int TARGET_DISTANCE = 300;
-const int TURN_DISTANCE = 400;
+  int comma1 = line.indexOf(',');
+  int comma2 = line.indexOf(',', comma1 + 1);
+  int comma3 = line.indexOf(',', comma2 + 1);
+  int comma4 = line.indexOf(',', comma3 + 1);
+  int comma5 = line.indexOf(',', comma4 + 1);
 
-const float Kp = 0.09; // 0.1
-const float Kg = 0.95;
-const float Kd = 0.05; // 0.1
+  if (comma1 < 0 || comma2 < 0 || comma3 < 0 || comma4 < 0 || comma5 < 0) {
+    return false;
+  }
+
+  const String mode = line.substring(comma1 + 1, comma2);
+  const String side = line.substring(comma3 + 1, comma4);
+  const int packetAgeMs = line.substring(comma5 + 1).toInt();
+  const float confidence = line.substring(comma4 + 1, comma5).toFloat();
+
+  if (packetAgeMs > VISION_MAX_AGE_MS || confidence < VISION_MIN_CONFIDENCE) {
+    out.fresh = false;
+    return true;
+  }
+
+  out.laneShiftMm = constrain(line.substring(comma2 + 1, comma3).toInt(), -250, 250);
+  out.obstacleSide = side == "LEFT" ? -1 : (side == "RIGHT" ? 1 : 0);
+  out.confidence = confidence;
+  out.receivedAt = millis();
+  out.fresh = mode == "OBSTACLE" || mode == "TRACK";
+  return true;
+}
+
+void updateVisionGuidance() {
+  if (!OBSTACLE_ROUND) {
+    return;
+  }
+
+  while (camera_serial.available() > 0) {
+    const String line = camera_serial.readStringUntil('\n');
+    if (parseVisionPacket(line, vision)) {
+      Serial.println(String("Vision: ") + line);
+    }
+  }
+
+  if (vision.fresh && (millis() - vision.receivedAt) > VISION_MAX_AGE_MS) {
+    vision.fresh = false;
+    vision.laneShiftMm = 0;
+    vision.obstacleSide = 0;
+    vision.confidence = 0;
+  }
+}
 
 void loop() {
-    BUTTON_STATE = digitalRead(BUTTON_PIN);
+    button_state = digitalRead(BUTTON_PIN);
     blink_lights();
 
-    float newHeading = robotCompass.getYaw();
-    if (BUTTON_STATE == 0) {
+    if (button_state == 0) {
       started = !started;
-      targetAngle = newHeading;
       delay(400);
+      targetAngle = robotCompass.getYaw();
     } 
 
     if (!started) {
@@ -118,22 +195,39 @@ void loop() {
 
     set_light_state(2, 1);
     engine.drive(255);
+    updateVisionGuidance();
 
-    int heading = targetAngle - newHeading;
+    float heading = targetAngle - robotCompass.getYaw();
     if (heading > 180)  heading -= 360;
     if (heading < -180) heading += 360;
 
     Distance_Result frontDistance = frontSensor.measureDistance();
-    Distance_Result leftDistance = leftSensor.measureDistance();
+    const Distance_Result leftDistance = leftSensor.measureDistance();
     const Distance_Result rightDistance = rightSensor.measureDistance();
+    const int width = leftDistance.distance + rightDistance.distance;
+    const int currentSector = abs(targetAngle) / 90;
+    int nextSector = currentSector + 1;
+    if (nextSector == 4) {
+      nextSector = 0;
+    }
 
-    // 2 or 4 when object is too far
-    
-    if (frontDistance.distance <= TURN_DISTANCE) {
-      isClockwise = leftDistance.distance <= 800 && leftDistance.status == 0;
-      while (frontDistance.distance <= 1000 || frontDistance.distance >= 2700) {
+    Serial.println(String("L: ") + leftDistance.distance + "mm (" + leftDistance.status + ") R: " 
+    + rightDistance.distance + "(" + rightDistance.status + ") Gyro: " + heading + " Front: " + frontDistance.distance + "mm (" + frontDistance.status + ") Sector: " + currentSector + " Width: " + sectorWidth[currentSector] + " Next: " + nextSector);
+
+    if (frontDistance.distance <= (ROBOT_WIDTH + (sectorWidth[nextSector] == 0 ? TARGET_DISTANCE : (sectorWidth[nextSector] / 2)))
+      && frontDistance.status == 0 && width >= 900) {
+      if (!sideLock) {
+        isClockwise = (leftDistance.distance <= 700 && (leftDistance.status == 0 || leftDistance.status == 2));
+        sideLock = true;
+      }
+
+      if (!OBSTACLE_ROUND && measurementCount > 0) {
+        sectorWidth[currentSector] = constrain(cumulativeWidth / (measurementCount), 500, 900);
+      }
+
+      while (frontDistance.distance <= 1500 || frontDistance.distance >= 2700 || frontDistance.status == 4) {
         frontDistance = frontSensor.measureDistance();
-        //Serial.println(String("left:") + leftDistance.distance + " " + frontDistance.distance + " status: " + leftDistance.status);
+        Serial.println(String("left:") + leftDistance.distance + " " + frontDistance.distance + " status: " + leftDistance.status);
 
         if (isClockwise) {
           myservo.write(MIN_ANGLE);
@@ -150,46 +244,60 @@ void loop() {
         targetAngle += 90;
       }
 
-      targetAngle %= 360;
+      targetAngle = fmod(targetAngle, 360.0);
       edge++;
-      set_light_state(2, 3, edge);
+      cumulativeWidth = 0;
+      measurementCount = 0;
     }
 
     float angle = Kg * heading;
 
-    //Serial.println(String("L: ") + leftDistance.distance + "mm (" + leftDistance.status + ") T: " 
-    //+ targetAngle + ") Gyro: " + heading + " Front: " + frontDistance.distance + "mm");
+    // if the robot is going counterclockwise,  we should follow the right sensor
+    const Distance_Result outerDistance = isClockwise ? leftDistance : rightDistance;
+    int T = sectorWidth[currentSector] == 0 ? TARGET_DISTANCE : sectorWidth[currentSector] / 2;
+    if (vision.fresh) {
+      T = constrain(T + vision.laneShiftMm, 150, 650);
+    }
+    const float dist_err = outerDistance.distance - T;
 
-    const Distance_Result outerDistance = isClockwise ? leftDistance : leftDistance;
+    float err = last_error - heading;
 
-    // if the robot is going counterclockwise,  we should use the right sensor
-    const int dist_err = outerDistance.distance - TARGET_DISTANCE;
-    float err = heading - last_error;
+    if (outerDistance.distance <= 850 && width <= 1100 && 
+      (sectorWidth[currentSector] == 0 || abs(sectorWidth[currentSector] - width) <= WIDTH_THRESHOLD) // in case one of the sensors disconnects, prevents turning 
+    ) {
+      angle += Kp * dist_err * (isClockwise ? 1 : -1);
+      
+      // stopping
+      if (abs(dist_err) < 50 && edge >= 12 && heading <= 5) {
+        if (clockStop == 0) {
+          clockStop = millis();
+        } else if ((millis() - clockStop) >= 2000) {
+          engine.stop();
+          ESP.restart();
+        }
+      }
 
-    if (outerDistance.distance <= 850 && outerDistance.distance >= 100) {
-      angle += Kp * dist_err;
+      // vehicle learns the width's of the sectors
+      if (!OBSTACLE_ROUND && heading <= 3) {
+        cumulativeWidth += width;
+        measurementCount++;
+      }
     }
 
+    // Calculates derivative term
     if (last_error == 0) {
       last_time = millis();
       last_error = err;
     } else {
       err /= (millis() - last_time);
       last_time = millis();
-      angle -= Kd * err;
+      angle += Kd * err;
     }
 
-    if (abs(angle) < 3) {
+    // prevents jittery
+    if (abs(angle) < 1) 
       angle = 0;
-
-      // Stop after the robot is centered in the sector
-      if (edge >= 12) {
-        engine.stop();
-        ESP.restart();
-      }
-    }
 
     const int angle_constrained = constrain(STRAIGHT_ANGLE + round(angle), MIN_ANGLE, MAX_ANGLE);
     myservo.write(angle_constrained);
 };
-

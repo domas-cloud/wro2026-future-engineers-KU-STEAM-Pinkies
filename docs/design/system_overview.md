@@ -76,7 +76,7 @@ The motor choice and the differential both influenced:
 - resistance in corners,
 - and overall controllability.
 
-The 600 rpm motor worked best because it balanced speed and torque. The LEGO differential improved precision and reduced binding. These decisions made the robot easier to control, not just faster or slower.
+The 250 rpm motor worked best because it balanced speed and torque. The LEGO differential improved precision and reduced binding. These decisions made the robot easier to control, not just faster or slower.
 
 ## Interaction 4: Software and Mechanics
 

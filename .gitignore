@@ -8,11 +8,18 @@ Thumbs.db
 __pycache__/
 *.pyc
 *.pyo
-*.py
 *.log
 tmp/
+.venv/
+venv/
+.pio/
+src/.pio/
+src/.vscode/.browse_c_cpp.db*
+src/.vscode/c_cpp_properties.json
+src/.vscode/launch.json
+src/.vscode/ipch/
 
-# Optional local exports
+# Optional local exports and generated documents
 *.tmp
 *.bak
 ~$*.docx

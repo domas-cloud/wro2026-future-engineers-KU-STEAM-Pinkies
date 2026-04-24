@@ -16,7 +16,7 @@ The final electronics system includes:
 - `ESP32-WROOM-32`
 - `BNO085` IMU
 - one front `VL53L1X` ToF sensor
-- `2x VL53L4CD` distance sensors
+- `2x VL53L1CD` distance sensors
 - `MG90S` steering servo
 - `N20 6 V 250 rpm` drive motor
 - `L298N` motor driver
@@ -58,12 +58,14 @@ The current values below are the practical design values we used in the document
 | Subsystem | Main parts | Rail type | Design assumption |
 | --- | --- | --- | --- |
 | Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `720 mA` continuous |
-| Sensors | `BNO085`, `VL53L1X`, `2x VL53L4CD` | regulated sensor rail | `132.3 mA` continuous |
+| Sensors | `BNO085`, `VL53L1X`, `2x VL53L1CD` | regulated sensor rail | `132.3 mA` continuous |
 | Steering | `MG90S` servo | steering branch | `800 mA` peak |
 | Drive | `N20` + `L298N` | battery / motor branch | `0.67 A` peak |
 | Total | all branches together | battery input | about `2.32 A` peak |
 
 The total peak budget comes from the documented working assumptions: `0.72 A + 0.1323 A + 0.8 A + 0.67 A = 2.3223 A`.
+
+In practice, the current demand stayed similar during normal driving because the steering linkage was built to move freely. The servo was not used near stall torque during autonomous driving, so steering did not create the kind of large current spike that would be expected from a jammed or overloaded linkage.
 
 ## Why We Kept Regulated Power
 
@@ -91,8 +93,8 @@ The `BNO085` helps keep the robot aligned with its heading target. Without yaw f
 The distance sensors are used as:
 
 - `front VL53L1X` for turn timing and close-range detection;
-- `left VL53L4CD` for side-distance feedback;
-- `right VL53L4CD` for the opposite side.
+- `left VL53L1CD` for side-distance feedback;
+- `right VL53L1CD` for the opposite side.
 
 Together, they give the controller local geometry that the camera alone cannot guarantee at short range.
 
@@ -100,7 +102,7 @@ Together, they give the controller local geometry that the camera alone cannot g
 
 We also tried `VL53L5CX` matrix sensors during development. They offered richer data, but the added complexity was not worth it for this robot.
 
-For our final system, the `VL53L1X` + `VL53L4CD` layout was easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
+For our final system, the `VL53L1X` + `VL53L1CD` layout was easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
 
 ## Sensor Placement
 
@@ -108,7 +110,7 @@ The placement follows the job of each sensor:
 
 - the camera watches the wider scene ahead;
 - the front `VL53L1X` watches the area used for turn triggering;
-- the side `VL53L4CD` sensors watch wall or obstacle spacing;
+- the side `VL53L1CD` sensors watch wall or obstacle spacing;
 - the IMU is mounted rigidly so the yaw estimate follows the chassis, not a flexible bracket.
 
 ## Calibration Routine

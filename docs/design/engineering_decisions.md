@@ -26,15 +26,15 @@ That is why we chose a smaller final robot, about:
 
 The smaller robot was easier to package, easier to turn, and easier to control.
 
-## 3. The `600 rpm` Motor Instead Of Extreme Options
+## 3. The `250 rpm` Motor Instead Of Extreme Options
 
 We tested three N20 motor options:
 
 - `300 rpm`
-- `600 rpm`
+- `250 rpm`
 - `1000 rpm`
 
-The `300 rpm` option was too slow. The `1000 rpm` option did not give enough torque. The `600 rpm` motor gave the best balance between speed and usable torque, so that became the final choice.
+The `300 rpm` option was too slow. The `1000 rpm` option did not give enough torque. The `250 rpm` motor gave the best balance between speed and usable torque, so that became the final choice.
 
 ## 4. Differential As A Required Part
 
@@ -98,7 +98,7 @@ We performed about `10` test runs while comparing versions. The change from stee
 
 | Decision | Option A | Option B | Chosen | Evidence |
 | --- | --- | --- | --- | --- |
-| Drive motor speed | `300 rpm` | `600 rpm` | `600 rpm` | `300 rpm` was too slow in long sections; `600 rpm` kept enough speed while remaining controllable |
+| Drive motor speed | `300 rpm` | `250 rpm` | `250 rpm` | `300 rpm` was too slow in long sections; `250 rpm` kept enough speed while remaining controllable |
 | Steering concept | complex custom steering | simplified low-friction steering | simplified steering | More repeatable, less friction, easier servo load |
 | Front wheel tires | low-grip wheels | silicone wheels | silicone wheels | Better corner hold and less random slip |
 | Sensor role | distance-only | fused distance + `IMU` + camera | fused | More robust against single-sensor error |
@@ -117,7 +117,7 @@ In most cases, we preferred the option that reduced random behavior, even if it 
 | Too much steering angle | unstable behavior | limited steering range to about `60` degrees |
 | Front wheel slip | weak real steering effect | switched to silicone front wheels |
 | Poor differential behavior | rougher, less precise turning | switched to `LEGO` differential |
-| Extreme motor choice | too slow or not enough torque | selected `600 rpm` N20 |
+| Extreme motor choice | too fast or not enough usable torque margin | selected `250 rpm` N20 |
 
 ## Failure Modes, Mitigation, And Evidence
 

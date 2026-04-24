@@ -23,8 +23,8 @@ The main signal and power paths are:
 - step-down regulator -> `ESP32`;
 - `ESP32` -> `BNO085`;
 - `ESP32` -> front `VL53L1X` sensor;
-- `ESP32` -> left `VL53L4CD` sensor;
-- `ESP32` -> right `VL53L4CD` sensor;
+- `ESP32` -> left `VL53L1CD` sensor;
+- `ESP32` -> right `VL53L1CD` sensor;
 - `Raspberry Pi Zero` -> camera;
 - `ESP32` -> `MG90S` servo;
 - `ESP32` -> `L298N`;
@@ -59,8 +59,8 @@ The controller code in `src/src/main.cpp` confirms these pin assignments:
      -> logic regulator -> ESP32
      -> sensor branch -> BNO085
      -> sensor branch -> VL53L1X front (0x30)
-     -> sensor branch -> VL53L4CD left (0x31)
-     -> sensor branch -> VL53L4CD right (0x32)
+     -> sensor branch -> VL53L1CD left (0x31)
+     -> sensor branch -> VL53L1CD right (0x32)
      -> steering branch -> MG90S servo
 
 Raspberry Pi Zero
@@ -102,7 +102,7 @@ This image gives the quickest overview of the boards, motor driver, servo, and m
 
 ![Sensor bus detail](../../schemes/images/sensor-bus-detail.png)
 
-This detail shows the shared sensor bus and the separate shutdown handling for the front `VL53L1X` and the two `VL53L4CD` modules.
+This detail shows the shared sensor bus and the separate shutdown handling for the front `VL53L1X` and the two `VL53L1CD` modules.
 
 ### Power Conversion Reference
 

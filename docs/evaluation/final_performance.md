@@ -23,7 +23,7 @@ This distribution of sensor roles reduced the impact of any single-sensor error 
 
 | Test layout | Runs | Successful runs | Robot version | Notes |
 | --- | --- | --- | --- | --- |
-| 3 m straight stability check | `5` | `5` | final steering geometry + `600 rpm` motor | drift stayed within `3-5 cm` |
+| 3 m straight stability check | `5` | `5` | final steering geometry + `250 rpm` motor | drift stayed within `3-5 cm` |
 | obstacle practice route | `5` | `4` | final geometry + 3 ToF sensors + IMU | one late correction on a pillar approach |
 | full practice loop | `5` | `4` | final repository-state robot | one run ended with corner-exit misalignment |
 

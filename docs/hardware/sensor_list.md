@@ -7,7 +7,7 @@ This page summarizes the sensors we used, why we chose them, and how they were p
 - camera system used for the perception layer;
 - `BNO085 9-DOF IMU`;
 - one front `VL53L1X` ToF sensor;
-- `2x VL53L4CD` distance sensors used as `left` and `right`.
+- `2x VL53L1CD` distance sensors used as `left` and `right`.
 
 ## Sensor Selection And Role
 
@@ -16,8 +16,8 @@ This page summarizes the sensors we used, why we chose them, and how they were p
 | camera system | wider scene interpretation and obstacle/lane perception | it sees farther ahead than short-range sensors and supports higher-level driving decisions |
 | `BNO085` IMU | heading awareness, straight-line stability, turn consistency | a steering robot benefits from yaw feedback even when distance readings momentarily change |
 | `front VL53L1X` | close approach and turn triggering | it gives direct information about the boundary ahead of the robot |
-| `left VL53L4CD` | side-distance awareness | it supports wall-offset control on one side of the robot |
-| `right VL53L4CD` | opposite side-distance awareness | it allows the same control model to be used when the reference side changes |
+| `left VL53L1CD` | side-distance awareness | it supports wall-offset control on one side of the robot |
+| `right VL53L1CD` | opposite side-distance awareness | it allows the same control model to be used when the reference side changes |
 
 ## Tested Alternative And Why We Rejected It
 
@@ -49,7 +49,7 @@ This combination supports the full robot behavior because the robot needs both:
 
 - The `BNO085` must be mounted rigidly so sensor fusion reflects robot motion rather than board flex.
 - The camera must be mounted so its field of view is stable and useful for the perception layer.
-- The front `VL53L1X` and the two `VL53L4CD` modules should be positioned so their view is not blocked by wheels, chassis walls, or servo parts.
+- The front `VL53L1X` and the two `VL53L1CD` modules should be positioned so their view is not blocked by wheels, chassis walls, or servo parts.
 - The distance sensors must be documented together because they solve different geometric parts of the same control problem.
 - Using camera perception together with compact distance sensors keeps the sensing architecture broader without losing local geometric feedback.
 

@@ -8,7 +8,7 @@ That is why we tested the robot as one connected system.
 
 The main comparison areas were:
 
-- `300 rpm`, `600 rpm`, and `1000 rpm` `N20` motors;
+- `250 rpm`, `300 rpm`, and `1000 rpm` `N20` motors;
 - steering `Version 1`, `Version 2`, and `Version 3`;
 - earlier front wheels versus silicone front wheels;
 - earlier differential solution versus the final `LEGO` differential;
@@ -43,7 +43,7 @@ For steering comparisons, we used about `10` practical runs while deciding betwe
 
 ### Motor
 
-The `300 rpm` motor was too slow. The `1000 rpm` motor was faster but gave too little useful torque. The `600 rpm` motor gave the best overall balance, so it became the final choice.
+The `300 rpm` motor was too slow. The `1000 rpm` motor was faster but gave too little useful torque. The `250 rpm` motor gave the best overall balance, so it became the final choice.
 
 ### Steering
 
@@ -61,7 +61,7 @@ The `LEGO` differential was more stable than the earlier metal solution and gave
 
 | Comparison area | Earlier version | Final version | Practical result |
 | --- | --- | --- | --- |
-| motor choice | `300 rpm` or `1000 rpm` | `600 rpm` N20 | better balance of speed and torque |
+| motor choice | `300 rpm` or `1000 rpm` | `250 rpm` N20 | better balance of speed and torque |
 | steering geometry | `V1` with larger lever arm | `V2/V3` with lower load | steering became easier and more repeatable |
 | front wheel material | earlier wheels with more slip | silicone front wheels | stronger real steering effect |
 | rear differential | earlier metal solution | `LEGO` differential | smoother cornering and less binding |

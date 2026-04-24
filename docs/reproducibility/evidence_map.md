@@ -11,6 +11,7 @@ Main files:
 - [docs/design/drivetrain_and_steering.md](../design/drivetrain_and_steering.md)
 - [docs/design/engineering_decisions.md](../design/engineering_decisions.md)
 - [docs/design/risk_and_failures.md](../design/risk_and_failures.md)
+- [docs/reproducibility/mechanical_rebuild.md](mechanical_rebuild.md)
 - [models/README.md](../../models/README.md)
 
 What they show:
@@ -26,6 +27,7 @@ Main files:
 
 - [docs/hardware/electronics_overview.md](../hardware/electronics_overview.md)
 - [docs/hardware/pcb_wiring_diagrams.md](../hardware/pcb_wiring_diagrams.md)
+- [docs/hardware/as_built_wiring_checklist.md](../hardware/as_built_wiring_checklist.md)
 - [docs/hardware/sensor_list.md](../hardware/sensor_list.md)
 - [docs/hardware/parts_list.md](../hardware/parts_list.md)
 - [schemes/README.md](../../schemes/README.md)
@@ -49,6 +51,7 @@ Main files:
 - [docs/code/navigation_strategy_improved.md](../code/navigation_strategy_improved.md)
 - [docs/code/software_flow_and_state_logic.md](../code/software_flow_and_state_logic.md)
 - [docs/code/vision_interface.md](../code/vision_interface.md)
+- [docs/code/runtime_setup_and_calibration.md](../code/runtime_setup_and_calibration.md)
 - [src/README.md](../../src/README.md)
 - [src/pi-zero/README.md](../../src/pi-zero/README.md)
 
@@ -74,6 +77,7 @@ Main files:
 - [docs/evaluation/comparison_initial_goals.md](../evaluation/comparison_initial_goals.md)
 - [docs/evaluation/what_worked.md](../evaluation/what_worked.md)
 - [docs/evaluation/what_didnt.md](../evaluation/what_didnt.md)
+- [docs/testing/iteration_log.md](../testing/iteration_log.md)
 
 What they show:
 
@@ -90,7 +94,9 @@ Main files:
 - [START_HERE.md](../../START_HERE.md)
 - [docs/README.md](../README.md)
 - [docs/reproducibility/submission_checklist.md](submission_checklist.md)
+- [docs/reproducibility/full_rebuild_guide.md](full_rebuild_guide.md)
 - [docs/testing/tests.md](../testing/tests.md)
+- [docs/testing/final_validation_results.md](../testing/final_validation_results.md)
 - [models/README.md](../../models/README.md)
 - [video/video.md](../../video/video.md)
 - [t-photos/README.md](../../t-photos/README.md)
@@ -110,8 +116,9 @@ What they show:
 For a short rebuild-oriented path:
 
 1. [README.md](../../README.md)
-2. [docs/hardware/parts_list.md](../hardware/parts_list.md)
-3. [docs/hardware/pcb_wiring_diagrams.md](../hardware/pcb_wiring_diagrams.md)
-4. [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf)
-5. [docs/design/drivetrain_and_steering.md](../design/drivetrain_and_steering.md)
-6. [models/README.md](../../models/README.md)
+2. [docs/reproducibility/full_rebuild_guide.md](full_rebuild_guide.md)
+3. [docs/hardware/parts_list.md](../hardware/parts_list.md)
+4. [docs/reproducibility/mechanical_rebuild.md](mechanical_rebuild.md)
+5. [docs/hardware/as_built_wiring_checklist.md](../hardware/as_built_wiring_checklist.md)
+6. [docs/code/runtime_setup_and_calibration.md](../code/runtime_setup_and_calibration.md)
+7. [docs/testing/final_validation_results.md](../testing/final_validation_results.md)

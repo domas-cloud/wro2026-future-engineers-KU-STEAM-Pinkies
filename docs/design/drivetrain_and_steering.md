@@ -9,7 +9,7 @@ We chose that combination because it gave the best overall control on the field.
 Before choosing the final motor, we tested three `N20` options:
 
 - `300 rpm`
-- `600 rpm`
+- `250 rpm`
 - `1000 rpm`
 
 All three were small enough for the robot, but they behaved differently on the track.
@@ -22,9 +22,9 @@ This option was too slow for the performance we wanted.
 
 This option was faster, but its usable torque was weaker in practice.
 
-### `600 rpm`
+### `250 rpm`
 
-The `600 rpm` motor gave the best balance between speed and torque, so it became the final choice.
+The `250 rpm` motor gave the best balance between speed and torque, so it became the final choice.
 
 ## Why The Motor Choice Mattered
 
@@ -33,7 +33,7 @@ For this robot, speed alone was not enough. It also needed predictable motion an
 | Motor option | Practical strength | Practical weakness | Final decision |
 | --- | --- | --- | --- |
 | `300 rpm` | easy to control at low speed | too slow | rejected |
-| `600 rpm` | balanced speed and usable torque | normal tuning still required | selected |
+| `250 rpm` | balanced speed and usable torque | normal tuning still required | selected |
 | `1000 rpm` | high theoretical speed | less stable under load | rejected |
 
 ## Differential Choice
@@ -166,7 +166,7 @@ The most important result was clear: the jump from steering `V1` to `V2` gave th
 
 | Element | Tested options | Final choice | Why |
 | --- | --- | --- | --- |
-| drive motor | `300 / 600 / 1000 rpm` `N20` | `600 rpm` `N20` | best balance of speed and torque |
+| drive motor | `250 / 300 / 1000 rpm` `N20` | `250 rpm` `N20` | best balance of speed and torque |
 | differential | earlier metal differential vs `LEGO` differential | `LEGO` differential | smoother and more repeatable turning |
 | steering geometry | `V1`, `V2`, `V3` | `V3` | best precision, lowest resistance, best grip |
 | front wheels | earlier wheels vs silicone wheels | silicone wheels | less slip, stronger steering effect |

@@ -16,10 +16,10 @@ Build target used by this repository:
 
 - compact rear-wheel-drive robot;
 - front steering with `MG90S`;
-- rear `N20 6 V 600 rpm` drive motor through `L298N`;
+- rear `N20 6 V 250 rpm` drive motor through `L298N`;
 - `ESP32-WROOM-32` low-level controller;
 - `Raspberry Pi Zero` plus camera for perception;
-- `BNO085` and `3x VL53L4CD`.
+- `BNO085` and `front VL53L1X + 2x VL53L1CD`.
 
 ## 2. Wire It Exactly
 
@@ -31,7 +31,7 @@ Build target used by this repository:
      -> motor branch -> L298N -> N20 motor
      -> regulated logic branch -> ESP32
      -> regulated logic branch -> Raspberry Pi Zero
-     -> regulated sensor branch -> BNO085 + VL53L4CD sensors
+     -> regulated sensor branch -> BNO085 + VL53L1CD sensors
      -> steering branch -> MG90S servo
 ```
 
@@ -55,9 +55,9 @@ Build target used by this repository:
 | Sensor | Address | Role |
 | --- | --- | --- |
 | `BNO085` | `0x4A` with `0x4B` fallback | yaw / heading |
-| front `VL53L4CD` | `0x30` | turn trigger |
-| left `VL53L4CD` | `0x31` | left clearance |
-| right `VL53L4CD` | `0x32` | right clearance |
+| front `VL53L1X` | `0x30` | turn trigger |
+| left `VL53L1CD` | `0x31` | left clearance |
+| right `VL53L1CD` | `0x32` | right clearance |
 
 ## 3. Upload The ESP32 Firmware
 

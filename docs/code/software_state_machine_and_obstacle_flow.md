@@ -68,8 +68,8 @@ flowchart TD
 
 - camera: obstacle color and preferred side;
 - `BNO085`: keeps the robot aligned with `targetAngle`;
-- front `VL53L4CD`: prevents late entry into a wall or corner and can interrupt avoidance for a hard turn;
-- left and right `VL53L4CD`: maintain local clearance during the offset maneuver;
+- front `VL53L1X`: prevents late entry into a wall or corner and can interrupt avoidance for a hard turn;
+- left and right `VL53L1CD`: maintain local clearance during the offset maneuver;
 - start button: arms the whole state machine.
 
 ### 3. Fallback behavior

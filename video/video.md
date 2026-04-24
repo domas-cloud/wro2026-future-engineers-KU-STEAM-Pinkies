@@ -16,8 +16,9 @@ This file records the official driving-video references for the repository toget
 ## Notes
 
 - track configuration: the final challenge setup used for the recording;
-- highlighted subsystems: steering, obstacle response, lane following, and recovery;
-- what it demonstrates: autonomous operation and repeatable behavior.
+- highlighted subsystems: steering, lane following, heading correction, and recovery;
+- what it demonstrates: autonomous Open Challenge operation and repeatable behavior.
+- separate Obstacle Challenge video: not currently included in this repository.
 - repository evidence package: the same final media set is stored in `t-photos/`, `v-photos/`, and this file.
 
 ## Final Submission Checklist
@@ -27,5 +28,5 @@ Before final submission, confirm all of the following:
 - the YouTube link is public or accessible by link;
 - the autonomous driving segment is at least 30 seconds long;
 - the robot starts and drives without manual assistance;
-- the video shows obstacle response, lane following, and stable driving;
+- the video shows lane following, heading correction, and stable Open Challenge driving;
 - the link in this file exactly matches the final submission link provided to organizers.

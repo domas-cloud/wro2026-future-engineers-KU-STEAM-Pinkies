@@ -34,9 +34,9 @@ The current engineering conclusions supported by repeated testing are:
 
 - after the steering-geometry correction, the servo worked with less load and the center position remained more stable;
 - keeping the differential reduced slip and turning resistance in corners;
-- the 3 `VL53L4CD` modules gave enough short-range information for front and side control;
+- the 3 `VL53L1CD` modules gave enough short-range information for front and side control;
 - a more rigidly mounted `BNO085` improved heading-stability estimation;
-- the `600 rpm` motor gave a better balance than the slower and faster alternatives.
+- the `250 rpm` motor gave a better balance than the slower and faster alternatives.
 
 ## Quantitative Tuning Summary
 
@@ -78,6 +78,12 @@ Average result:
 - earlier robot average drift: `(11 + 10 + 12 + 9 + 11) / 5 = 10.6 cm`
 - improvement: `6.6 cm` less drift over `3 m`, about `62%`
 
+Field calibration note:
+
+- during field checks, a visible straight-line offset of about `7 cm` over `3 m` was enough for us to recalibrate the robot;
+- steering-center and yaw calibration corrected this behavior before official runs;
+- because of this, calibration is treated as part of the repeatability process, not as an optional setup step.
+
 ### Obstacle Layout Pass Rate
 
 | Layout | Runs | Clean passes | Notes |
@@ -108,7 +114,7 @@ Average comparison:
 
 | Subsystem | Older situation | Final situation | Result of comparison |
 | --- | --- | --- | --- |
-| drive motor | too slow or too weak under load | `600 rpm` N20 | better balance of speed and usable torque |
+| drive motor | too slow or too weak under load | `250 rpm` N20 | better balance of speed and usable torque |
 | steering geometry | large lever arm | corrected geometry | lower servo load and more repeatable steering |
 | front wheels | more slip on the floor | silicone front wheels | stronger conversion of steering command into real motion |
 | differential | less suitable earlier solution | `LEGO` differential | smoother turning and less resistance |

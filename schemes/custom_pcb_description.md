@@ -12,7 +12,7 @@ The drawing includes:
 - `Raspberry Pi Zero` as the camera-side board;
 - `BNO085` IMU;
 - one front `VL53L1X` ToF sensor;
-- `2x VL53L4CD` side-distance sensors;
+- `2x VL53L1CD` side-distance sensors;
 - `L298N` motor driver;
 - steering servo;
 - DC drive motor;
@@ -51,7 +51,7 @@ The intended split is straightforward:
 
 ## Sensor Bus
 
-The `BNO085` and the ToF sensors share the main sensor bus. The distance sensors also use separate shutdown lines so the front `VL53L1X` and the two side `VL53L4CD` modules can be started in the intended sequence and assigned different addresses.
+The `BNO085` and the ToF sensors share the main sensor bus. The distance sensors also use separate shutdown lines so the front `VL53L1X` and the two side `VL53L1CD` modules can be started in the intended sequence and assigned different addresses.
 
 That is one of the most practical details in the whole design, because without it the ToF sensors would conflict on the bus.
 
