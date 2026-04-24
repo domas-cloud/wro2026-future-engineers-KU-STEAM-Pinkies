@@ -17,4 +17,4 @@ tmp/
 *.bak
 ~$*.docx
 output/doc/*
-!output/doc/KU-STEAM-Pinkies-repo-viename-dokumente.docx
+!output/doc/KU-STEAM-Pinkies-project-report.docx

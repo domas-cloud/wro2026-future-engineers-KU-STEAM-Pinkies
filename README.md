@@ -29,7 +29,7 @@ This repository contains the documentation, design decisions, and embedded contr
 
 For a continuous, judge-friendly Word version of the repository documentation, use:
 
-- [KU-STEAM-Pinkies-repo-viename-dokumente.docx](output/doc/KU-STEAM-Pinkies-repo-viename-dokumente.docx)
+- [KU-STEAM-Pinkies-project-report.docx](output/doc/KU-STEAM-Pinkies-project-report.docx)
 
 ## Robot At A Glance
 
