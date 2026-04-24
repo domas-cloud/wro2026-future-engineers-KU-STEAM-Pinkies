@@ -1,66 +1,6 @@
 # KU STEAM Pinkies - WRO 2026 Future Engineers
 
-This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
-
-One clear software tuning result was that straight-line drift after `2 m` improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, `3`-lap success from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`.
-
-## Quick Navigation
-
-If you want the fastest route through the repository, use one of these paths:
-
-| Goal | Start here | Then continue to |
-|---|---|---|
-| Judge overview | [START_HERE.md](START_HERE.md) | [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md) |
-| Mechanical design | [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md) | [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md) |
-| Electronics and wiring | [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md) | [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md) |
-| Software and control | [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md) | [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md) |
-| Rebuild path | [docs/hardware/parts_list.md](docs/hardware/parts_list.md) | [models/README.md](models/README.md) and [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf) |
-| Submission media | [t-photos/](t-photos/) | [v-photos/](v-photos/) and [video/video.md](video/video.md) |
-
-## Table Of Contents
-
-- [Challenge Overview](#challenge-overview)
-- [Version Milestones](#version-milestones)
-- [Team](#team)
-- [Robot At A Glance](#robot-at-a-glance)
-- [Quick Visual Overview](#quick-visual-overview)
-- [What Makes This Repository Judge-Friendly](#what-makes-this-repository-judge-friendly)
-- [What The Code Shows](#what-the-code-shows)
-- [How The Full System Is Intended To Work](#how-the-full-system-is-intended-to-work)
-- [System Modules](#system-modules)
-- [Assembly And Rebuild Path](#assembly-and-rebuild-path)
-- [Code Structure](#code-structure)
-- [How The Software Relates To The Hardware](#how-the-software-relates-to-the-hardware)
-- [Build, Compile, And Upload](#build-compile-and-upload)
-- [Main Engineering Files](#main-engineering-files)
-- [Technical Drawings And Fabrication Evidence](#technical-drawings-and-fabrication-evidence)
-- [Where To Start](#where-to-start)
-- [Repository Layout](#repository-layout)
-- [Photo Gallery](#photo-gallery)
-- [Video Submission](#video-submission)
-- [Submission Media](#submission-media)
-- [Cost Analysis](#cost-analysis)
-- [Reproducibility Note](#reproducibility-note)
-
-## Challenge Overview
-
-In WRO Future Engineers, the robot must drive autonomously, stay mechanically reliable, and show clear engineering reasoning across hardware, software, and testing.
-
-For our team, the central engineering problem was not only making the robot move, but making it move in a controlled and repeatable way despite steering friction, wheel grip changes, power variation, and sensor noise. Because of that, this repository documents the robot as one integrated system rather than as isolated components.
-
-## Version Milestones
-
-To make the development path easier to judge, we track a small set of repository milestones instead of only keeping undated edits.
-
-| Version | Status | Meaning |
-|---|---|---|
-| `v0.8` | regional-ready | Robot and documentation stable enough for regional presentation and validation runs |
-| `v1.0` | documentation submission | Main repository package aligned for official submission and evidence review |
-| `v1.1` | final improvements | Small post-submission refinements, wording cleanups, and non-structural improvements |
-
-The current documentation package should be read as **`v1.0 documentation submission`** unless a later milestone is explicitly referenced in [CHANGELOG.md](CHANGELOG.md).
-
-## Team
+## Team And Project Introduction
 
 We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
 
@@ -82,6 +22,8 @@ We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
 - wiring, component layout, and implementation support.
 
 We divided responsibilities, but the final robot was developed and tested as one shared engineering project.
+
+This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
 
 ## Robot At A Glance
 
@@ -118,6 +60,65 @@ The robot was developed as one system, not as a collection of separate parts. Du
     <td align="center">Main power and control structure.</td>
   </tr>
 </table>
+
+## Challenge Overview
+
+In WRO Future Engineers, the robot must drive autonomously, stay mechanically reliable, and show clear engineering reasoning across hardware, software, and testing.
+
+For our team, the central engineering problem was not only making the robot move, but making it move in a controlled and repeatable way despite steering friction, wheel grip changes, power variation, and sensor noise. Because of that, this repository documents the robot as one integrated system rather than as isolated components.
+
+One clear software tuning result was that straight-line drift after `2 m` improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, `3`-lap success from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`.
+
+## Version Milestones
+
+To make the development path easier to judge, we track a small set of repository milestones instead of only keeping undated edits.
+
+| Version | Status | Meaning |
+|---|---|---|
+| `v0.8` | regional-ready | Robot and documentation stable enough for regional presentation and validation runs |
+| `v1.0` | documentation submission | Main repository package aligned for official submission and evidence review |
+| `v1.1` | final improvements | Small post-submission refinements, wording cleanups, and non-structural improvements |
+
+The current documentation package should be read as **`v1.0 documentation submission`** unless a later milestone is explicitly referenced in [CHANGELOG.md](CHANGELOG.md).
+
+## Quick Navigation
+
+If you want the fastest route through the repository, use one of these paths:
+
+| Goal | Start here | Then continue to |
+|---|---|---|
+| Judge overview | [START_HERE.md](START_HERE.md) | [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md) |
+| Mechanical design | [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md) | [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md) |
+| Electronics and wiring | [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md) | [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md) |
+| Software and control | [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md) | [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md) |
+| Rebuild path | [docs/hardware/parts_list.md](docs/hardware/parts_list.md) | [models/README.md](models/README.md) and [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf) |
+| Submission media | [t-photos/](t-photos/) | [v-photos/](v-photos/) and [video/video.md](video/video.md) |
+
+## Table Of Contents
+
+- [Team And Project Introduction](#team-and-project-introduction)
+- [Robot At A Glance](#robot-at-a-glance)
+- [Quick Visual Overview](#quick-visual-overview)
+- [Challenge Overview](#challenge-overview)
+- [Version Milestones](#version-milestones)
+- [Quick Navigation](#quick-navigation)
+- [What Makes This Repository Judge-Friendly](#what-makes-this-repository-judge-friendly)
+- [What The Code Shows](#what-the-code-shows)
+- [How The Full System Is Intended To Work](#how-the-full-system-is-intended-to-work)
+- [System Modules](#system-modules)
+- [Assembly And Rebuild Path](#assembly-and-rebuild-path)
+- [Code Structure](#code-structure)
+- [How The Software Relates To The Hardware](#how-the-software-relates-to-the-hardware)
+- [Build, Compile, And Upload](#build-compile-and-upload)
+- [Main Engineering Files](#main-engineering-files)
+- [Technical Drawings And Fabrication Evidence](#technical-drawings-and-fabrication-evidence)
+- [Where To Start](#where-to-start)
+- [Repository Layout](#repository-layout)
+- [Photo Gallery](#photo-gallery)
+- [Video Submission](#video-submission)
+- [Submission Media](#submission-media)
+- [Cost Analysis](#cost-analysis)
+- [Reproducibility Note](#reproducibility-note)
 
 ## What Makes This Repository Judge-Friendly
 
