@@ -83,7 +83,7 @@ The final robot is a compact self-driving car with:
 - an `ESP32` for low-level control;
 - a `Raspberry Pi Zero` and camera for perception;
 - a `BNO085` IMU for yaw feedback;
-- three `VL53L4CD` distance sensors;
+- `3x VL53L4CD` distance sensors and one front `VL53L1X` ToF sensor;
 - an `MG90S` steering servo;
 - an `N20 6 V 250 rpm` drive motor;
 - an `L298N` motor driver;
@@ -259,7 +259,7 @@ This split made the robot easier to understand. The camera side can focus on sce
 | perception | `Raspberry Pi Zero`, camera | lane and obstacle interpretation |
 | low-level control | `ESP32-WROOM-32` | control loop, motor, servo, sensors |
 | orientation | `BNO085` IMU | yaw feedback and heading reference |
-| distance sensing | `3x VL53L4CD` | front trigger and side-distance feedback |
+| distance sensing | `3x VL53L4CD`, front `VL53L1X` ToF | side-distance feedback and front trigger |
 | drive | `N20 250 rpm`, `L298N` | vehicle movement |
 | steering | `MG90S` servo | front-wheel steering |
 | power | `2x 18650`, regulators | stable supply branches |
@@ -281,22 +281,24 @@ The photo below shows the real perfboard-based electronics integration stage. Th
 
 | Subsystem | Design assumption |
 |---|---:|
-| logic compute | `0.8 A` continuous |
-| sensors | `0.35 A` continuous |
-| steering | `1.0 A` peak |
-| drive | `1.5 A` peak |
-| total | about `3.7 A` peak |
+| logic compute | `720 mA` continuous |
+| sensors | `132.3 mA` continuous |
+| steering servo | `800 mA` peak |
+| drive motor | `0.67 A` peak |
+| total peak budget | about `2.32 A` peak |
+
+The total peak budget was calculated from the main peak and continuous loads: `0.72 A + 0.1323 A + 0.8 A + 0.67 A = 2.3223 A`. We used this budget to check that the power system had enough headroom during steering and drive peaks.
 
 We separated power branches because motors and servos can create voltage sag and noise. Stable logic and sensor power made the robot easier to debug and more reliable.
 
 ### Sensor Placement
 
 - camera: wider scene ahead;
-- front `VL53L4CD`: turn timing and close boundary detection;
+- front `VL53L1X`: front trigger and close boundary detection;
 - left/right `VL53L4CD`: local wall or obstacle spacing;
 - `BNO085`: rigidly mounted yaw feedback.
 
-We tried richer ToF sensing with `VL53L5CX`, but `VL53L4CD` was more practical for the final system because it was easier to integrate and tune.
+We used the front `VL53L1X` for the forward ToF trigger, while the `VL53L4CD` sensors were used for local side-distance feedback. This separated front detection from side-spacing control and made the sensor roles easier to tune.
 
 **Go deeper:** electronics architecture is in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md). Wiring, pin assignments, and perfboard evidence are in [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md). Sensor choices are in [`docs/hardware/sensor_list.md`](docs/hardware/sensor_list.md). Schematic material is in [`schemes/README.md`](schemes/README.md).
 
