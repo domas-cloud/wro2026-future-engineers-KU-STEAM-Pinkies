@@ -22,7 +22,7 @@ This page shows the main relationship between the `ESP32`, `Raspberry Pi Zero`, 
 
 ![Sensor bus detail](images/sensor-bus-detail.png)
 
-This view shows the `BNO085` and the `VL53L4CD` sensor bus structure. In the published `ESP32` code, the visible sensing layout is `front`, `left`, and `right` distance sensing together with yaw feedback.
+This view shows the `BNO085` and the ToF sensor bus structure. In the published `ESP32` code, the visible sensing layout is one front `VL53L1X`, two side `VL53L4CD` sensors, and yaw feedback.
 
 ### Power Regulator Reference
 
