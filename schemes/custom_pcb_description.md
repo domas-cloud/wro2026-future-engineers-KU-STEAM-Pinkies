@@ -11,7 +11,8 @@ The drawing includes:
 - `ESP32-WROOM-32` as the low-level control board;
 - `Raspberry Pi Zero` as the camera-side board;
 - `BNO085` IMU;
-- `VL53L4CD` distance sensing;
+- one front `VL53L1X` ToF sensor;
+- `2x VL53L4CD` side-distance sensors;
 - `L298N` motor driver;
 - steering servo;
 - DC drive motor;
@@ -50,9 +51,9 @@ The intended split is straightforward:
 
 ## Sensor Bus
 
-The `BNO085` and distance sensors share the main sensor bus. The distance sensors also use separate shutdown lines so identical modules can be started one by one and assigned different addresses.
+The `BNO085` and the ToF sensors share the main sensor bus. The distance sensors also use separate shutdown lines so the front `VL53L1X` and the two side `VL53L4CD` modules can be started in the intended sequence and assigned different addresses.
 
-That is one of the most practical details in the whole design, because without it the three ToF sensors would conflict on the bus.
+That is one of the most practical details in the whole design, because without it the ToF sensors would conflict on the bus.
 
 ## Actuation Path
 
@@ -77,6 +78,6 @@ If another team wanted to follow this layout, the most important points would be
 
 1. keep the motor-current path away from logic and sensor wiring;
 2. use regulated power for the control and perception boards;
-3. initialize identical ToF sensors one by one;
+3. initialize the ToF sensors in the intended startup sequence;
 4. keep a common ground across the whole system;
 5. treat the PDF as the electrical reference and the perfboard as the physical implementation.
