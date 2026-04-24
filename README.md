@@ -89,7 +89,7 @@ The final robot is a compact self-driving car with:
 - an `L298N` motor driver;
 - a `2x 18650` Li-ion battery pack, about `7.4 V` nominal;
 - a `LEGO` rear differential;
-- custom silicone front wheels;
+- **custom silicone front wheels**, made to improve steering grip and reduce front-wheel slip;
 - custom steering and mounting parts.
 
 <table>
@@ -158,7 +158,7 @@ The main mechanical principles were:
 - fix steering resistance before using a stronger servo;
 - choose a motor that is controllable, not only fast;
 - use a differential that turns smoothly;
-- improve front-wheel grip so steering commands become real movement;
+- use **custom silicone front wheels** so the steering command creates real grip instead of sliding;
 - keep the robot compact enough for easier turning and parking.
 
 ### 5.2 Mechanical Comparison Photos
@@ -186,7 +186,7 @@ The main mechanical principles were:
     <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering detail" width="760"></td>
   </tr>
   <tr>
-    <td align="center">The final steering version reduced mechanical load and improved steering response.</td>
+    <td align="center">The final steering version reduced mechanical load. Together with the custom silicone front wheels, it made steering response stronger and more predictable.</td>
   </tr>
 </table>
 
@@ -221,11 +221,25 @@ The steering system went through three main versions:
 |---|---|---|
 | `V1` | large lever arm and high steering load | servo worked too hard |
 | `V2` | bad lever arm reduced | steering became easier and more predictable |
-| `V3` | bearings and silicone front wheels added | best precision, lower friction, better grip |
+| `V3` | bearings and **custom silicone front wheels** added | best precision, lower friction, better grip |
 
-The most important lesson was that a stronger servo was not the best first fix. The better fix was to reduce the mechanical load.
+The most important lesson was that a stronger servo was not the best first fix. The better fix was to reduce the mechanical load and improve how the front wheels transfer steering force to the field surface.
 
-### 5.6 Steering Range
+### 5.6 Why The Custom Silicone Front Wheels Mattered
+
+The front wheels are not only supports; they are the part that turns a servo command into real vehicle movement. Earlier front-wheel setups could slip before the robot fully followed the steering command. That made turns less predictable and forced the software to correct more.
+
+The custom silicone front wheels improved the robot because they:
+
+- increased grip at the steering axle;
+- reduced front-wheel slip during corrections;
+- made the same steering angle produce a more consistent turn;
+- helped the controller recover faster after steering changes;
+- made the final steering geometry more useful in real driving.
+
+This was important because software tuning only works well when the mechanical response is repeatable.
+
+### 5.7 Steering Range
 
 The servo can rotate further, but we limited the useful steering range to about `60` degrees. More steering angle looked useful, but too much angle made the robot less stable. A controlled range made the robot easier to tune.
 
@@ -369,7 +383,7 @@ The final robot worked better because mechanics, electronics, sensing, and softw
 | Risk / failure mode | Likely effect | Fix / mitigation |
 |---|---|---|
 | steering resistance | servo load and inconsistent steering | redesigned steering geometry |
-| front wheel slip | weak real steering effect | silicone front wheels |
+| front wheel slip | weak real steering effect | custom silicone front wheels |
 | wrong motor speed | too slow or unstable under load | selected `600 rpm` after comparison |
 | differential binding | rough corner exits | selected smoother final differential |
 | servo/motor voltage sag | unstable sensors or controller | separated power branches |
@@ -500,7 +514,7 @@ The final robot focuses on controlled repeatability:
 - balanced `600 rpm` motor instead of extreme motor choices;
 - smoother `LEGO` differential instead of rougher drivetrain behaviour;
 - improved steering geometry instead of forcing the servo to overcome bad mechanics;
-- silicone front wheels instead of accepting steering slip;
+- custom silicone front wheels instead of accepting steering slip;
 - split perception and control instead of one overloaded system;
 - regulated power branches instead of unstable shared power;
 - state-machine logic instead of unclear behaviour;
