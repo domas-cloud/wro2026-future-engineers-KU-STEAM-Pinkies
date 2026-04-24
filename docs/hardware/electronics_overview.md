@@ -15,9 +15,10 @@ The final electronics system includes:
 - camera module
 - `ESP32-WROOM-32`
 - `BNO085` IMU
-- `3x VL53L4CD` distance sensors
+- one front `VL53L1X` ToF sensor
+- `2x VL53L4CD` distance sensors
 - `MG90S` steering servo
-- `N20 6 V 600 rpm` drive motor
+- `N20 6 V 250 rpm` drive motor
 - `L298N` motor driver
 - `2x 18650 Li-ion` battery pack
 - step-down regulation and perfboard-based distribution
@@ -38,7 +39,7 @@ So the robot is not built around one giant controller that tries to do everythin
 
 ## Power Layout
 
-The robot is powered by a 2-cell `18650` pack, treated in our documentation as about `7.5 V` under normal use.
+The robot is powered by a 2-cell `18650` pack, treated in our documentation as about `7.4 V` nominal under normal use.
 
 From that source we separate power into several branches:
 
@@ -52,17 +53,17 @@ We used separate branches because the drive motor and servo can disturb logic po
 
 ## Current Budget
 
-We did not try to present laboratory-grade current measurements for every part. Instead, we used a conservative design budget so the power system would still have margin.
+The current values below are the practical design values we used in the documentation.
 
 | Subsystem | Main parts | Rail type | Design assumption |
 | --- | --- | --- | --- |
-| Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `0.8 A` continuous |
-| Sensors | `BNO085`, `3x VL53L4CD` | regulated sensor rail | `0.35 A` continuous |
-| Steering | `MG90S` servo | steering branch | `1.0 A` peak |
-| Drive | `N20` + `L298N` | battery / motor branch | `1.5 A` peak |
-| Total | all branches together | battery input | about `3.7 A` peak |
+| Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `720 mA` continuous |
+| Sensors | `BNO085`, `VL53L1X`, `2x VL53L4CD` | regulated sensor rail | `132.3 mA` continuous |
+| Steering | `MG90S` servo | steering branch | `800 mA` peak |
+| Drive | `N20` + `L298N` | battery / motor branch | `0.67 A` peak |
+| Total | all branches together | battery input | about `2.32 A` peak |
 
-The point of this table is simple: the regulators and wiring should have headroom, not just barely work on paper.
+The total peak budget comes from the documented working assumptions: `0.72 A + 0.1323 A + 0.8 A + 0.67 A = 2.3223 A`.
 
 ## Why We Kept Regulated Power
 
@@ -87,27 +88,27 @@ The `BNO085` helps keep the robot aligned with its heading target. Without yaw f
 
 ### Distance Sensors
 
-The three `VL53L4CD` modules are used as:
+The distance sensors are used as:
 
-- `front` for turn timing and close-range detection;
-- `left` for side-distance feedback;
-- `right` for the opposite side.
+- `front VL53L1X` for turn timing and close-range detection;
+- `left VL53L4CD` for side-distance feedback;
+- `right VL53L4CD` for the opposite side.
 
 Together, they give the controller local geometry that the camera alone cannot guarantee at short range.
 
-## Why We Stayed With `VL53L4CD`
+## Why We Stayed With This ToF Layout
 
 We also tried `VL53L5CX` matrix sensors during development. They offered richer data, but the added complexity was not worth it for this robot.
 
-For our final system, `VL53L4CD` modules were easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
+For our final system, the `VL53L1X` + `VL53L4CD` layout was easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
 
 ## Sensor Placement
 
 The placement follows the job of each sensor:
 
 - the camera watches the wider scene ahead;
-- the front distance sensor watches the area used for turn triggering;
-- the side sensors watch wall or obstacle spacing;
+- the front `VL53L1X` watches the area used for turn triggering;
+- the side `VL53L4CD` sensors watch wall or obstacle spacing;
 - the IMU is mounted rigidly so the yaw estimate follows the chassis, not a flexible bracket.
 
 ## Calibration Routine
@@ -115,7 +116,7 @@ The placement follows the job of each sensor:
 Our basic setup routine is:
 
 1. make sure the `BNO085` is mounted rigidly and gives stable yaw when the robot is still;
-2. initialize the three distance sensors one by one so they can share the bus with different addresses;
+2. initialize the front and side distance sensors in the intended startup sequence so they can share the bus with different addresses;
 3. verify repeatable distance readings against known positions;
 4. check that the perception layer and the low-level controller agree on the intended driving line;
 5. verify that straight driving does not drift immediately after startup;
@@ -129,7 +130,7 @@ The most important practical electrical risks were:
 | --- | --- | --- |
 | motor noise on logic rails | unstable control or noisy sensor data | split power branches |
 | servo current spikes | voltage sag and steering inconsistency | separate steering branch with headroom |
-| identical ToF sensors on one bus | address conflict or missing readings | staged startup and address assignment |
+| ToF sensors on one bus | address conflict or missing readings | staged startup and address assignment |
 | flexible IMU mounting | unstable yaw estimate | rigid mounting and repeated checks |
 | sensor wires near motor path | inconsistent readings | keep logic and sensor wiring away from high-current paths |
 
