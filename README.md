@@ -87,8 +87,9 @@ The final robot is a compact self-driving car with:
 - an `MG90S` steering servo;
 - an `N20 6 V 600 rpm` drive motor;
 - an `L298N` motor driver;
-- a `2x 18650` Li-ion battery pack;
-- a rear differential;
+- a `2x 18650` Li-ion battery pack, about `7.4 V` nominal;
+- a `LEGO` rear differential;
+- custom silicone front wheels;
 - custom steering and mounting parts.
 
 <table>
@@ -102,7 +103,7 @@ The final robot is a compact self-driving car with:
   </tr>
   <tr>
     <td align="center">The final steering geometry reduced friction and made the servo movement more useful.</td>
-    <td align="center">The selected differential made cornering smoother and more repeatable.</td>
+    <td align="center">The selected `LEGO` differential made cornering smoother and more repeatable.</td>
   </tr>
 </table>
 
@@ -497,7 +498,7 @@ The final robot is simpler than the previous rack/gearbox-style robot, but it is
 The final robot focuses on controlled repeatability:
 
 - balanced `600 rpm` motor instead of extreme motor choices;
-- smoother differential instead of rougher drivetrain behaviour;
+- smoother `LEGO` differential instead of rougher drivetrain behaviour;
 - improved steering geometry instead of forcing the servo to overcome bad mechanics;
 - silicone front wheels instead of accepting steering slip;
 - split perception and control instead of one overloaded system;
