@@ -83,7 +83,7 @@ The final robot is a compact self-driving car with:
 - an `ESP32` for low-level control;
 - a `Raspberry Pi Zero` and camera for perception;
 - a `BNO085` IMU for yaw feedback;
-- `3x VL53L4CD` distance sensors and one front `VL53L1X` ToF sensor;
+- `2x VL53L4CD` side-distance sensors and one front `VL53L1X` ToF sensor;
 - an `MG90S` steering servo;
 - an `N20 6 V 250 rpm` drive motor;
 - an `L298N` motor driver;
@@ -259,7 +259,7 @@ This split made the robot easier to understand. The camera side can focus on sce
 | perception | `Raspberry Pi Zero`, camera | lane and obstacle interpretation |
 | low-level control | `ESP32-WROOM-32` | control loop, motor, servo, sensors |
 | orientation | `BNO085` IMU | yaw feedback and heading reference |
-| distance sensing | `3x VL53L4CD`, front `VL53L1X` ToF | side-distance feedback and front trigger |
+| distance sensing | `2x VL53L4CD`, front `VL53L1X` ToF | side-distance feedback and front trigger |
 | drive | `N20 250 rpm`, `L298N` | vehicle movement |
 | steering | `MG90S` servo | front-wheel steering |
 | power | `2x 18650`, regulators | stable supply branches |
@@ -298,7 +298,7 @@ We separated power branches because motors and servos can create voltage sag and
 - left/right `VL53L4CD`: local wall or obstacle spacing;
 - `BNO085`: rigidly mounted yaw feedback.
 
-We used the front `VL53L1X` for the forward ToF trigger, while the `VL53L4CD` sensors were used for local side-distance feedback. This separated front detection from side-spacing control and made the sensor roles easier to tune.
+We used the front `VL53L1X` for the forward ToF trigger, while the two `VL53L4CD` sensors were used for local side-distance feedback. This separated front detection from side-spacing control and made the sensor roles easier to tune.
 
 **Go deeper:** electronics architecture is in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md). Wiring, pin assignments, and perfboard evidence are in [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md). Sensor choices are in [`docs/hardware/sensor_list.md`](docs/hardware/sensor_list.md). Schematic material is in [`schemes/README.md`](schemes/README.md).
 
