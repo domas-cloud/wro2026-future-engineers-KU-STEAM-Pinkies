@@ -239,6 +239,19 @@ This split lets the camera side focus on scene interpretation, while the `ESP32`
 | steering | `MG90S` servo | front-wheel steering |
 | power | `2x 18650`, regulators | stable supply branches |
 
+### Perfboard-Based Wiring Evidence
+
+The photo below shows the real perfboard-based electronics integration stage. It is important because the wiring was not only theoretical: the battery input, regulator, motor driver, controller wiring, signal routing, and power distribution had to be physically assembled and tested on the robot.
+
+<table>
+  <tr>
+    <td align="center"><img src="schemes/images/perfboard-wiring.jpg" alt="As-built perfboard wiring" width="850"></td>
+  </tr>
+  <tr>
+    <td align="center">As-built perfboard wiring used as real build evidence for the electronics and power system.</td>
+  </tr>
+</table>
+
 ### Power Budget
 
 | Subsystem | Design assumption |
