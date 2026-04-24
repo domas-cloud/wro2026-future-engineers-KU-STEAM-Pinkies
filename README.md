@@ -4,6 +4,8 @@ We are **KU STEAM Pinkies**, a WRO 2026 Future Engineers team building a compact
 
 This repository contains our design reasoning, hardware documentation, software structure, testing evidence, CAD/model references, wiring information, photos, and video submission material.
 
+> This README is the main story and quick judging path. For deeper evidence, each major section points to the detailed documentation files in `docs/`, `schemes/`, `models/`, and `src/`.
+
 ## Table Of Contents
 
 - [1. Starting Point: Previous Rack Robot](#1-starting-point-previous-rack-robot)
@@ -54,6 +56,8 @@ That is why our new design direction became:
 
 > build a smaller autonomous car where every subsystem helps consistency instead of adding unnecessary complexity.
 
+**Go deeper:** the previous-robot comparison and chassis reasoning are documented in [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md). The broader design trade-offs are explained in [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md).
+
 ## 2. Main Goal For The New Robot
 
 The main goal of the final robot was not maximum speed alone. We wanted **controlled repeatability**.
@@ -67,6 +71,8 @@ The new robot had to:
 - use sensors that match the field geometry;
 - separate camera perception from real-time motor control;
 - be documented clearly enough that another team could rebuild the system.
+
+**Go deeper:** the final system-level design is described in [`docs/design/system_overview.md`](docs/design/system_overview.md), while the comparison with initial goals is covered in [`docs/evaluation/comparison_initial_goals.md`](docs/evaluation/comparison_initial_goals.md).
 
 ## 3. Final Robot At A Glance
 
@@ -115,6 +121,8 @@ The high-level architecture is simple:
 2. the `ESP32` keeps the robot stable using IMU and ToF feedback;
 3. the mechanical system makes those commands physically repeatable.
 
+**Go deeper:** parts and component choices are listed in [`docs/hardware/parts_list.md`](docs/hardware/parts_list.md), mechanical layout is explained in [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md), and electronics are detailed in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md).
+
 ## 4. Team Roles
 
 ### Marius
@@ -135,6 +143,8 @@ The high-level architecture is simple:
 - wiring, component layout, and implementation support.
 
 Although responsibilities were divided, the robot was developed as one shared engineering system.
+
+**Go deeper:** project organisation and submission navigation are available in [`START_HERE.md`](START_HERE.md) and [`docs/README.md`](docs/README.md).
 
 ## 5. Mechanical Design Story
 
@@ -220,6 +230,8 @@ Instead of buying a stronger servo, we improved the steering geometry. That fixe
 
 The servo can rotate further, but we limited the useful steering range to about `60` degrees. Too much steering angle made the robot less stable, while a controlled steering range made behaviour more predictable.
 
+**Go deeper:** the complete drivetrain, motor, differential, wheel, and steering reasoning is in [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md). The chassis reasoning is in [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md). CAD and custom part evidence is in [`models/README.md`](models/README.md).
+
 ## 6. Power, Electronics, And Sensors
 
 The robot uses a split control system:
@@ -273,6 +285,8 @@ We separated power branches because motors and servos can create voltage sag and
 
 We tried richer ToF sensing with `VL53L5CX`, but `VL53L4CD` was more practical for the final system because it was easier to integrate and tune.
 
+**Go deeper:** electronics architecture is in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md). Wiring, pin assignments, and perfboard evidence are in [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md). Sensor choices are documented in [`docs/hardware/sensor_list.md`](docs/hardware/sensor_list.md), and schematic material is in [`schemes/README.md`](schemes/README.md).
+
 ## 7. Software Architecture And Obstacle Strategy
 
 The low-level controller in [`src/src/main.cpp`](src/src/main.cpp) follows this pattern:
@@ -320,6 +334,8 @@ Important fallback thresholds:
 - `confidence < 0.40` -> treat guidance as weak;
 - `frontDistance <= 400 mm` -> hard-turn trigger.
 
+**Go deeper:** the single judge-facing state machine is in [`docs/code/software_state_machine_and_obstacle_flow.md`](docs/code/software_state_machine_and_obstacle_flow.md). Control logic is explained in [`docs/code/control_algorithms.md`](docs/code/control_algorithms.md), the architecture overview is in [`docs/code/software_architecture_improved.md`](docs/code/software_architecture_improved.md), and the active embedded project is described in [`src/README.md`](src/README.md).
+
 ## 8. Testing And Tuning Evidence
 
 We tested mechanics and software together because they affected each other. A steering change changed controller tuning, and better wheel grip changed how much correction was needed.
@@ -343,6 +359,8 @@ We tested mechanics and software together because they affected each other. A st
 
 The key improvement was consistency: successful `3`-lap runs improved from `60%` to `90%`.
 
+**Go deeper:** combined mechanical/software testing is documented in [`docs/testing/mechanical_and_software_testing.md`](docs/testing/mechanical_and_software_testing.md), with additional test structure in [`docs/testing/tests.md`](docs/testing/tests.md). Evaluation notes are in [`docs/evaluation/what_worked.md`](docs/evaluation/what_worked.md) and [`docs/evaluation/what_didnt.md`](docs/evaluation/what_didnt.md).
+
 ## 9. Systems Thinking And Risk Mitigation
 
 The final robot worked better because mechanics, electronics, sensing, and software were treated as one connected system.
@@ -357,6 +375,8 @@ The final robot worked better because mechanics, electronics, sensing, and softw
 | ToF address conflict | missing readings | staged startup and address assignment |
 | stale camera data | wrong obstacle reaction | age/confidence fallback |
 | flexible IMU mounting | bad yaw estimate | rigid mounting and checks |
+
+**Go deeper:** risk/failure reasoning is expanded in [`docs/design/risk_and_failures.md`](docs/design/risk_and_failures.md). The decision logic behind final choices is in [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md), and the full evidence index is in [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md).
 
 ## 10. Build, Compile, And Upload
 
@@ -380,6 +400,8 @@ Main software files:
 - [`src/platformio.ini`](src/platformio.ini)
 - [`docs/code/vision_interface.md`](docs/code/vision_interface.md)
 
+**Go deeper:** firmware build and source structure are explained in [`src/README.md`](src/README.md). Exact rebuild and startup references are in [`docs/reproducibility/exact_rebuild_wiring_upload_start.md`](docs/reproducibility/exact_rebuild_wiring_upload_start.md).
+
 ## 11. Reproducibility Map
 
 | Criterion | Main evidence files |
@@ -400,6 +422,8 @@ Fast rebuild path:
 6. [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md)
 7. [`models/README.md`](models/README.md)
 8. [`src/README.md`](src/README.md)
+
+**Go deeper:** the most complete criterion-by-criterion index is [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md). The submission checklist is [`docs/reproducibility/submission_checklist.md`](docs/reproducibility/submission_checklist.md).
 
 ## 12. Photos And Video
 
@@ -446,6 +470,8 @@ Current published link:
 
 - Open Challenge: [YouTube video](https://www.youtube.com/watch?v=PdYDFbR_HfI)
 
+**Go deeper:** official robot photos are stored in [`v-photos/`](v-photos/), the team photo is in [`t-photos/`](t-photos/), and video evidence is described in [`video/video.md`](video/video.md).
+
 ## 13. Repository Layout
 
 - `docs/design/` - mechanical design, trade-offs, risk, and system-level decisions
@@ -461,6 +487,8 @@ Current published link:
 - `v-photos/` - robot photos
 - `video/` - video submission information
 - `output/doc/` - continuous DOCX report version
+
+**Go deeper:** [`docs/README.md`](docs/README.md) is the full documentation index, and [`START_HERE.md`](START_HERE.md) is the fastest judge-facing entry point.
 
 ## 14. Final Conclusion
 
