@@ -102,7 +102,7 @@ The robot would either become too slow or lose too much practical drive strength
 ### Mitigation
 We tested three N20 motors:
 
-- 300 rpm,
+- 50 rpm,
 - 250 rpm,
 - 1000 rpm.
 
@@ -156,7 +156,7 @@ The chosen MG90S servo became sufficient once the steering geometry was correcte
 | Too much steering angle | Lower stability | Limited to ~60° | More controlled behaviour |
 | Front-wheel slipping | Weak real steering effect | Silicone front wheels | Better grip, stronger turning |
 | Unsuitable differential | Lower precision, more binding | LEGO differential | More precise, less jamming |
-| Wrong motor choice | Too fast or too weak under load | Tested 250 / 300 / 1000 rpm | 250 rpm chosen |
+| Wrong motor choice | Too slow, too fast, or too weak under load | Tested 50 / 250 / 1000 rpm | 250 rpm chosen |
 | Straight-driving drift | Lower repeatability | Multiple mechanical improvements | Minimal drift |
 | Stronger-servo-only solution | More energy use without geometry fix | Improved mechanics first | MG90S became sufficient |
 

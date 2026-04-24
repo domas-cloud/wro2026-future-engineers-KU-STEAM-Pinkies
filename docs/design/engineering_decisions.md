@@ -30,11 +30,11 @@ The smaller robot was easier to package, easier to turn, and easier to control.
 
 We tested three N20 motor options:
 
-- `300 rpm`
+- `50 rpm`
 - `250 rpm`
 - `1000 rpm`
 
-The `300 rpm` option was too slow. The `1000 rpm` option did not give enough torque. The `250 rpm` motor gave the best balance between speed and usable torque, so that became the final choice.
+The `50 rpm` option was useful for slow testing, but it was too slow for the final driving behaviour. The `1000 rpm` option did not give enough torque. The `250 rpm` motor gave the best balance between speed and usable torque, so that became the final choice.
 
 ## 4. Differential As A Required Part
 
@@ -98,7 +98,7 @@ We performed about `10` test runs while comparing versions. The change from stee
 
 | Decision | Option A | Option B | Chosen | Evidence |
 | --- | --- | --- | --- | --- |
-| Drive motor speed | `300 rpm` | `250 rpm` | `250 rpm` | `300 rpm` was too slow in long sections; `250 rpm` kept enough speed while remaining controllable |
+| Drive motor speed | `50 rpm` | `250 rpm` | `250 rpm` | `50 rpm` was too slow in long sections; `250 rpm` kept enough speed while remaining controllable |
 | Steering concept | complex custom steering | simplified low-friction steering | simplified steering | More repeatable, less friction, easier servo load |
 | Front wheel tires | low-grip wheels | silicone wheels | silicone wheels | Better corner hold and less random slip |
 | Sensor role | distance-only | fused distance + `IMU` + camera | fused | More robust against single-sensor error |
