@@ -35,6 +35,30 @@ Our development did not start from the final vehicle. Before this version, we ha
 
 The biggest lesson from the previous robot was that a complicated mechanism is not automatically better. In WRO Future Engineers, the vehicle must repeat the same behaviour under changing field layouts. Because of that, we decided that the new robot should be simpler, lower-friction, easier to tune, and more reproducible.
 
+### Previous Prototype Evidence
+
+The photos below show the earlier mechanical direction and the drivetrain/steering ideas that influenced the final redesign.
+
+<table>
+  <tr>
+    <td align="center"><strong>Earlier Differential Version</strong></td>
+    <td align="center"><strong>Final Differential Version</strong></td>
+    <td align="center"><strong>Final Steering Version</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/design/images/metal-differential.jpg" alt="Earlier metal differential version" width="260"></td>
+    <td align="center"><img src="docs/design/images/lego-differential.png" alt="Final LEGO differential version" width="260"></td>
+    <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering version" width="260"></td>
+  </tr>
+  <tr>
+    <td align="center">The earlier drivetrain direction looked stronger, but it introduced more binding and less repeatable corner behaviour.</td>
+    <td align="center">The final differential was smoother and made corner exits more predictable.</td>
+    <td align="center">The final steering geometry reduced load and made servo movement more useful.</td>
+  </tr>
+</table>
+
+This visual comparison is important because it shows why we did not simply keep the most complicated-looking mechanism. We kept the version that behaved better during driving.
+
 So the new design direction became:
 
 > build a smaller autonomous car where every subsystem helps consistency instead of adding unnecessary complexity.
