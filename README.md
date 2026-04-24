@@ -1,8 +1,84 @@
 # KU STEAM Pinkies - WRO 2026 Future Engineers
 
-## Team And Project Introduction
+We are **KU STEAM Pinkies**, a WRO 2026 Future Engineers team building a compact autonomous self-driving car. This repository is our engineering story: how we moved from an earlier robot that was too complicated to control consistently, toward a smaller and more reliable robot where mechanics, electronics, sensing, software, testing, and documentation were developed as one connected system.
 
-We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
+The goal of this README is not only to list parts. It explains why the robot became the way it is, what we changed after testing, and where another team or judge can find the evidence needed to understand or reproduce the vehicle.
+
+## Table Of Contents
+
+- [1. Starting Point: What The Previous Robot Taught Us](#1-starting-point-what-the-previous-robot-taught-us)
+- [2. Main Design Goal For The New Robot](#2-main-design-goal-for-the-new-robot)
+- [3. Final Robot At A Glance](#3-final-robot-at-a-glance)
+- [4. Team Roles](#4-team-roles)
+- [5. Visual Overview](#5-visual-overview)
+- [6. Mobility And Mechanical Design Story](#6-mobility-and-mechanical-design-story)
+- [7. Electronics, Power, And Sensors](#7-electronics-power-and-sensors)
+- [8. Software Architecture And Obstacle Strategy](#8-software-architecture-and-obstacle-strategy)
+- [9. Testing And Iteration Results](#9-testing-and-iteration-results)
+- [10. Systems Thinking: How The Subsystems Affect Each Other](#10-systems-thinking-how-the-subsystems-affect-each-other)
+- [11. Risk And Failure Mitigation](#11-risk-and-failure-mitigation)
+- [12. Build, Compile, And Upload](#12-build-compile-and-upload)
+- [13. Reproducibility And Evidence Map](#13-reproducibility-and-evidence-map)
+- [14. Photos, Video, And Submission Media](#14-photos-video-and-submission-media)
+- [15. Repository Layout](#15-repository-layout)
+- [16. Final Engineering Conclusion](#16-final-engineering-conclusion)
+
+## 1. Starting Point: What The Previous Robot Taught Us
+
+Our development did not start from the final vehicle. Before this version, we had a previous robot that was larger and used a more complex steering idea. On paper, that older robot looked more advanced, but in practice it created several problems:
+
+- the steering system had more friction and more mechanical resistance;
+- the robot was harder to tune because small mechanical issues changed the software behaviour;
+- the larger structure made the vehicle less predictable in corners;
+- the steering servo had to fight the mechanism instead of only positioning the wheels;
+- testing one change at a time was difficult because many weaknesses affected each other.
+
+The biggest lesson from the previous robot was that a complicated mechanism is not automatically better. In WRO Future Engineers, the vehicle must repeat the same behaviour under changing field layouts. Because of that, we decided that the new robot should be simpler, lower-friction, easier to tune, and more reproducible.
+
+So the new design direction became:
+
+> build a smaller autonomous car where every subsystem helps consistency instead of adding unnecessary complexity.
+
+## 2. Main Design Goal For The New Robot
+
+For the new robot, our target was not maximum speed alone. The target was **controlled repeatability**.
+
+That meant the robot had to:
+
+- drive straight without drifting too much;
+- turn corners cleanly;
+- recover after corrections without wobbling;
+- keep the steering load low;
+- use sensors that are useful for the field geometry;
+- separate perception and low-level control so timing stays predictable;
+- be documented clearly enough that another team can understand how it works.
+
+This design goal shaped every major decision: motor choice, differential choice, steering geometry, power layout, sensor placement, and software structure.
+
+## 3. Final Robot At A Glance
+
+Our final robot is a compact self-driving car with:
+
+- rear-wheel drive;
+- front-wheel steering;
+- an `ESP32` for low-level real-time control;
+- a `Raspberry Pi Zero` and camera for perception;
+- a `BNO085` IMU for yaw feedback;
+- three `VL53L4CD` distance sensors for front and side feedback;
+- an `MG90S` steering servo;
+- an `N20 6 V 600 rpm` drive motor;
+- an `L298N` motor driver;
+- a `2x 18650` Li-ion battery pack;
+- a mechanical rear differential;
+- custom steering and mounting parts.
+
+The high-level idea is simple:
+
+1. the camera/perception layer decides the driving reference or obstacle side;
+2. the `ESP32` keeps the robot stable using IMU and ToF feedback;
+3. the mechanical system makes those commands physically repeatable.
+
+## 4. Team Roles
 
 ### Marius
 
@@ -21,37 +97,13 @@ We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
 - electronics and hardware design;
 - wiring, component layout, and implementation support.
 
-We divided responsibilities, but the final robot was developed and tested as one shared engineering project.
+We divided responsibilities, but the final robot was developed and tested as one shared engineering project. Most improvements required cooperation between mechanical, electrical, and software work.
 
-This repository contains the documentation, design decisions, and embedded control code for our WRO 2026 Future Engineers robot.
-
-## Single DOCX Report
-
-For a continuous, judge-friendly Word version of the repository documentation, use:
-
-- [KU-STEAM-Pinkies-project-report.docx](output/doc/KU-STEAM-Pinkies-project-report.docx)
-
-## Robot At A Glance
-
-Our robot is a compact self-driving car with:
-
-- rear-wheel drive;
-- front-wheel steering;
-- an `ESP32` for low-level control;
-- a `Raspberry Pi Zero` and camera for perception;
-- a `BNO085` IMU;
-- three `VL53L4CD` distance sensors for front and side feedback;
-- an `MG90S` steering servo, `N20` drive motor, and `L298N` motor driver.
-
-The main idea is simple: perception chooses the driving reference, and the low-level controller keeps the robot on that reference as smoothly and consistently as possible.
-
-The robot was developed as one system, not as a collection of separate parts. During the season we repeatedly found that steering geometry, wheel grip, sensor quality, software tuning, and power stability all affected each other. Because of that, this repository is organized to show both the final solution and the reasoning that led us there.
-
-## Quick Visual Overview
+## 5. Visual Overview
 
 <table>
   <tr>
-    <td align="center"><strong>Steering Layout</strong></td>
+    <td align="center"><strong>Final Steering Layout</strong></td>
     <td align="center"><strong>Rear Drivetrain</strong></td>
     <td align="center"><strong>Electronics Structure</strong></td>
   </tr>
@@ -61,221 +113,268 @@ The robot was developed as one system, not as a collection of separate parts. Du
     <td align="center"><img src="schemes/images/schematic-overview.png" alt="Main schematic overview" width="300"></td>
   </tr>
   <tr>
-    <td align="center">Final steering geometry used in the robot.</td>
-    <td align="center">Rear drivetrain with the <code>LEGO</code> differential.</td>
+    <td align="center">Version 3 steering geometry with lower resistance and better repeatability.</td>
+    <td align="center">Rear drivetrain using the selected differential solution.</td>
     <td align="center">Main power and control structure.</td>
   </tr>
 </table>
 
-## Challenge Overview
+## 6. Mobility And Mechanical Design Story
 
-In WRO Future Engineers, the robot must drive autonomously, stay mechanically reliable, and show clear engineering reasoning across hardware, software, and testing.
+### 6.1 Why We Changed The Mechanical Philosophy
 
-For our team, the central engineering problem was not only making the robot move, but making it move in a controlled and repeatable way despite steering friction, wheel grip changes, power variation, and sensor noise. Because of that, this repository documents the robot as one integrated system rather than as isolated components.
+The previous robot made us focus on a key question:
 
-One clear software tuning result was that straight-line drift after `2 m` improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, `3`-lap success from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`.
+> Do we want a mechanism that looks complex, or a mechanism that gives repeatable control?
 
-## Version Milestones
+We chose repeatable control. That is why the final robot uses a simpler front-steering layout, rear-wheel drive, and a differential that turns smoothly instead of fighting the controller.
 
-To make the development path easier to judge, we track a small set of repository milestones instead of only keeping undated edits.
+### 6.2 Drive Motor Selection
 
-| Version | Status | Meaning |
+We tested three `N20` motor options:
+
+| Motor option | Practical strength | Practical weakness | Decision |
+|---|---|---|---|
+| `300 rpm` | easy to control slowly | too slow for our target behaviour | rejected |
+| `600 rpm` | best speed/torque balance | still required controller tuning | selected |
+| `1000 rpm` | higher theoretical speed | weaker usable torque and less stable under load | rejected |
+
+The `600 rpm` motor became the final choice because it gave enough speed while still having usable torque. For our robot size, the extreme options were worse: `300 rpm` was too slow, while `1000 rpm` made control less predictable.
+
+### 6.3 Differential Choice
+
+We also compared differential behaviour. The earlier metal differential looked stronger, but the final `LEGO` differential gave smoother and more repeatable cornering.
+
+The final choice was based on practical behaviour:
+
+- less binding in turns;
+- smoother corner exits;
+- more repeatable behaviour between runs;
+- easier software tuning.
+
+This was a good example of our engineering approach: the part that works better on the field is more important than the part that looks stronger by itself.
+
+### 6.4 Steering Iterations
+
+The steering system went through three main versions.
+
+| Version | Problem or improvement | Result |
 |---|---|---|
-| `v0.8` | regional-ready | Robot and documentation stable enough for regional presentation and validation runs |
-| `v1.0` | documentation submission | Main repository package aligned for official submission and evidence review |
-| `v1.1` | final improvements | Small post-submission refinements, wording cleanups, and non-structural improvements |
+| `V1` | large lever arm and high steering load | servo worked too hard and steering was less repeatable |
+| `V2` | bad lever arm reduced | steering became easier to move and more predictable |
+| `V3` | bearings and silicone front wheels added | best precision, lower friction, better grip |
 
-The current documentation package should be read as **`v1.0 documentation submission`** unless a later milestone is explicitly referenced in [CHANGELOG.md](CHANGELOG.md).
+The largest improvement came from `V1` to `V2`, because reducing the bad lever arm lowered the force required from the servo. Instead of solving the problem with a heavier servo, we improved the mechanism itself.
 
-## Quick Navigation
+### 6.5 Steering Range Trade-Off
 
-If you want the fastest route through the repository, use one of these paths:
+The servo can physically rotate further, but we intentionally limited the useful steering range to about `60` degrees.
 
-| Goal | Start here | Then continue to |
+The trade-off was:
+
+- larger steering angle can make tighter turns possible;
+- too much steering angle can reduce stability and increase aggressive corrections;
+- a controlled range made the robot more predictable.
+
+So the final steering range was chosen for stability, not for maximum mechanical movement.
+
+### 6.6 Front And Rear Wheel Roles
+
+We treated the front and rear wheels differently because they do different jobs.
+
+Front wheels must transfer steering commands into real movement. After switching to silicone front wheels:
+
+- front slip decreased;
+- the steering command had a stronger real effect;
+- turn behaviour became more repeatable.
+
+Rear wheels must provide stable drive through the differential. The rear setup therefore stayed focused on dependable traction and smooth cornering.
+
+## 7. Electronics, Power, And Sensors
+
+### 7.1 Split Control Architecture
+
+The robot uses a split electronics system:
+
+- `Raspberry Pi Zero` + camera: perception and obstacle/lane interpretation;
+- `ESP32`: real-time control, sensors, servo output, and motor output.
+
+We chose this architecture because perception and low-level control have different timing needs. The camera side can interpret the scene, while the `ESP32` keeps fast and predictable control over the vehicle.
+
+### 7.2 Main Electronic Parts
+
+| Subsystem | Main parts | Purpose |
 |---|---|---|
-| Judge overview | [START_HERE.md](START_HERE.md) | [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md) |
-| Mechanical design | [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md) | [docs/design/engineering_decisions.md](docs/design/engineering_decisions.md) |
-| Electronics and wiring | [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md) | [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md) |
-| Software and control | [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md) | [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md) |
-| Rebuild path | [docs/hardware/parts_list.md](docs/hardware/parts_list.md) | [models/README.md](models/README.md) and [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf) |
-| Submission media | [t-photos/](t-photos/) | [v-photos/](v-photos/) and [video/video.md](video/video.md) |
+| perception | `Raspberry Pi Zero`, camera | wider scene, lane and obstacle interpretation |
+| low-level control | `ESP32-WROOM-32` | control loop, motor, servo, sensors |
+| orientation | `BNO085` IMU | yaw feedback and heading reference |
+| distance sensing | `3x VL53L4CD` | front trigger and side-distance feedback |
+| drive | `N20 600 rpm`, `L298N` | vehicle movement |
+| steering | `MG90S` servo | front-wheel steering |
+| power | `2x 18650`, regulators, wiring branches | stable supply for logic, sensors, motor, and servo |
 
-## Table Of Contents
+### 7.3 Power Budget
 
-- [Team And Project Introduction](#team-and-project-introduction)
-- [Robot At A Glance](#robot-at-a-glance)
-- [Quick Visual Overview](#quick-visual-overview)
-- [Challenge Overview](#challenge-overview)
-- [Version Milestones](#version-milestones)
-- [Quick Navigation](#quick-navigation)
-- [What Makes This Repository Judge-Friendly](#what-makes-this-repository-judge-friendly)
-- [What The Code Shows](#what-the-code-shows)
-- [How The Full System Is Intended To Work](#how-the-full-system-is-intended-to-work)
-- [System Modules](#system-modules)
-- [Assembly And Rebuild Path](#assembly-and-rebuild-path)
-- [Code Structure](#code-structure)
-- [How The Software Relates To The Hardware](#how-the-software-relates-to-the-hardware)
-- [Build, Compile, And Upload](#build-compile-and-upload)
-- [Main Engineering Files](#main-engineering-files)
-- [Technical Drawings And Fabrication Evidence](#technical-drawings-and-fabrication-evidence)
-- [Where To Start](#where-to-start)
-- [Repository Layout](#repository-layout)
-- [Photo Gallery](#photo-gallery)
-- [Video Submission](#video-submission)
-- [Submission Media](#submission-media)
-- [Cost Analysis](#cost-analysis)
-- [Reproducibility Note](#reproducibility-note)
+We used a conservative design budget so the system would have headroom instead of barely working on paper.
 
-## What Makes This Repository Judge-Friendly
+| Subsystem | Main parts | Design assumption |
+|---|---|---|
+| logic compute | `Raspberry Pi Zero`, `ESP32` | `0.8 A` continuous |
+| sensors | `BNO085`, `3x VL53L4CD` | `0.35 A` continuous |
+| steering | `MG90S` servo | `1.0 A` peak |
+| drive | `N20` + `L298N` | `1.5 A` peak |
+| total | all branches together | about `3.7 A` peak |
 
-This repository is organized so that a judge can quickly verify:
+The main reason for separating power branches was reliability. Motors and servos can create voltage drops and noise, so the logic and sensors should not depend on the same unstable path.
 
-- what the final robot is made of;
-- how the steering, drivetrain, sensors, and control system connect;
-- where the active embedded code lives;
-- which files provide rebuild evidence;
-- where the required submission media is stored.
+### 7.4 Sensor Placement Reasoning
 
-If you want the quickest entry path, start with [START_HERE.md](START_HERE.md), then continue into [docs/README.md](docs/README.md) and [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md).
+The sensor placement follows the job of each sensor:
 
-The most direct evidence files are:
+- the camera looks ahead and supports higher-level decisions;
+- the front `VL53L4CD` helps trigger turns and detect close boundaries;
+- the left and right `VL53L4CD` sensors help keep local wall or obstacle spacing;
+- the `BNO085` is mounted rigidly so yaw follows the chassis instead of a flexible bracket.
 
-- [README.md](README.md)
-- [docs/reproducibility/evidence_map.md](docs/reproducibility/evidence_map.md)
-- [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
-- [docs/hardware/electronics_overview.md](docs/hardware/electronics_overview.md)
-- [docs/code/software_state_machine_and_obstacle_flow.md](docs/code/software_state_machine_and_obstacle_flow.md)
-- [docs/code/software_flow_and_state_logic.md](docs/code/software_flow_and_state_logic.md)
-- [docs/testing/mechanical_and_software_testing.md](docs/testing/mechanical_and_software_testing.md)
-- [docs/reproducibility/exact_rebuild_wiring_upload_start.md](docs/reproducibility/exact_rebuild_wiring_upload_start.md)
+We also tried richer ToF sensing with `VL53L5CX`, but for the final robot `VL53L4CD` modules were easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
 
-## What The Code Shows
+## 8. Software Architecture And Obstacle Strategy
 
-The clearest software example in this repository is [src/src/main.cpp](src/src/main.cpp).
+### 8.1 Why The Software Is Split
 
-That code shows the low-level `ESP32` controller:
+The software follows the same logic as the electronics:
 
-1. wait for the start button;
-2. store the current yaw as the heading reference;
-3. drive forward at fixed power;
-4. read front, left, and right distance sensors together with yaw;
-5. keep heading and wall offset under control;
-6. make a hard turn when the front sensor detects a close boundary;
-7. count sector turns and stop after the required sequence.
+- the `Raspberry Pi Zero` can decide what the robot should aim for;
+- the `ESP32` executes the real-time driving behaviour.
 
-So the code here shows the low-level controller, not the whole robot software stack by itself.
+The low-level controller does not need to understand the whole world. It needs reliable references and local sensor feedback.
 
-## How The Full System Is Intended To Work
+### 8.2 Main Runtime Behaviour
 
-In the full robot architecture, the `Raspberry Pi Zero` and camera handle the perception layer. That layer can decide which line the robot should follow or which side it should use around an obstacle.
+The active low-level controller in `src/src/main.cpp` shows this sequence:
 
-The `ESP32` remains responsible for:
+1. wait for the physical start button;
+2. store current yaw as the heading reference;
+3. start the drive motor;
+4. read front, left, and right ToF sensors;
+5. read yaw from the IMU;
+6. apply heading and wall-distance correction;
+7. trigger a hard turn when the front distance becomes small;
+8. update the target angle after a turn;
+9. count sectors and stop after the required sequence.
 
-- reading the IMU and distance sensors;
-- generating steering and motor output;
-- executing the real-time control loop.
+This structure supports predictable autonomous movement without manual input during the run.
 
-This is why the repository documents both the low-level `ESP32` controller and the Pi-side perception architecture, with the `ESP32` still holding the real-time control responsibility.
+### 8.3 State Machine Summary
 
-## System Modules
+| State | Main inputs | Main output | Exit condition |
+|---|---|---|---|
+| `Idle` | start button | motor off, steering centered | button press |
+| `StraightControl` | yaw, front ToF, side ToF | heading hold and wall-offset correction | obstacle packet or corner trigger |
+| `ObstacleDecision` | camera result, confidence, packet age | choose legal passing side | enter left/right avoidance or fallback |
+| `AvoidLeft` | camera command, IMU, ToF | shift reference left while checking clearance | obstacle cleared or fallback |
+| `AvoidRight` | camera command, IMU, ToF | shift reference right while checking clearance | obstacle cleared or fallback |
+| `HardTurn` | front ToF, side ToF, yaw | full-lock turn and target angle update | open space detected ahead |
+| `Finish` | sector count and steering error | stop motor and center steering | wait for restart |
 
-The robot can be understood as a set of connected modules.
+### 8.4 Obstacle Rule Logic
 
-### 1. Perception Module
+The obstacle strategy follows the WRO pillar rule:
 
-The perception module is built around the `Raspberry Pi Zero` and camera. Its role is to interpret the wider scene ahead of the robot. In our intended final architecture, this layer can:
+- red pillar -> pass on the right side;
+- green pillar -> pass on the left side.
 
-- detect relevant lane or obstacle information;
-- choose which side should be used around an obstacle;
-- provide the low-level controller with a preferred driving line or reference shift.
+The intended full-system data path is:
 
-This module is connected to the electromechanical system indirectly. It does not drive the servo or motor by itself. Instead, it sends a higher-level reference to the control side.
+1. the camera detects the obstacle and preferred side;
+2. the Pi sends a vision packet to the `ESP32`;
+3. the `ESP32` checks packet age and confidence;
+4. if the data is fresh enough, the controller shifts the driving reference;
+5. if the data is stale or weak, the robot falls back to neutral wall/heading control.
 
-### 2. Low-Level Control Module
+Important fallback thresholds in the documented architecture:
 
-The low-level control module is the `ESP32` firmware. This is the controller that is visible most directly in the repository under `src/`.
+- `age_ms > 250` -> ignore obstacle guidance;
+- `confidence < 0.40` -> treat obstacle guidance as weak;
+- front turn trigger around `400 mm` -> switch to hard-turn behaviour.
 
-Its role is to:
+This fallback design matters because the robot should fail safely instead of following old or uncertain perception data.
 
-- read the `BNO085` yaw heading;
-- read the front, left, and right `VL53L4CD` distance sensors;
-- compute steering corrections;
-- trigger and execute hard turns;
-- drive the motor and steering servo.
+## 9. Testing And Iteration Results
 
-This module is directly connected to the electromechanical components of the robot:
+We tested mechanics and software together because they affected each other. A steering change changed controller tuning. Better wheel grip changed how much correction was needed. A smoother differential made corner exits easier to control.
 
-- `BNO085` IMU
-- three `VL53L4CD` distance sensors
-- `MG90S` steering servo
-- `L298N` motor driver
-- `N20` drive motor
-- start button and status lights
+### 9.1 Main Comparison Areas
 
-### 3. Mechanical Module
+We compared:
 
-The mechanical module includes the chassis, drivetrain, front steering layout, rear differential, wheel mounting, and custom printed parts. These parts matter because they directly affect how well the low-level controller can work. A good steering algorithm is much less useful if the wheels slip, the steering binds, or the differential resists turning.
+- `300 rpm`, `600 rpm`, and `1000 rpm` `N20` motors;
+- steering `V1`, `V2`, and `V3`;
+- earlier front wheels versus silicone front wheels;
+- earlier differential solution versus the final `LEGO` differential;
+- sensor mounting and wiring stability;
+- software tuning before and after mechanical improvements.
 
-### 4. Power Module
+### 9.2 Test Method
 
-The robot uses a `2x 18650` battery pack together with regulated power branches. The power layout matters because motor and servo loads can disturb logic and sensor signals if the electrical system is not organized carefully.
+For major changes, we used this pattern:
 
-### 5. Documentation And Reproducibility Module
+1. change one part or subsystem;
+2. run the same scenario several times;
+3. watch whether the same weakness repeats;
+4. compare the result with the previous version;
+5. keep the version that improves repeatability, not just one lucky run.
 
-The repository itself is also part of the final solution. It contains:
+For steering comparisons, we used about `10` practical runs while deciding between the main versions.
 
-- source code;
-- mechanical explanations;
-- electronics and wiring information;
-- CAD exports;
-- testing notes;
-- team, robot, and video submission material.
+### 9.3 Key Software Tuning Results
 
-## Assembly And Rebuild Path
+| Test case | Before change | After change | Sample size | Why it mattered |
+|---|---:|---:|---:|---|
+| straight corridor drift after `2 m` | `9 cm` | `4 cm` | `10` runs | better lane stability |
+| corner overshoot | `14 cm` | `6 cm` | `10` runs | lower wall-contact risk |
+| successful `3`-lap runs | `6/10` | `9/10` | `10` runs | higher consistency |
+| recovery after obstacle correction | `1.2 s` | `0.6 s` | `10` runs | faster return to target line |
 
-If another team wanted to understand or rebuild the robot efficiently, we would suggest this order:
+The most important result was not one perfect run. The important result was consistency: successful `3`-lap completion improved from `60%` to `90%` across the measured runs.
 
-1. [README.md](README.md)
-2. [docs/hardware/parts_list.md](docs/hardware/parts_list.md)
-3. [docs/hardware/pcb_wiring_diagrams.md](docs/hardware/pcb_wiring_diagrams.md)
-4. [schemes/Wro_customPCBs.pdf](schemes/Wro_customPCBs.pdf)
-5. [docs/design/drivetrain_and_steering.md](docs/design/drivetrain_and_steering.md)
-6. [models/README.md](models/README.md)
+## 10. Systems Thinking: How The Subsystems Affect Each Other
 
-This path is intentionally practical: parts first, wiring second, mechanics third, and only then the deeper design trade-off documents.
+The robot improved because we stopped treating subsystems separately.
 
-## Code Structure
+Examples:
 
-The active embedded controller project is inside [src/README.md](src/README.md).
+- when steering friction was high, the controller looked unstable even if the software logic was reasonable;
+- when front wheels slipped, steering commands did not become real movement;
+- when the differential bound during turns, the robot exited corners inconsistently;
+- when power was not separated clearly, sensor and control reliability could suffer;
+- when sensor placement changed, the control thresholds had to be rechecked.
 
-The main software pieces are:
+This is why our final design is not only a list of components. It is a set of choices that support each other:
 
-- `src/src/main.cpp` - main runtime loop
-- `src/lib/Compass/Compass.h` - yaw heading support
-- `src/lib/Lidar/Lidar.h` - distance sensor handling
-- `src/lib/Engine/Engine.h` - motor control wrapper
-- `src/lib/Lights/` - status lights
-- `src/platformio.ini` - PlatformIO project configuration
-- `docs/code/vision_interface.md` - Pi-to-ESP32 interface definition
+- lower-friction steering helps the servo;
+- better front grip helps the controller;
+- smoother differential behaviour helps cornering;
+- split electronics keeps perception and control responsibilities clear;
+- regulated power branches reduce electrical instability;
+- state-machine logic makes robot behaviour easier to understand and debug.
 
-Together, these files show how the code is split into sensing, control, and actuation responsibilities.
+## 11. Risk And Failure Mitigation
 
-## How The Software Relates To The Hardware
+| Risk or failure mode | Likely effect | Mitigation |
+|---|---|---|
+| steering mechanism has too much resistance | servo load increases and steering becomes inconsistent | redesigned steering geometry from `V1` to `V2/V3` |
+| front wheels slip | steering command does not translate into movement | silicone front wheels |
+| motor too slow or too weak under load | poor lap time or unstable acceleration | selected `600 rpm` motor after comparing `300/600/1000 rpm` |
+| differential binds | rough corner exits and unpredictable turns | selected smoother final differential solution |
+| servo or motor causes voltage sag | unstable electronics or sensor readings | separated power branches and regulator planning |
+| ToF sensors conflict on bus | missing or incorrect distance readings | staged startup and address assignment |
+| camera data is stale or low-confidence | wrong obstacle action | packet age/confidence fallback |
+| IMU mounted flexibly | yaw estimate does not match chassis motion | rigid IMU mounting and repeated checks |
 
-The software is tightly connected to the electromechanical layout of the vehicle.
+## 12. Build, Compile, And Upload
 
-- The `ESP32` reads yaw from the `BNO085` to keep the robot aligned with the current heading target.
-- The front `VL53L4CD` sensor helps decide when a turn should begin.
-- The side `VL53L4CD` sensors provide local spacing information used for steering correction.
-- The `MG90S` servo receives the final steering command.
-- The `L298N` and `N20` motor provide forward movement under control of the `ESP32`.
-- The `Raspberry Pi Zero` and camera can provide higher-level scene interpretation above this control loop.
-
-This relationship between code and hardware is the reason we documented both sides together. The robot cannot be understood correctly if software, electronics, and mechanics are described in isolation.
-
-## Build, Compile, And Upload
-
-The low-level controller is built as a PlatformIO project.
+The active embedded controller project is inside [`src/`](src/).
 
 ### Environment
 
@@ -286,84 +385,52 @@ The low-level controller is built as a PlatformIO project.
 ### Basic Steps
 
 1. Open the `src/` folder as a PlatformIO project.
-2. Use PlatformIO to install the required libraries defined in `platformio.ini`.
-3. Build the firmware environment from that configuration.
+2. Install the libraries defined in `platformio.ini`.
+3. Build the firmware.
 4. Connect the `ESP32` board by USB.
-5. Upload the compiled firmware to the controller.
-6. Use the physical start button on the robot to begin the run.
+5. Upload the firmware.
+6. Place the robot on the field switched off.
+7. Switch the robot on.
+8. Press the physical start button when the round begins.
 
-### What Gets Uploaded
+### Main Software Files
 
-The uploaded program includes:
+- [`src/src/main.cpp`](src/src/main.cpp) - main runtime loop
+- [`src/lib/Compass/Compass.h`](src/lib/Compass/Compass.h) - yaw heading support
+- [`src/lib/Lidar/Lidar.h`](src/lib/Lidar/Lidar.h) - distance sensor handling
+- [`src/lib/Engine/Engine.h`](src/lib/Engine/Engine.h) - motor control wrapper
+- [`src/lib/Lights/`](src/lib/Lights/) - status lights
+- [`src/platformio.ini`](src/platformio.ini) - PlatformIO configuration
+- [`docs/code/vision_interface.md`](docs/code/vision_interface.md) - Pi-to-ESP32 interface definition
 
-- sensor startup and address assignment for the three distance sensors;
-- compass startup;
-- PWM setup for the drive motor and servo;
-- the main control loop for straight driving and hard turns.
+## 13. Reproducibility And Evidence Map
 
-### What Another Team Needs
+The repository is organized so that judges can quickly verify the five main documentation criteria.
 
-To reproduce the controller side, another team would mainly need:
+| Criterion | Main evidence files |
+|---|---|
+| Mobility and mechanical design | [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md), [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md), [`models/README.md`](models/README.md) |
+| Power and sensor architecture | [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md), [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md), [`schemes/wiring_overview.md`](schemes/wiring_overview.md) |
+| Software architecture and obstacle strategy | [`docs/code/software_state_machine_and_obstacle_flow.md`](docs/code/software_state_machine_and_obstacle_flow.md), [`docs/code/control_algorithms.md`](docs/code/control_algorithms.md), [`src/README.md`](src/README.md) |
+| Systems thinking and engineering decisions | [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md), [`docs/design/risk_and_failures.md`](docs/design/risk_and_failures.md), [`docs/evaluation/what_worked.md`](docs/evaluation/what_worked.md) |
+| Reproducibility and GitHub quality | [`START_HERE.md`](START_HERE.md), [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md), [`docs/reproducibility/submission_checklist.md`](docs/reproducibility/submission_checklist.md) |
 
-- the `ESP32` board;
-- the `src/` PlatformIO project;
-- the same or equivalent sensors and motor-control hardware;
-- the wiring described in `docs/hardware/` and `schemes/`;
-- the mechanical layout described in `docs/design/` and `models/`.
+### Fast Rebuild Path
 
-## Main Engineering Files
+For another team trying to understand or reproduce the robot, we recommend this order:
 
-If you want the fastest high-value reading path, these are the most important files:
+1. [`README.md`](README.md)
+2. [`START_HERE.md`](START_HERE.md)
+3. [`docs/hardware/parts_list.md`](docs/hardware/parts_list.md)
+4. [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md)
+5. [`schemes/Wro_customPCBs.pdf`](schemes/Wro_customPCBs.pdf)
+6. [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md)
+7. [`models/README.md`](models/README.md)
+8. [`src/README.md`](src/README.md)
 
-- [Start Here](START_HERE.md)
-- [Documentation Index](docs/README.md)
-- [Drivetrain and Steering](docs/design/drivetrain_and_steering.md)
-- [Engineering Decisions](docs/design/engineering_decisions.md)
-- [Electronics Overview](docs/hardware/electronics_overview.md)
-- [PCB And Wiring Diagrams](docs/hardware/pcb_wiring_diagrams.md)
-- [Software Architecture](docs/code/software_architecture_improved.md)
-- [Control Algorithms](docs/code/control_algorithms.md)
-- [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
-- [Embedded Controller README](src/README.md)
+## 14. Photos, Video, And Submission Media
 
-## Technical Drawings And Fabrication Evidence
-
-The main build evidence is distributed across:
-
-- `models/` for custom part exports and CAD-related material;
-- `schemes/` for schematics, PCB, and wiring evidence;
-- `docs/design/` for steering, drivetrain, and chassis explanations;
-- `docs/hardware/` for parts, sensors, and electronics decisions.
-
-These files are important because the robot cannot be reproduced from source code alone.
-
-## Where To Start
-
-If you want the fastest overview, start here:
-
-1. [Start Here](START_HERE.md)
-2. [Documentation Index](docs/README.md)
-3. [Drivetrain and Steering](docs/design/drivetrain_and_steering.md)
-4. [Electronics Overview](docs/hardware/electronics_overview.md)
-5. [Software Architecture](docs/code/software_architecture_improved.md)
-6. [Mechanical and Software Testing](docs/testing/mechanical_and_software_testing.md)
-
-If you want the broader documentation map instead of a reading order, open [docs/README.md](docs/README.md).
-
-## Repository Layout
-
-- `docs/design/` - mechanical design, trade-offs, and system-level decisions
-- `docs/hardware/` - electronics, sensors, wiring, and parts
-- `docs/code/` - software logic, state flow, and control explanations
-- `docs/testing/` and `docs/evaluation/` - test results and lessons learned
-- `schemes/` - schematic material and wiring overview
-- `models/` - exported CAD files for custom parts
-- `src/` - published embedded controller project
-- `t-photos/`, `v-photos/`, `video/` - submission media
-
-## Photo Gallery
-
-### Team Photos
+### Team Photo
 
 <table>
   <tr>
@@ -399,58 +466,43 @@ If you want the broader documentation map instead of a reading order, open [docs
   </tr>
 </table>
 
-These photos are placed here as the fastest visual reference to the final robot layout. The same files remain in `v-photos/` as part of the submission package.
+### Video
 
-## Video Submission
-
-The official competition video references and validation notes are documented in [video/video.md](video/video.md).
+The driving video information is documented in [`video/video.md`](video/video.md).
 
 Current published link:
 
 - Open Challenge: [YouTube video](https://www.youtube.com/watch?v=PdYDFbR_HfI)
 
-The submission videos are intended to show:
+## 15. Repository Layout
 
-- autonomous driving without manual assistance;
-- stable lane-following and turn transitions;
-- obstacle response and recovery behavior;
-- repeatable robot performance on the field.
+- `docs/design/` - mechanical design, trade-offs, risk, and system-level decisions
+- `docs/hardware/` - electronics, sensors, wiring, power, and parts
+- `docs/code/` - software logic, state flow, control algorithms, and obstacle strategy
+- `docs/testing/` - practical testing and tuning evidence
+- `docs/evaluation/` - what worked, what did not, and comparison to goals
+- `docs/reproducibility/` - evidence map, checklist, and rebuild support
+- `schemes/` - schematic material and wiring overview
+- `models/` - CAD and custom part evidence
+- `src/` - embedded controller and software material
+- `t-photos/` - team photo
+- `v-photos/` - robot photos
+- `video/` - video submission information
+- `output/doc/` - continuous DOCX report version
 
-## Submission Media
+## 16. Final Engineering Conclusion
 
-The repository also includes the media required for the final submission package:
+The final robot is simpler than our earlier direction, but it is better engineered for the WRO task. The previous robot showed us that complexity can create friction, tuning difficulty, and inconsistent behaviour. The final robot focuses on controlled repeatability:
 
-- `t-photos/` for the team photo
-- `v-photos/` for the robot photos
-- `video/` for the published driving video link
+- a balanced `600 rpm` motor instead of the slowest or fastest option;
+- a smoother differential instead of a rougher drivetrain;
+- improved steering geometry instead of forcing the servo to overcome bad mechanics;
+- silicone front wheels instead of accepting steering slip;
+- split perception and control instead of one overloaded system;
+- regulated power branches instead of unstable shared supply paths;
+- state-machine logic instead of unclear behaviour;
+- documented test results instead of only final claims.
 
-These media files matter because the rules require that the repository includes both technical documentation and final competition evidence.
+The most important measured improvement was consistency: after mechanical changes and controller tuning, straight drift improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, successful `3`-lap runs from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`.
 
-## Cost Analysis
-
-The main hardware groups are documented in [docs/hardware/parts_list.md](docs/hardware/parts_list.md). For this repository, the most useful cost view is the grouped structure below.
-
-| Cost group | Main items |
-|---|---|
-| Control electronics | `ESP32`, `Raspberry Pi Zero`, camera |
-| Sensors | `BNO085`, `3x VL53L4CD` |
-| Motion components | `MG90S`, `N20`, `L298N` |
-| Power system | `2x 18650`, regulators, wiring |
-| Mechanical parts | chassis, printed parts, drivetrain, wheels |
-| Manufacturing extras | fasteners, connectors, support materials |
-
-This grouped view matches the way the robot was designed and documented: electronics, sensing, motion, power, and fabrication were treated as connected engineering subsystems rather than as isolated purchases.
-
-## Reproducibility Note
-
-For software, the most direct evidence is the `ESP32` project under `src/`.
-
-For the full robot, the hardware, design, and testing documents matter just as much because they explain the wider architecture, the mechanical choices, and how the system was tuned in practice.
-
-Our goal with this repository is that another team should be able to understand:
-
-- what the robot is made of;
-- how the main modules are connected;
-- what the control code does;
-- how the firmware is built and uploaded;
-- why the final design choices were made.
+That is the core story of this project: we used the problems from the previous robot to build a smaller, cleaner, more controllable, and better documented autonomous vehicle.
