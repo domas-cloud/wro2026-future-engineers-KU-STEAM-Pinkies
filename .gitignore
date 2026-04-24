@@ -8,8 +8,13 @@ Thumbs.db
 __pycache__/
 *.pyc
 *.pyo
+*.py
 *.log
+tmp/
 
 # Optional local exports
 *.tmp
 *.bak
+~$*.docx
+output/doc/*
+!output/doc/KU-STEAM-Pinkies-repo-viename-dokumente.docx
