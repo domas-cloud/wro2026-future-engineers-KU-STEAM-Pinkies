@@ -1,31 +1,31 @@
 # KU STEAM Pinkies - WRO 2026 Future Engineers
 
-We are **KU STEAM Pinkies**, a WRO 2026 Future Engineers team building a compact autonomous self-driving car. This README tells the engineering story of our robot: we started from a previous larger rack/gearbox-style robot, identified what made it hard to control, and redesigned the new robot around repeatability, lower friction, clearer sensing, and easier tuning.
+We are **KU STEAM Pinkies**, a WRO 2026 Future Engineers team building a compact autonomous self-driving car.
 
-This repository contains our design reasoning, hardware documentation, software structure, testing evidence, CAD/model references, wiring information, photos, and video submission material.
+This repository tells the story of how the robot developed. We started with an older, larger robot that used a more complicated rack/gearbox-style mechanical idea. That robot was useful because it showed us what was difficult to control. From that point, we redesigned the new robot to be smaller, simpler, lower-friction, and easier to tune.
 
-> This README is the main story and quick judging path. For deeper evidence, each major section points to the detailed documentation files in `docs/`, `schemes/`, `models/`, and `src/`.
+The README gives the quick judging path. The detailed proof is still kept in the `docs/`, `schemes/`, `models/`, `src/`, `v-photos/`, `t-photos/`, and `video/` folders. At the end of each major section, there is a short **Go deeper** note that points to the full documentation file.
 
 ## Table Of Contents
 
-- [1. Starting Point: Previous Rack Robot](#1-starting-point-previous-rack-robot)
-- [2. Main Goal For The New Robot](#2-main-goal-for-the-new-robot)
-- [3. Final Robot At A Glance](#3-final-robot-at-a-glance)
+- [1. What We Learned From The Previous Robot](#1-what-we-learned-from-the-previous-robot)
+- [2. What We Wanted The New Robot To Do Better](#2-what-we-wanted-the-new-robot-to-do-better)
+- [3. Final Robot Overview](#3-final-robot-overview)
 - [4. Team Roles](#4-team-roles)
-- [5. Mechanical Design Story](#5-mechanical-design-story)
-- [6. Power, Electronics, And Sensors](#6-power-electronics-and-sensors)
-- [7. Software Architecture And Obstacle Strategy](#7-software-architecture-and-obstacle-strategy)
-- [8. Testing And Tuning Evidence](#8-testing-and-tuning-evidence)
-- [9. Systems Thinking And Risk Mitigation](#9-systems-thinking-and-risk-mitigation)
-- [10. Build, Compile, And Upload](#10-build-compile-and-upload)
-- [11. Reproducibility Map](#11-reproducibility-map)
+- [5. Mechanical Development](#5-mechanical-development)
+- [6. Electronics, Power, And Sensors](#6-electronics-power-and-sensors)
+- [7. Software And Control Logic](#7-software-and-control-logic)
+- [8. Testing Results](#8-testing-results)
+- [9. System Risks And Fixes](#9-system-risks-and-fixes)
+- [10. Build And Upload](#10-build-and-upload)
+- [11. Where The Evidence Is](#11-where-the-evidence-is)
 - [12. Photos And Video](#12-photos-and-video)
 - [13. Repository Layout](#13-repository-layout)
 - [14. Final Conclusion](#14-final-conclusion)
 
-## 1. Starting Point: Previous Rack Robot
+## 1. What We Learned From The Previous Robot
 
-Our final robot did not appear immediately. Before this version, we used a larger and mechanically more complicated robot with a rack/gearbox-style mechanical direction. It looked more advanced, but it taught us that more complicated mechanics are not automatically better for autonomous driving.
+Our final robot did not appear immediately. Before this version, we had a larger robot with a more complicated rack/gearbox-style mechanical direction. It looked strong and interesting, but during testing it was harder to make consistent.
 
 <table>
   <tr>
@@ -37,58 +37,58 @@ Our final robot did not appear immediately. Before this version, we used a large
     <td align="center"><img src="docs/design/images/previous-robot-drivetrain.jpg" alt="Previous robot drivetrain and steering area" width="520"></td>
   </tr>
   <tr>
-    <td align="center">The older robot was larger and mechanically more complex.</td>
-    <td align="center">The drivetrain and steering area helped us identify friction, resistance, and tuning problems.</td>
+    <td align="center">The older robot was larger and mechanically more complicated.</td>
+    <td align="center">This drivetrain and steering area helped us see where friction and tuning problems came from.</td>
   </tr>
 </table>
 
-The previous robot created several practical problems:
+The older robot taught us several important lessons:
 
-- the steering system had more friction and mechanical resistance;
-- the robot was harder to tune because mechanical behaviour changed the software result;
-- the larger structure made turns less predictable;
-- the servo had to fight the steering mechanism instead of simply positioning the wheels;
-- one mechanical weakness could make the whole controller look worse than it really was.
+- more parts and more complicated mechanics do not automatically make the robot better;
+- steering friction can make the software look worse than it really is;
+- a larger robot is harder to turn and package cleanly;
+- a servo should not have to fight the whole mechanism;
+- the best design is the one that repeats the same behaviour on the field.
 
-The key lesson was clear: for WRO Future Engineers, **repeatable control is more valuable than mechanical complexity**.
-
-That is why our new design direction became:
+Because of that, the new robot was designed around one main idea:
 
 > build a smaller autonomous car where every subsystem helps consistency instead of adding unnecessary complexity.
 
-**Go deeper:** the previous-robot comparison and chassis reasoning are documented in [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md). The broader design trade-offs are explained in [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md).
+**Go deeper:** previous-robot comparison and chassis reasoning are in [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md). The broader design trade-offs are in [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md).
 
-## 2. Main Goal For The New Robot
+## 2. What We Wanted The New Robot To Do Better
 
-The main goal of the final robot was not maximum speed alone. We wanted **controlled repeatability**.
+For the new robot, we did not only want more speed. We wanted the car to be easier to control and easier to repeat.
 
-The new robot had to:
+The main goals were:
 
-- drive straight with less drift;
-- turn corners cleanly;
-- recover after corrections without wobbling;
-- keep the steering load low;
-- use sensors that match the field geometry;
-- separate camera perception from real-time motor control;
-- be documented clearly enough that another team could rebuild the system.
+- drive straighter;
+- turn more predictably;
+- reduce steering load;
+- reduce random slipping;
+- keep the electronics stable;
+- separate camera/perception work from real-time motor control;
+- make the repository understandable for judges and for another team trying to rebuild the robot.
 
-**Go deeper:** the final system-level design is described in [`docs/design/system_overview.md`](docs/design/system_overview.md), while the comparison with initial goals is covered in [`docs/evaluation/comparison_initial_goals.md`](docs/evaluation/comparison_initial_goals.md).
+This meant that every decision had to answer the same question: **does this make the robot more repeatable on the field?**
 
-## 3. Final Robot At A Glance
+**Go deeper:** final system-level design is described in [`docs/design/system_overview.md`](docs/design/system_overview.md). The comparison with the initial goals is in [`docs/evaluation/comparison_initial_goals.md`](docs/evaluation/comparison_initial_goals.md).
 
-Our final robot is a compact self-driving car with:
+## 3. Final Robot Overview
+
+The final robot is a compact self-driving car with:
 
 - rear-wheel drive;
 - front-wheel steering;
-- an `ESP32` for low-level real-time control;
+- an `ESP32` for low-level control;
 - a `Raspberry Pi Zero` and camera for perception;
 - a `BNO085` IMU for yaw feedback;
-- three `VL53L4CD` distance sensors for front and side feedback;
+- three `VL53L4CD` distance sensors;
 - an `MG90S` steering servo;
 - an `N20 6 V 600 rpm` drive motor;
 - an `L298N` motor driver;
 - a `2x 18650` Li-ion battery pack;
-- a mechanical rear differential;
+- a rear differential;
 - custom steering and mounting parts.
 
 <table>
@@ -101,8 +101,8 @@ Our final robot is a compact self-driving car with:
     <td align="center"><img src="docs/design/images/lego-differential.png" alt="LEGO differential" width="520"></td>
   </tr>
   <tr>
-    <td align="center">The final steering geometry became lower-friction and easier for the servo to control.</td>
-    <td align="center">The selected differential gave smoother and more repeatable cornering.</td>
+    <td align="center">The final steering geometry reduced friction and made the servo movement more useful.</td>
+    <td align="center">The selected differential made cornering smoother and more repeatable.</td>
   </tr>
 </table>
 
@@ -115,13 +115,13 @@ Our final robot is a compact self-driving car with:
   </tr>
 </table>
 
-The high-level architecture is simple:
+The overall system is simple:
 
-1. the camera/perception layer chooses the driving reference or obstacle side;
-2. the `ESP32` keeps the robot stable using IMU and ToF feedback;
-3. the mechanical system makes those commands physically repeatable.
+1. the camera/perception layer can choose the driving reference or obstacle side;
+2. the `ESP32` keeps the robot stable using IMU and distance feedback;
+3. the mechanical design makes those commands physically repeatable.
 
-**Go deeper:** parts and component choices are listed in [`docs/hardware/parts_list.md`](docs/hardware/parts_list.md), mechanical layout is explained in [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md), and electronics are detailed in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md).
+**Go deeper:** parts are listed in [`docs/hardware/parts_list.md`](docs/hardware/parts_list.md). Mechanical layout is explained in [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md). Electronics are detailed in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md).
 
 ## 4. Team Roles
 
@@ -142,27 +142,25 @@ The high-level architecture is simple:
 - electronics and hardware design;
 - wiring, component layout, and implementation support.
 
-Although responsibilities were divided, the robot was developed as one shared engineering system.
+The responsibilities were divided, but the final robot was developed as one shared system. When one subsystem changed, the others often had to be checked again.
 
-**Go deeper:** project organisation and submission navigation are available in [`START_HERE.md`](START_HERE.md) and [`docs/README.md`](docs/README.md).
+**Go deeper:** project navigation is available in [`START_HERE.md`](START_HERE.md) and [`docs/README.md`](docs/README.md).
 
-## 5. Mechanical Design Story
+## 5. Mechanical Development
 
-### 5.1 From Complex Rack Robot To Compact Steering
+### 5.1 Why We Simplified The Mechanism
 
-The previous rack/gearbox-style robot showed that a larger and more complex mechanism was harder to control. For the final robot, we moved toward a compact front-steering layout with less friction and more predictable steering response.
+The previous robot showed that a complex mechanical design can make the robot harder to tune. For the final robot, we focused on a compact front-steering layout with less friction and more predictable response.
 
-The final mechanical philosophy was:
+The main mechanical principles were:
 
-- reduce steering resistance before increasing servo power;
+- fix steering resistance before using a stronger servo;
 - choose a motor that is controllable, not only fast;
-- use a differential that gives smooth cornering;
+- use a differential that turns smoothly;
 - improve front-wheel grip so steering commands become real movement;
-- keep the robot small enough for easier turning and parking.
+- keep the robot compact enough for easier turning and parking.
 
 ### 5.2 Mechanical Comparison Photos
-
-These additional photos show the drivetrain and steering evidence used during the design comparison.
 
 <table>
   <tr>
@@ -187,7 +185,7 @@ These additional photos show the drivetrain and steering evidence used during th
     <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering detail" width="760"></td>
   </tr>
   <tr>
-    <td align="center">The final steering version reduced mechanical load and improved real steering response.</td>
+    <td align="center">The final steering version reduced mechanical load and improved steering response.</td>
   </tr>
 </table>
 
@@ -195,7 +193,7 @@ These additional photos show the drivetrain and steering evidence used during th
 
 We tested three `N20` motor options:
 
-| Motor option | Practical strength | Practical weakness | Decision |
+| Motor option | What was good | What was bad | Decision |
 |---|---|---|---|
 | `300 rpm` | easy to control slowly | too slow | rejected |
 | `600 rpm` | best speed/torque balance | still required tuning | selected |
@@ -205,9 +203,9 @@ The `600 rpm` motor became the final choice because it gave the best practical b
 
 ### 5.4 Differential Choice
 
-We compared differential behaviour because cornering consistency depended strongly on drivetrain resistance. The earlier metal differential looked stronger, but the final `LEGO` differential gave smoother and more repeatable cornering.
+Cornering consistency depended strongly on drivetrain resistance. The earlier metal differential looked stronger, but the final `LEGO` differential gave smoother and more repeatable cornering.
 
-The final differential helped with:
+It helped with:
 
 - less binding in turns;
 - smoother corner exits;
@@ -224,22 +222,22 @@ The steering system went through three main versions:
 | `V2` | bad lever arm reduced | steering became easier and more predictable |
 | `V3` | bearings and silicone front wheels added | best precision, lower friction, better grip |
 
-Instead of buying a stronger servo, we improved the steering geometry. That fixed the real cause of the problem: excessive mechanical load.
+The most important lesson was that a stronger servo was not the best first fix. The better fix was to reduce the mechanical load.
 
 ### 5.6 Steering Range
 
-The servo can rotate further, but we limited the useful steering range to about `60` degrees. Too much steering angle made the robot less stable, while a controlled steering range made behaviour more predictable.
+The servo can rotate further, but we limited the useful steering range to about `60` degrees. More steering angle looked useful, but too much angle made the robot less stable. A controlled range made the robot easier to tune.
 
-**Go deeper:** the complete drivetrain, motor, differential, wheel, and steering reasoning is in [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md). The chassis reasoning is in [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md). CAD and custom part evidence is in [`models/README.md`](models/README.md).
+**Go deeper:** complete drivetrain, motor, differential, wheel, and steering reasoning is in [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md). Chassis reasoning is in [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md). CAD and custom part evidence is in [`models/README.md`](models/README.md).
 
-## 6. Power, Electronics, And Sensors
+## 6. Electronics, Power, And Sensors
 
 The robot uses a split control system:
 
 - `Raspberry Pi Zero` + camera for perception;
 - `ESP32` for low-level real-time control.
 
-This split lets the camera side focus on scene interpretation, while the `ESP32` handles timing-critical control tasks.
+This split made the robot easier to understand. The camera side can focus on scene interpretation, while the `ESP32` keeps motor and steering control predictable.
 
 | Subsystem | Main parts | Purpose |
 |---|---|---|
@@ -253,7 +251,7 @@ This split lets the camera side focus on scene interpretation, while the `ESP32`
 
 ### Perfboard-Based Wiring Evidence
 
-The photo below shows the real perfboard-based electronics integration stage. It is important because the wiring was not only theoretical: the battery input, regulator, motor driver, controller wiring, signal routing, and power distribution had to be physically assembled and tested on the robot.
+The photo below shows the real perfboard-based electronics integration stage. This matters because the wiring was not only theoretical. The battery input, regulator, motor driver, controller wiring, signal routing, and power distribution had to be physically assembled and tested on the robot.
 
 <table>
   <tr>
@@ -285,9 +283,9 @@ We separated power branches because motors and servos can create voltage sag and
 
 We tried richer ToF sensing with `VL53L5CX`, but `VL53L4CD` was more practical for the final system because it was easier to integrate and tune.
 
-**Go deeper:** electronics architecture is in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md). Wiring, pin assignments, and perfboard evidence are in [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md). Sensor choices are documented in [`docs/hardware/sensor_list.md`](docs/hardware/sensor_list.md), and schematic material is in [`schemes/README.md`](schemes/README.md).
+**Go deeper:** electronics architecture is in [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md). Wiring, pin assignments, and perfboard evidence are in [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md). Sensor choices are in [`docs/hardware/sensor_list.md`](docs/hardware/sensor_list.md). Schematic material is in [`schemes/README.md`](schemes/README.md).
 
-## 7. Software Architecture And Obstacle Strategy
+## 7. Software And Control Logic
 
 The low-level controller in [`src/src/main.cpp`](src/src/main.cpp) follows this pattern:
 
@@ -334,13 +332,15 @@ Important fallback thresholds:
 - `confidence < 0.40` -> treat guidance as weak;
 - `frontDistance <= 400 mm` -> hard-turn trigger.
 
-**Go deeper:** the single judge-facing state machine is in [`docs/code/software_state_machine_and_obstacle_flow.md`](docs/code/software_state_machine_and_obstacle_flow.md). Control logic is explained in [`docs/code/control_algorithms.md`](docs/code/control_algorithms.md), the architecture overview is in [`docs/code/software_architecture_improved.md`](docs/code/software_architecture_improved.md), and the active embedded project is described in [`src/README.md`](src/README.md).
+The current published `ESP32` runtime shows the verified low-level controller. The Pi/camera layer and obstacle packet interface are documented as the full-system architecture and integration path.
 
-## 8. Testing And Tuning Evidence
+**Go deeper:** the judge-facing state machine is in [`docs/code/software_state_machine_and_obstacle_flow.md`](docs/code/software_state_machine_and_obstacle_flow.md). Control logic is explained in [`docs/code/control_algorithms.md`](docs/code/control_algorithms.md). Architecture overview is in [`docs/code/software_architecture_improved.md`](docs/code/software_architecture_improved.md). The active embedded project is described in [`src/README.md`](src/README.md).
+
+## 8. Testing Results
 
 We tested mechanics and software together because they affected each other. A steering change changed controller tuning, and better wheel grip changed how much correction was needed.
 
-### Testing Method
+Our method was simple:
 
 1. change one part or subsystem;
 2. run the same scenario several times;
@@ -357,15 +357,15 @@ We tested mechanics and software together because they affected each other. A st
 | successful `3`-lap runs | `6/10` | `9/10` | `10` runs | higher consistency |
 | recovery after obstacle correction | `1.2 s` | `0.6 s` | `10` runs | faster return to target line |
 
-The key improvement was consistency: successful `3`-lap runs improved from `60%` to `90%`.
+The most important improvement was consistency: successful `3`-lap runs improved from `60%` to `90%`.
 
-**Go deeper:** combined mechanical/software testing is documented in [`docs/testing/mechanical_and_software_testing.md`](docs/testing/mechanical_and_software_testing.md), with additional test structure in [`docs/testing/tests.md`](docs/testing/tests.md). Evaluation notes are in [`docs/evaluation/what_worked.md`](docs/evaluation/what_worked.md) and [`docs/evaluation/what_didnt.md`](docs/evaluation/what_didnt.md).
+**Go deeper:** combined mechanical/software testing is documented in [`docs/testing/mechanical_and_software_testing.md`](docs/testing/mechanical_and_software_testing.md). Additional test structure is in [`docs/testing/tests.md`](docs/testing/tests.md). Evaluation notes are in [`docs/evaluation/what_worked.md`](docs/evaluation/what_worked.md) and [`docs/evaluation/what_didnt.md`](docs/evaluation/what_didnt.md).
 
-## 9. Systems Thinking And Risk Mitigation
+## 9. System Risks And Fixes
 
 The final robot worked better because mechanics, electronics, sensing, and software were treated as one connected system.
 
-| Risk / failure mode | Likely effect | Mitigation |
+| Risk / failure mode | Likely effect | Fix / mitigation |
 |---|---|---|
 | steering resistance | servo load and inconsistent steering | redesigned steering geometry |
 | front wheel slip | weak real steering effect | silicone front wheels |
@@ -376,9 +376,9 @@ The final robot worked better because mechanics, electronics, sensing, and softw
 | stale camera data | wrong obstacle reaction | age/confidence fallback |
 | flexible IMU mounting | bad yaw estimate | rigid mounting and checks |
 
-**Go deeper:** risk/failure reasoning is expanded in [`docs/design/risk_and_failures.md`](docs/design/risk_and_failures.md). The decision logic behind final choices is in [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md), and the full evidence index is in [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md).
+**Go deeper:** risk and failure reasoning is expanded in [`docs/design/risk_and_failures.md`](docs/design/risk_and_failures.md). Decision logic is in [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md). The full evidence index is in [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md).
 
-## 10. Build, Compile, And Upload
+## 10. Build And Upload
 
 The active embedded controller project is inside [`src/`](src/).
 
@@ -402,15 +402,15 @@ Main software files:
 
 **Go deeper:** firmware build and source structure are explained in [`src/README.md`](src/README.md). Exact rebuild and startup references are in [`docs/reproducibility/exact_rebuild_wiring_upload_start.md`](docs/reproducibility/exact_rebuild_wiring_upload_start.md).
 
-## 11. Reproducibility Map
+## 11. Where The Evidence Is
 
-| Criterion | Main evidence files |
+| Area | Main evidence files |
 |---|---|
-| Mobility and mechanical design | [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md), [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md), [`models/README.md`](models/README.md) |
-| Power and sensor architecture | [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md), [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md), [`schemes/wiring_overview.md`](schemes/wiring_overview.md) |
+| Mechanical design | [`docs/design/chassis_design_improved.md`](docs/design/chassis_design_improved.md), [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md), [`models/README.md`](models/README.md) |
+| Power and sensors | [`docs/hardware/electronics_overview.md`](docs/hardware/electronics_overview.md), [`docs/hardware/pcb_wiring_diagrams.md`](docs/hardware/pcb_wiring_diagrams.md), [`schemes/wiring_overview.md`](schemes/wiring_overview.md) |
 | Software and obstacle strategy | [`docs/code/software_state_machine_and_obstacle_flow.md`](docs/code/software_state_machine_and_obstacle_flow.md), [`docs/code/control_algorithms.md`](docs/code/control_algorithms.md), [`src/README.md`](src/README.md) |
 | Systems thinking | [`docs/design/engineering_decisions.md`](docs/design/engineering_decisions.md), [`docs/design/risk_and_failures.md`](docs/design/risk_and_failures.md), [`docs/evaluation/what_worked.md`](docs/evaluation/what_worked.md) |
-| GitHub quality | [`START_HERE.md`](START_HERE.md), [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md), [`docs/reproducibility/submission_checklist.md`](docs/reproducibility/submission_checklist.md) |
+| Submission quality | [`START_HERE.md`](START_HERE.md), [`docs/reproducibility/evidence_map.md`](docs/reproducibility/evidence_map.md), [`docs/reproducibility/submission_checklist.md`](docs/reproducibility/submission_checklist.md) |
 
 Fast rebuild path:
 
@@ -492,7 +492,9 @@ Current published link:
 
 ## 14. Final Conclusion
 
-The final robot is simpler than the previous rack/gearbox-style robot, but it is better suited to WRO autonomous driving. The previous robot taught us that complexity can create friction, tuning difficulty, and inconsistent behaviour. The final robot focuses on controlled repeatability:
+The final robot is simpler than the previous rack/gearbox-style robot, but it is better suited to WRO autonomous driving. The previous robot taught us that complexity can create friction, tuning difficulty, and inconsistent behaviour.
+
+The final robot focuses on controlled repeatability:
 
 - balanced `600 rpm` motor instead of extreme motor choices;
 - smoother differential instead of rougher drivetrain behaviour;
