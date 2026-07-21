@@ -1,146 +1,202 @@
 # Electronics Overview
 
-Our robot uses a split electronics system. The `Raspberry Pi Zero` and camera handle perception, while the `ESP32` handles low-level control, steering, and motor output.
+## Active architecture
 
-That split gave us two practical benefits:
+Hardware V2 uses one central `ESP32-WROOM-32` control system together with a first-generation `PixyCam` that performs colour-object processing on its own processor.
 
-- the camera side could focus on track and obstacle interpretation;
-- the controller side could stay fast and predictable.
+The previous Raspberry Pi Zero architecture was copied before this update to:
 
-## Main Electronic Parts
+[`archivo/hardware-v1-esp32-250rpm/docs/hardware/electronics_overview.md`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/electronics_overview.md)
 
-The final electronics system includes:
+The Raspberry Pi Zero is not part of the active Hardware V2 robot. It remains preserved as Hardware V1 development history.
 
-- `Raspberry Pi Zero`
-- camera module
-- `ESP32-WROOM-32`
-- `BNO085` IMU
-- one front `VL53L1X` ToF sensor
-- `2x VL53L1CD` distance sensors
-- `MG90S` steering servo
-- `N20 6 V 250 rpm` drive motor
-- `L298N` motor driver
-- `2x 18650 Li-ion` battery pack
-- step-down regulation and perfboard-based distribution
+## System data flow
 
-## Board Roles
+```text
+red / green traffic pillar
+        |
+        v
+first-generation PixyCam
+(onboard colour-signature processing)
+        |
+        | wired SPI block data
+        v
+ESP32-WROOM-32
+        |
+        +--> heading and distance control
+        +--> obstacle-side decision
+        +--> MG90S steering output
+        +--> motor-driver PWM / direction output
+```
 
-The `Raspberry Pi Zero` is responsible for perception. It can decide which driving line is safer or which side should be used around an obstacle.
+The PixyCam is not intended to stream full images to the ESP32. It should provide compact detection results such as the colour signature, object centre position and object size. The ESP32 combines that information with IMU and ToF measurements.
 
-The `ESP32` is responsible for:
+## Confirmed electronic parts
 
-- reading the IMU and distance sensors;
-- holding the heading reference;
-- applying wall-distance correction;
-- driving the steering servo;
-- controlling the drive motor.
+- `ESP32-WROOM-32` main controller;
+- first-generation `PixyCam` / CMUcam5;
+- wired `SPI` connection between PixyCam and ESP32;
+- `BNO085` IMU;
+- one front `VL53L1X` ToF sensor;
+- two side `VL53L4CD` ToF sensors;
+- `MG90S` steering servo;
+- LiPo battery architecture, exact specification still `TBD`;
+- faster drive motor, exact model still `TBD`;
+- custom PCB motor-driver stage, exact driver IC still `TBD`.
 
-So the robot is not built around one giant controller that tries to do everything. It is split into a perception layer and a control layer.
+## Controller responsibilities
 
-## Power Layout
+The `ESP32-WROOM-32` is responsible for:
 
-The robot is powered by a 2-cell `18650` pack, treated in our documentation as about `7.4 V` nominal under normal use.
+- initializing and reading the `BNO085`;
+- initializing and reading the front and side ToF sensors;
+- receiving PixyCam object information over SPI;
+- deciding the legal obstacle-passing side from the colour signature;
+- holding the heading target;
+- applying wall-distance and obstacle-line corrections;
+- controlling the `MG90S` steering servo;
+- controlling the drive motor through the selected H-bridge;
+- handling timeouts, missing sensor data and safe-stop behaviour.
 
-From that source we separate power into several branches:
+## PixyCam responsibilities
 
-- motor branch for the `L298N` and drive motor;
-- regulated logic branch for the `ESP32`;
-- regulated logic branch for the `Raspberry Pi Zero`;
-- regulated sensor branch for the IMU and distance sensors;
-- steering branch for the servo.
+The first-generation PixyCam is responsible for:
 
-We used separate branches because the drive motor and servo can disturb logic power if everything is tied together without enough isolation.
+- acquiring the forward camera image;
+- applying its trained colour signatures;
+- identifying red and green WRO traffic pillars;
+- returning detected block information to the ESP32.
 
-## Current Budget
+The intended training setup is:
 
-The current values below are the practical design values we used in the documentation.
+| Pixy signature | Intended object | Robot action after validation |
+|---|---|---|
+| red-pillar signature | red traffic pillar | select a path that passes on the required side |
+| green-pillar signature | green traffic pillar | select the opposite required passing path |
 
-| Subsystem | Main parts | Rail type | Design assumption |
-| --- | --- | --- | --- |
-| Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `720 mA` continuous |
-| Sensors | `BNO085`, `VL53L1X`, `2x VL53L1CD` | regulated sensor rail | `132.3 mA` continuous |
-| Steering | `MG90S` servo | steering branch | `800 mA` peak |
-| Drive | `N20` + `L298N` | battery / motor branch | `0.67 A` peak |
-| Total | all branches together | battery input | about `2.32 A` peak |
+The exact signature numbers, thresholds, lighting settings and reliable detection distances remain `TBD` until recorded from the real camera and field.
 
-The total peak budget comes from the documented working assumptions: `0.72 A + 0.1323 A + 0.8 A + 0.67 A = 2.3223 A`.
+## Sensor architecture
 
-In practice, the current demand stayed similar during normal driving because the steering linkage was built to move freely. The servo was not used near stall torque during autonomous driving, so steering did not create the kind of large current spike that would be expected from a jammed or overloaded linkage.
+### Orientation
 
-## Why We Kept Regulated Power
+The `BNO085` supplies fused yaw / heading feedback. It should be mounted rigidly so that its orientation follows the chassis rather than a flexible cable or bracket.
 
-Regulated power mattered for a few reasons:
+### Distance sensing
 
-- neither the `ESP32` nor the `Raspberry Pi Zero` should be fed from raw battery voltage;
-- noisy logic power makes sensor data less trustworthy;
-- the servo and drive motor can cause voltage sag during aggressive movement;
-- a structured power layout is easier to debug and easier to rebuild.
+The confirmed ToF set is:
 
-## Sensor Set
+- front `VL53L1X` — front-distance measurement and turn trigger;
+- left `VL53L4CD` — left-side spacing;
+- right `VL53L4CD` — right-side spacing.
 
-We used several sensor types because they solve different problems.
+The older `VL53L1CD` name in some Hardware V1 documents was incorrect for the side sensors. Archived files remain unchanged as historical snapshots; active Hardware V2 documents use `VL53L4CD`.
 
-### Camera
+### I2C requirements
 
-The camera gives a wider view of the track. That is useful for lane interpretation and obstacle-side decisions before the robot reaches the immediate interaction zone.
+The final schematic and firmware must document:
 
-### IMU
+- the I2C voltage level;
+- pull-up values and where they are installed;
+- XSHUT or startup-control lines used to avoid address conflicts;
+- final runtime addresses;
+- initialization order;
+- timeout and missing-sensor behaviour;
+- connector labels matching physical positions.
 
-The `BNO085` helps keep the robot aligned with its heading target. Without yaw feedback, straight driving and repeatable 90-degree turns would be much harder.
+## SPI requirements for PixyCam
 
-### Distance Sensors
+The custom PCB must provide:
 
-The distance sensors are used as:
+- camera power and ground;
+- SPI clock;
+- controller-to-camera data;
+- camera-to-controller data;
+- chip-select;
+- verified logic-level compatibility;
+- clear connector orientation and pin-1 marking;
+- a cable arrangement that cannot be pulled loose during testing.
 
-- `front VL53L1X` for turn timing and close-range detection;
-- `left VL53L1CD` for side-distance feedback;
-- `right VL53L1CD` for the opposite side.
+Exact ESP32 GPIO numbers remain `TBD` until the final PCB pin map is approved.
 
-Together, they give the controller local geometry that the camera alone cannot guarantee at short range.
+## Power architecture
 
-## Why We Stayed With This ToF Layout
+Hardware V2 will use a LiPo battery, but the following are not yet known:
 
-We also tried `VL53L5CX` matrix sensors during development. They offered richer data, but the added complexity was not worth it for this robot.
+- cell count;
+- nominal and fully charged voltage;
+- capacity;
+- C-rating;
+- connector type;
+- maximum expected current.
 
-For our final system, the `VL53L1X` + `VL53L1CD` layout was easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
+Because these values are unknown, the final power budget and regulator selections are not yet valid. Hardware V1 values such as the `2x 18650` pack and approximately `2.32 A` peak budget must not be copied into Hardware V2 as final values.
 
-## Sensor Placement
+The custom PCB should separate or carefully filter these current paths:
 
-The placement follows the job of each sensor:
+1. battery input and protection;
+2. motor power;
+3. servo power;
+4. ESP32 logic power;
+5. PixyCam power;
+6. IMU and ToF sensor power.
 
-- the camera watches the wider scene ahead;
-- the front `VL53L1X` watches the area used for turn triggering;
-- the side `VL53L1CD` sensors watch wall or obstacle spacing;
-- the IMU is mounted rigidly so the yaw estimate follows the chassis, not a flexible bracket.
+All branches need a common electrical reference, but high motor and servo return current should not be routed through sensitive sensor-ground paths.
 
-## Calibration Routine
+## Power budget that must be measured
 
-Our basic setup routine is:
+| Load | Required measurement | Status |
+|---|---|---|
+| ESP32 control system | idle and active current | TBD |
+| first-generation PixyCam | normal detection current and startup peak | TBD |
+| BNO085 + ToF sensors | combined continuous current | TBD |
+| MG90S | typical steering and peak / near-stall current | TBD |
+| selected motor | free-run, loaded, launch and stall current | TBD |
+| regulators and driver | conversion loss and temperature | TBD |
+| complete robot | idle, normal run and worst observed transient | TBD |
 
-1. make sure the `BNO085` is mounted rigidly and gives stable yaw when the robot is still;
-2. initialize the front and side distance sensors in the intended startup sequence so they can share the bus with different addresses;
-3. verify repeatable distance readings against known positions;
-4. check that the perception layer and the low-level controller agree on the intended driving line;
-5. verify that straight driving does not drift immediately after startup;
-6. repeat these checks after any meaningful mechanical or wiring change.
+The motor driver, LiPo, connectors, copper width, protection and regulators must be selected from these measurements rather than from rpm alone.
 
-## Main Electrical Risks
+## Main electrical risks
 
-The most important practical electrical risks were:
+| Risk | Likely effect | Required mitigation / evidence |
+|---|---|---|
+| unknown LiPo voltage | damaged regulators or insufficient motor voltage | lock exact battery specification before schematic release |
+| underestimated motor stall current | overheated or damaged H-bridge | measure stall current and document design margin |
+| servo transient current | ESP32 reset or sensor disturbance | separate supply path, bulk capacitance and rail-sag test |
+| motor noise | unstable SPI/I2C or false sensor readings | suppression, layout separation and motor-on communication test |
+| PixyCam lighting sensitivity | incorrect red/green decision | signature training and repeated field tests under varied lighting |
+| I2C address conflict | missing ToF data | controlled startup, documented addresses and failure handling |
+| wrong SPI voltage or pinout | unreliable camera data or damage | verify levels and publish complete pin map |
+| loose connectors | intermittent failures | keyed / retained connectors and strain relief |
 
-| Risk | Likely effect | Mitigation |
-| --- | --- | --- |
-| motor noise on logic rails | unstable control or noisy sensor data | split power branches |
-| servo current spikes | voltage sag and steering inconsistency | separate steering branch with headroom |
-| ToF sensors on one bus | address conflict or missing readings | staged startup and address assignment |
-| flexible IMU mounting | unstable yaw estimate | rigid mounting and repeated checks |
-| sensor wires near motor path | inconsistent readings | keep logic and sensor wiring away from high-current paths |
+## Verification sequence
 
-## Why This Layout Stayed
+1. Approve the block diagram and exact component list.
+2. Select the LiPo, motor and motor driver.
+3. Calculate voltage and current margins.
+4. Review the schematic and PCB layout.
+5. Power the board from a current-limited supply with motor and servo disconnected.
+6. Verify each rail and test point.
+7. Bring up the ESP32, IMU and ToF sensors.
+8. Bring up PixyCam SPI communication.
+9. Connect servo and measure transients.
+10. Connect the motor and validate the H-bridge under load.
+11. Test all communication while motor and servo are active.
+12. Complete repeated Open and Obstacle field runs.
 
-We kept this electronics layout because it gave us:
+## Evidence required for final documentation
 
-- stable power distribution;
-- a clean separation between perception and control;
-- reliable local sensing for the low-level controller;
-- documentation that another team can actually follow.
+- final schematic and editable source;
+- PCB layout and Gerbers;
+- connector and ESP32 pin map;
+- exact LiPo, motor and driver datasheets;
+- current, voltage and temperature measurements;
+- PixyCam training screenshots;
+- red / green detection test table;
+- oscilloscope or multimeter evidence of rail stability where available;
+- assembled PCB top and bottom photos;
+- first-power-up and failure log;
+- Hardware V1 versus Hardware V2 comparison.
+
+Until this evidence exists, Hardware V2 should be described as the active confirmed design direction, not as a completed final electronics system.
