@@ -2,101 +2,196 @@
 
 ## Status
 
-Hardware V2 is the active redesign direction. The previous ESP32 development-board/perfboard implementation remains preserved as Hardware V1 evidence in `archivo/hardware-v1-esp32-250rpm/` and in the existing historical documentation.
+Hardware V2 is the active redesign direction. The verified Hardware V1 implementation remains preserved in `archivo/hardware-v1-esp32-250rpm/` and in the repository history. No Hardware V1 evidence is deleted when an active document is updated.
 
-## Confirmed direction
+This document separates three evidence levels:
 
-- remove the ESP development board from the final electronics stack;
-- replace module/perfboard integration with a purpose-built custom PCB;
-- replace the current 250 rpm drive motor with a faster motor;
-- preserve the Raspberry Pi/camera role unless testing later proves that another architecture is better;
-- keep all changes compatible with WRO rules: wired communication only during runs, one driving axle, one steering actuator, maximum 1.5 kg and 300 x 200 x 300 mm dimensions.
+- **confirmed** — the team has selected the component or architecture;
+- **TBD** — the team has not selected the exact specification yet;
+- **verified** — the final assembled Hardware V2 system has passed measured bench and field tests.
 
-## Decisions that are not locked yet
+Hardware V2 is currently **confirmed in architecture but not yet fully verified**.
 
-The following values must not be presented as final until measured and tested:
+## Confirmed Hardware V2 architecture
 
-- exact microcontroller or processor integrated on the custom PCB;
-- exact motor model, rated voltage, no-load rpm, stall current and gearbox ratio;
-- motor driver IC and thermal design;
-- battery chemistry and nominal voltage;
+| Subsystem | Confirmed Hardware V2 decision | Interface / role | Evidence state |
+|---|---|---|---|
+| main controller | Espressif `ESP32-WROOM-32` | central real-time controller | confirmed |
+| perception | first-generation `PixyCam` / CMUcam5 | camera performs onboard colour-object processing | confirmed |
+| camera link | wired `SPI` | PixyCam sends detected block information to the ESP32 | confirmed |
+| front distance | `1x VL53L1X` | front-distance and turn-trigger sensing over I2C | confirmed |
+| side distance | `2x VL53L4CD` | left and right local-distance sensing over I2C | confirmed |
+| orientation | `BNO085` | fused yaw / heading feedback | confirmed |
+| steering | `MG90S` | PWM-controlled front steering servo | confirmed |
+| power source | LiPo battery | exact cell count, voltage, capacity, C-rating and connector not selected | partially confirmed / TBD |
+| drive motor | faster replacement for the Hardware V1 `250 rpm` motor | exact model, voltage, speed, torque and current not selected | TBD |
+| motor driver | custom-PCB drive stage | exact IC and thermal design depend on the selected motor | TBD |
+
+## Architecture change from Hardware V1
+
+Hardware V1 used a Raspberry Pi Zero and camera for perception together with an ESP32 low-level controller. Hardware V2 removes the Raspberry Pi Zero from the active robot.
+
+The new data path is:
+
+```text
+first-generation PixyCam
+  -> onboard colour-signature processing
+  -> SPI block data
+  -> ESP32-WROOM-32
+  -> navigation decision
+  -> motor and MG90S steering commands
+```
+
+This reduces the compute stack and removes the Pi boot process, Pi camera interface, Pi-to-ESP32 UART packet layer and the Pi power branch. The old architecture remains archived as development evidence.
+
+## PixyCam role
+
+The first-generation PixyCam is intended to be trained in its own software for the WRO traffic pillars:
+
+- colour signature for the red pillar;
+- colour signature for the green pillar.
+
+The camera performs image processing on its own processor. The ESP32 should receive compact object information such as the detected signature, object centre position and object size. The final documentation must not claim detection reliability until it is measured on the real field under different lighting conditions.
+
+Required PixyCam validation:
+
+- red and green pillars detected separately;
+- no repeated confusion between field colours and pillars;
+- object position remains usable at approach speed;
+- SPI data remains stable while the motor and servo are active;
+- stale or missing camera data produces a safe fallback;
+- detection and reaction distance are tested with the final faster motor.
+
+## Correct sensor set
+
+The Hardware V2 sensor set is:
+
+- front: `VL53L1X`;
+- left: `VL53L4CD`;
+- right: `VL53L4CD`;
+- orientation: `BNO085`.
+
+Older active documents that state `VL53L1CD` must be treated as Hardware V1 documentation errors and corrected only after their previous text is copied into `archivo/`.
+
+The three ToF sensors share I2C resources, so the schematic and firmware must document:
+
+- XSHUT or equivalent startup control for sensors that require address assignment;
+- final runtime addresses;
+- pull-up placement and voltage level;
+- connector labels by physical location: `FRONT`, `LEFT`, `RIGHT`;
+- startup failure handling and sensor timeout behaviour.
+
+## Custom PCB requirements
+
+### 1. Controller block
+
+- `ESP32-WROOM-32` based control system;
+- exact physical implementation — module soldered directly or board-level carrier — remains TBD until the schematic is available;
+- programming and debugging connection;
+- boot/reset access;
+- labelled test points for critical signals.
+
+### 2. PixyCam SPI interface
+
+The PCB must provide a documented wired SPI connection for the first-generation PixyCam:
+
+- camera supply and ground;
+- `SCK`;
+- controller-to-camera data line;
+- camera-to-controller data line;
+- chip-select line;
+- verified logic-level compatibility;
+- connector orientation and pin-1 marking;
+- cable strain relief.
+
+Exact pin numbers must remain TBD until the PCB pin map and firmware configuration are locked.
+
+### 3. Power entry and protection
+
+- LiPo-compatible battery input;
+- keyed connector after the exact battery is selected;
+- reverse-polarity protection;
+- fuse or resettable protection;
+- accessible main power switch path;
+- bulk capacitance close to high-current loads;
+- test points for battery voltage and regulated rails.
+
+The PCB must not be finalized before the LiPo cell count and maximum charged voltage are known.
+
+### 4. Logic and sensor power
+
+- regulated rail for the ESP32;
+- suitable supply for the PixyCam;
+- regulated or filtered sensor branch;
+- current headroom for the `BNO085`, `VL53L1X` and `2x VL53L4CD`;
+- grounding arranged so motor and servo current do not corrupt sensor data.
+
+### 5. Drive stage
+
+- H-bridge selected from measured motor stall current, not only unloaded current;
+- PWM and direction control from the ESP32;
+- thermal copper area and temperature-test procedure;
+- motor connector with strain relief;
+- suppression strategy for motor noise;
+- current and voltage margins documented against the final LiPo and motor.
+
+### 6. Steering stage
+
+- `MG90S` connector and PWM routing;
+- servo supply with transient-current headroom;
+- local bulk capacitance where required;
+- common ground without routing servo current through sensitive sensor return paths.
+
+### 7. Competition controls
+
+- one main power-switch path;
+- one physical start-button input;
+- status LEDs that do not require extra interaction during a round;
+- wired communication only while the robot operates.
+
+## Decisions still open
+
+The following values must not be presented as final yet:
+
+- whether the ESP32-WROOM-32 module is soldered directly onto the PCB or connected through another carrier arrangement;
+- exact drive-motor model, rated voltage, loaded speed, gearbox ratio, stall current and stall torque;
+- motor-driver IC and thermal design;
+- LiPo cell count, nominal and maximum voltage, capacity, C-rating and connector;
 - regulator topology and current headroom;
-- final connector families and pinout;
-- PCB dimensions, layer count and mounting-hole positions.
-
-## Required PCB blocks
-
-The custom PCB should be divided into clearly reviewable functional blocks:
-
-1. **Power entry and protection**
-   - keyed battery connector;
-   - reverse-polarity protection;
-   - fuse or resettable protection;
-   - bulk capacitance close to the motor-driver supply;
-   - accessible power switch connection.
-
-2. **Logic power**
-   - regulated rail for the control MCU;
-   - separate regulated rail or filtered branch for sensors;
-   - test points for battery, logic rail, sensor rail and ground;
-   - voltage margins documented against the real battery range.
-
-3. **Drive stage**
-   - H-bridge sized from measured motor stall current, not only normal running current;
-   - PWM and direction interface;
-   - thermal copper area and temperature-test procedure;
-   - motor connector with strain relief;
-   - suppression strategy for motor noise.
-
-4. **Steering stage**
-   - servo power connector;
-   - PWM signal routing;
-   - sufficient current headroom for steering peaks;
-   - grounding arranged so servo current does not corrupt sensor readings.
-
-5. **Sensor interfaces**
-   - I2C connections for IMU and ToF sensors;
-   - separate shutdown/address-control lines for sensors sharing a default address;
-   - optional pull-up configuration documented;
-   - connectors labelled by physical robot position, not only channel number.
-
-6. **Perception interface**
-   - wired UART or another allowed wired link to the Raspberry Pi/perception unit;
-   - clear logic-level compatibility;
-   - packet timeout/failsafe behaviour retained in software.
-
-7. **Competition controls**
-   - one power switch path;
-   - one start-button input;
-   - status LEDs that do not require additional operator interaction.
+- final connector families and complete pinout;
+- PCB dimensions, layer count and mounting-hole positions;
+- final PixyCam colour signatures, thresholds and measured detection limits.
 
 ## Verification gates
 
-The PCB must pass these gates before it replaces Hardware V1 in the main documentation:
+The PCB must pass these gates before Hardware V2 is described as the final robot:
 
 | Gate | Minimum evidence |
 |---|---|
-| schematic review | complete schematic, labelled nets, power-tree explanation and peer review notes |
+| architecture review | block diagram matches the confirmed ESP32 + PixyCam SPI architecture |
+| schematic review | complete schematic, labelled nets, power-tree explanation and review notes |
 | power validation | measured idle, normal-driving and peak current; rail voltage during motor and steering transients |
-| motor-driver validation | forward/reverse test, PWM sweep, temperature after repeated full-load runs |
-| sensor validation | all sensors start repeatedly, no address conflicts, stable readings while motor is active |
-| communication validation | packet-loss and stale-data fallback test |
-| field validation | repeated straight, corner and three-lap tests compared with Hardware V1 |
-| reproducibility | BOM, Gerbers, source schematic/PCB files, assembly drawing, pinout and bring-up checklist |
+| PixyCam validation | red/green detection tests, SPI stability and stale-data fallback |
+| motor-driver validation | forward/reverse test, PWM sweep, stall-protection behaviour and temperature after repeated load |
+| sensor validation | all ToF sensors and BNO085 start repeatedly and remain stable with motor active |
+| field validation | repeated straight, corner, Open and Obstacle runs compared with Hardware V1 |
+| reproducibility | BOM, Gerbers, editable PCB files, assembly drawing, pinout and bring-up checklist |
 
-## Documentation evidence to collect
+## Evidence still to collect
 
 - schematic PDF and editable source;
-- PCB layout screenshots showing power and signal separation;
+- PCB layout screenshots;
 - Gerber and drill files;
-- assembled top and bottom photos;
-- labelled connector map;
-- measured current and voltage table;
-- thermal observations for the motor driver and regulators;
-- failure log from first power-up;
-- comparison table: Hardware V1 versus Hardware V2;
-- final reason for choosing the exact controller and motor.
+- assembled PCB top and bottom photos;
+- labelled connector map and full pinout;
+- exact LiPo label or datasheet;
+- exact motor and motor-driver datasheets;
+- measured current, voltage and temperature tables;
+- PixyCam training screenshots and field-test images;
+- first-power-up and failure log;
+- Hardware V1 versus Hardware V2 comparison table;
+- final reason for choosing the exact motor, driver and battery.
 
 ## Safety rule
 
-The first power-up should use a current-limited bench supply or an inline fuse. The drive motor and servo should initially be disconnected. Power rails must be checked before inserting expensive controllers or sensors.
+The first power-up should use a current-limited bench supply or an inline fuse. Initially disconnect the motor and servo, verify every power rail, then connect loads one subsystem at a time. A LiPo must be charged, stored and handled using equipment suitable for its exact cell count and chemistry.
