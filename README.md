@@ -1,12 +1,25 @@
 # KU STEAM Pinkies - WRO 2026 Future Engineers
 
-We are **KU STEAM Pinkies**, a WRO 2026 Future Engineers team building a compact autonomous self-driving car.
+## Quick Navigation
 
-This repository tells the story of how the robot developed. We started with an older, larger robot that used a more complicated rack/gearbox-style mechanical idea. That robot was useful because it showed us what was difficult to control. From that point, we redesigned the new robot to be smaller, simpler, lower-friction, and easier to tune.
+| Area | Open |
+|---|---|
+| 🚦 Judge-facing starting point | [`START_HERE.md`](START_HERE.md) |
+| 🆕 Hardware V2 migration | [`Custom PCB plan`](docs/hardware/hardware_v2_custom_pcb_plan.md) · [`Faster motor plan`](docs/design/hardware_v2_motor_upgrade_plan.md) |
+| ⚙️ Mechanical design | [`Drivetrain and steering`](docs/design/drivetrain_and_steering.md) |
+| 🔌 Electronics, power, and sensors | [`Electronics overview`](docs/hardware/electronics_overview.md) · [`Wiring`](docs/hardware/pcb_wiring_diagrams.md) |
+| 💻 Software and obstacle strategy | [`State machine and obstacle flow`](docs/code/software_state_machine_and_obstacle_flow.md) · [`Source code`](src/) |
+| 🧪 Testing and results | [`Mechanical and software testing`](docs/testing/mechanical_and_software_testing.md) · [`Performance measurements`](docs/testing/performance_measurements.md) |
+| 🛠️ Rebuild the robot | [`Exact rebuild guide`](docs/reproducibility/exact_rebuild_wiring_upload_start.md) · [`Parts list`](docs/hardware/parts_list.md) |
+| 🗺️ Find evidence by rubric criterion | [`Evidence map`](docs/reproducibility/evidence_map.md) |
+| 📸 Photos and video | [Jump to photos and video](#12-photos-and-video) |
+| 🗄️ Verified Hardware V1 archive | [`archivo/hardware-v1-esp32-250rpm/`](archivo/hardware-v1-esp32-250rpm/) |
 
-The README gives the quick judging path. The detailed proof is still kept in the `docs/`, `schemes/`, `models/`, `src/`, `v-photos/`, `t-photos/`, and `video/` folders. At the end of each major section, there is a short **Go deeper** note that points to the full documentation file.
+> **Current development status:** the verified `ESP32` + perfboard + `250 rpm` robot remains documented as **Hardware V1**. We are now preparing **Hardware V2**, which replaces the low-level ESP board arrangement with a custom PCB and tests a faster drive motor. Existing Hardware V1 evidence has not been deleted.
 
-## Table Of Contents
+We are **KU STEAM Pinkies**, a WRO 2026 Future Engineers team building a compact autonomous self-driving car. This repository documents the complete engineering process: mechanical development, electronics, software, testing, failures, decisions, and rebuild information.
+
+## README Contents
 
 - [1. What We Learned From The Previous Robot](#1-what-we-learned-from-the-previous-robot)
 - [2. What We Wanted The New Robot To Do Better](#2-what-we-wanted-the-new-robot-to-do-better)
