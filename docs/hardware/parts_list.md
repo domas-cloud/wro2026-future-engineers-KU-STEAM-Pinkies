@@ -1,44 +1,78 @@
 # Bill Of Materials (BOM)
 
-This BOM is written as a rebuild guide, not only as a summary of what we used.
-Another team should be able to use this page as a shopping and fabrication checklist for a functionally equivalent robot.
+## Documentation status
 
-## How To Read This BOM
+This is the active Hardware V2 BOM. The complete pre-migration Hardware V1 BOM was copied before this update to:
 
-- `Exact part name` is the preferred item to buy or fabricate.
-- `Manufacturer / model` uses the exact vendor when it is known from the final build documentation.
-- `Generic` means the repository documents the part class and key specification, but not a single locked vendor.
-- `Custom` means the part must be made from the files in `models/` or by matching the documented geometry.
-- If an alternative is used, the team should re-check mounting, power budget, and control tuning.
+[`archivo/hardware-v1-esp32-250rpm/docs/hardware/parts_list.md`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/parts_list.md)
 
-## Rebuild BOM
+Hardware V2 is still under development. A part marked `TBD` is intentionally not guessed and must not be treated as final until the exact component or measurement is available.
 
-| Category | Exact part name | Manufacturer / model | Qty | Key specification | Used for | Alternative |
-| --- | --- | --- | --- | --- | --- | --- |
-| compute board | Low-level controller board | Espressif `ESP32-WROOM-32` development board | 1 | `3.3 V` logic, I2C, UART, PWM-capable GPIO | Real-time control, sensor polling, servo PWM, motor-driver control | Another `ESP32` dev board with the same voltage level and a remapped pinout |
-| compute board | Perception board | Raspberry Pi `Raspberry Pi Zero` | 1 | `5 V` SBC, CSI camera connector, UART link to controller | Camera processing and high-level lane / obstacle decisions | `Raspberry Pi Zero 2 W` if power budget and thermal behavior are re-checked |
-| camera | Wide-angle camera module | Generic `OV5647 5 MP` Pi camera | 1 | CSI interface, wide field of view, Pi-compatible | Forward scene perception for lane and obstacle interpretation | Another Pi-compatible wide-angle CSI camera with recalibrated vision parameters |
-| IMU | 9-DOF inertial measurement unit | CEVA / Hillcrest Labs `BNO085` breakout | 1 | I2C IMU with fused yaw output, address `0x4A` or `0x4B` | Heading reference and straight-line stabilization | `BNO086` with matching firmware support and the same rigid mounting quality |
-| ToF sensor | Front distance sensor | STMicroelectronics `VL53L1X` breakout | 1 | ToF sensor, I2C, used as the forward trigger sensor | Front wall detection and turn trigger | Equivalent front ToF only after retuning thresholds and startup sequence |
-| ToF sensor | Left distance sensor | STMicroelectronics `VL53L1CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Left-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
-| ToF sensor | Right distance sensor | STMicroelectronics `VL53L1CD` breakout | 1 | Short-range ToF, I2C, unique runtime address after XSHUT setup | Right-side wall distance correction | Equivalent short-range ToF only after retuning thresholds and startup sequence |
-| motor driver | DC motor driver module | Generic `L298N` module | 1 | H-bridge driver, PWM + direction control, battery motor rail input | Drives the rear DC motor | Smaller H-bridge module only if stall current, voltage drop, and cooling are still acceptable |
-| motor | Rear drive motor | Generic `N20 6 V 250 rpm` geared DC motor | 1 | `6 V`, about `250 rpm`, metal gearbox form factor | Rear-wheel propulsion | Another `N20`-format motor near the same speed/torque range, followed by control retuning |
-| servo | Steering servo | Tower Pro `MG90S` metal-gear micro servo | 1 | `5 V` micro servo, metal gears, PWM control | Front-wheel steering actuation | Higher-torque micro servo if the steering geometry or wheel load changes |
-| batteries | Main battery pack | Generic `2x 18650 Li-ion` holder + 2 matched cells | 1 | 2-cell pack, about `7.4 V` nominal, sized for about `2.32 A` system peak budget | Main robot power source | Protected 2-cell Li-ion or LiPo pack with similar voltage and equal or better current margin |
-| regulators | Logic / sensor step-down regulator | Generic buck regulator module | 2 | `5 V` regulated output, enough margin for logic and sensor rails | Stable supply for `ESP32`, `Raspberry Pi Zero`, IMU, and ToF sensors | Equivalent buck converter modules with verified current headroom and low-noise output |
-| connectors | Perfboard power / signal distribution set | Generic perfboard, pin headers, Dupont leads, JST-style leads, screw terminals | 1 set | Common-ground distribution, separate logic / sensor / motor / servo branches | Interconnects and power distribution between all modules | Any equivalent connector set if wire gauge, labeling, and strain relief remain clear |
-| structural part | Main chassis plate and mounting structure | Custom wood frame | 1 set | Approx. `21 x 10 x 8 cm` robot package, supports compact rear-drive layout | Holds drivetrain, electronics, sensors, and camera in final geometry | Another rigid chassis with the same wheelbase and mounting geometry, followed by mechanical retuning |
-| structural part | Rear differential | LEGO differential element | 1 | Mechanical differential for rear axle | Reduces drag in turns and improves handling consistency | Fixed rear axle only with major handling tradeoffs and controller retuning |
-| structural part | Rear wheels | LEGO wheels | 2 | Matching rear-wheel diameter and width for the published drivetrain | Rear traction on the driven axle | Equivalent wheels with similar diameter and grip, followed by tuning updates |
-| structural part | Front wheels | Custom silicone wheels | 2 | Lightweight steering wheels with stable grip and matching steering geometry | Front steering contact and grip | Recast wheels from the same mold or equivalent wheels with matching diameter and scrub behavior |
-| custom printed part | Steering gear set | Custom 3D-printed parts from `models/` | 1 set | STL-based steering transmission geometry matched to `MG90S` servo output | Transfers servo motion to the front steering system | Reprint from the provided CAD files or regenerate matching geometry if the servo horn or linkage changes |
-| custom printed part | Brackets and sensor / board mounts | Custom 3D-printed parts from `models/` | 1 set | Mounts for steering-related geometry and supporting structure | Keeps boards, sensors, and steering parts aligned in the documented layout | Reprint from the provided CAD files or redesign with the same sensor positions and stiffness |
+## Confirmed Hardware V2 BOM
 
-## Notes For Rebuild Teams
+| Category | Exact part / decision | Qty | Interface or key specification | Status | Purpose |
+|---|---|---:|---|---|---|
+| main controller | Espressif `ESP32-WROOM-32` | 1 | `3.3 V` logic; I2C, SPI, PWM and GPIO capability | confirmed | central real-time control, sensing, navigation decisions and actuator output |
+| perception camera | first-generation `PixyCam` / CMUcam5 | 1 | onboard colour-object processing | confirmed | detect red and green WRO traffic pillars |
+| camera interface | wired `SPI` connection between PixyCam and ESP32 | 1 | clock, controller-to-camera data, camera-to-controller data, chip select, power and ground | confirmed | transfer detected block information without Raspberry Pi |
+| IMU | `BNO085` breakout | 1 | I2C, fused yaw / heading output | confirmed | heading reference and turn control |
+| front ToF | `VL53L1X` breakout | 1 | I2C | confirmed | front-distance measurement and turn triggering |
+| side ToF | `VL53L4CD` breakout | 2 | I2C, left and right positions | confirmed | local wall and obstacle spacing |
+| steering servo | Tower Pro `MG90S` or the already documented equivalent unit | 1 | PWM, nominal 5 V class supply | confirmed | front-wheel steering |
+| power source | LiPo battery | 1 | cell count, nominal voltage, maximum voltage, capacity, C-rating and connector `TBD` | partially confirmed | main robot energy source |
+| drive motor | faster geared DC motor replacing Hardware V1 `N20 250 rpm` | 1 | exact model, voltage, rpm, torque, gearbox and current `TBD` | TBD | rear-axle propulsion |
+| motor driver | H-bridge stage for custom PCB | 1 | exact IC and current/thermal rating `TBD` | TBD | PWM and direction control for the selected motor |
+| custom PCB | Hardware V2 control and power board | 1 | ESP32 control, PixyCam SPI, I2C sensors, servo, motor stage and protected power input | in design | replaces the Hardware V1 development-board/perfboard integration |
+| power regulation | regulated logic, camera, sensor and servo power branches | as required | topology and ratings depend on final LiPo and load measurements | TBD | stable power distribution |
+| main switch and start input | wired competition controls | 1 each | exact connector and pinout `TBD` | required | legal startup and round control |
 
-- The two `VL53L1CD` modules and the front `VL53L1X` share one I2C bus, so the shutdown / startup sequence still matters during initialization.
-- Keep the motor-current path separate from sensor and logic wiring, then join all subsystems at a common ground point.
-- The repository documents a perfboard-based implementation, so teams do not need a fabricated PCB to reproduce the electrical architecture.
-- Custom printed parts should be taken from `models/` and checked together with `docs/design/drivetrain_and_steering.md` and `docs/design/chassis_design_improved.md`.
-- If a substitute part is used in compute, sensing, steering, or drivetrain hardware, expect to recalibrate software thresholds and steering / speed gains.
+## Mechanical parts currently retained from the documented robot
+
+These parts remain the current mechanical baseline unless later testing records a replacement:
+
+| Category | Part | Qty | Status / role |
+|---|---|---:|---|
+| chassis | custom wood frame and mounting structure | 1 set | current compact chassis baseline |
+| rear differential | LEGO differential element | 1 | rear driven axle and smoother cornering |
+| rear wheels | matching LEGO wheels | 2 | driven-wheel pair |
+| front wheels | custom silicone wheels | 2 | steering grip and repeatable response |
+| steering transmission | custom 3D-printed parts from `models/` | 1 set | matched to the MG90S steering layout |
+| brackets and mounts | custom printed / fabricated parts | 1 set | maintain sensor, camera, PCB and steering alignment |
+
+## Components removed from the active Hardware V2 BOM
+
+The following items remain documented only as Hardware V1 development evidence:
+
+- `Raspberry Pi Zero`;
+- Raspberry Pi CSI camera;
+- Pi-to-ESP32 UART perception architecture;
+- `2x 18650 Li-ion` battery holder and cells;
+- Hardware V1 perfboard distribution;
+- Hardware V1 `L298N` module as the assumed final driver;
+- Hardware V1 `N20 6 V 250 rpm` motor as the assumed final motor.
+
+They were not deleted. Their earlier BOM is preserved in the archive link above.
+
+## Sensor and bus notes
+
+- The correct active side-sensor model is `VL53L4CD`, not `VL53L1CD`.
+- The front `VL53L1X`, both side `VL53L4CD` sensors and the `BNO085` use the I2C side of the architecture.
+- The final schematic and firmware must document runtime I2C addresses, XSHUT/startup sequencing where required, pull-ups and timeout handling.
+- The first-generation PixyCam uses a separate wired SPI link to the ESP32.
+- Connectors should be labelled by physical role: `PIXy`, `FRONT_TOF`, `LEFT_TOF`, `RIGHT_TOF`, `IMU`, `SERVO`, `MOTOR`, `START` and power input.
+
+## Data still required before this becomes a final rebuild BOM
+
+1. Exact drive-motor model and datasheet.
+2. Loaded motor speed, running current and stall current on the robot.
+3. Exact motor-driver IC and thermal design.
+4. LiPo cell count, voltage, capacity, C-rating and connector.
+5. Final regulator parts and current headroom.
+6. ESP32 physical PCB implementation and complete pin map.
+7. Custom PCB dimensions, mounting holes, layer count and fabrication files.
+8. Verified PixyCam power requirement and final SPI pin assignment.
+9. Final measured robot mass and dimensions after Hardware V2 assembly.
+
+## Rebuild rule
+
+Another team should only use the active Hardware V2 table as a final shopping list after every `TBD` field has been replaced with a verified exact value. Until then, Hardware V1 remains the reproducible complete baseline and Hardware V2 remains the documented migration target.
