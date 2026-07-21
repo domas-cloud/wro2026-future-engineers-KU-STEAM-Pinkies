@@ -4,14 +4,16 @@
 
 The repository contains two evidence levels:
 
-- **Hardware V1** — verified historical robot, code, measurements, photos and video;
-- **Hardware V2** — active custom-PCB/PixyCam redesign with confirmed architecture and missing implementation evidence.
+- `[HW1-HISTORY]` **Hardware V1** — verified historical robot, code, measurements, photos and video;
+- `[HW2-IMPROVEMENT]` **Hardware V2** — active custom-PCB/PixyCam redesign with confirmed architecture and missing implementation evidence.
 
 The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/evidence_map.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/evidence_map.md).
 
+> **[NEXT-REVIEW]** The master list of missing information, update locations and completion conditions is [`../../NEXT_REVIEW.md`](../../NEXT_REVIEW.md). Search that file for the matching `HW2-...` ID before updating any section.
+
 ## Criterion 1 — mobility and mechanical design
 
-### Evidence already available
+### [HW1-HISTORY] Evidence already available
 
 - [`drivetrain_and_steering.md`](../design/drivetrain_and_steering.md) — Hardware V1 motor, differential, steering and wheel iterations;
 - [`engineering_decisions.md`](../design/engineering_decisions.md) — trade-offs behind the verified baseline;
@@ -19,7 +21,13 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 - [`models/README.md`](../../models/README.md) — CAD/STL evidence;
 - [`performance_measurements.md`](../testing/performance_measurements.md) — strict Hardware V1 measurements.
 
-### Hardware V2 evidence still required
+### [HW2-IMPROVEMENT] What is changing
+
+Hardware V2 keeps the successful steering, wheel-grip and differential lessons but reopens the drive-motor choice for greater speed and integrates the new electronics and battery layout.
+
+### [HW2-TBD] Evidence still required
+
+Tracker IDs: `HW2-MOTOR-01`, `HW2-SENSOR-01/02/03`, `HW2-REBUILD-01`.
 
 - exact faster motor and datasheet;
 - torque/speed/current comparison;
@@ -30,7 +38,7 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 
 ## Criterion 2 — power and sensor architecture
 
-### Confirmed design evidence
+### [HW2-CONFIRMED] Design evidence already available
 
 - [`electronics_overview.md`](../hardware/electronics_overview.md);
 - [`parts_list.md`](../hardware/parts_list.md);
@@ -39,12 +47,18 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 - [`sensor_list.md`](../hardware/sensor_list.md);
 - [`pcb_wiring_diagrams.md`](../hardware/pcb_wiring_diagrams.md).
 
-### Historical Hardware V1 evidence
+### [HW1-HISTORY] Historical evidence
 
 - existing schematic PDF and perfboard photographs under [`schemes/`](../../schemes/);
 - archived Hardware V1 electronics and wiring text under [`archivo/`](../../archivo/).
 
-### Hardware V2 evidence still required
+### [HW2-IMPROVEMENT] What is changing
+
+The development-board, perfboard, `2x 18650` and `L298N` arrangement is being replaced by an ESP32-WROOM-32 custom PCB, LiPo power architecture and an H-bridge selected for the final motor.
+
+### [HW2-TBD] Evidence still required
+
+Tracker IDs: `HW2-POWER-01`, `HW2-DRIVER-01`, `HW2-PCB-01`.
 
 - exact LiPo, motor, driver and regulators;
 - power calculations and measured current;
@@ -59,14 +73,20 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 
 ### Evidence already available
 
-- [`src/README.md`](../../src/README.md) — honest status of the published Hardware V1 code;
-- [`software_architecture_improved.md`](../code/software_architecture_improved.md) — Hardware V2 target architecture;
+- [`src/README.md`](../../src/README.md) — `[HW1-HISTORY]` honest status of the published Hardware V1 code;
+- [`software_architecture_improved.md`](../code/software_architecture_improved.md) — `[HW2-CONFIRMED]` target architecture;
 - [`vision_interface.md`](../code/vision_interface.md) — required PixyCam SPI contract;
 - [`pixycam_spi_integration_plan.md`](../code/pixycam_spi_integration_plan.md) — camera implementation and test plan;
 - [`software_state_machine_and_obstacle_flow.md`](../code/software_state_machine_and_obstacle_flow.md) — target state flow and unresolved thresholds;
 - [`control_algorithms.md`](../code/control_algorithms.md) — Hardware V1 low-level control reasoning.
 
-### Hardware V2 evidence still required
+### [HW2-IMPROVEMENT] What is changing
+
+The Raspberry Pi/UART vision path is being replaced by first-generation PixyCam onboard colour processing and direct SPI block-data access from the ESP32.
+
+### [HW2-TBD] Evidence still required
+
+Tracker IDs: `HW2-VISION-02`, `HW2-VISION-03`, `HW2-SW-01`.
 
 - published PixyCam SPI source;
 - final board configuration and pin map;
@@ -87,7 +107,9 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 - [`iteration_log.md`](../testing/iteration_log.md);
 - [`hardware_v2_validation_template.md`](../testing/hardware_v2_validation_template.md).
 
-### Evidence still required
+### [HW2-TBD] Evidence still required
+
+Tracker IDs: `HW2-PCB-01`, `HW2-MOTOR-01`, `HW2-TEST-01`.
 
 - failure and correction log for PCB revision A;
 - measured effect of faster speed on perception and turning;
@@ -101,13 +123,16 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 
 - [`README.md`](../../README.md);
 - [`START_HERE.md`](../../START_HERE.md);
+- [`NEXT_REVIEW.md`](../../NEXT_REVIEW.md);
 - [`docs/README.md`](../README.md);
 - [`submission_checklist.md`](submission_checklist.md);
 - [`full_rebuild_guide.md`](full_rebuild_guide.md);
 - [`models/README.md`](../../models/README.md);
 - archived Hardware V1 code, wiring and documentation.
 
-### Hardware V2 evidence still required
+### [HW2-TBD] Evidence still required
+
+Tracker IDs: `HW2-REBUILD-01`, `HW2-MEDIA-01`, `HW2-TEST-01`.
 
 - final exact BOM;
 - complete PCB manufacturing package;
@@ -121,10 +146,11 @@ The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs
 
 1. [`README.md`](../../README.md)
 2. [`START_HERE.md`](../../START_HERE.md)
-3. [`Hardware V2 decision register`](../hardware/hardware_v2_decision_register.md)
-4. [`Hardware V2 PCB plan`](../hardware/hardware_v2_custom_pcb_plan.md)
-5. [`PixyCam SPI plan`](../code/pixycam_spi_integration_plan.md)
-6. [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
-7. [`Hardware V1 performance measurements`](../testing/performance_measurements.md)
+3. [`NEXT_REVIEW.md`](../../NEXT_REVIEW.md)
+4. [`Hardware V2 decision register`](../hardware/hardware_v2_decision_register.md)
+5. [`Hardware V2 PCB plan`](../hardware/hardware_v2_custom_pcb_plan.md)
+6. [`PixyCam SPI plan`](../code/pixycam_spi_integration_plan.md)
+7. [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
+8. [`Hardware V1 performance measurements`](../testing/performance_measurements.md)
 
-This map does not claim that missing Hardware V2 artifacts already exist.
+This map does not claim that missing Hardware V2 artifacts already exist. An item becomes `[HW2-DONE]` only when the implementation, repository files and measured evidence describe the same physical robot.
