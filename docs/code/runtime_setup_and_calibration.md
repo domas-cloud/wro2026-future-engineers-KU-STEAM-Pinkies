@@ -1,74 +1,78 @@
 # Runtime Setup And Calibration
 
-This page explains how to move from source code to a ready-to-run robot using only documented repository information.
+## Current status
 
-## Software Layers
+The previous Raspberry Pi Zero runtime instructions were archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/runtime_setup_and_calibration.md`](../../archivo/hardware-v1-esp32-250rpm/docs/code/runtime_setup_and_calibration.md).
 
-| Layer | Location | Role |
-| --- | --- | --- |
-| ESP32 controller | [src/src/main.cpp](../../src/src/main.cpp) | real-time motor, steering, sensor, and state control |
-| ESP32 libraries | [src/lib/](../../src/lib/) | compass, lidar, engine, and lights helpers |
-| PlatformIO project | [src/platformio.ini](../../src/platformio.ini) | build and upload configuration |
-| Pi Zero interface | [src/pi-zero/README.md](../../src/pi-zero/README.md) | perception-side runtime note |
-| Pi packet format | [src/pi-zero/protocol.md](../../src/pi-zero/protocol.md) | UART message contract |
+The repository currently contains buildable Hardware V1 ESP32 source and legacy Pi source. Hardware V2 runtime setup is incomplete because PixyCam SPI code, the final PCB pin map, motor driver and power design are not yet available.
 
-## ESP32 Build And Upload
+## Current Hardware V1 code build
 
-1. Open [src/](../../src/) as the PlatformIO project.
-2. Confirm the selected board/environment in [platformio.ini](../../src/platformio.ini).
-3. Connect the `ESP32-WROOM-32` by USB.
-4. Build the firmware.
-5. Upload the firmware.
-6. Open the serial monitor at `115200` baud for startup checks.
+The current PlatformIO project is under [`src/`](../../src/):
 
-## Pi Zero Runtime
+- [`src/src/main.cpp`](../../src/src/main.cpp);
+- [`src/lib/`](../../src/lib/);
+- [`src/platformio.ini`](../../src/platformio.ini).
 
-If perception packets are used:
+It can be used as historical controller evidence and as a starting point for the V2 port. It must not be presented as the completed PixyCam/custom-PCB firmware.
 
-1. connect the camera to the `Raspberry Pi Zero`;
-2. connect Pi UART to `ESP32 GPIO16/GPIO17` using `3.3 V` TTL;
-3. install dependencies listed for the Pi runtime;
-4. start the Pi runtime according to [src/pi-zero/README.md](../../src/pi-zero/README.md);
-5. verify packet format against [protocol.md](../../src/pi-zero/protocol.md).
+## Hardware V2 setup information still required
 
-Expected packet:
+Before publishing final setup instructions, add verified values for:
 
-```text
-VISION,<mode>,<lane_shift_mm>,<obstacle_side>,<confidence>,<age_ms>
-```
+1. exact PCB revision;
+2. exact ESP32 flash/programming configuration;
+3. final GPIO map;
+4. PixyCam library/version and SPI pins;
+5. I2C pins, addresses, pull-ups and startup sequence;
+6. motor-driver type and PWM behaviour;
+7. servo centre and safe limits;
+8. LiPo and regulator checks;
+9. build command and upload connection tested on the real board;
+10. expected serial/debug output and fault indications.
 
-## Pre-Run Calibration
+## Required Hardware V2 pre-run calibration
 
-| Step | Why it matters | Pass condition |
-| --- | --- | --- |
-| charge battery | low voltage changes motor and servo behavior | robot can steer and drive without brownout |
-| center steering | reduces first-meter drift | front wheels return close to straight |
-| check motor direction | prevents immediate wrong-way launch | forward command moves robot forward |
-| keep robot still during IMU start | yaw baseline depends on stable startup | heading is stable while stationary |
-| check ToF sensors | wall and obstacle logic depends on valid distance | front/left/right values change when blocked |
-| check Pi packet age if used | stale vision data should not guide the robot | packets are fresh before starting |
+| Check | Required record | Pass condition |
+|---|---|---|
+| battery | exact pack and measured voltage | inside documented operating range |
+| power rails | idle and transient measurements | no unsafe voltage or reset |
+| steering centre | neutral pulse/angle and physical alignment | repeatable centre without binding |
+| steering limits | tested left/right mechanical clearance | no hard-stop loading |
+| motor direction | command and observed direction | forward command moves forward |
+| BNO085 | orientation and stationary yaw | stable and correctly signed |
+| front ToF | address, range and mounting | valid response in intended approach area |
+| side ToF | addresses and wall-distance checks | left/right readings match physical positions |
+| PixyCam | signatures and detection test | correct red/green classification in test conditions |
+| camera timeout | update interruption test | controller enters documented fallback |
 
-## Start Procedure
+## Required start procedure
 
-1. Place the robot in the required start position.
-2. Power the robot and wait for sensor initialization.
-3. Keep the robot still and aligned with the track.
-4. Press the physical start button.
-5. The controller stores the current yaw as the target heading.
-6. The run loop starts motor, steering, sensor, and state updates.
+The final procedure must state, in order:
 
-## Post-Run Logging
+1. how the LiPo is connected and switched;
+2. expected initialization indication;
+3. what happens when a required sensor or camera fails;
+4. how long the robot must remain still for heading initialization;
+5. the exact physical start-button action;
+6. the condition that starts motor output;
+7. the condition that ends the run.
 
-After a test run, record:
+These steps remain incomplete until the real Hardware V2 firmware and PCB exist.
+
+## Post-run logging
+
+Each structured test should record:
 
 - date;
-- code commit or branch;
-- battery condition;
-- challenge type;
-- field layout;
-- pass/fail result;
-- visible cause of failure if any;
-- whether calibration was changed before the next run.
+- commit;
+- PCB revision;
+- motor, driver and battery;
+- Pixy settings;
+- challenge layout;
+- run result and time;
+- contacts or moved pillars;
+- fault or failure cause;
+- change made before the next test.
 
-Use [docs/testing/final_validation_results.md](../testing/final_validation_results.md) for the final counted run table.
-
+Use [`hardware_v2_validation_template.md`](../testing/hardware_v2_validation_template.md).

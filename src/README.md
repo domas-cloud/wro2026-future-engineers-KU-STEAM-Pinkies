@@ -1,62 +1,79 @@
-# Embedded Controller
+# Source Code Status
 
-This folder contains the active PlatformIO project for the robot controller.
+## Important version note
 
-## Main Files
+The previous source index was archived at [`archivo/hardware-v1-esp32-250rpm/src/README.md`](../archivo/hardware-v1-esp32-250rpm/src/README.md).
 
-- [src/src/main.cpp](src/main.cpp): main robot loop
-- [src/lib/Lidar/Lidar.h](lib/Lidar/Lidar.h): distance sensor abstraction
-- [src/lib/Compass/Compass.h](lib/Compass/Compass.h): `BNO085` yaw handling
-- [src/lib/Engine/Engine.h](lib/Engine/Engine.h): motor control wrapper
-- [src/lib/Lights/](lib/Lights/): status lights
-- [src/platformio.ini](platformio.ini): PlatformIO configuration
-- [src/pi-zero/README.md](pi-zero/README.md): perception-side architecture note
-- [src/pi-zero/protocol.md](pi-zero/protocol.md): Pi-to-ESP32 packet format
+The source tree currently contains **Hardware V1 controller and Raspberry Pi development code**. Hardware V2 has confirmed PixyCam SPI architecture, but its final firmware is not yet implemented in this repository.
 
-## Current Runtime Model
+## Current directories
 
-The documented runtime is split into two controllers:
+| Path | Current meaning |
+|---|---|
+| [`src/src/main.cpp`](src/main.cpp) | Hardware V1 ESP32 controller and legacy UART vision parser |
+| [`src/lib/`](lib/) | Hardware V1 helpers for compass, distance sensors, motor and lights |
+| [`src/platformio.ini`](platformio.ini) | current development-board PlatformIO environment |
+| [`src/pi-zero/`](pi-zero/) | legacy Raspberry Pi Zero perception implementation |
+| [`src/python/`](python/) | earlier legacy Raspberry Pi/OpenCV perception prototype |
 
-- an `ESP32` low-level controller under `src/src/main.cpp`;
-- a `Raspberry Pi Zero` perception-side architecture described under `src/pi-zero/`.
+The two Raspberry Pi directories are kept as development evidence. Raspberry Pi Zero is not part of Hardware V2.
 
-The `ESP32` controller:
+## What the current ESP32 source does
 
-- initializes three distance sensors and one compass;
-- waits for a start button;
-- drives forward at constant power;
-- keeps heading close to `targetAngle`;
-- uses side distance as an additional steering correction;
-- performs a hard left or right turn when the front sensor detects a close boundary;
-- counts sector transitions with `edge`;
-- stops cleanly when the run is finished.
+The published controller includes:
 
-The documented `Raspberry Pi Zero` side:
+- start-button handling;
+- BNO085 yaw reading;
+- front VL53L1X and side VL53L4CD reading;
+- heading and wall-distance steering correction;
+- corner execution;
+- motor and MG90S output;
+- legacy `VISION,...` UART parsing.
 
-- selects a reference shift and obstacle-pass side at a higher level;
-- is intended to send a compact packet to the `ESP32`;
-- should time out to a neutral command if fresh perception data is unavailable.
+## What it does not yet do
 
-## Important Runtime Variables
+The current source does not yet provide:
 
-- `targetAngle`: desired heading reference
-- `edge`: number of completed sector turns
-- `isClockwise`: selected turning direction
-- `Kp`, `Kg`, `Kd`: control gains
-- `TARGET_DISTANCE`: desired wall offset
-- `TURN_DISTANCE`: threshold that triggers a corner turn
+- first-generation PixyCam SPI initialization and block reading;
+- final Hardware V2 GPIO map;
+- final custom-PCB programming configuration;
+- selected Hardware V2 H-bridge support;
+- verified LiPo/power fault handling;
+- final obstacle logic tested with the faster motor.
 
-## Build And Upload
+## Known text/code alignment items
 
-1. Open `src/` as a PlatformIO project.
-2. Build the environment from `src/platformio.ini`.
-3. Upload to the `ESP32`.
-4. Review the Pi-side interface notes in `src/pi-zero/` if the perception layer is used.
-5. Use the physical start button to toggle the run state.
+Before Hardware V2 is marked final, resolve and test:
 
-## Related Documentation
+- code uses `GPIO14` for the button while old text used `GPIO13`;
+- legacy UART code uses `9600` while old text also listed `115200`;
+- obstacle mode is disabled by default in the current source;
+- corner entry uses a dynamic expression, not one fixed `400 mm` threshold;
+- finish behaviour calls `ESP.restart()` after stopping;
+- derivative/error history should be reviewed and tested;
+- sensor type should not be inferred from the XSHUT GPIO number;
+- BNO085 reset and status LED pins must appear in the final pin map.
 
-- [Root README](../README.md)
-- [Software Architecture](../docs/code/software_architecture_improved.md)
-- [Software Flow and State Logic](../docs/code/software_flow_and_state_logic.md)
-- [Electronics Overview](../docs/hardware/electronics_overview.md)
+This README records discrepancies but does not silently change untested control code.
+
+## Hardware V2 source required
+
+The final source should contain clearly named modules for:
+
+- PixyCam SPI;
+- `VL53L1X` front sensor;
+- `VL53L4CD` side sensors;
+- BNO085;
+- MG90S steering;
+- selected motor driver;
+- state machine and fault handling;
+- final board configuration.
+
+It must build from the published PlatformIO configuration and match the PCB schematic and wiring tables.
+
+## Related documents
+
+- [`Hardware V2 software architecture`](../docs/code/software_architecture_improved.md)
+- [`Hardware V2 vision interface`](../docs/code/vision_interface.md)
+- [`PixyCam SPI integration plan`](../docs/code/pixycam_spi_integration_plan.md)
+- [`Runtime setup and calibration`](../docs/code/runtime_setup_and_calibration.md)

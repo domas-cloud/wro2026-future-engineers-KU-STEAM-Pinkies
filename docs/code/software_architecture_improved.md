@@ -1,106 +1,85 @@
-# Software Architecture
+# Hardware V2 Software Architecture
 
-The software is easiest to understand as two layers:
+## Version status
 
-- a perception layer on the `Raspberry Pi Zero`;
-- a low-level control layer on the `ESP32`.
+The previous two-controller Raspberry Pi Zero + ESP32 architecture was archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/software_architecture_improved.md`](../../archivo/hardware-v1-esp32-250rpm/docs/code/software_architecture_improved.md).
 
-The repository now documents both the `ESP32` runtime and the Pi-side perception interface, with the `ESP32` remaining the clearest view of the real-time controller.
+Hardware V2 keeps the ESP32 as the central real-time controller and replaces Raspberry Pi image processing with a first-generation PixyCam that performs colour processing on its own processor.
 
-## What The `ESP32` Controller Does
+## Target architecture
 
-The code in `src/src/main.cpp` is responsible for:
+```text
+PixyCam colour processing
+        ↓ SPI block data
+ESP32 input validation
+        ↓
+obstacle-side decision
+        + BNO085 heading
+        + front/side ToF distances
+        ↓
+steering reference and corner logic
+        ↓
+MG90S PWM + motor-driver commands
+```
 
-- startup and sensor initialization;
-- reading yaw and distance sensors;
-- waiting for the start button;
-- holding heading and wall offset on straight sections;
-- making hard turns at corners;
-- stopping after the required edge count.
+## ESP32 responsibilities
 
-## Main Software Pieces
+- start and monitor the BNO085 and all three ToF sensors;
+- initialize and read PixyCam over SPI;
+- maintain a local age for the latest valid camera result;
+- select red/green obstacle behaviour;
+- hold heading and local spacing;
+- execute corner transitions;
+- drive the steering servo and selected motor driver;
+- detect missing sensors or communication faults;
+- stop or fall back according to the final safety strategy.
 
-The low-level controller is built from a few simple pieces.
+## PixyCam responsibilities
 
-### Initialization
+- acquire the camera image;
+- apply trained red and green signatures;
+- return detected block information;
+- avoid transferring full images to the ESP32.
 
-`setup()` starts serial, I2C, sensors, PWM, servo, lights, and motor control. If a critical sensor fails to initialize, the robot stays halted.
+## Published-code status
 
-### Sensing
+The current [`src/src/main.cpp`](../../src/src/main.cpp) is Hardware V1 controller code. It includes:
 
-The active runtime inputs are:
+- ESP32 sensor initialization;
+- BNO085 and ToF control;
+- steering and motor control;
+- legacy UART vision parsing;
+- a compile-time obstacle-round flag.
 
-- `frontSensor`
-- `leftSensor`
-- `rightSensor`
-- `robotCompass`
-- the start button
+It does **not** yet implement the confirmed Hardware V2 PixyCam SPI interface. The `src/pi-zero/` and `src/python/` directories are legacy Raspberry Pi development evidence and are not active Hardware V2 runtime components.
 
-### State Logic
+## Known alignment work before Hardware V2 firmware is final
 
-In normal use, the controller moves between a few simple states:
+1. implement PixyCam SPI access;
+2. remove or isolate obsolete Pi/UART code from the active build;
+3. replace pin assumptions with the approved PCB pin map;
+4. confirm the start-button pin from hardware and code;
+5. make the front/side sensor type explicit instead of inferring it from a GPIO number;
+6. align corner-trigger documentation with the actual formula used in code;
+7. define final stop behaviour and steering-centre behaviour;
+8. verify derivative/error-state handling in the controller;
+9. add camera, sensor and motor-driver fault handling;
+10. publish testable configuration values and calibration steps.
 
-- idle before the run starts;
-- straight control while following the current sector;
-- hard turn when the front sensor reaches the turn threshold;
-- finish when the run is complete.
+These are required tasks, not claims that the code has already been corrected.
 
-### Control
+## Required final source structure
 
-The steering output combines:
+The final repository should make it obvious which files are built for Hardware V2. It should include:
 
-- heading error;
-- side-distance error;
-- a damping term.
+- one documented PlatformIO environment for the final ESP32 hardware;
+- PixyCam interface module;
+- explicit sensor modules for `VL53L1X`, `VL53L4CD` and `BNO085`;
+- motor-driver abstraction matching the selected H-bridge;
+- configuration or constants matching the PCB pin map;
+- comments explaining state transitions and safety behaviour;
+- build and upload instructions verified on the real board.
 
-### Actuation
+## Architecture acceptance condition
 
-- `engine.drive(255)` drives the motor;
-- `myservo.write(...)` sets the steering angle;
-- LEDs show simple status information.
-
-## How The Camera Layer Fits
-
-The camera layer should sit above the low-level controller, not replace it.
-
-Its job is to decide the preferred driving line:
-
-- which side should be used around an obstacle;
-- whether the reference line should shift left or right;
-- what the controller should aim for in the current sector.
-
-The `ESP32` still does the real-time part:
-
-- sensor polling;
-- steering calculation;
-- hard-turn execution;
-- final actuation.
-
-The Pi-side interface is documented in:
-
-- `src/pi-zero/protocol.md`
-- `docs/code/vision_interface.md`
-
-## Data Flow
-
-The low-level loop is straightforward:
-
-1. read button and yaw;
-2. if not started, keep the motor stopped;
-3. read front, left, and right distances;
-4. if the front sensor says a corner is near, run the turn routine;
-5. otherwise calculate steering from heading and side distance;
-6. constrain the servo angle and write it.
-
-If camera guidance is active, it modifies the reference line before step 5. The steering law itself does not need to be replaced.
-
-## Why The Architecture Stayed Simple
-
-We kept the controller simple on purpose:
-
-- one clear low-level loop;
-- direct sensor-to-actuator path;
-- separate perception and control roles;
-- no unnecessary control layers inside the `ESP32`.
-
-That made the robot easier to tune and easier to explain.
+Hardware V2 software may be described as final only when the source code, custom PCB, wiring tables, calibration procedure and repeated Open/Obstacle tests all describe the same implementation.

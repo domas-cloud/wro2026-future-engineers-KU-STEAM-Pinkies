@@ -1,112 +1,80 @@
-# Software State Machine And Obstacle Flow
+# Hardware V2 State Machine And Obstacle Flow
 
-This page is the single judge-facing software picture for the robot. It combines the current `ESP32` runtime, the `Raspberry Pi Zero` obstacle-decision layer, and the exact fallback behavior.
+## Status
 
-## One-Picture Flowchart
+The previous Raspberry Pi/UART state-machine text was archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/software_state_machine_and_obstacle_flow.md`](../../archivo/hardware-v1-esp32-250rpm/docs/code/software_state_machine_and_obstacle_flow.md).
+
+This page describes the confirmed Hardware V2 control concept. Exact transition thresholds remain `TBD` until PixyCam SPI and the final motor are implemented and measured.
+
+## Target flow
 
 ```mermaid
 flowchart TD
-    A([Power on]) --> B[Initialize ESP32, IMU, 3x ToF, servo, motor, UART]
-    B --> C{Start button on GPIO13 pressed?}
-    C -- no --> C
-    C -- yes --> D[Store current yaw as targetAngle and start motor]
-    D --> E[Read IMU yaw, front ToF, left ToF, right ToF]
-    E --> F{Fresh vision packet? age <= 250 ms and confidence >= 0.40}
-    F -- no --> G[Fallback to neutral guidance\nlane_shift = 0\nobstacle_side = NONE]
-    F -- yes --> H{mode == OBSTACLE?}
-    H -- no --> I[Track guidance\nuse lane_shift_mm as advisory reference]
-    H -- yes --> J{Obstacle color / rule result}
-    J -- red --> K[Avoid on RIGHT side]
-    J -- green --> L[Avoid on LEFT side]
-    J -- unknown --> G
-    G --> M{frontDistance <= TURN_DISTANCE\n400 mm?}
-    I --> M
-    K --> N[Obstacle avoidance active\nIMU keeps heading\nside ToF checks clearance\nfront ToF protects corner entry]
-    L --> N
-    N --> O{Avoidance finished?}
-    O -- obstacle cleared and lane_shift returns near 0 --> M
-    O -- packet stale / low confidence --> G
-    O -- frontDistance <= 400 mm --> M
-    M -- yes --> P{leftDistance valid and <= 800 mm?}
-    M -- no --> Q[Straight control\nheading correction + wall offset correction + damping]
-    P -- yes --> R[Hard turn clockwise\nservo to MIN_ANGLE]
-    P -- no --> S[Hard turn counterclockwise\nservo to MAX_ANGLE]
-    R --> T{frontDistance back in open range?}
-    S --> T
-    T -- no --> R
-    T -- yes --> U[Rotate targetAngle by 90 deg\nincrement edge]
-    U --> V{edge >= 12 and steering settled?}
-    Q --> V
-    V -- no --> E
-    V -- yes --> W[Stop motor, center steering, wait for restart]
-    W --> C
+    A([Power on]) --> B[Initialize ESP32, BNO085, three ToF sensors, PixyCam, servo and motor stage]
+    B --> C{All required systems ready?}
+    C -- no --> X[Safe stop and visible fault state]
+    C -- yes --> D{Physical start button pressed?}
+    D -- no --> D
+    D -- yes --> E[Store heading reference and start autonomous control]
+    E --> F[Read yaw, front ToF, side ToF and Pixy blocks]
+    F --> G{Trusted red or green block?}
+    G -- no --> H[Neutral heading and local-distance control]
+    G -- red --> I[Select right-side passing reference]
+    G -- green --> J[Select left-side passing reference]
+    I --> K[Execute avoidance using heading and distance feedback]
+    J --> K
+    H --> L{Corner trigger reached?}
+    K --> L
+    L -- yes --> M[Execute corner turn and update heading reference]
+    L -- no --> N[Continue straight or avoidance control]
+    M --> O{Required run complete?}
+    N --> O
+    O -- no --> F
+    O -- yes --> P[Stop motor and set documented steering end state]
 ```
 
-## State Summary
+## Logical states
 
-| State | Main inputs | Main output | Exit condition |
-| --- | --- | --- | --- |
-| `Idle` | start button | motor off, steering centered | button press |
-| `StraightControl` | yaw, front ToF, side ToF | heading hold plus wall-offset correction | obstacle packet or corner trigger |
-| `ObstacleDecision` | camera result, `mode`, `obstacle_side`, `confidence`, `age_ms` | choose legal passing side | enter `AvoidLeft`, `AvoidRight`, or fallback |
-| `AvoidLeft` | camera command + IMU + ToF | shift reference left while maintaining clearance | obstacle cleared, stale packet, or corner trigger |
-| `AvoidRight` | camera command + IMU + ToF | shift reference right while maintaining clearance | obstacle cleared, stale packet, or corner trigger |
-| `HardTurn` | front ToF, left ToF, yaw | full-lock corner turn and `targetAngle` update | open space detected ahead |
-| `Finish` | `edge`, steering error | safe stop | controller waits for next start |
+| State | Main inputs | Main action | Exit condition still to document |
+|---|---|---|---|
+| `Init` | startup results | initialize buses, sensors, camera and outputs | all required systems ready or fault |
+| `Idle` | start button | motor stopped | physical start command |
+| `StraightControl` | yaw and ToF | heading and local-distance correction | trusted obstacle or corner condition |
+| `ObstacleDecision` | Pixy signature, position, size and age | select legal passing side or reject result | valid decision, no block or fault |
+| `AvoidLeft` / `AvoidRight` | camera reference, yaw and ToF | maintain an offset path with local protection | obstacle cleared, stale data or corner condition |
+| `HardTurn` | front/side ToF and yaw | execute corner and update heading target | open-space / heading exit condition |
+| `Finish` | lap/sector count and alignment | stop safely | power cycle or documented restart action |
+| `Fault` | initialization or runtime fault | stop or restricted fallback | documented recovery condition |
 
-## Obstacle Obedience Logic
+## Obstacle rule
 
-### 1. How left/right is decided
+- red pillar → pass on the right side;
+- green pillar → pass on the left side.
 
-- `Raspberry Pi Zero` classifies the obstacle and sends `VISION,<mode>,<lane_shift_mm>,<obstacle_side>,<confidence>,<age_ms>`.
-- Rule used by the software architecture:
-  - `red pillar -> pass right`
-  - `green pillar -> pass left`
-- The `ESP32` does not re-classify color. It checks whether the command is fresh and trustworthy, then executes the requested side shift inside the normal controller.
+PixyCam classifies the colour signature. ESP32 validates the block and creates the steering reference. PixyCam does not directly control the servo.
 
-### 2. Which sensors participate
+## Data-validity requirements
 
-- camera: obstacle color and preferred side;
-- `BNO085`: keeps the robot aligned with `targetAngle`;
-- front `VL53L1X`: prevents late entry into a wall or corner and can interrupt avoidance for a hard turn;
-- left and right `VL53L1CD`: maintain local clearance during the offset maneuver;
-- start button: arms the whole state machine.
+The final code must define and publish:
 
-### 3. Fallback behavior
+- accepted signature numbers;
+- minimum block size;
+- rule for choosing among multiple blocks;
+- maximum age of the last valid block;
+- how ambiguous red/green detections are handled;
+- when avoidance begins and ends;
+- how camera failure changes the state;
+- how a front-distance corner condition overrides obstacle guidance.
 
-If obstacle guidance is missing, stale, or weak, the controller falls back immediately to neutral guidance:
+## Current Hardware V1 code mapping
 
-- `age_ms > 250` -> ignore obstacle guidance;
-- `confidence < 0.40` -> treat obstacle guidance as advisory only;
-- `mode == NEUTRAL` or `obstacle_side == NONE` -> return to standard straight control.
+The current published ESP32 firmware already contains low-level elements such as startup, heading/distance control, corner execution and run completion. It still uses legacy UART vision code and does not implement the PixyCam SPI path.
 
-In fallback mode the robot still has local protection from:
+The current code also differs from older documentation in several details:
 
-- front-wall turn trigger: `frontDistance <= 400 mm`;
-- IMU heading correction;
-- side-distance correction.
+- the start button is defined as `GPIO14` in code, while old text used `GPIO13`;
+- the legacy UART is opened at `9600`, while old text also claimed `115200`;
+- corner entry is calculated dynamically rather than by one fixed `400 mm` constant;
+- the finish path currently calls `ESP.restart()` after stopping instead of clearly returning to an idle state.
 
-### 4. When avoidance ends
-
-Obstacle avoidance is considered complete when one of these becomes true:
-
-1. the obstacle is cleared and the perception layer returns the lane shift toward neutral;
-2. the packet becomes stale or low-confidence, so the controller drops back to neutral guidance;
-3. the front sensor reaches the normal corner-turn threshold, so the robot leaves avoidance and executes the sector turn.
-
-## Current-Code Mapping
-
-The low-level runtime already visible in [main.cpp](../../src/src/main.cpp) implements:
-
-- `Idle`
-- `StraightControl`
-- `HardTurn`
-- `Finish`
-
-The obstacle layer shown here is the documented full-system extension defined by:
-
-- [Vision Interface](vision_interface.md)
-- [Pi Zero Runtime](../../src/pi-zero/README.md)
-- [Pi Zero Protocol](../../src/pi-zero/protocol.md)
-
-This is why the picture above shows both the current embedded controller and the intended obstacle-decision layer in one place.
+These differences must be resolved in firmware and then copied exactly into the final state diagram. This page does not choose values that the team has not yet implemented and tested.
