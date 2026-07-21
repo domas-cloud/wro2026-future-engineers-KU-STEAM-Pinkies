@@ -4,7 +4,7 @@ This changelog tracks repository milestones so judges can distinguish verified h
 
 ## Current milestone
 
-### v1.2 hardware-v2 architecture and text alignment — 2026-07-21
+### v1.2 hardware-v2 architecture, text alignment and follow-up tracking — 2026-07-21
 
 - opened the `hardware-v2-custom-pcb-migration` branch;
 - established the rule that active text is archived before it is rewritten;
@@ -19,6 +19,12 @@ This changelog tracks repository milestones so judges can distinguish verified h
 - archived and rewrote the root README, sensor list, PCB/wiring pages and schemes descriptions;
 - separated Hardware V1 schematic/perfboard evidence from the incomplete Hardware V2 PCB target;
 - removed unsupported Hardware V2 claims from active text and replaced missing details with explicit required-evidence sections;
+- added root [`NEXT_REVIEW.md`](NEXT_REVIEW.md) as the single follow-up tracker;
+- added searchable markers: `[HW1-HISTORY]`, `[HW2-IMPROVEMENT]`, `[HW2-CONFIRMED]`, `[HW2-TBD]`, `[HW2-VERIFY]`, `[HW2-DONE]` and `[NEXT-REVIEW]`;
+- mapped each open item to the files that must be updated and to a clear completion condition;
+- expanded the Hardware V1 archive index with a V1-to-V2 improvement map;
+- linked START_HERE, the docs index, the decision register and the evidence map to the new tracker;
+- archived the previous versions of those index files before updating them;
 - did not delete source code, CAD, photos, videos, schematics or historical documentation.
 
 ## Planned milestones
