@@ -1,54 +1,61 @@
-# Documentation Index
+# Technical Documentation
 
-This folder contains the main engineering documentation for the robot.
+The main project story is in the [root README](../README.md). This page is an index for readers who need more detail.
 
-## Fast Paths
+## Main documents
 
-Use these routes if you want to navigate by purpose instead of by folder:
+| Area | Main document | What it contains |
+| --- | --- | --- |
+| Mechanics | [Drivetrain and steering](design/drivetrain_and_steering.md) | motor comparison, differential, steering versions and wheel grip |
+| Electronics | [Electronics overview](hardware/electronics_overview.md) | power budget, controller roles, sensors and calibration |
+| Software | [Software state and obstacle flow](code/software_state_machine_and_obstacle_flow.md) | control flow, serial interface, fallback behaviour and obstacle strategy |
+| Testing | [Performance measurements](testing/performance_measurements.md) | recorded measurements and repeated-run results |
+| Rebuild | [Full rebuild guide](reproducibility/full_rebuild_guide.md) | parts, assembly, wiring, upload and calibration path |
 
-| Goal | Start here | Then continue to |
-|---|---|---|
-| Judge overview | [Evidence Map](reproducibility/evidence_map.md) | [System Overview](design/system_overview.md) |
-| Mechanical design | [Drivetrain and Steering](design/drivetrain_and_steering.md) | [Mechanical Rebuild Notes](reproducibility/mechanical_rebuild.md) |
-| Electronics | [Electronics Overview](hardware/electronics_overview.md) | [As-Built Wiring Checklist](hardware/as_built_wiring_checklist.md) |
-| Software | [Software Architecture](code/software_architecture_improved.md) | [Runtime Setup And Calibration](code/runtime_setup_and_calibration.md) |
-| Testing and validation | [Testing Workflow](testing/tests.md) | [Final Validation Results](testing/final_validation_results.md) |
+These five files are the normal reading path. The remaining pages provide supporting evidence or narrower implementation details.
 
-## Best First Files
+## Supporting mechanical evidence
 
-- [Evidence Map](reproducibility/evidence_map.md)
-- [Full Rebuild Guide](reproducibility/full_rebuild_guide.md)
-- [System Overview](design/system_overview.md)
-- [Engineering Decisions](design/engineering_decisions.md)
-- [Electronics Overview](hardware/electronics_overview.md)
-- [Mechanical and Software Testing](testing/mechanical_and_software_testing.md)
+- [Chassis development](design/chassis_design_improved.md)
+- [Engineering decisions](design/engineering_decisions.md)
+- [Risks and failures](design/risk_and_failures.md)
+- [Mechanical rebuild notes](reproducibility/mechanical_rebuild.md)
+- [CAD/STL index](../models/README.md)
 
-## Main Sections
+## Supporting electronics evidence
 
-- [Mechanical Design](design/chassis_design_improved.md)
-- [Hardware](hardware/electronics_overview.md)
-- [As-Built Wiring Checklist](hardware/as_built_wiring_checklist.md)
-- [Software](code/software_architecture_improved.md)
-- [Runtime Setup And Calibration](code/runtime_setup_and_calibration.md)
-- [Testing](testing/mechanical_and_software_testing.md)
-- [Testing Workflow](testing/tests.md)
-- [Iteration Log](testing/iteration_log.md)
-- [Final Validation Results](testing/final_validation_results.md)
-- [Evaluation](evaluation/final_performance.md)
+- [Parts list](hardware/parts_list.md)
+- [Sensor list](hardware/sensor_list.md)
+- [Motor and servo selection](hardware/motor_servo_selection.md)
+- [Wiring diagrams](hardware/pcb_wiring_diagrams.md)
+- [As-built wiring checklist](hardware/as_built_wiring_checklist.md)
+- [Schematics](../schemes/README.md)
 
-## Reproducibility Files
+## Supporting software evidence
 
-- [Final Submission Pack](reproducibility/final_submission_pack.md)
-- [Final Submission Checklist](reproducibility/submission_checklist.md)
-- [Full Rebuild Guide](reproducibility/full_rebuild_guide.md)
-- [Mechanical Rebuild Notes](reproducibility/mechanical_rebuild.md)
-- [Parts List](hardware/parts_list.md)
-- [PCB / Wiring Diagrams](hardware/pcb_wiring_diagrams.md)
-- [Schemes Folder](../schemes/README.md)
-- [Models Index](../models/README.md)
+- [Control algorithms](code/control_algorithms.md)
+- [Software architecture](code/software_architecture_improved.md)
+- [Navigation strategy](code/navigation_strategy_improved.md)
+- [Vision interface](code/vision_interface.md)
+- [Runtime setup and calibration](code/runtime_setup_and_calibration.md)
+- [ESP32 project](../src/README.md)
+- [Pi Zero runtime](../src/pi-zero/README.md)
 
-## Related Entry Points
+## Supporting test records
 
-- [Root README](../README.md)
-- [Start Here](../START_HERE.md)
-- [Embedded Controller](../src/README.md)
+- [Testing method](testing/tests.md)
+- [Iteration log](testing/iteration_log.md)
+- [Mechanical and software testing](testing/mechanical_and_software_testing.md)
+- [Final validation table](testing/final_validation_results.md)
+- [What worked](evaluation/what_worked.md)
+- [What did not work](evaluation/what_didnt.md)
+
+## Submission material
+
+- [Evidence map](reproducibility/evidence_map.md)
+- [Submission checklist](reproducibility/submission_checklist.md)
+- [Team photo](../t-photos/team.jpg)
+- [Robot photos](../v-photos/README.md)
+- [Video links](../video/video.md)
+
+Some supporting pages overlap because they were written during development. When two pages repeat the same information, the document listed in the **Main documents** table should be treated as the current explanation.
