@@ -1,17 +1,22 @@
-# Comparison With Initial Goals
+# Comparison With Initial Goals And Current Redesign
 
-This table compares the first planned robot with the final repository-state robot.
+## Status
 
-| Initial goal | Final outcome | What changed | Why it changed | Evidence file |
-| --- | --- | --- | --- | --- |
-| simple front steering with enough torque | three-gear steering with corrected geometry and `MG90S` servo | steering pivots and geometry were rebuilt | the earlier wheel lever arm overloaded the servo and reduced repeatability | `docs/design/drivetrain_and_steering.md` |
-| single-sensor navigation concept | mixed sensing with camera, `BNO085`, and `front VL53L1X + 2x VL53L1CD` | architecture became multi-layer instead of single-source | one sensor type alone was not reliable enough across layouts | `docs/hardware/electronics_overview.md` |
-| direct drive without much drivetrain complexity | rear differential retained in the final robot | drivetrain became mechanically more forgiving | the version without a differential increased corner resistance and slip | `docs/evaluation/what_didnt.md` |
-| fastest possible motor choice | `N20 6 V 250 rpm` chosen as the final balance | slower and faster motors were rejected | the team prioritized controllability and usable torque over headline speed | `docs/testing/performance_measurements.md` |
-| software driven mostly from one controller | split `Raspberry Pi Zero` and `ESP32` runtime | perception and low-level control were separated | this made the control loop simpler and the perception role clearer | `docs/code/software_architecture_improved.md` |
-| generic rebuild notes | judge-oriented rebuild path with BOM, CAD, schematics, and runtime docs | documentation became part of the engineered solution | reproducibility is judged directly in WRO submission review | `docs/reproducibility/evidence_map.md` |
+The previous final-outcome table was archived at [`archivo/hardware-v1-esp32-250rpm/docs/evaluation/comparison_initial_goals.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/evaluation/comparison_initial_goals.md).
 
-## Most Logical Next Improvement
+This table separates the verified Hardware V1 outcome from the incomplete Hardware V2 target.
 
-The next practical improvement is not a new subsystem. It is tighter repeatability: more counted full-route runs and a cleaner perception-to-controller interface under more obstacle layouts.
+| Area | Initial goal | Hardware V1 evidence | Hardware V2 direction | V2 evidence still required |
+|---|---|---|---|---|
+| steering | compact, controllable front steering | MG90S, corrected geometry, bearings and silicone wheels | retain the working mechanical concept unless testing requires change | final dimensions, load and faster-speed validation |
+| drivetrain | usable speed with enough torque | 50/250/1000 rpm N20 comparison; 250 rpm retained for V1 | select a faster motor | exact model, current, torque, loaded speed and repeated runs |
+| differential | smooth rear-axle turning | LEGO differential reduced binding | currently retained | final motor/differential compatibility test |
+| perception | detect obstacle colour | Raspberry Pi camera/OpenCV development | first-generation PixyCam with onboard processing | signatures, SPI code, detection matrix and videos |
+| controller | stable real-time control | ESP32 low-level controller | ESP32-WROOM-32 remains central | final PCB pin map and verified firmware |
+| distance/orientation | heading plus local spacing | BNO085, front VL53L1X and side ToF | BNO085 + VL53L1X + 2x VL53L4CD | mounting, addresses, startup and reliability results |
+| power | stable supply for logic and actuators | 2x18650 and module/perfboard architecture | LiPo and custom PCB | exact pack, regulators, current budget and protection |
+| documentation | rebuildable GitHub record | V1 code, media, CAD, wiring and measurements | complete V2 manufacturing and validation package | final BOM, PCB files, code, calibration and final media |
 
+## Current conclusion
+
+Hardware V1 proved several mechanical and control ideas. Hardware V2 is not simply renamed V1: it changes perception, power, drive and electronics integration. The remaining work must be shown with real artifacts and measurements rather than rewritten as if already complete.

@@ -1,38 +1,39 @@
-# Final Performance
+# Performance Evaluation Status
 
-The final robot version was optimized not for maximum speed, but for more stable and repeatable track driving.
-The main improvements came from reducing mechanical steering load, keeping the differential, and separating sensor roles more clearly.
+## Version status
 
-## Steering Behavior
+The previous page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/evaluation/final_performance.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/evaluation/final_performance.md).
 
-After the geometry corrections, the steering system behaved more consistently than in earlier tests.
-Servo load decreased because the large wheel lever-arm problem was removed, and front-wheel motion remained more symmetric.
+No final Hardware V2 performance claim is currently possible.
 
-## Turning And Traction
+## Hardware V1 historical evidence
 
-The rear-axle differential improved the robot's behavior in turns.
-Compared with the earlier robot without a differential, turning resistance was reduced, so the robot cornered more smoothly and slipped less.
+The verified baseline showed:
 
-## Sensor Performance
+- average 3 m drift improving from 10.6 cm to 4.0 cm across the recorded table;
+- approximate 90° turn space improving from 46 cm to 39 cm;
+- 5/5 clean open-straight tests;
+- 4/5 clean obstacle-slalom tests;
+- 4/5 full-practice-route completions.
 
-The camera remained the main source of overall track information, while the distance sensors were used for short-range confirmation.
-The `BNO085` added heading and motion-stability information, especially after several consecutive turns.
-This distribution of sensor roles reduced the impact of any single-sensor error on the full decision cycle.
+See [`performance_measurements.md`](../testing/performance_measurements.md) for the raw snapshot.
 
-## Quantitative Summary
+## Hardware V2 evaluation still required
 
-| Test layout | Runs | Successful runs | Robot version | Notes |
-| --- | --- | --- | --- | --- |
-| 3 m straight stability check | `5` | `5` | final steering geometry + `250 rpm` motor | drift stayed within `3-5 cm` |
-| obstacle practice route | `5` | `4` | final geometry + 3 ToF sensors + IMU | one late correction on a pillar approach |
-| full practice loop | `5` | `4` | final repository-state robot | one run ended with corner-exit misalignment |
+Evaluate the final V2 revision for:
 
-## Remaining Limitations
+- speed and three-lap time;
+- straight drift;
+- turn space and overshoot;
+- Open Challenge success rate;
+- red/green decision accuracy;
+- Obstacle Challenge success rate;
+- parking;
+- motor-driver and regulator temperature;
+- battery/rail stability;
+- sensor and camera startup reliability;
+- failure recovery.
 
-The robot is repeatable enough to summarize with counted runs, but it is still not a laboratory dataset.
-The tables above are the compact measurements we kept because they influenced design decisions directly.
+## Final evaluation format
 
-## Further Improvements
-
-It would be useful to continue collecting results with one consistent method: steering-center deviation, repeatability across multiple runs, and obstacle-handling success rate.
-That would make it possible to present clear numerical progress alongside the qualitative evaluation.
+The eventual conclusion must compare Hardware V2 with Hardware V1 and explain both gains and regressions. It must identify the exact commit and physical robot revision. Until those results exist, this page remains a status document rather than a final-performance claim.

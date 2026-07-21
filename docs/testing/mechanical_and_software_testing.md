@@ -1,127 +1,65 @@
 # Mechanical And Software Testing
 
-We did not treat mechanics and software as separate worlds. Most of the time, when one side changed, the other side had to be retuned.
+## Version status
 
-That is why we tested the robot as one connected system.
+The previous text was archived at [`archivo/hardware-v1-esp32-250rpm/docs/testing/mechanical_and_software_testing.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/testing/mechanical_and_software_testing.md).
 
-## What We Compared
+This page separates strict Hardware V1 evidence from Hardware V2 tests that are still pending.
 
-The main comparison areas were:
+## Hardware V1 comparisons
 
-- `250 rpm`, `300 rpm`, and `1000 rpm` `N20` motors;
-- steering `Version 1`, `Version 2`, and `Version 3`;
+The documented V1 motor options were:
+
+- `50 rpm` N20;
+- `250 rpm` N20;
+- `1000 rpm` N20.
+
+The `250 rpm` motor was retained for Hardware V1. Earlier text that referred to a `300 rpm` alternative was inconsistent and is preserved only in the archived snapshot.
+
+Other V1 comparisons included:
+
+- steering versions V1, V2 and V3;
 - earlier front wheels versus silicone front wheels;
-- earlier differential solution versus the final `LEGO` differential;
-- sensor mounting and wiring stability.
+- metal versus LEGO differential;
+- sensor mounting and controller tuning.
 
-## What Counted As A Better Version
+## Strict Hardware V1 quantitative source
 
-A version was better if it improved the robot as a whole, not just one isolated metric.
+Use [`performance_measurements.md`](performance_measurements.md) as the source of numeric V1 evidence.
 
-The practical things we cared about were:
+| Metric | Earlier version | Hardware V1 result |
+|---|---:|---:|
+| average drift over `3 m` | `10.6 cm` | `4.0 cm` |
+| approximate `90°` turn space | `46 cm` | `39 cm` |
+| open straight clean passes | not kept as a matched earlier set | `5/5` |
+| obstacle slalom clean passes | not kept as a matched earlier set | `4/5` |
+| full practice route completions | not kept as a matched earlier set | `4/5` |
 
-- less drift on straight driving;
-- cleaner `90` degree turns;
-- lower steering load;
-- smoother recovery after turns;
-- fewer repeated failures in the same scenario;
-- easier tuning after the change.
+Older text claimed separate `2 m` drift, overshoot, recovery-time and `6/10 → 9/10` datasets. Those figures are not used here because the stricter measurement document says they were not logged as one consistent matched dataset.
 
-## Test Method
+## Hardware V1 qualitative conclusions
 
-For major comparisons, we reused the same pattern:
+- corrected steering geometry reduced mechanical load;
+- silicone wheels improved useful front grip;
+- LEGO differential reduced binding;
+- rigid sensor mounting improved consistency;
+- software tuning worked better after the mechanics became more repeatable.
 
-1. change one part or one subsystem;
-2. run the same scenario several times;
-3. watch whether the same weakness repeats;
-4. compare the result with the previous version;
-5. keep the version that improves repeatability, not just one lucky run.
+## Hardware V2 testing required
 
-For steering comparisons, we used about `10` practical runs while deciding between the main versions.
+Hardware V2 changes camera, communication, battery, motor, motor driver and PCB integration. V1 results cannot be copied as V2 results.
 
-## Main Mechanical Results
+Required V2 tests include:
 
-### Motor
+1. motor free-run, loaded, launch and stall current;
+2. 3 m speed and drift comparison;
+3. turn-space and overshoot at the selected speed;
+4. MG90S current and steering stability;
+5. LiPo and regulator voltage under transient load;
+6. motor-driver temperature;
+7. ten full sensor/camera startup cycles;
+8. Pixy red/green detection under several positions and lighting conditions;
+9. SPI stability with motor and servo active;
+10. repeated Open and Obstacle Challenge runs.
 
-The `300 rpm` motor was too slow. The `1000 rpm` motor was faster but gave too little useful torque. The `250 rpm` motor gave the best overall balance, so it became the final choice.
-
-### Steering
-
-The jump from steering `V1` to `V2` was one of the clearest improvements of the whole season. Reducing the bad lever arm lowered servo load and made the steering much more repeatable.
-
-### Front Wheels
-
-Silicone front wheels improved real steering effect because the front axle stopped wasting as much motion in slip.
-
-### Differential
-
-The `LEGO` differential was more stable than the earlier metal solution and gave smoother cornering with less binding.
-
-## Comparison Table
-
-| Comparison area | Earlier version | Final version | Practical result |
-| --- | --- | --- | --- |
-| motor choice | `300 rpm` or `1000 rpm` | `250 rpm` N20 | better balance of speed and torque |
-| steering geometry | `V1` with larger lever arm | `V2/V3` with lower load | steering became easier and more repeatable |
-| front wheel material | earlier wheels with more slip | silicone front wheels | stronger real steering effect |
-| rear differential | earlier metal solution | `LEGO` differential | smoother cornering and less binding |
-| sensor mounting | less rigid layout | cleaner, more rigid layout | more stable behavior between runs |
-
-### Differential Comparison
-
-![Metal differential version](../design/images/metal-differential.jpg)
-
-Earlier version with the metal differential.
-
-![LEGO differential version](../design/images/lego-differential.png)
-
-Final version with the `LEGO` differential.
-
-## Software Checks
-
-On the software side, we mainly watched what the robot actually did on the track:
-
-- did it wobble;
-- did it hold its heading;
-- did it stay near the intended wall offset;
-- did it overshoot after correction;
-- were the turn transitions clean;
-- did it recover cleanly after a turn.
-
-## Software Tuning Results
-
-| Test case | Before change | After change | Sample size | Why it mattered |
-| --- | --- | --- | --- | --- |
-| Straight corridor drift after `2 m` | `9 cm` | `4 cm` | `10` runs | Better lane stability |
-| Corner overshoot | `14 cm` | `6 cm` | `10` runs | Less wall contact risk |
-| Successful `3`-lap runs | `6/10` | `9/10` | `10` runs | Higher consistency |
-| Recovery after obstacle correction | `1.2 s` | `0.6 s` | `10` runs | Faster return to target line |
-
-After changing steering geometry and retuning the controller, our robot became more stable in straight sections and less aggressive in corners.
-
-The biggest improvement was consistency: successful `3`-lap completion increased from `60%` to `90%` across `10` runs.
-
-This confirmed that the update improved both control quality and reliability.
-
-## Why The Two Sides Were Linked
-
-The controller could only be tuned properly if the mechanics were predictable.
-
-For example:
-
-- steering friction made the controller look weaker than it really was;
-- front-wheel slip reduced the effect of a correct steering command;
-- better symmetry and grip made the tuning much easier.
-
-That is why we never treated testing as only mechanical or only software. The robot improved because both sides were adjusted together.
-
-## Short Conclusion
-
-The final version was selected because it was:
-
-- easier to control;
-- more repeatable;
-- smoother in turns;
-- less sensitive to the same repeated failures.
-
-That mattered more than any single impressive part on its own.
+Use [`hardware_v2_validation_template.md`](hardware_v2_validation_template.md) and tie each test to a commit and physical revision.

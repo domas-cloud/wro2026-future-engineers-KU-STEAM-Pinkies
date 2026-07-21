@@ -1,82 +1,77 @@
 # Final Submission Checklist
 
-Use this checklist before the final WRO submission.
+## Version rule
 
-## Entry Path
+The previous checklist was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/submission_checklist.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/submission_checklist.md).
 
-Make sure these files are present and easy to read:
+Run this checklist against **Hardware V2**, not against mixed Hardware V1 and V2 files.
 
-- `README.md`
-- `START_HERE.md`
-- `docs/README.md`
-- `docs/reproducibility/evidence_map.md`
-- `docs/reproducibility/full_rebuild_guide.md`
-- `docs/reproducibility/mechanical_rebuild.md`
-- `docs/testing/tests.md`
-- `docs/testing/final_validation_results.md`
+## Entry and navigation
 
-## Hardware And Rebuild Evidence
+- [ ] README is at least 5000 characters and states the exact robot version;
+- [ ] START_HERE gives a one-minute reading path;
+- [ ] evidence map separates verified evidence from missing evidence;
+- [ ] no active page calls Hardware V1 electronics the final Hardware V2 design;
+- [ ] all important links work.
 
-Confirm that the repository includes:
+## Mechanical evidence
 
-- electronics overview and wiring explanation
-- at least one schematic file
-- parts list
-- CAD or STL files for custom parts
-- mechanical rebuild notes
-- as-built wiring checklist
-- embedded controller README
+- [ ] final dimensions and mass;
+- [ ] wheelbase, track widths, wheel diameter and clearance;
+- [ ] exact motor and drivetrain data;
+- [ ] motor speed/torque/current reasoning;
+- [ ] steering geometry and limits;
+- [ ] final CAD/STL/source files;
+- [ ] iteration and failure evidence;
+- [ ] final mechanical photos.
 
-Main files:
+## Electronics and PCB evidence
 
-- `docs/hardware/electronics_overview.md`
-- `docs/hardware/pcb_wiring_diagrams.md`
-- `docs/hardware/as_built_wiring_checklist.md`
-- `docs/hardware/parts_list.md`
-- `docs/reproducibility/mechanical_rebuild.md`
-- `schemes/Wro_customPCBs.pdf`
-- `models/README.md`
-- `src/README.md`
+- [ ] exact LiPo and safety information;
+- [ ] complete power/current budget;
+- [ ] schematic and editable source;
+- [ ] PCB source, Gerbers and drills;
+- [ ] BOM;
+- [ ] connector and pin map;
+- [ ] assembled PCB photos;
+- [ ] measured voltage/current/temperature;
+- [ ] ten-start sensor and communication test;
+- [ ] as-built wiring checklist completed.
 
-## Visual Submission Evidence
+## Software evidence
 
-Confirm that these are final:
+- [ ] final Hardware V2 source code;
+- [ ] PixyCam SPI implementation;
+- [ ] exact board/build environment;
+- [ ] code comments explain important logic;
+- [ ] state diagram matches source;
+- [ ] red/green decisions documented;
+- [ ] stale/ambiguous/camera-fault handling documented;
+- [ ] upload and calibration procedure tested.
 
-- team photo folder
-- robot photo folder
-- video link file
+## Testing evidence
 
-Main files:
+- [ ] final motor comparison;
+- [ ] power and thermal results;
+- [ ] PixyCam detection matrix;
+- [ ] Open Challenge repeated runs;
+- [ ] Obstacle Challenge repeated runs;
+- [ ] failures linked to corrections and retests;
+- [ ] final results tied to a commit and physical revision.
 
-- `t-photos/README.md`
-- `v-photos/README.md`
-- `video/video.md`
+## Media
 
-Checks:
+- [ ] team photo;
+- [ ] final Hardware V2 front/back/left/right/top/bottom photos;
+- [ ] final Open Challenge video;
+- [ ] final Obstacle Challenge video;
+- [ ] links are public or accessible by link;
+- [ ] video runtime and autonomous segment satisfy the rules.
 
-1. `t-photos/` contains the single final team photo `team.jpg`
-2. `v-photos/` contains front, rear, left, right, top, and bottom views
-3. `video/video.md` contains the final public or accessible-by-link YouTube URL
-4. the autonomous driving segment is at least 30 seconds long
-5. counted final run results are filled in `docs/testing/final_validation_results.md`, or missing values are clearly left as `TBD`
+## Honesty check
 
-## Repository Quality
-
-Before submission, verify:
-
-1. the repository is public
-2. the README matches the final robot state
-3. hardware names are consistent across the main documents
-4. major links still work
-5. a judge can understand where to start in less than one minute
-6. the testing workflow explains how versions are validated and marked stable
-7. runtime setup and calibration are documented in `docs/code/runtime_setup_and_calibration.md`
-
-## Honest Scope Check
-
-Before submission, verify that:
-
-1. the repository does not claim evidence that is missing
-2. measurements are only stated where they were really observed
-3. diagrams, CAD, photos, and text describe the same final robot version
-4. all `TBD` values in final validation tables are either replaced by real run data or left visible as missing evidence
+- [ ] every number is measured or clearly labelled as calculated;
+- [ ] no `TBD` is hidden by an estimate;
+- [ ] Hardware V1 evidence is labelled historical;
+- [ ] diagrams, code, BOM, photos and text describe the same final robot;
+- [ ] another person can rebuild without undocumented team knowledge.

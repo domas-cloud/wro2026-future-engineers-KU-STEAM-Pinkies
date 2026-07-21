@@ -1,54 +1,65 @@
 # Documentation Index
 
-This folder contains the main engineering documentation for the robot.
+## Current project state
 
-## Fast Paths
+The previous index was archived at [`archivo/hardware-v1-esp32-250rpm/docs/README.md`](../archivo/hardware-v1-esp32-250rpm/docs/README.md).
 
-Use these routes if you want to navigate by purpose instead of by folder:
+- Hardware V1: verified historical baseline;
+- Hardware V2: active ESP32 + PixyCam SPI + custom-PCB migration.
 
-| Goal | Start here | Then continue to |
-|---|---|---|
-| Judge overview | [Evidence Map](reproducibility/evidence_map.md) | [System Overview](design/system_overview.md) |
-| Mechanical design | [Drivetrain and Steering](design/drivetrain_and_steering.md) | [Mechanical Rebuild Notes](reproducibility/mechanical_rebuild.md) |
-| Electronics | [Electronics Overview](hardware/electronics_overview.md) | [As-Built Wiring Checklist](hardware/as_built_wiring_checklist.md) |
-| Software | [Software Architecture](code/software_architecture_improved.md) | [Runtime Setup And Calibration](code/runtime_setup_and_calibration.md) |
-| Testing and validation | [Testing Workflow](testing/tests.md) | [Final Validation Results](testing/final_validation_results.md) |
+## Best first files
 
-## Best First Files
+1. [`../README.md`](../README.md)
+2. [`../START_HERE.md`](../START_HERE.md)
+3. [`hardware/hardware_v2_decision_register.md`](hardware/hardware_v2_decision_register.md)
+4. [`reproducibility/evidence_map.md`](reproducibility/evidence_map.md)
+5. [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
 
-- [Evidence Map](reproducibility/evidence_map.md)
-- [Full Rebuild Guide](reproducibility/full_rebuild_guide.md)
-- [System Overview](design/system_overview.md)
-- [Engineering Decisions](design/engineering_decisions.md)
-- [Electronics Overview](hardware/electronics_overview.md)
-- [Mechanical and Software Testing](testing/mechanical_and_software_testing.md)
+## Hardware V2 design
 
-## Main Sections
+- [`design/system_overview.md`](design/system_overview.md)
+- [`hardware/hardware_v2_custom_pcb_plan.md`](hardware/hardware_v2_custom_pcb_plan.md)
+- [`hardware/hardware_v2_decision_register.md`](hardware/hardware_v2_decision_register.md)
+- [`design/hardware_v2_motor_upgrade_plan.md`](design/hardware_v2_motor_upgrade_plan.md)
 
-- [Mechanical Design](design/chassis_design_improved.md)
-- [Hardware](hardware/electronics_overview.md)
-- [As-Built Wiring Checklist](hardware/as_built_wiring_checklist.md)
-- [Software](code/software_architecture_improved.md)
-- [Runtime Setup And Calibration](code/runtime_setup_and_calibration.md)
-- [Testing](testing/mechanical_and_software_testing.md)
-- [Testing Workflow](testing/tests.md)
-- [Iteration Log](testing/iteration_log.md)
-- [Final Validation Results](testing/final_validation_results.md)
-- [Evaluation](evaluation/final_performance.md)
+## Electronics
 
-## Reproducibility Files
+- [`hardware/electronics_overview.md`](hardware/electronics_overview.md)
+- [`hardware/parts_list.md`](hardware/parts_list.md)
+- [`hardware/sensor_list.md`](hardware/sensor_list.md)
+- [`hardware/pcb_wiring_diagrams.md`](hardware/pcb_wiring_diagrams.md)
+- [`hardware/as_built_wiring_checklist.md`](hardware/as_built_wiring_checklist.md)
 
-- [Final Submission Pack](reproducibility/final_submission_pack.md)
-- [Final Submission Checklist](reproducibility/submission_checklist.md)
-- [Full Rebuild Guide](reproducibility/full_rebuild_guide.md)
-- [Mechanical Rebuild Notes](reproducibility/mechanical_rebuild.md)
-- [Parts List](hardware/parts_list.md)
-- [PCB / Wiring Diagrams](hardware/pcb_wiring_diagrams.md)
-- [Schemes Folder](../schemes/README.md)
-- [Models Index](../models/README.md)
+## Software
 
-## Related Entry Points
+- [`code/software_architecture_improved.md`](code/software_architecture_improved.md)
+- [`code/vision_interface.md`](code/vision_interface.md)
+- [`code/pixycam_spi_integration_plan.md`](code/pixycam_spi_integration_plan.md)
+- [`code/software_state_machine_and_obstacle_flow.md`](code/software_state_machine_and_obstacle_flow.md)
+- [`code/runtime_setup_and_calibration.md`](code/runtime_setup_and_calibration.md)
+- [`../src/README.md`](../src/README.md)
 
-- [Root README](../README.md)
-- [Start Here](../START_HERE.md)
-- [Embedded Controller](../src/README.md)
+## Testing
+
+- [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
+- [`testing/tests.md`](testing/tests.md)
+- [`testing/final_validation_results.md`](testing/final_validation_results.md)
+- [`testing/performance_measurements.md`](testing/performance_measurements.md) — Hardware V1 measurement source;
+- [`testing/iteration_log.md`](testing/iteration_log.md).
+
+## Reproducibility and submission
+
+- [`reproducibility/evidence_map.md`](reproducibility/evidence_map.md)
+- [`reproducibility/full_rebuild_guide.md`](reproducibility/full_rebuild_guide.md)
+- [`reproducibility/exact_rebuild_wiring_upload_start.md`](reproducibility/exact_rebuild_wiring_upload_start.md)
+- [`reproducibility/submission_checklist.md`](reproducibility/submission_checklist.md)
+- [`reproducibility/final_submission_pack.md`](reproducibility/final_submission_pack.md)
+
+## Historical evidence
+
+- [`../archivo/hardware-v1-esp32-250rpm/`](../archivo/hardware-v1-esp32-250rpm/)
+- [`../schemes/`](../schemes/) — current files include Hardware V1 schematic/media status;
+- [`../v-photos/`](../v-photos/) — Hardware V1 robot views until replaced;
+- [`../video/`](../video/) — Hardware V1 Open video until replaced.
+
+No file should be treated as final Hardware V2 evidence unless its own status says it is verified.

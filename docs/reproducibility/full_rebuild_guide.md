@@ -1,81 +1,88 @@
-# Full Rebuild Guide
+# Rebuild Guide And Current Reproducibility Status
 
-This is the single rebuild path from an empty table to a functionally equivalent robot.
+## Status
 
-## 1. Collect Parts
+The earlier Hardware V1 rebuild guide was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/full_rebuild_guide.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/full_rebuild_guide.md).
 
-Start with:
+Hardware V1 remains the only complete historical rebuild baseline. Hardware V2 cannot yet be rebuilt exactly because several required parts and design files are `TBD`.
 
-- [parts_list.md](../hardware/parts_list.md);
-- `ESP32-WROOM-32`;
-- `Raspberry Pi Zero` with camera;
-- `BNO085`;
-- front, left, and right ToF sensors;
-- `MG90S` steering servo;
-- `N20 6 V 250 rpm` drive motor;
-- `L298N` motor driver;
-- `2x 18650` battery pack and regulators;
-- printed parts from [models/](../../models/).
+## Hardware V1 historical rebuild
 
-## 2. Print And Fit Mechanical Parts
+Use the archived Hardware V1 documentation and current historical source when the purpose is to inspect or reproduce the earlier working robot. That baseline includes Raspberry Pi Zero, perfboard, `L298N`, `N20 250 rpm` and `2x 18650` power.
 
-1. Print the steering and motor support STL files listed in [models/README.md](../../models/README.md).
-2. Build the compact chassis layout described in [mechanical_rebuild.md](mechanical_rebuild.md).
-3. Install the drive motor and rear differential.
-4. Install the front steering column, servo, and linkage.
-5. Confirm that the steering returns to center and does not bind.
+Hardware V1 is not the current competition target.
 
-## 3. Wire The Robot
+## Hardware V2 confirmed starting list
 
-1. Follow [as_built_wiring_checklist.md](../hardware/as_built_wiring_checklist.md).
-2. Compare against [pcb_wiring_diagrams.md](../hardware/pcb_wiring_diagrams.md).
-3. Compare against [schemes/wiring_overview.md](../../schemes/wiring_overview.md).
-4. Check the schematic PDF in [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf).
+- ESP32-WROOM-32;
+- first-generation PixyCam / CMUcam5 over SPI;
+- BNO085;
+- front VL53L1X;
+- two side VL53L4CD;
+- MG90S;
+- retained mechanical baseline unless later testing records a change;
+- custom PCB;
+- LiPo, motor, H-bridge and regulators still `TBD`.
 
-## 4. Upload Controller Firmware
+## Information required before exact rebuilding is possible
 
-1. Open [src/](../../src/) as a PlatformIO project.
-2. Build using [src/platformio.ini](../../src/platformio.ini).
-3. Upload to the `ESP32`.
-4. Confirm serial output at `115200` baud if needed.
+### Parts
 
-## 5. Start Pi Perception Layer
+- exact LiPo and connector;
+- exact drive motor and gearbox;
+- exact motor-driver IC;
+- exact regulator and protection parts;
+- exact connectors and fasteners;
+- final PCB BOM.
 
-1. Read [src/pi-zero/README.md](../../src/pi-zero/README.md).
-2. Confirm packet format in [src/pi-zero/protocol.md](../../src/pi-zero/protocol.md).
-3. Connect UART at `3.3 V` TTL to `ESP32 GPIO16/GPIO17`.
-4. Run the Pi process only after confirming the ESP32 can run safely on its own.
+### Mechanical dimensions
 
-## 6. Calibrate
+- chassis length, width and height after V2 assembly;
+- mass;
+- wheelbase;
+- front and rear track widths;
+- wheel diameters;
+- ground clearance;
+- sensor and camera mounting coordinates;
+- PCB and battery mounting points.
 
-Use [runtime_setup_and_calibration.md](../code/runtime_setup_and_calibration.md).
+### Electronics files
 
-Minimum checks:
+- schematic and editable source;
+- PCB source;
+- Gerbers and drills;
+- pin map;
+- connector drawing;
+- assembly drawing;
+- top/bottom photographs;
+- measured power and thermal results.
 
-- steering center;
-- motor direction;
-- stable IMU heading;
-- valid front/left/right ToF readings;
-- fresh Pi packets if perception mode is enabled;
-- battery/regulator stability under servo and motor load.
+### Software
 
-## 7. Validate
+- final PlatformIO environment;
+- PixyCam SPI implementation;
+- selected motor-driver implementation;
+- final pin definitions;
+- dependencies and versions;
+- build/upload command;
+- calibration values;
+- start, stop and fault behaviour.
 
-Use:
+## Required rebuild sequence once data exists
 
-- [tests.md](../testing/tests.md);
-- [performance_measurements.md](../testing/performance_measurements.md);
-- [final_validation_results.md](../testing/final_validation_results.md).
+1. manufacture or obtain the final mechanical parts;
+2. assemble chassis, drivetrain and steering;
+3. manufacture and inspect the PCB;
+4. verify all power rails with high-current loads disconnected;
+5. program the ESP32;
+6. bring up BNO085 and ToF sensors;
+7. bring up PixyCam SPI;
+8. connect and calibrate MG90S;
+9. connect the motor stage and test safely;
+10. install all subsystems and verify cable retention;
+11. run the startup checklist;
+12. complete the Hardware V2 validation tables.
 
-The final submission should include real counted runs for open and obstacle layouts.
+## Rebuild acceptance rule
 
-## 8. Judge Review Path
-
-For fastest review:
-
-1. [README.md](../../README.md)
-2. [START_HERE.md](../../START_HERE.md)
-3. [evidence_map.md](evidence_map.md)
-4. [full_rebuild_guide.md](full_rebuild_guide.md)
-5. [final_validation_results.md](../testing/final_validation_results.md)
-
+A second person should be able to reproduce the same wiring, firmware and calibration without asking the team for missing private information. Until that is possible, this guide remains a structured list of required content rather than a false exact rebuild claim.

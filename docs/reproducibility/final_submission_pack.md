@@ -1,139 +1,74 @@
-# Final Submission Pack
+# WRO Submission Pack Status
 
-This page is the single navigation point for the final WRO submission package.
+## Current state
 
-If you are a judge and want the fastest route, open these first:
+The previous submission-pack page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/final_submission_pack.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/final_submission_pack.md).
 
-1. [README.md](../../README.md)
-2. [START_HERE.md](../../START_HERE.md)
-3. [Evidence Map](evidence_map.md)
-4. [Final Submission Checklist](submission_checklist.md)
+The repository currently contains a complete Hardware V1 documentation package and an incomplete Hardware V2 migration package. Hardware V2 is not yet ready to be called the final submission robot.
 
-## Entry Points
+## Judge entry points
 
-- [README.md](../../README.md)
-- [START_HERE.md](../../START_HERE.md)
-- [docs/README.md](../README.md)
-- [Evidence Map](evidence_map.md)
-- [Final Submission Checklist](submission_checklist.md)
+1. [`README.md`](../../README.md)
+2. [`START_HERE.md`](../../START_HERE.md)
+3. [`Evidence map`](evidence_map.md)
+4. [`Hardware V2 decision register`](../hardware/hardware_v2_decision_register.md)
+5. [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
 
-## All Final Docs
+## Current Hardware V2 documentation
 
 ### Design
 
-- [System Overview](../design/system_overview.md)
-- [Chassis Design](../design/chassis_design_improved.md)
-- [Drivetrain and Steering](../design/drivetrain_and_steering.md)
-- [Engineering Decisions](../design/engineering_decisions.md)
-- [Risk and Failures](../design/risk_and_failures.md)
+- [`System overview`](../design/system_overview.md)
+- [`Custom PCB plan`](../hardware/hardware_v2_custom_pcb_plan.md)
+- [`Motor upgrade plan`](../design/hardware_v2_motor_upgrade_plan.md)
+- [`Decision register`](../hardware/hardware_v2_decision_register.md)
 
 ### Hardware
 
-- [Electronics Overview](../hardware/electronics_overview.md)
-- [Sensor List](../hardware/sensor_list.md)
-- [Motor and Servo Selection](../hardware/motor_servo_selection.md)
-- [Parts List / BOM](../hardware/parts_list.md)
-- [PCB Wiring Diagrams](../hardware/pcb_wiring_diagrams.md)
+- [`Electronics overview`](../hardware/electronics_overview.md)
+- [`Active BOM`](../hardware/parts_list.md)
+- [`Sensor list`](../hardware/sensor_list.md)
+- [`PCB/wiring status`](../hardware/pcb_wiring_diagrams.md)
 
 ### Software
 
-- [Software Architecture](../code/software_architecture_improved.md)
-- [Navigation Strategy](../code/navigation_strategy_improved.md)
-- [Software Flow and State Logic](../code/software_flow_and_state_logic.md)
-- [Control Algorithms](../code/control_algorithms.md)
-- [Vision Interface](../code/vision_interface.md)
+- [`Software architecture`](../code/software_architecture_improved.md)
+- [`Vision interface`](../code/vision_interface.md)
+- [`PixyCam SPI plan`](../code/pixycam_spi_integration_plan.md)
+- [`State machine`](../code/software_state_machine_and_obstacle_flow.md)
+- [`Source status`](../../src/README.md)
 
-### Testing and Evaluation
+### Testing
 
-- [Mechanical and Software Testing](../testing/mechanical_and_software_testing.md)
-- [Track Testing](../testing/track_testing.md)
-- [Performance Measurements](../testing/performance_measurements.md)
-- [Test Matrix](../testing/tests.md)
-- [Final Performance](../evaluation/final_performance.md)
-- [What Worked](../evaluation/what_worked.md)
-- [What Didn't](../evaluation/what_didnt.md)
-- [Comparison to Initial Goals](../evaluation/comparison_initial_goals.md)
+- [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
+- [`Testing workflow`](../testing/tests.md)
+- [`Hardware V1 measurements`](../testing/performance_measurements.md)
+- [`Final validation status`](../testing/final_validation_results.md)
 
-### Support Docs
+## Historical Hardware V1 evidence
 
-- [Schemes Index](../../schemes/README.md)
-- [Wiring Overview](../../schemes/wiring_overview.md)
-- [Custom PCB Description](../../schemes/custom_pcb_description.md)
-- [Models Index](../../models/README.md)
-- [Source Code Index](../../src/README.md)
-- [Pi Zero Runtime Notes](../../src/pi-zero/README.md)
-- [Pi Zero Protocol](../../src/pi-zero/protocol.md)
+- archived documents under [`archivo/hardware-v1-esp32-250rpm/`](../../archivo/hardware-v1-esp32-250rpm/);
+- current legacy source under [`src/`](../../src/);
+- existing schematic PDF and perfboard media under [`schemes/`](../../schemes/);
+- current robot six-view photographs under [`v-photos/`](../../v-photos/);
+- current Open Challenge video under [`video/`](../../video/).
 
-## Final Photos
+These artifacts remain useful evidence but do not represent the completed Hardware V2 robot.
 
-### Team Photo
+## Missing before final Hardware V2 submission
 
-- [t-photos/README.md](../../t-photos/README.md)
-- [team.jpg](../../t-photos/team.jpg)
+- exact LiPo, motor, driver and regulators;
+- reviewed schematic and PCB files;
+- production package and BOM;
+- assembled-board photos;
+- final firmware with PixyCam SPI;
+- calibration and exact rebuild instructions;
+- power, thermal, sensor and camera results;
+- repeated Open and Obstacle tables;
+- final six-view photos;
+- final Open and Obstacle videos;
+- final public commit/tag matching the physical robot.
 
-### Robot Photos
+## Release rule
 
-- [v-photos/README.md](../../v-photos/README.md)
-- [front.jpg](../../v-photos/front.jpg)
-- [back.jpg](../../v-photos/back.jpg)
-- [left.jpg](../../v-photos/left.jpg)
-- [right.jpg](../../v-photos/right.jpg)
-- [top.jpg](../../v-photos/top.jpg)
-- [bottom.jpg](../../v-photos/bottom.jpg)
-
-## Videos
-
-- [video/video.md](../../video/video.md)
-- Open Challenge video: [YouTube](https://www.youtube.com/watch?v=PdYDFbR_HfI)
-- Separate Obstacle Challenge video: not currently linked in this repository
-
-## Code Directories
-
-- [src/README.md](../../src/README.md)
-- [`src/src/`](../../src/src/)
-- [`src/lib/`](../../src/lib/)
-- [`src/include/`](../../src/include/)
-- [`src/test/`](../../src/test/)
-- [`src/pi-zero/`](../../src/pi-zero/)
-
-Main library modules:
-
-- [`src/lib/Compass/`](../../src/lib/Compass/)
-- [`src/lib/Engine/`](../../src/lib/Engine/)
-- [`src/lib/Lidar/`](../../src/lib/Lidar/)
-- [`src/lib/Lights/`](../../src/lib/Lights/)
-
-## Wiring, CAD, and Models
-
-- [Schemes Index](../../schemes/README.md)
-- [Wiring Overview](../../schemes/wiring_overview.md)
-- [PCB Wiring Diagrams](../hardware/pcb_wiring_diagrams.md)
-- [Custom PCB Description](../../schemes/custom_pcb_description.md)
-- [Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf)
-- [Models Index](../../models/README.md)
-- [models/](../../models/)
-
-## BOM
-
-- [Parts List / BOM](../hardware/parts_list.md)
-- [Sensor List](../hardware/sensor_list.md)
-- [Motor and Servo Selection](../hardware/motor_servo_selection.md)
-
-## Testing Workflow
-
-- [Mechanical and Software Testing](../testing/mechanical_and_software_testing.md)
-- [Track Testing](../testing/track_testing.md)
-- [Performance Measurements](../testing/performance_measurements.md)
-- [Test Matrix](../testing/tests.md)
-
-Suggested review order for reproducibility:
-
-1. [README.md](../../README.md)
-2. [START_HERE.md](../../START_HERE.md)
-3. [Evidence Map](evidence_map.md)
-4. [Parts List / BOM](../hardware/parts_list.md)
-5. [PCB Wiring Diagrams](../hardware/pcb_wiring_diagrams.md)
-6. [Models Index](../../models/README.md)
-7. [Source Code Index](../../src/README.md)
-8. [Final Photos](#final-photos)
-9. [Videos](#videos)
+The submission pack becomes final only when every linked document and artifact describes the same Hardware V2 revision. Missing evidence remains visible as `TBD`; it is not replaced by assumed values.

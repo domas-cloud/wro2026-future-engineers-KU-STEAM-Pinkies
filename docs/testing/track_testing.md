@@ -1,67 +1,56 @@
 # Track Testing
 
-Track tests record real runs under conditions similar to competition.
+## Version status
 
-Our track testing was not only a final demonstration stage. It was the place where we decided whether a version was actually better.
+The previous Hardware V1 track-testing narrative was archived at [`archivo/hardware-v1-esp32-250rpm/docs/testing/track_testing.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/testing/track_testing.md).
 
-## What We Checked On Track
+Current measured results in `performance_measurements.md` describe Hardware V1. Hardware V2 has not yet completed final track validation.
 
-- lane-following consistency;
-- behavior while handling obstacles;
-- steering stability in turns;
-- repeatability across multiple runs;
-- `MG90S` return-to-center behavior;
-- repeatable acceleration from the `N20` and `L298N`;
-- useful readings from the distance sensors near obstacles and reflective surfaces;
-- the effect of the `BNO085` on heading stability after several turns.
+## Hardware V1 purposes
 
-## Core Track-Test Scenarios
+Track tests were used to compare:
 
-| Scenario | Main thing we checked | Why it mattered |
-| --- | --- | --- |
-| straight section | drift and heading stability | straight driving is one of the easiest ways to see steering asymmetry |
-| repeated corner entry | steering smoothness and return after turning | weak steering or poor differential behavior becomes visible quickly |
-| obstacle approach | whether the robot keeps a usable path near an obstacle | this tests sensing and path behavior together |
-| repeated lap pattern | whether one good run can be repeated | WRO performance must be repeatable, not accidental |
-| disturbed or imperfect run | whether the robot recovers after a correction | recovery quality is often more important than ideal-case behavior |
+- straight drift and heading stability;
+- corner entry and exit;
+- steering centring and mechanical binding;
+- obstacle-section recovery;
+- repeated route completion;
+- effect of sensor mounting and tuning.
 
-## What Counted As A Good Track Result
+## Hardware V2 controlled-test requirements
 
-A track result was considered good if it showed:
+For each comparison record:
 
-- low visible wobble;
-- small straight-line drift compared to older versions;
-- smooth turning without obvious binding;
-- no repeated front-wheel slipping;
-- stable return after a correction;
-- similar behavior across repeated attempts.
+- date and commit;
+- PCB and mechanical revision;
+- exact motor, driver and LiPo;
+- PixyCam settings;
+- field layout and direction;
+- surface and lighting notes;
+- unchanged tuning across the comparison block;
+- run count, pass count and failure reason.
 
-## How We Recorded The Result
+## Open Challenge metrics
 
-For each important track test, we tried to keep at least these notes:
+- three-lap completion;
+- time;
+- wall contacts;
+- straight drift;
+- turn-space/overshoot;
+- parking result;
+- repeatability across at least five, preferably ten, final runs.
 
-- track description or scenario type;
-- number of repetitions;
-- what improved or failed;
-- which subsystem probably caused the observed behavior;
-- a photo or video reference, if available.
+## Obstacle Challenge metrics
 
-## Why Track Testing Was Important
+- correct red decisions;
+- correct green decisions;
+- pillars moved;
+- late detections;
+- alignment after obstacle;
+- three-lap completion;
+- parking result;
+- repeated-run success rate.
 
-Some versions looked acceptable on the workbench but became clearly worse on the track.
+## Acceptance rule
 
-For example:
-
-- a steering design could move, but still overload the servo during repeated turns;
-- a sensor placement could work once, but become inconsistent near reflective or awkward geometry;
-- a controller could look sharp, but become less repeatable over several runs.
-
-This is why competition-like testing mattered more than appearance.
-
-## Judge-Facing Summary
-
-Our track tests were mainly used to answer one question:
-
-> does this version make the robot more repeatable on the real field?
-
-If the answer was no, we did not keep that version even if it looked promising in theory.
+A Hardware V2 version becomes stable only when it improves the target problem without introducing a repeated failure elsewhere. One best run is not sufficient.

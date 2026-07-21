@@ -1,32 +1,26 @@
-# Video Submission
+# Video Submission Status
 
-- Competition: WRO 2026 Future Engineers
-- Minimum autonomous driving segment: 30 seconds
+## Version status
 
-This file records the official driving-video references for the repository together with the validation checklist used before submission.
+The previous video page was archived at [`archivo/hardware-v1-esp32-250rpm/video/video.md`](../archivo/hardware-v1-esp32-250rpm/video/video.md).
 
-## Video Links
+## Existing Hardware V1 video
 
 - Open Challenge: [https://www.youtube.com/watch?v=PdYDFbR_HfI](https://www.youtube.com/watch?v=PdYDFbR_HfI)
-- Recording date: `2026-04-22`
-- Robot version / repository milestone: `v1.0 documentation submission`
-- Controller reference: `main` branch runtime as documented in `src/src/main.cpp`
-- Runtime configuration: autonomous straight control, front-triggered corner turns, side-distance correction, and final safe stop
+- recording date: `2026-04-22`;
+- repository milestone: Hardware V1 / `v1.0 documentation submission`;
+- demonstrates the earlier ESP32, Raspberry Pi/perfboard, 250 rpm robot baseline.
 
-## Notes
+This link is preserved as historical autonomous-driving evidence. It is not the final Hardware V2 video.
 
-- track configuration: the final challenge setup used for the recording;
-- highlighted subsystems: steering, lane following, heading correction, and recovery;
-- what it demonstrates: autonomous Open Challenge operation and repeatable behavior.
-- separate Obstacle Challenge video: not currently included in this repository.
-- repository evidence package: the same final media set is stored in `t-photos/`, `v-photos/`, and this file.
+## Hardware V2 videos still required
 
-## Final Submission Checklist
+- final Open Challenge video;
+- final Obstacle Challenge video showing red and green decisions;
+- identifiable final robot revision;
+- autonomous segment satisfying the competition requirement;
+- public or accessible-by-link URL;
+- recording date and matching commit;
+- brief note describing the field layout and demonstrated subsystems.
 
-Before final submission, confirm all of the following:
-
-- the YouTube link is public or accessible by link;
-- the autonomous driving segment is at least 30 seconds long;
-- the robot starts and drives without manual assistance;
-- the video shows lane following, heading correction, and stable Open Challenge driving;
-- the link in this file exactly matches the final submission link provided to organizers.
+Do not overwrite the historical link without preserving its version context.

@@ -1,124 +1,130 @@
 # Evidence Map
 
-A quick map of where the main evidence lives in the repository.
+## How to read this repository
 
-## Criterion 1: Mobility And Mechanical Design
+The repository contains two evidence levels:
 
-Main files:
+- **Hardware V1** — verified historical robot, code, measurements, photos and video;
+- **Hardware V2** — active custom-PCB/PixyCam redesign with confirmed architecture and missing implementation evidence.
 
-- [README.md](../../README.md)
-- [docs/design/chassis_design_improved.md](../design/chassis_design_improved.md)
-- [docs/design/drivetrain_and_steering.md](../design/drivetrain_and_steering.md)
-- [docs/design/engineering_decisions.md](../design/engineering_decisions.md)
-- [docs/design/risk_and_failures.md](../design/risk_and_failures.md)
-- [docs/reproducibility/mechanical_rebuild.md](mechanical_rebuild.md)
-- [models/README.md](../../models/README.md)
+The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/evidence_map.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/evidence_map.md).
 
-What they show:
+## Criterion 1 — mobility and mechanical design
 
-- chassis layout
-- steering and drivetrain design
-- trade-offs and iterations
-- custom part evidence
+### Evidence already available
 
-## Criterion 2: Power And Sensor Architecture
+- [`drivetrain_and_steering.md`](../design/drivetrain_and_steering.md) — Hardware V1 motor, differential, steering and wheel iterations;
+- [`engineering_decisions.md`](../design/engineering_decisions.md) — trade-offs behind the verified baseline;
+- [`risk_and_failures.md`](../design/risk_and_failures.md) — mechanical failure reasoning;
+- [`models/README.md`](../../models/README.md) — CAD/STL evidence;
+- [`performance_measurements.md`](../testing/performance_measurements.md) — strict Hardware V1 measurements.
 
-Main files:
+### Hardware V2 evidence still required
 
-- [docs/hardware/electronics_overview.md](../hardware/electronics_overview.md)
-- [docs/hardware/pcb_wiring_diagrams.md](../hardware/pcb_wiring_diagrams.md)
-- [docs/hardware/as_built_wiring_checklist.md](../hardware/as_built_wiring_checklist.md)
-- [docs/hardware/sensor_list.md](../hardware/sensor_list.md)
-- [docs/hardware/parts_list.md](../hardware/parts_list.md)
-- [schemes/README.md](../../schemes/README.md)
-- [schemes/wiring_overview.md](../../schemes/wiring_overview.md)
-- [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf)
-- [schemes/custom_pcb_description.md](../../schemes/custom_pcb_description.md)
+- exact faster motor and datasheet;
+- torque/speed/current comparison;
+- loaded speed and repeated-run results;
+- final robot mass, wheel diameter, wheelbase and track widths;
+- mechanical changes required by the PCB, battery and new motor;
+- final CAD and assembly photos.
 
-What they show:
+## Criterion 2 — power and sensor architecture
 
-- electronics architecture
-- power branches
-- sensor choices and placement
-- wiring and schematic evidence
+### Confirmed design evidence
 
-## Criterion 3: Software Architecture And Obstacle Strategy
+- [`electronics_overview.md`](../hardware/electronics_overview.md);
+- [`parts_list.md`](../hardware/parts_list.md);
+- [`hardware_v2_custom_pcb_plan.md`](../hardware/hardware_v2_custom_pcb_plan.md);
+- [`hardware_v2_decision_register.md`](../hardware/hardware_v2_decision_register.md);
+- [`sensor_list.md`](../hardware/sensor_list.md);
+- [`pcb_wiring_diagrams.md`](../hardware/pcb_wiring_diagrams.md).
 
-Main files:
+### Historical Hardware V1 evidence
 
-- [docs/code/control_algorithms.md](../code/control_algorithms.md)
-- [docs/code/software_architecture_improved.md](../code/software_architecture_improved.md)
-- [docs/code/navigation_strategy_improved.md](../code/navigation_strategy_improved.md)
-- [docs/code/software_flow_and_state_logic.md](../code/software_flow_and_state_logic.md)
-- [docs/code/vision_interface.md](../code/vision_interface.md)
-- [docs/code/runtime_setup_and_calibration.md](../code/runtime_setup_and_calibration.md)
-- [src/README.md](../../src/README.md)
-- [src/pi-zero/README.md](../../src/pi-zero/README.md)
+- existing schematic PDF and perfboard photographs under [`schemes/`](../../schemes/);
+- archived Hardware V1 electronics and wiring text under [`archivo/`](../../archivo/).
 
-What they show:
+### Hardware V2 evidence still required
 
-- low-level control structure
-- obstacle handling idea
-- state flow
-- published controller layout
-- Pi-to-ESP32 software interface
+- exact LiPo, motor, driver and regulators;
+- power calculations and measured current;
+- schematic and editable source;
+- PCB source, Gerbers, drill files and BOM;
+- connector/pin map;
+- assembled-board photos;
+- rail-sag and thermal tests;
+- ten-start I2C/SPI reliability results.
 
-Key tuning result:
+## Criterion 3 — software architecture and obstacle strategy
 
-- straight drift improved from `9 cm` to `4 cm`, corner overshoot from `14 cm` to `6 cm`, `3`-lap success from `60%` to `90%`, and recovery time from `1.2 s` to `0.6 s`
+### Evidence already available
 
-## Criterion 4: Systems Thinking And Engineering Decisions
+- [`src/README.md`](../../src/README.md) — honest status of the published Hardware V1 code;
+- [`software_architecture_improved.md`](../code/software_architecture_improved.md) — Hardware V2 target architecture;
+- [`vision_interface.md`](../code/vision_interface.md) — required PixyCam SPI contract;
+- [`pixycam_spi_integration_plan.md`](../code/pixycam_spi_integration_plan.md) — camera implementation and test plan;
+- [`software_state_machine_and_obstacle_flow.md`](../code/software_state_machine_and_obstacle_flow.md) — target state flow and unresolved thresholds;
+- [`control_algorithms.md`](../code/control_algorithms.md) — Hardware V1 low-level control reasoning.
 
-Main files:
+### Hardware V2 evidence still required
 
-- [docs/design/system_overview.md](../design/system_overview.md)
-- [docs/design/engineering_decisions.md](../design/engineering_decisions.md)
-- [docs/design/risk_and_failures.md](../design/risk_and_failures.md)
-- [docs/evaluation/comparison_initial_goals.md](../evaluation/comparison_initial_goals.md)
-- [docs/evaluation/what_worked.md](../evaluation/what_worked.md)
-- [docs/evaluation/what_didnt.md](../evaluation/what_didnt.md)
-- [docs/testing/iteration_log.md](../testing/iteration_log.md)
+- published PixyCam SPI source;
+- final board configuration and pin map;
+- exact state transitions and fault handling;
+- matching code comments and diagrams;
+- red/green detection results;
+- stale/ambiguous-data tests;
+- repeated Obstacle Challenge validation.
 
-What they show:
+## Criterion 4 — systems thinking and engineering decisions
 
-- interaction between subsystems
-- why one option was chosen over another
-- failure modes and mitigations
-- improvement during the season
+### Evidence already available
 
-## Criterion 5: Reproducibility And GitHub Quality
+- [`system_overview.md`](../design/system_overview.md);
+- [`engineering_decisions.md`](../design/engineering_decisions.md);
+- [`risk_and_failures.md`](../design/risk_and_failures.md);
+- [`hardware_v2_decision_register.md`](../hardware/hardware_v2_decision_register.md);
+- [`iteration_log.md`](../testing/iteration_log.md);
+- [`hardware_v2_validation_template.md`](../testing/hardware_v2_validation_template.md).
 
-Main files:
+### Evidence still required
 
-- [README.md](../../README.md)
-- [START_HERE.md](../../START_HERE.md)
-- [docs/README.md](../README.md)
-- [docs/reproducibility/submission_checklist.md](submission_checklist.md)
-- [docs/reproducibility/full_rebuild_guide.md](full_rebuild_guide.md)
-- [docs/testing/tests.md](../testing/tests.md)
-- [docs/testing/final_validation_results.md](../testing/final_validation_results.md)
-- [models/README.md](../../models/README.md)
-- [video/video.md](../../video/video.md)
-- [t-photos/README.md](../../t-photos/README.md)
-- [v-photos/README.md](../../v-photos/README.md)
-- [src/pi-zero/README.md](../../src/pi-zero/README.md)
+- failure and correction log for PCB revision A;
+- measured effect of faster speed on perception and turning;
+- V1 versus V2 comparison;
+- decisions tied to commit, photo, measurement or video evidence;
+- final explanation of rejected battery, motor and driver options.
 
-What they show:
+## Criterion 5 — reproducibility and GitHub quality
 
-- where to start reading
-- how the repository is organized
-- how testing workflow and version stability are documented
-- submission media and rebuild references
-- multi-controller runtime entry points
+### Evidence already available
 
-## Fast Rebuild Path
+- [`README.md`](../../README.md);
+- [`START_HERE.md`](../../START_HERE.md);
+- [`docs/README.md`](../README.md);
+- [`submission_checklist.md`](submission_checklist.md);
+- [`full_rebuild_guide.md`](full_rebuild_guide.md);
+- [`models/README.md`](../../models/README.md);
+- archived Hardware V1 code, wiring and documentation.
 
-For a short rebuild-oriented path:
+### Hardware V2 evidence still required
 
-1. [README.md](../../README.md)
-2. [docs/reproducibility/full_rebuild_guide.md](full_rebuild_guide.md)
-3. [docs/hardware/parts_list.md](../hardware/parts_list.md)
-4. [docs/reproducibility/mechanical_rebuild.md](mechanical_rebuild.md)
-5. [docs/hardware/as_built_wiring_checklist.md](../hardware/as_built_wiring_checklist.md)
-6. [docs/code/runtime_setup_and_calibration.md](../code/runtime_setup_and_calibration.md)
-7. [docs/testing/final_validation_results.md](../testing/final_validation_results.md)
+- final exact BOM;
+- complete PCB manufacturing package;
+- final source code and dependencies;
+- calibration and startup procedure verified on the custom PCB;
+- final six-view photos and both challenge videos;
+- completed final validation tables;
+- one release/tag or clearly identified final commit.
+
+## Fast review path
+
+1. [`README.md`](../../README.md)
+2. [`START_HERE.md`](../../START_HERE.md)
+3. [`Hardware V2 decision register`](../hardware/hardware_v2_decision_register.md)
+4. [`Hardware V2 PCB plan`](../hardware/hardware_v2_custom_pcb_plan.md)
+5. [`PixyCam SPI plan`](../code/pixycam_spi_integration_plan.md)
+6. [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
+7. [`Hardware V1 performance measurements`](../testing/performance_measurements.md)
+
+This map does not claim that missing Hardware V2 artifacts already exist.

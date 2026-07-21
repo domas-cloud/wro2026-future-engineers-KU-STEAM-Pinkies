@@ -1,57 +1,36 @@
 # Final Validation Results
 
-This page is the final counted-results hub. It includes the measured results already present in the repository and clearly marks the fields that still require real final-run data.
+## Version status
 
-## Current Counted Results Already Documented
+The previous mixed-version page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/testing/final_validation_results.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/testing/final_validation_results.md).
 
-| Test | Runs | Clean passes | Current result | Source |
-| --- | --- | --- | --- | --- |
-| open straight test | `5` | `5` | `100%` | [performance_measurements.md](performance_measurements.md) |
-| obstacle slalom test | `5` | `4` | `80%` | [performance_measurements.md](performance_measurements.md) |
-| full practice route | `5` | `4` | `80%` | [performance_measurements.md](performance_measurements.md) |
+## Hardware V1 historical snapshot
 
-## Current Measurement Snapshot
+| Test | Runs | Clean passes | Result | Source |
+|---|---:|---:|---:|---|
+| open straight test | 5 | 5 | 100% | [`performance_measurements.md`](performance_measurements.md) |
+| obstacle slalom test | 5 | 4 | 80% | [`performance_measurements.md`](performance_measurements.md) |
+| full practice route | 5 | 4 | 80% | [`performance_measurements.md`](performance_measurements.md) |
 
-| Metric | Earlier version | Final version | Source |
-| --- | --- | --- | --- |
-| average `3 m` drift | `10.6 cm` | `4.0 cm` | [performance_measurements.md](performance_measurements.md) |
-| `90` degree turn space | about `46 cm` | about `39 cm` | [performance_measurements.md](performance_measurements.md) |
+| Metric | Earlier version | Hardware V1 result |
+|---|---:|---:|
+| average 3 m drift | 10.6 cm | 4.0 cm |
+| approximate 90° turn space | 46 cm | 39 cm |
 
-## Final Open Challenge Table
+These are not Hardware V2 results.
 
-Fill this with real final-run data before submission.
+## Hardware V2 final results
 
-| Run | Date | Commit | Battery condition | Layout | Result | Notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 2 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 3 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 4 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 5 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 6 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 7 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 8 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 9 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 10 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
+Use [`hardware_v2_validation_template.md`](hardware_v2_validation_template.md) for the full tables.
 
-## Final Obstacle Challenge Table
+Current status:
 
-Fill this with real final-run data before submission.
+- Open Challenge repeated final runs: `TBD`;
+- Obstacle Challenge repeated final runs: `TBD`;
+- PixyCam detection results: `TBD`;
+- power and thermal results: `TBD`;
+- final motor comparison: `TBD`.
 
-| Run | Date | Commit | Battery condition | Layout | Result | Notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 2 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 3 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 4 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 5 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 6 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 7 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 8 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 9 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 10 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
+## Completion rule
 
-## Honest Scope Rule
-
-Do not replace `TBD` with estimated values. Only use values from real final test runs.
-
+Only add results measured on the final identified Hardware V2 revision. Each result must state date, commit, PCB revision, motor, driver, LiPo and test conditions.
