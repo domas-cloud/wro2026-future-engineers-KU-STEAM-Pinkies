@@ -1,30 +1,40 @@
-# Motor And Servo Selection
+# Hardware V2 Motor And Servo Selection
 
-## Motor
+## Status
 
-The drive side uses a motor that can provide enough torque for acceleration and repeated restarts on the track.
-During selection, controllability and reliability were more important than maximum top speed alone.
+The previous generic page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/hardware/motor_servo_selection.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/hardware/motor_servo_selection.md).
 
-## Steering Servo
+## Steering servo
 
-The steering servo must position the front wheels accurately and return to center consistently.
-Because steering precision directly affects lane-following behavior, servo stability is more important than extremely fast motion.
+`MG90S` is confirmed for Hardware V2 because it matches the existing steering baseline. Final validation still requires:
 
-## Mechanical Compatibility
+- supply voltage;
+- normal and near-stall current;
+- centre repeatability;
+- full left/right load;
+- rail voltage during movement;
+- performance at the selected faster driving speed.
 
-The servo choice is closely tied to the steering linkages and gear mechanism.
-This means the servo is not just a parts-list item; it defines how much steering range the geometry can use and how much load the mechanism can tolerate.
+## Drive motor
 
-## Selection Criteria
+The exact Hardware V2 motor is `TBD`. It must be faster than the V1 250 rpm baseline while remaining controllable and electrically compatible.
 
-- sufficient torque;
-- predictable response;
-- compatible voltage and current requirements;
-- mechanical compatibility with the steering geometry;
-- easy replacement if testing shows a better option.
+For every candidate record:
 
-## What Should Be Documented
+- exact model and supplier/datasheet;
+- rated voltage;
+- no-load rpm;
+- gearbox ratio;
+- stall torque/current;
+- loaded wheel speed;
+- launch current;
+- 3 m time;
+- corner/overshoot behaviour;
+- motor and driver temperature;
+- repeated three-lap result.
 
-- the exact part names;
-- why the parts were selected;
-- any trade-offs between speed, torque, accuracy, and power demand.
+## Selection rule
+
+Do not choose only by rpm. Choose the candidate that improves useful track time without causing repeated steering, perception, current, thermal or reliability failures.
+
+See [`../design/hardware_v2_motor_upgrade_plan.md`](../design/hardware_v2_motor_upgrade_plan.md).

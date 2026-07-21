@@ -1,129 +1,76 @@
 # Start Here
 
-> **Active development branch:** Hardware V2 is moving to a custom PCB, a first-generation PixyCam over SPI and a faster motor. Hardware V1 is preserved under [`archivo/`](archivo/) and in Git history. Nothing from the previous working robot is deleted.
+> **Current state:** Hardware V1 is the verified historical baseline. Hardware V2 is the active custom-PCB/PixyCam redesign. Nothing from Hardware V1 is deleted; rewritten text is preserved under [`archivo/`](archivo/).
 
-## Current Hardware V2 status
-
-### Confirmed
+## Hardware V2 confirmed
 
 - main controller: `ESP32-WROOM-32`;
 - Raspberry Pi Zero removed from the active robot;
-- perception camera: first-generation `PixyCam` / CMUcam5;
-- PixyCam-to-ESP32 communication: wired `SPI`;
-- front ToF: `1x VL53L1X`;
+- first-generation `PixyCam` / CMUcam5;
+- PixyCam communication: wired SPI;
+- front ToF: `VL53L1X`;
 - side ToF: `2x VL53L4CD`;
 - IMU: `BNO085`;
 - steering servo: `MG90S`;
-- battery type: LiPo;
-- electronics direction: custom PCB;
-- drive direction: replace the Hardware V1 `250 rpm` motor with a faster motor.
+- battery chemistry: LiPo;
+- custom PCB direction;
+- faster drive motor direction.
 
-### Still TBD
+## Hardware V2 still TBD
 
-- exact LiPo cell count, voltage, capacity, C-rating and connector;
+- exact LiPo pack and connector;
 - exact faster motor;
-- exact motor-driver IC;
-- regulator selection and current headroom;
-- final PCB pinout, dimensions, mounting holes and layer count;
-- whether the ESP32-WROOM-32 module is soldered directly or used through another carrier arrangement;
-- final PixyCam signature numbers and measured detection limits.
+- exact H-bridge;
+- regulators and protection parts;
+- ESP32 physical PCB implementation;
+- complete GPIO and connector map;
+- PCB dimensions, layers and mounting holes;
+- PixyCam signatures and measured detection limits;
+- final firmware;
+- final power, thermal, Open and Obstacle results.
 
-Hardware V2 is confirmed in architecture but is not yet a completed or fully verified robot.
+## Best reading path
 
-## Read these first
-
-1. [Hardware V2 custom PCB plan](docs/hardware/hardware_v2_custom_pcb_plan.md)
-2. [Hardware V2 decision register](docs/hardware/hardware_v2_decision_register.md)
-3. [Active Hardware V2 BOM](docs/hardware/parts_list.md)
-4. [Electronics overview](docs/hardware/electronics_overview.md)
-5. [PixyCam SPI integration plan](docs/code/pixycam_spi_integration_plan.md)
-6. [Faster motor selection plan](docs/design/hardware_v2_motor_upgrade_plan.md)
-7. [Hardware V2 validation template](docs/testing/hardware_v2_validation_template.md)
-8. [Archived Hardware V1 baseline](archivo/hardware-v1-esp32-250rpm/)
-
-Current repository milestone: **`v1.2 hardware-v2 architecture confirmation`**. Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
+1. [`README.md`](README.md)
+2. [`Hardware V2 decision register`](docs/hardware/hardware_v2_decision_register.md)
+3. [`Hardware V2 custom PCB plan`](docs/hardware/hardware_v2_custom_pcb_plan.md)
+4. [`Active BOM`](docs/hardware/parts_list.md)
+5. [`Electronics overview`](docs/hardware/electronics_overview.md)
+6. [`PixyCam SPI plan`](docs/code/pixycam_spi_integration_plan.md)
+7. [`Software architecture`](docs/code/software_architecture_improved.md)
+8. [`Motor upgrade plan`](docs/design/hardware_v2_motor_upgrade_plan.md)
+9. [`Hardware V2 validation template`](docs/testing/hardware_v2_validation_template.md)
+10. [`Evidence map`](docs/reproducibility/evidence_map.md)
 
 ## Team
-
-We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**.
 
 - **Marius** — software development and mechanical design;
 - **Domas** — project coordination, testing and documentation;
 - **Jonas** — electronics and hardware design.
 
-Responsibilities are divided, but major decisions are reviewed as one robot system because mechanical, electrical and software changes affect each other.
+## Version guide
 
-## Judge-facing quick path
+### Hardware V1
 
-For a fast review:
+The historical working baseline used Raspberry Pi Zero, ESP32, perfboard, L298N, N20 250 rpm and a 2x18650 supply. Its code, documents, media and measurements remain available as development evidence.
 
-1. [README.md](README.md)
-2. [Hardware V2 custom PCB plan](docs/hardware/hardware_v2_custom_pcb_plan.md)
-3. [Hardware V2 decision register](docs/hardware/hardware_v2_decision_register.md)
-4. [Faster motor selection plan](docs/design/hardware_v2_motor_upgrade_plan.md)
-5. [Evidence map](docs/reproducibility/evidence_map.md)
-6. [Drivetrain and steering](docs/design/drivetrain_and_steering.md)
-7. [Electronics overview](docs/hardware/electronics_overview.md)
-8. [PixyCam SPI integration plan](docs/code/pixycam_spi_integration_plan.md)
-9. [Performance measurements](docs/testing/performance_measurements.md)
-10. [Hardware V2 validation template](docs/testing/hardware_v2_validation_template.md)
+### Hardware V2
 
-## Full reading order
-
-### 1. Overview and evidence
-
-- [README.md](README.md)
-- [Final submission pack](docs/reproducibility/final_submission_pack.md)
-- [System overview](docs/design/system_overview.md)
-- [Evidence map](docs/reproducibility/evidence_map.md)
-
-### 2. Mechanical design
-
-- [Faster motor selection plan](docs/design/hardware_v2_motor_upgrade_plan.md)
-- [Chassis design](docs/design/chassis_design_improved.md)
-- [Drivetrain and steering](docs/design/drivetrain_and_steering.md)
-- [Engineering decisions](docs/design/engineering_decisions.md)
-- [Risks and failures](docs/design/risk_and_failures.md)
-
-### 3. Electronics and PCB
-
-- [Hardware V2 custom PCB plan](docs/hardware/hardware_v2_custom_pcb_plan.md)
-- [Hardware V2 decision register](docs/hardware/hardware_v2_decision_register.md)
-- [Active BOM](docs/hardware/parts_list.md)
-- [Electronics overview](docs/hardware/electronics_overview.md)
-- [PCB wiring diagrams](docs/hardware/pcb_wiring_diagrams.md)
-- [Existing schematic material](schemes/Wro_customPCBs.pdf)
-
-### 4. Software and perception
-
-- [PixyCam SPI integration plan](docs/code/pixycam_spi_integration_plan.md)
-- [Software state machine and obstacle flow](docs/code/software_state_machine_and_obstacle_flow.md)
-- [Software architecture](docs/code/software_architecture_improved.md)
-- [Navigation strategy](docs/code/navigation_strategy_improved.md)
-- [Software flow and state logic](docs/code/software_flow_and_state_logic.md)
-
-Some older software documents still describe the Raspberry Pi Zero architecture. They remain useful as Hardware V1 history and must be archived before their active Hardware V2 replacements are written.
-
-### 5. Testing
-
-- [Hardware V2 validation template](docs/testing/hardware_v2_validation_template.md)
-- [Mechanical and software testing](docs/testing/mechanical_and_software_testing.md)
-- [Track testing](docs/testing/track_testing.md)
-- [Performance measurements](docs/testing/performance_measurements.md)
-- [Final validation results](docs/testing/final_validation_results.md)
+The active target uses ESP32-WROOM-32, first-generation PixyCam over SPI, custom PCB, LiPo and a faster motor. It is not yet a finished or reproducible final robot.
 
 ## Rebuild status
 
-- **Hardware V1:** the current fully documented historical baseline.
-- **Hardware V2:** active redesign with several confirmed components and several unresolved `TBD` fields.
-
-A final Hardware V2 rebuild guide should only be published after the exact motor, driver, LiPo, regulators, pin map, PCB files and measured validation results are available.
+- Hardware V1: historical rebuild evidence available;
+- Hardware V2: exact rebuild instructions pending component lock, PCB files and final firmware.
 
 ## Archive rule
 
-Before replacing an active Hardware V1 or early Hardware V2 document:
+Before changing an active historical text file:
 
-1. copy its current version into `archivo/`;
-2. update the active file;
-3. record confirmed facts separately from `TBD` values;
-4. never replace missing measurements with invented numbers.
+1. copy its current blob into the matching `archivo/` path;
+2. rewrite the active file using confirmed facts;
+3. label missing information as `TBD` or describe the evidence required;
+4. record the change in `CHANGELOG.md`;
+5. never present an estimate as a measurement.
+
+Current milestone: **v1.2 Hardware V2 architecture and text alignment**.

@@ -1,26 +1,32 @@
-# What Worked
+# What Worked — Hardware V1 Evidence
 
-This section describes the solutions that proved effective in testing and were kept in later robot versions.
+## Status
 
-## Mechanics
+The previous page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/evaluation/what_worked.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/evaluation/what_worked.md).
 
-- the three-gear steering layout allowed the servo motion to be transferred to both front wheels at the same time;
-- rotating the side assemblies around their own axis reduced the large wheel lever-arm problem and the servo load;
-- keeping the differential on the rear axle reduced turning resistance and improved track behavior.
+## Supported Hardware V1 lessons
 
-## Sensors
+### Mechanics
 
-- the `OV5647 5Mpx wide-angle` camera provided a wide enough track view for lane and obstacle evaluation;
-- the `BNO085 9-DOF IMU` helped maintain more stable heading after several turns and reduced uncertainty that would otherwise depend only on the camera;
-- the distance sensors worked well as a short-range confirmation layer near obstacles.
+- corrected steering geometry reduced the large lever-arm problem;
+- MG90S became sufficient after mechanical resistance was reduced;
+- silicone front wheels improved useful steering grip;
+- LEGO differential reduced turning resistance and binding;
+- compact packaging improved manoeuvrability.
 
-## System Architecture
+### Sensors and control
 
-- using the `ESP32` for control kept the robot decision cycle simpler and faster;
-- limiting the number of ToF modules reduced power consumption and simplified the electronics architecture;
-- rigid `BNO085` mounting and cleaner sensor placement reduced the effect of vibration on the readings.
+- BNO085 provided heading feedback;
+- front/side ToF sensing supported local distance control;
+- rigid mounting improved consistency;
+- ESP32 handled the real-time controller.
 
-## Overall Evaluation
+### Process
 
-The most effective decisions were those that reduced mechanical load and simplified the system structure.
-That was especially visible in the steering geometry, the use of the differential, and the clearer separation of sensor roles.
+- comparing repeated runs was more useful than judging one best run;
+- mechanical improvements made software tuning easier;
+- preserving rejected versions made the engineering decisions explainable.
+
+## Hardware V2 caution
+
+The Raspberry Pi camera, 18650 power system, L298N and 250 rpm motor are not active V2 choices. PixyCam, LiPo, custom PCB and the faster motor require new validation before being added to this list.

@@ -1,87 +1,37 @@
 # Navigation Strategy
 
-The robot navigates by combining sector-based heading control with local distance sensing.
+## Version status
 
-## Core Navigation Idea
+The previous Hardware V1 strategy was archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/navigation_strategy_improved.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/code/navigation_strategy_improved.md).
 
-On straight sections, the robot tries to keep:
+## Hardware V2 target strategy
 
-- the current heading target in `targetAngle`;
-- an approximate wall offset through `TARGET_DISTANCE`.
+- BNO085 provides heading feedback;
+- front VL53L1X contributes corner-approach information;
+- side VL53L4CD sensors provide local spacing;
+- PixyCam identifies red/green pillar blocks;
+- ESP32 selects the required passing reference and controls steering/motor outputs.
 
-At corners, the front distance sensor triggers a hard turn and the heading target is rotated by `90` degrees.
+## Obstacle rule
 
-So the navigation is built from two clearly different behaviors:
+- red pillar → pass right;
+- green pillar → pass left.
 
-- continuous correction on straights;
-- forced corner turns at sector changes.
+The final code must define how block position and size become a path offset, when avoidance begins/ends, and how camera decisions interact with corner logic.
 
-## Obstacle Rule
+## Direction and corner logic
 
-For obstacle driving, the high-level rule is direct:
+The Hardware V1 code selected direction and corner entry from sensor/sector conditions. Hardware V2 must publish the exact final method after it is implemented and tested. Old fixed-threshold descriptions should not override the source code.
 
-- `red pillar -> pass right`
-- `green pillar -> pass left`
+## Finish and parking
 
-The clean way to implement that rule is to shift the reference line inside the current sector. The low-level steering logic can then stay the same.
+The final strategy must document:
 
-## Straight Sections
+- direction selection;
+- lap/sector counting;
+- finish detection;
+- parking approach;
+- final steering state;
+- restart behaviour.
 
-On a straight segment, the robot stabilizes around:
-
-- `targetAngle`
-- `TARGET_DISTANCE`
-
-That makes it behave like a heading-guided wall follower.
-
-If camera guidance is active, it can bias the reference line left or right without changing the basic control structure.
-
-## Turn Trigger
-
-The front sensor is the main trigger for leaving straight control:
-
-```text
-frontDistance.distance <= TURN_DISTANCE
-```
-
-When that happens, the robot enters the hard-turn routine.
-
-## Turn Direction
-
-The current code decides the turn direction from the left sensor:
-
-```text
-isClockwise = leftDistance.distance <= 800 && leftDistance.status == 0;
-```
-
-So a close valid left reading leads to a clockwise turn; otherwise the robot turns the other way.
-
-## Corner Execution
-
-Once the controller decides to turn, it:
-
-- forces the servo to one steering extreme;
-- waits until the front sensor sees open space again;
-- updates `targetAngle` by `90` degrees;
-- increments `edge`.
-
-This keeps the corner logic separate from the straight-line regulation.
-
-## Current Side-Correction Logic
-
-The current controller uses:
-
-- `leftDistance` when the robot is turning clockwise;
-- `rightDistance` when the robot is turning counterclockwise.
-
-That keeps the wall-correction term aligned with the outer side of the sector instead of hard-coding one sensor for both directions.
-
-## Run Completion
-
-The run ends when:
-
-- `edge >= 12`
-- and the steering error has settled near center again.
-
-At that point the controller stops and restarts.
-At that point the controller stops, centers the steering, and waits for the next start command.
+Parking and final Obstacle behaviour remain `TBD` until the final runtime is tested.

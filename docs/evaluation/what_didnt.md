@@ -1,27 +1,36 @@
-# What Did Not Work
+# What Did Not Work — Historical And Current Risks
 
-This section lists solutions and situations that did not work well or had to be redesigned.
+## Status
 
-## Excessive Wheel Lever Arm In The Steering Mechanism
+The previous page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/evaluation/what_didnt.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/evaluation/what_didnt.md).
 
-One of the most important early weaknesses was the large wheel lever arm.
-Because of it, the servo had to overcome a much larger load, which made the system less efficient and harder to repeat reliably.
-This solution was not kept because real tests showed that it reduced steering reliability.
+## Hardware V1 rejected or weak approaches
 
-## Previous Robot Without A Differential
+- large steering lever arm increased MG90S load;
+- earlier low-grip front wheels reduced steering effectiveness;
+- metal/less suitable differential behaviour increased binding;
+- one sensor type alone was insufficient for all navigation needs;
+- insufficiently rigid IMU/sensor mounting reduced consistency;
+- extreme motor choices were less useful than the V1 250 rpm compromise.
 
-A mistake in the previous robot was not using a differential.
-In turns, that strongly increased turning resistance, worsened the trajectory, and increased the chance of slipping.
-Because of that, the current robot kept the differential as a necessary drivetrain element.
+## Architecture retired for Hardware V2
 
-## Over-Reliance On One Sensor Type
+- Raspberry Pi Zero perception stack;
+- Pi camera and UART message layer;
+- 2x18650 supply;
+- perfboard/module integration;
+- L298N as the assumed final driver;
+- 250 rpm motor as the assumed final motor.
 
-Testing showed that one sensor type alone was not enough for stable navigation in all situations.
-Camera data alone or short-range sensors alone could not reliably solve all track scenarios.
-Because of that, a mixed solution was chosen using the camera, `BNO085`, and distance sensors.
+These items are not erased; they remain Hardware V1 evidence.
 
-## Insufficiently Rigid Mounting
+## Hardware V2 failure evidence still required
 
-If the `BNO085` or other important components are mounted without enough rigidity, the readings become less reliable.
-This matters especially when the structure vibrates or flexes slightly while driving.
-Because of that, weaker mounting solutions were abandoned and more attention was given to stiffness.
+The final report should document at least one real failure and correction for:
+
+- PCB bring-up;
+- PixyCam signature/lighting setup;
+- SPI or I2C stability under motor load;
+- faster-motor control;
+- LiPo/regulator transient behaviour;
+- repeated obstacle runs.

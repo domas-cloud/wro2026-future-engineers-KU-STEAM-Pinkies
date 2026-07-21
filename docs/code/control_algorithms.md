@@ -1,98 +1,43 @@
 # Control Algorithms
 
-This file describes the low-level steering and turn logic that can be seen in `src/src/main.cpp`.
+## Version status
 
-## Main Idea
+The previous Hardware V1 description was archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/control_algorithms.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/code/control_algorithms.md).
 
-The controller keeps two things under control at the same time:
+The current published controller uses heading and side-distance correction, but Hardware V2 values and camera integration are not final.
 
-- the heading reference;
-- the side distance to the wall or boundary.
+## Hardware V1 low-level concept
 
-That steering command is built from three terms:
-
-- `Kg * heading`
-- `Kp * dist_err`
-- `Kd * derivative`
-
-In simplified form:
+The steering command combines:
 
 ```text
-angle = Kg * heading
-angle += Kp * dist_err
-angle -= Kd * err_rate
-servo = constrain(STRAIGHT_ANGLE + round(angle), MIN_ANGLE, MAX_ANGLE)
+heading correction
++ side-distance correction
++ damping / derivative term
 ```
 
-## Inputs Used By The Controller
+The controller also uses front distance and sector information to enter a hard-turn routine.
 
-### Yaw
+## Hardware V2 retained concept
 
-The compass gives the current yaw. The controller compares it with `targetAngle`, which is the reference direction for the current sector.
+PixyCam should choose or bias the required obstacle path, while the ESP32 retains real-time heading, local-distance and actuator control. The camera should not directly command the servo.
 
-### Front Distance
+## Code/documentation items to resolve
 
-The front sensor decides when the robot should leave straight control and start a hard turn.
+- verify derivative/error-history calculation;
+- publish the real dynamic corner-trigger expression or replace it with a tested alternative;
+- define the final finish and steering-centre behaviour;
+- define sensor-invalid and camera-fault handling;
+- make sensor type explicit rather than dependent on a GPIO number;
+- retune gains for the final motor, mass, battery and steering response;
+- publish units and limits for every control parameter.
 
-### Side Distance
+## Required final algorithm evidence
 
-The side sensors provide the wall-distance correction used to keep the robot near `TARGET_DISTANCE`.
-
-## Normal Driving
-
-During a straight segment, the controller:
-
-1. reads yaw and distance sensors;
-2. computes heading error;
-3. adds side-distance correction;
-4. adds damping;
-5. clamps the result into the allowed servo range.
-
-So the robot behaves like a heading-guided wall follower, not like a purely visual line follower.
-
-## Corner Handling
-
-When the front sensor reaches `TURN_DISTANCE`, the robot switches into a different mode:
-
-1. decide turn direction;
-2. force the steering to one extreme;
-3. stay in the turn loop until open space appears again;
-4. rotate `targetAngle` by `90` degrees;
-5. increment `edge`.
-
-This is the key structural split in the controller:
-
-- continuous correction on straights;
-- discrete hard turns at corners.
-
-## Where Camera Guidance Fits
-
-If the perception layer changes the driving line, it should do it by shifting the reference line, not by replacing the low-level controller.
-
-That means:
-
-- the camera decides which line should be followed;
-- the low-level controller still does heading hold, side-distance correction, and corner execution.
-
-## Obstacle Rule
-
-For obstacle driving, the high-level rule is direct:
-
-- `red pillar -> pass right`
-- `green pillar -> pass left`
-
-The clean way to connect that with the current controller is:
-
-- perception identifies the pillar color;
-- the color decides the legal side;
-- the reference line shifts accordingly;
-- the same low-level controller executes that line.
-
-## Important Current Detail
-
-The distance-correction branch now switches between the two side sensors:
-
-- clockwise sectors use `leftDistance`;
-- counterclockwise sectors use `rightDistance`.
-
-That keeps the controller closer to the intended outer-wall regulator described in the rest of the documentation.
+- equations or pseudocode matching source code;
+- parameter table with units;
+- tuning method;
+- before/after or candidate comparison;
+- overshoot/drift/turn-space measurements;
+- camera-decision timing at final speed;
+- failure and fallback tests.
