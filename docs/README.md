@@ -4,16 +4,28 @@
 
 The previous index was archived at [`archivo/hardware-v1-esp32-250rpm/docs/README.md`](../archivo/hardware-v1-esp32-250rpm/docs/README.md).
 
-- Hardware V1: verified historical baseline;
-- Hardware V2: active ESP32 + PixyCam SPI + custom-PCB migration.
+- `[HW1-HISTORY]` Hardware V1: verified historical baseline;
+- `[HW2-IMPROVEMENT]` Hardware V2: active ESP32 + PixyCam SPI + custom-PCB migration.
+
+For the next review, missing information and the exact update locations are maintained in [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md).
+
+## Status markers
+
+- `[HW1-HISTORY]` — older verified evidence;
+- `[HW2-IMPROVEMENT]` — change from Hardware V1;
+- `[HW2-CONFIRMED]` — selected V2 fact;
+- `[HW2-TBD]` — missing exact information;
+- `[HW2-VERIFY]` — requires physical validation;
+- `[HW2-DONE]` — complete and verified.
 
 ## Best first files
 
 1. [`../README.md`](../README.md)
 2. [`../START_HERE.md`](../START_HERE.md)
-3. [`hardware/hardware_v2_decision_register.md`](hardware/hardware_v2_decision_register.md)
-4. [`reproducibility/evidence_map.md`](reproducibility/evidence_map.md)
-5. [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
+3. [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md)
+4. [`hardware/hardware_v2_decision_register.md`](hardware/hardware_v2_decision_register.md)
+5. [`reproducibility/evidence_map.md`](reproducibility/evidence_map.md)
+6. [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
 
 ## Hardware V2 design
 
@@ -30,6 +42,8 @@ The previous index was archived at [`archivo/hardware-v1-esp32-250rpm/docs/READM
 - [`hardware/pcb_wiring_diagrams.md`](hardware/pcb_wiring_diagrams.md)
 - [`hardware/as_built_wiring_checklist.md`](hardware/as_built_wiring_checklist.md)
 
+Battery, motor, H-bridge, regulator, PCB and pin-map follow-up requirements are indexed under the matching IDs in [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md).
+
 ## Software
 
 - [`code/software_architecture_improved.md`](code/software_architecture_improved.md)
@@ -39,12 +53,14 @@ The previous index was archived at [`archivo/hardware-v1-esp32-250rpm/docs/READM
 - [`code/runtime_setup_and_calibration.md`](code/runtime_setup_and_calibration.md)
 - [`../src/README.md`](../src/README.md)
 
+The published source is currently Hardware V1 evidence. PixyCam SPI and final PCB integration remain `[HW2-TBD]` until source and hardware tests match.
+
 ## Testing
 
 - [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
 - [`testing/tests.md`](testing/tests.md)
 - [`testing/final_validation_results.md`](testing/final_validation_results.md)
-- [`testing/performance_measurements.md`](testing/performance_measurements.md) — Hardware V1 measurement source;
+- [`testing/performance_measurements.md`](testing/performance_measurements.md) — `[HW1-HISTORY]` measurement source;
 - [`testing/iteration_log.md`](testing/iteration_log.md).
 
 ## Reproducibility and submission
@@ -57,9 +73,9 @@ The previous index was archived at [`archivo/hardware-v1-esp32-250rpm/docs/READM
 
 ## Historical evidence
 
-- [`../archivo/hardware-v1-esp32-250rpm/`](../archivo/hardware-v1-esp32-250rpm/)
-- [`../schemes/`](../schemes/) — current files include Hardware V1 schematic/media status;
+- [`../archivo/hardware-v1-esp32-250rpm/`](../archivo/hardware-v1-esp32-250rpm/) — `[HW1-HISTORY]` archived text snapshots;
+- [`../schemes/`](../schemes/) — Hardware V1 schematic/media status and Hardware V2 requirements;
 - [`../v-photos/`](../v-photos/) — Hardware V1 robot views until replaced;
 - [`../video/`](../video/) — Hardware V1 Open video until replaced.
 
-No file should be treated as final Hardware V2 evidence unless its own status says it is verified.
+Old information remains useful as iteration evidence, but active pages must identify it as Hardware V1 and state the Hardware V2 improvement. No file should be treated as final Hardware V2 evidence unless its own status says `[HW2-DONE]` or verified.
