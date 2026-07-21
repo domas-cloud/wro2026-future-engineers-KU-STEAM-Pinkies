@@ -1,52 +1,48 @@
 # Changelog
 
-This changelog tracks repository milestones so judges can quickly understand which state of the robot and documentation they are reading.
+This changelog tracks repository milestones so judges can distinguish verified history from active development.
 
 ## Current milestone
 
-### v1.2 hardware-v2 architecture confirmation - 2026-07-21
+### v1.2 hardware-v2 architecture and text alignment — 2026-07-21
 
-- opened a separate `hardware-v2-custom-pcb-migration` development branch;
-- established the rule that nothing from Hardware V1 is deleted during migration;
-- created `archivo/hardware-v1-esp32-250rpm/` and `archivo/hardware-v2-planning-snapshots/` for copies of files before they are rewritten;
+- opened the `hardware-v2-custom-pcb-migration` branch;
+- established the rule that active text is archived before it is rewritten;
 - confirmed `ESP32-WROOM-32` as the main Hardware V2 controller;
-- removed Raspberry Pi Zero from the active Hardware V2 architecture while preserving its Hardware V1 documentation;
-- confirmed a first-generation `PixyCam` / CMUcam5 with wired `SPI` communication to the ESP32;
-- confirmed `1x VL53L1X` front ToF, `2x VL53L4CD` side ToF sensors, `BNO085` IMU and `MG90S` steering servo;
-- confirmed the move from the Hardware V1 `2x 18650` pack to a LiPo architecture, while leaving the exact LiPo specification `TBD`;
-- retained the plan to replace the Hardware V1 `250 rpm` motor with a faster motor, exact model `TBD`;
-- left the exact motor driver, regulators, PCB pinout and physical ESP32 integration unconfirmed until the parts and schematic are available;
-- archived the previous active BOM and electronics overview before replacing them with Hardware V2 documents;
-- added a Hardware V2 decision register;
-- added a PixyCam SPI integration and validation plan;
-- added a Hardware V2 power, sensor, camera, motor and field-test template;
-- corrected the active side-ToF designation from `VL53L1CD` to `VL53L4CD` without altering the archived historical snapshot;
-- added verification gates for schematic review, power integrity, motor-driver thermal/current testing, sensor stability, PixyCam reliability, field performance and reproducibility.
+- removed Raspberry Pi Zero from the active Hardware V2 architecture;
+- confirmed first-generation PixyCam / CMUcam5 over wired SPI;
+- confirmed `VL53L1X`, `2x VL53L4CD`, `BNO085` and `MG90S`;
+- confirmed LiPo as the new battery chemistry while leaving the exact pack `TBD`;
+- retained the plan for a faster drive motor while leaving the motor and H-bridge `TBD`;
+- added the Hardware V2 PCB plan, decision register, BOM, PixyCam plan and validation template;
+- corrected active side-ToF text to `VL53L4CD`;
+- archived and rewrote the root README, sensor list, PCB/wiring pages and schemes descriptions;
+- separated Hardware V1 schematic/perfboard evidence from the incomplete Hardware V2 PCB target;
+- removed unsupported Hardware V2 claims from active text and replaced missing details with explicit required-evidence sections;
+- did not delete source code, CAD, photos, videos, schematics or historical documentation.
 
 ## Planned milestones
 
-- `v1.3 hardware-v2 component lock` — exact LiPo, motor, driver, regulator and ESP32 PCB implementation selected;
-- `v1.4 hardware-v2 schematic` — reviewed custom PCB schematic and locked pin map;
+- `v1.3 hardware-v2 component lock` — exact LiPo, motor, driver, regulators and ESP32 PCB implementation selected;
+- `v1.4 hardware-v2 schematic` — reviewed schematic and locked pin map;
 - `v1.5 hardware-v2 prototype` — assembled PCB and bench-validation evidence;
-- `v1.6 hardware-v2 field-tested` — PixyCam, motor and repeated Open / Obstacle track results;
-- `v2.0 final hardware documentation` — complete BOM, PCB production files, code, calibration and rebuild guide.
+- `v1.6 hardware-v2 field-tested` — PixyCam, motor and repeated Open/Obstacle results;
+- `v2.0 final hardware documentation` — final BOM, PCB production files, code, calibration and rebuild guide.
 
-## v0.8 regional-ready - 2026-04-07
+## v0.8 regional-ready — 2026-04-07
 
-- built the documentation structure for the WRO Future Engineers robot;
-- added the main subsystem documentation;
-- added the wiring overview, parts list, test templates, and reproducibility checklist;
-- added project metadata and repo hygiene files;
-- prepared the repository for private GitHub hosting.
+- built the main documentation structure;
+- added subsystem documentation, wiring overview, parts list and test templates;
+- prepared the repository for GitHub-based review.
 
-## v1.0 documentation submission - 2026-04-19
+## v1.0 documentation submission — 2026-04-19
 
-- strengthened judge-facing evidence for drivetrain, steering, software testing, and system interaction;
-- added visual schematic previews and design-comparison images for key hardware decisions;
-- aligned the main README and reproducibility checklist more closely with the WRO 2026 rubric and general rules.
+- strengthened judge-facing mechanical, software, testing and systems evidence;
+- added schematic previews and design-comparison images;
+- aligned the repository with the WRO documentation structure.
 
 ## 2026-04-23
 
-- added `docs/testing/tests.md` with a documented testing workflow for open challenge and obstacle challenge;
-- documented acceptance criteria, fail/pass criteria, stable-version rules, and change-to-result logging expectations;
-- linked the testing workflow from the docs index and reproducibility files for easier judge navigation.
+- added `docs/testing/tests.md` with the Open and Obstacle testing workflow;
+- documented pass/fail criteria and stable-version rules;
+- linked the testing workflow from the documentation index and reproducibility pages.

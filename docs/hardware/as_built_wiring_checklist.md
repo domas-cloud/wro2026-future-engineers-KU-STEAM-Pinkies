@@ -1,61 +1,76 @@
-# As-Built Wiring Checklist
+# Hardware V2 As-Built Wiring Checklist
 
-This checklist turns the current wiring documentation into a single judge-friendly verification page.
+## Status
 
-## Power Path
+Hardware V2 has not yet been assembled, so this is a completion checklist rather than a claim that the wiring already exists. The Hardware V1 checklist was archived at [`archivo/hardware-v1-esp32-250rpm/docs/hardware/as_built_wiring_checklist.md`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/as_built_wiring_checklist.md).
 
-| From | To | Purpose | Check |
-| --- | --- | --- | --- |
-| `2x 18650` battery pack | perfboard main input | main energy source | confirm polarity before powering |
-| perfboard distribution | `L298N` motor branch | drive motor power | motor branch isolated from logic wiring as much as possible |
-| perfboard distribution | logic regulator | stable logic voltage | regulator output checked before connecting boards |
-| logic regulator | `ESP32` | low-level controller power | common ground with all modules |
-| logic regulator | `Raspberry Pi Zero` | perception computer power | stable under camera load |
-| sensor branch | `BNO085` and ToF sensors | sensing power | common I2C ground |
-| steering branch | `MG90S` servo | steering actuation | servo power path checked under movement |
+## Build identification
 
-## ESP32 Pin Checklist
+| Field | Value |
+|---|---|
+| PCB revision | `TBD` |
+| schematic revision | `TBD` |
+| firmware commit | `TBD` |
+| LiPo specification | `TBD` |
+| motor | `TBD` |
+| motor driver | `TBD` |
+| assembly date | `TBD` |
 
-| Function | ESP32 pin / address | Verification |
-| --- | --- | --- |
-| start button input | `GPIO13` | button toggles run state |
-| motor PWM / enable | `GPIO32` | motor speed output changes |
-| motor direction 1 | `GPIO26` | forward direction correct |
-| motor direction 2 | `GPIO25` | reverse/brake logic not swapped |
-| steering servo PWM | `GPIO33` | servo centers and turns both directions |
-| front ToF XSHUT | `GPIO15` | front sensor initializes |
-| left ToF XSHUT | `GPIO5` | left sensor initializes |
-| right ToF XSHUT | `GPIO18` | right sensor initializes |
-| Pi UART RX | `GPIO16` | ESP32 receives Pi packets |
-| Pi UART TX | `GPIO17` | optional controller transmit line |
-| I2C bus | `400 kHz` | IMU and ToF sensors respond |
+## Power path checks
 
-## Sensor Address Checklist
+- [ ] battery chemistry, cell count and maximum charged voltage match the schematic;
+- [ ] connector polarity and pin-1 markings are documented;
+- [ ] main switch and protection device are fitted;
+- [ ] reverse-polarity protection is verified;
+- [ ] every regulator output is measured before connecting loads;
+- [ ] ESP32, PixyCam, sensors, servo and motor rails are labelled;
+- [ ] motor and servo current do not return through sensitive sensor-ground paths;
+- [ ] rail voltage is measured during motor launch and steering movement;
+- [ ] no ESP32 reset or sensor dropout occurs during the worst observed transient.
 
-| Module | Address | Role | Verification |
-| --- | --- | --- | --- |
-| `BNO085` | `0x4A`, fallback `0x4B` | yaw / heading | stable heading while robot is still |
-| front ToF | `0x30` | front distance / turn trigger | distance changes when object moves in front |
-| left ToF | `0x31` | left clearance | distance changes on left side |
-| right ToF | `0x32` | right clearance | distance changes on right side |
+## Controller and connector checks
 
-## Pi Link Checklist
+- [ ] programming connector works;
+- [ ] boot and reset access works;
+- [ ] physical start button works on the documented GPIO;
+- [ ] status outputs match the firmware;
+- [ ] PixyCam connector orientation is keyed or clearly marked;
+- [ ] front, left and right ToF connectors cannot be confused;
+- [ ] motor and servo connectors have strain relief;
+- [ ] complete pin map matches the schematic and source code.
 
-| Item | Expected value |
-| --- | --- |
-| voltage level | `3.3 V` TTL UART |
-| baud rate | `115200` |
-| packet format | `VISION,<mode>,<lane_shift_mm>,<obstacle_side>,<confidence>,<age_ms>` |
-| behavior on stale data | ESP32 should not depend on old perception packets |
+## Sensor and camera checks
 
-## Final Cross-Check
+- [ ] `BNO085` starts repeatedly and reports stable yaw while stationary;
+- [ ] front `VL53L1X` starts at the documented address;
+- [ ] left `VL53L4CD` starts at the documented address;
+- [ ] right `VL53L4CD` starts at the documented address;
+- [ ] ten full power cycles complete without address conflict;
+- [ ] PixyCam SPI initializes repeatedly;
+- [ ] red and green signatures are documented;
+- [ ] camera data remains stable with motor and servo active;
+- [ ] stale or missing camera data produces the documented fallback.
 
-Before submission, compare this page against:
+## Motor and steering checks
 
-- [pcb_wiring_diagrams.md](pcb_wiring_diagrams.md);
-- [schemes/wiring_overview.md](../../schemes/wiring_overview.md);
-- [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf);
-- final robot photos in [v-photos/](../../v-photos/).
+- [ ] motor direction agrees with the firmware command;
+- [ ] PWM sweep is tested without driver fault;
+- [ ] launch and stall current are recorded safely;
+- [ ] motor-driver temperature is recorded after repeated load;
+- [ ] MG90S centres without heavy buzzing;
+- [ ] servo rail remains within the required voltage range;
+- [ ] steering limits do not force the mechanism against a hard stop.
 
-If the physical robot differs from this checklist, update the documentation instead of leaving a mismatch.
+## Evidence to attach
 
+- PCB top and bottom photos;
+- labelled connector photo;
+- measured power table;
+- thermal table;
+- ten-start sensor table;
+- PixyCam detection table;
+- schematic and PCB revision links;
+- firmware commit;
+- signed review note stating that hardware, text and code match.
+
+Until these items are completed with real measurements, this file remains a preparation checklist.

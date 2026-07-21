@@ -1,83 +1,78 @@
-# Custom Electronics Schematic Description
+# Hardware V2 Custom PCB Description
 
-This file explains what is shown in `Wro_customPCBs.pdf` in plain engineering language.
+## Status
 
-Even though the robot is assembled on perfboard, the schematic is still useful because it shows the electrical structure clearly: power branches, board roles, sensors, actuators, and the links between them.
+The previous text describing the Hardware V1 perfboard/Raspberry Pi schematic was copied to [`archivo/hardware-v1-esp32-250rpm/schemes/custom_pcb_description.md`](../archivo/hardware-v1-esp32-250rpm/schemes/custom_pcb_description.md).
 
-## Main Blocks In The Schematic
+The existing `Wro_customPCBs.pdf` is Hardware V1 evidence. This document defines what the real Hardware V2 PCB package must contain once it is designed.
 
-The drawing includes:
+## Confirmed architecture
 
-- `ESP32-WROOM-32` as the low-level control board;
-- `Raspberry Pi Zero` as the camera-side board;
-- `BNO085` IMU;
-- one front `VL53L1X` ToF sensor;
-- `2x VL53L1CD` side-distance sensors;
-- `L298N` motor driver;
-- steering servo;
-- DC drive motor;
-- 2-cell `18650` battery supply and step-down regulation.
+- main controller: `ESP32-WROOM-32`;
+- perception: first-generation PixyCam / CMUcam5;
+- PixyCam link: wired SPI;
+- IMU: `BNO085`;
+- front ToF: `VL53L1X`;
+- side ToF: `2x VL53L4CD`;
+- steering: `MG90S`;
+- power source: LiPo, exact pack `TBD`;
+- motor: faster geared DC motor, exact part `TBD`;
+- motor driver: PCB H-bridge, exact IC `TBD`.
 
-## What The Code Confirms
+## Required schematic blocks
 
-The controller code in `src/src/main.cpp` makes a few things very clear:
+### Battery input and protection
 
-- the `ESP32` runs the low-level control loop;
-- it reads front, left, and right distance sensors;
-- it reads yaw from the `BNO085`;
-- it drives the servo and motor output.
+The final schematic must show the exact LiPo connector, main switch, reverse-polarity protection, fuse or resettable protection, bulk capacitance and battery test point.
 
-So the schematic should be read together with the code: the PDF shows the full electrical layout, while `main.cpp` shows the control side directly.
+### Regulation
 
-## Power Structure
+The final design must state each rail voltage, regulator part, continuous rating, transient headroom, efficiency assumptions and measurement points. The PixyCam, ESP32, sensors, servo and motor requirements must be checked against the selected LiPo.
 
-The battery pack feeds several branches:
+### ESP32 implementation
 
-- raw battery voltage to the `L298N` and drive motor;
-- regulated `5 V` for the `ESP32`;
-- regulated `5 V` for the `Raspberry Pi Zero`;
-- regulated power for the sensing hardware.
+The schematic must show:
 
-That separation matters because the motor path and the logic path do not behave the same electrically.
+- exact ESP32-WROOM-32 implementation;
+- programming connection;
+- boot and reset circuit;
+- required decoupling;
+- antenna keep-out where applicable;
+- status outputs;
+- start-button circuit;
+- labelled test points.
 
-## Board Responsibilities
+Whether the module is soldered directly or connected through a carrier remains `TBD`.
 
-The intended split is straightforward:
+### PixyCam SPI
 
-- the `Raspberry Pi Zero` handles camera-side perception;
-- the `ESP32` handles real-time control;
-- the `ESP32` reads the IMU and distance sensors;
-- the `ESP32` drives the steering servo and the motor driver.
+The design must show power, ground, clock, both data directions, chip select, connector pin order and verified logic-level compatibility. The final firmware GPIOs and stable SPI rate must match the schematic.
 
-## Sensor Bus
+### I2C sensors
 
-The `BNO085` and the ToF sensors share the main sensor bus. The distance sensors also use separate shutdown lines so the front `VL53L1X` and the two side `VL53L1CD` modules can be started in the intended sequence and assigned different addresses.
+The design must show the BNO085, front VL53L1X and both VL53L4CD modules, including voltage, pull-ups, runtime addresses, XSHUT/startup-control lines, BNO reset if used and connector labels by physical position.
 
-That is one of the most practical details in the whole design, because without it the ToF sensors would conflict on the bus.
+### Steering
 
-## Actuation Path
+The MG90S connector, PWM signal, supply rail, local capacitance and common-ground path must be documented. Servo current must not flow through sensitive sensor return paths.
 
-The actuator side is split into two very different outputs:
+### Motor stage
 
-- PWM steering control from the `ESP32` to the servo;
-- drive-control signals from the `ESP32` to the `L298N`, then to the motor.
+The H-bridge must be chosen after motor current measurements. The schematic and layout must document PWM/direction control, current and voltage margin, thermal copper, protection, suppression, motor connector and test procedure.
 
-This is why the schematic should not be read as a random wiring map. It reflects the fact that steering and drive actuation need different handling.
+## Required PCB evidence
 
-## Why The Schematic Matters
+- source files and revision identifier;
+- board dimensions, layers and mounting holes;
+- placement and routing explanation;
+- separation of high-current and sensitive paths;
+- Gerber/drill package;
+- BOM;
+- assembly photographs;
+- first-power-up log;
+- measured voltages, current and temperatures;
+- list of any PCB errors and the correction made in the next revision.
 
-The PDF helps for three reasons:
+## Release condition
 
-- it shows the planned electrical structure in one place;
-- it makes the power and signal layout easier to follow than a photo alone;
-- it gives another team a realistic starting point for rebuilding the system.
-
-## Practical Rebuild Notes
-
-If another team wanted to follow this layout, the most important points would be:
-
-1. keep the motor-current path away from logic and sensor wiring;
-2. use regulated power for the control and perception boards;
-3. initialize the ToF sensors in the intended startup sequence;
-4. keep a common ground across the whole system;
-5. treat the PDF as the electrical reference and the perfboard as the physical implementation.
+This document may describe the PCB as final only after the exact components, schematic, board files, assembled hardware, matching firmware and validation evidence are present in the repository.

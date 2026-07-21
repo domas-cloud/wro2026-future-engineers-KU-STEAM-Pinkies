@@ -1,76 +1,65 @@
 # Wiring Overview
 
-## System Blocks
+## Version status
+
+The previous Raspberry Pi, perfboard, `L298N`, `N20 250 rpm` and `2x 18650` wiring overview was copied to [`archivo/hardware-v1-esp32-250rpm/schemes/wiring_overview.md`](../archivo/hardware-v1-esp32-250rpm/schemes/wiring_overview.md).
+
+This active page describes the confirmed Hardware V2 structure. Exact parts and pins remain `TBD` where the team has not selected them.
+
+## Hardware V2 system blocks
 
 ```text
-2x 18650 Li-ion
-  -> main power path
-  -> L298N H-bridge -> N20 drive motor
-  -> regulated logic rail -> ESP32
-  -> regulated logic rail -> Raspberry Pi Zero
-  -> regulated sensor rail -> BNO085 + distance sensors
-  -> steering supply rail -> MG90S
+LiPo — exact specification TBD
+  -> protected PCB power input
+     -> motor power -> H-bridge TBD -> faster motor TBD
+     -> servo power -> MG90S
+     -> ESP32 logic regulation
+     -> PixyCam supply
+     -> BNO085 and ToF sensor supply
+
+PixyCam (first generation)
+  -> SPI -> ESP32-WROOM-32
+
+ESP32-WROOM-32
+  -> I2C -> BNO085
+  -> I2C / startup control -> VL53L1X + 2x VL53L4CD
+  -> PWM -> MG90S
+  -> PWM / direction -> motor H-bridge
 ```
 
-## Power Domains
+## Power domains to document
 
-- `motor domain`: battery -> `L298N` -> `N20`, the highest-current branch;
-- `logic domain`: regulated rail for the `ESP32` and `Raspberry Pi Zero`;
-- `sensor domain`: the `BNO085` and distance sensor modules on a clean logic rail;
-- `servo domain`: the `MG90S` on a separate branch that can handle steering-current spikes.
+- battery input and protection;
+- motor branch;
+- servo branch;
+- ESP32 logic branch;
+- PixyCam branch;
+- sensor branch;
+- common reference and controlled high-current returns.
 
-## Grounding Strategy
+The final overview must name the exact regulator outputs, current margins, connector types and protection parts.
 
-- use one common ground reference point for all subsystems;
-- keep the motor return path as far as practical from sensitive signal wires;
-- avoid routing sensor wires next to the high-current motor branch over long distances;
-- keep the shared return point near the power input or regulator section.
+## Signal paths
 
-## Signal Paths
+- PixyCam processes trained colour signatures and sends block information over wired SPI;
+- ESP32 combines camera data with yaw and distance measurements;
+- BNO085 and the three ToF sensors use the sensor bus;
+- ESP32 generates steering PWM and motor-driver control;
+- a physical start button starts the autonomous round.
 
-- the `Raspberry Pi Zero` handles camera capture and higher-level perception;
-- the `ESP32` reads the `BNO085` and distance sensors for real-time control;
-- the `ESP32` performs the low-level control calculations and generates steering decisions;
-- the `ESP32` drives the `MG90S` steering servo with PWM;
-- the `ESP32` controls the `L298N` input pins for the `N20` drive motor;
-- the sensors communicate through the controller sensor bus, typically I2C on the `ESP32`.
+## Missing information required for the final diagram
 
-## Control Responsibilities
+- exact LiPo;
+- exact H-bridge and motor;
+- ESP32 physical implementation;
+- complete GPIO map;
+- I2C pull-ups, addresses and startup lines;
+- PixyCam voltage compatibility and SPI pin order;
+- regulator topology and part numbers;
+- connector family and pin-1 orientation;
+- PCB dimensions and mounting points;
+- measured current and rail stability.
 
-- the `ESP32` is responsible for state evaluation, decision selection, real-time output generation, PWM, and drive enable;
-- the `Raspberry Pi Zero` is responsible for the camera-side perception layer;
-- the battery and regulators provide power, but do not perform any control logic;
-- the scheme should clearly show which subsystem generates each control signal.
+## Historical files
 
-## Connection Table
-
-| Subsystem | Connection Type | Notes |
-| --- | --- | --- |
-| Pi Zero camera | CSI / camera interface | Camera capture and perception input |
-| Pi Zero to `ESP32` | Data link | Carries higher-level perception results |
-| `BNO085` | I2C | Must be mounted rigidly and calibrated |
-| `front`, `left`, `right` distance sensors | I2C + shutdown control | Published `ESP32` code uses three modules for local coverage |
-| `ESP32` to `MG90S` | PWM | Steering output |
-| `ESP32` to `L298N` | Digital control + enable/PWM | Drive direction and speed |
-| battery to `L298N` | Power input | Motor current path |
-| battery to regulators | Power input | Logic and sensor rails |
-
-## Consistency Note
-
-The schematic PDF shows the full electrical layout of the robot. `src/src/main.cpp` is the easiest place to confirm the low-level `ESP32` controller behavior and the active three-sensor setup.
-
-## Notes For The Final Schematic
-
-- the final schematic should show the exact pin numbers for the board version in use;
-- ground should be shown as a common reference even if the power rails are separated;
-- the schematic should clearly separate high-current motor wires from the low-current logic section;
-- if connectors or terminal blocks are used, they should be labeled.
-
-## Current Repository Reference
-
-The current repository already includes a schematic export:
-
-- [Custom Electronics Schematic PDF](Wro_customPCBs.pdf)
-- [Custom Electronics Schematic Description](custom_pcb_description.md)
-
-Use this overview together with those files and with the controller code under `src/`.
+The existing PDF and preview images in this folder show Hardware V1. They remain engineering evidence but must not be used as the final Hardware V2 wiring reference.

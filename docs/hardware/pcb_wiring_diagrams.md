@@ -1,121 +1,89 @@
-# PCB And Wiring Diagrams
+# Hardware V2 PCB And Wiring Status
 
-Our electronics are organized around a perfboard-based distribution layout. The goal was not visual perfection. The goal was wiring that stayed understandable, serviceable, and stable during testing.
+## Document status
 
-## Main Power Branches
+This file no longer presents the Hardware V1 perfboard wiring as the active robot. The previous text was copied to [`archivo/hardware-v1-esp32-250rpm/docs/hardware/pcb_wiring_diagrams.md`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/pcb_wiring_diagrams.md).
 
-From the battery pack, power is split into:
+The final Hardware V2 schematic and pin map do not exist yet. This page records the confirmed connection structure and the information that must be added when the PCB is designed.
 
-- logic branch;
-- motor branch;
-- steering branch;
-- sensor branch.
-
-The `ESP32` and `Raspberry Pi Zero` both receive regulated power rather than raw battery voltage.
-
-## Main Connections
-
-The main signal and power paths are:
-
-- battery holder -> perfboard distribution;
-- perfboard -> step-down regulator;
-- step-down regulator -> `Raspberry Pi Zero`;
-- step-down regulator -> `ESP32`;
-- `ESP32` -> `BNO085`;
-- `ESP32` -> front `VL53L1X` sensor;
-- `ESP32` -> left `VL53L1CD` sensor;
-- `ESP32` -> right `VL53L1CD` sensor;
-- `Raspberry Pi Zero` -> camera;
-- `ESP32` -> `MG90S` servo;
-- `ESP32` -> `L298N`;
-- `L298N` -> `N20` motor.
-
-## Pin And Address Table
-
-The controller code in `src/src/main.cpp` confirms these pin assignments:
-
-| Board / module | Signal | Pin / address |
-| --- | --- | --- |
-| `ESP32` | start button input | `GPIO13` |
-| `ESP32` | motor PWM / enable | `GPIO32` |
-| `ESP32` | motor direction 1 | `GPIO26` |
-| `ESP32` | motor direction 2 | `GPIO25` |
-| `ESP32` | steering servo PWM | `GPIO33` |
-| `ESP32` | distance-sensor shutdown lines | `GPIO15`, `GPIO5`, `GPIO18` |
-| `ESP32` I2C bus | clock speed | `400 kHz` |
-| `ESP32` UART RX/TX for Pi link | controller bridge | `GPIO16` / `GPIO17` |
-| `BNO085` | IMU I2C address | `0x4A`, fallback `0x4B` |
-| front distance sensor | configured address | `0x30` |
-| left distance sensor | configured address | `0x31` |
-| right distance sensor | configured address | `0x32` |
-
-## Wiring Diagram In Text Form
+## Confirmed block diagram
 
 ```text
-2x 18650 Li-ion pack
-  -> perfboard main input
-     -> motor branch -> L298N -> N20 drive motor
-     -> logic regulator -> Raspberry Pi Zero
-     -> logic regulator -> ESP32
-     -> sensor branch -> BNO085
-     -> sensor branch -> VL53L1X front (0x30)
-     -> sensor branch -> VL53L1CD left (0x31)
-     -> sensor branch -> VL53L1CD right (0x32)
-     -> steering branch -> MG90S servo
+LiPo battery — exact pack TBD
+  -> protected power input
+     -> motor branch -> H-bridge TBD -> faster geared DC motor TBD
+     -> servo branch -> MG90S
+     -> logic regulation -> ESP32-WROOM-32
+     -> camera supply -> first-generation PixyCam
+     -> sensor supply -> BNO085 + VL53L1X + 2x VL53L4CD
 
-Raspberry Pi Zero
-  -> camera module
-  -> UART perception packet to ESP32 (`115200 baud`, `3.3 V` TTL)
+PixyCam
+  -> wired SPI -> ESP32-WROOM-32
 
-ESP32
-  -> reads BNO085 and all three ToF sensors
-  -> drives MG90S steering servo
-  -> drives L298N motor controller
-  -> reads start button
+ESP32-WROOM-32
+  -> I2C -> BNO085
+  -> I2C + startup control -> front VL53L1X
+  -> I2C + startup control -> left VL53L4CD
+  -> I2C + startup control -> right VL53L4CD
+  -> PWM -> MG90S
+  -> PWM / direction -> H-bridge TBD
+  -> GPIO -> physical start button and status indication
 ```
 
-## About The Schematic PDF
+## Confirmed interfaces
 
-The schematic PDF shows the broader electrical design of the robot. The low-level controller details are easiest to confirm in `src/src/main.cpp`, while the PDF is better for understanding the whole layout.
+| Connection | Confirmed | Still required |
+|---|---|---|
+| PixyCam to ESP32 | wired SPI | exact GPIOs, SPI rate, connector pin order, voltage compatibility |
+| BNO085 to ESP32 | I2C | exact pins, pull-ups, address and reset connection |
+| ToF sensors to ESP32 | I2C with separate startup control where required | exact pins, addresses and initialization sequence |
+| MG90S to controller | PWM plus suitable power branch | exact pin, connector and measured rail transient |
+| motor stage | ESP32 PWM/direction to H-bridge | exact IC, pins, protection and current rating |
+| start control | physical wired button | exact GPIO and electrical circuit |
 
-Main related files:
+## Pin-map rule
 
-- [Custom Electronics Schematic](../../schemes/Wro_customPCBs.pdf)
-- [Custom Electronics Schematic Description](../../schemes/custom_pcb_description.md)
-- [Wiring Overview](../../schemes/wiring_overview.md)
+Hardware V1 documentation contained specific pins, including conflicting start-button values. Those pins must not be copied into Hardware V2 as final. The Hardware V2 table must be completed from the approved schematic and matching firmware.
 
-## Preview Images
+| Function | Hardware V2 pin |
+|---|---|
+| start button | `TBD` |
+| status LED(s) | `TBD` |
+| steering PWM | `TBD` |
+| motor PWM | `TBD` |
+| motor direction | `TBD` |
+| I2C SDA / SCL | `TBD` |
+| front / left / right ToF startup control | `TBD` |
+| BNO085 reset, if used | `TBD` |
+| PixyCam SCK / data / select | `TBD` |
+| programming, boot and reset | `TBD` |
 
-### As-Built Perfboard Wiring
+## Power information required
 
-![As-built perfboard wiring](../../schemes/images/perfboard-wiring.jpg)
+The final wiring document must show:
 
-This photo documents the real perfboard layout used on the robot. It is included as build evidence so the schematic can be checked against the actual wiring, connector placement, regulator, motor driver, battery input, and controller wiring.
+1. exact LiPo nominal and maximum voltage;
+2. main connector, switch, fuse or resettable protection;
+3. reverse-polarity protection;
+4. regulator part numbers and output rails;
+5. continuous and peak current margins;
+6. bulk and local decoupling;
+7. motor-noise suppression;
+8. common-ground strategy and high-current return routing;
+9. test points for battery and regulated rails.
 
-### Main System View
+## Required final files
 
-![Main component schematic](../../schemes/images/schematic-overview.png)
+- editable schematic source;
+- schematic PDF;
+- PCB source and layout screenshots;
+- Gerber and drill files;
+- BOM with exact manufacturer part numbers;
+- connector map and pin-1 markings;
+- assembled PCB top/bottom photos;
+- measured voltage, current and thermal results;
+- firmware pin definitions matching this document.
 
-This image gives the quickest overview of the boards, motor driver, servo, and main power branches.
+## Historical schematic notice
 
-### Sensor Wiring View
-
-![Sensor bus detail](../../schemes/images/sensor-bus-detail.png)
-
-This detail shows the shared sensor bus and the separate shutdown handling for the front `VL53L1X` and the two `VL53L1CD` modules.
-
-### Power Conversion Reference
-
-![Power regulator reference](../../schemes/images/power-regulator-reference.jpg)
-
-This figure shows the step-down idea used to derive `5 V` logic power from the battery pack.
-
-## How To Read This Section
-
-The important takeaways are:
-
-- the drive motor is isolated behind the `L298N`;
-- the servo is driven directly by the control side;
-- the sensor bus is structured, not improvised;
-- logic power is regulated;
-- the design is meant to be rebuilt, not only looked at.
+The existing [`schemes/Wro_customPCBs.pdf`](../../schemes/Wro_customPCBs.pdf), perfboard photo and old diagram images describe Hardware V1. They remain evidence of the previous working robot and are not the final Hardware V2 PCB.

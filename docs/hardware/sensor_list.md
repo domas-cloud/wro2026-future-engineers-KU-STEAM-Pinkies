@@ -1,71 +1,56 @@
-# Sensor List
+# Hardware V2 Sensor List
 
-This page summarizes the sensors we used, why we chose them, and how they were placed on the robot.
+## Status
 
-## Sensors In Use
+This is the active Hardware V2 sensor summary. The previous version was copied to [`archivo/hardware-v1-esp32-250rpm/docs/hardware/sensor_list.md`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/sensor_list.md) before this rewrite.
 
-- camera system used for the perception layer;
-- `BNO085 9-DOF IMU`;
-- one front `VL53L1X` ToF sensor;
-- `2x VL53L1CD` distance sensors used as `left` and `right`.
+## Confirmed sensors
 
-## Sensor Selection And Role
+| Sensor | Quantity | Interface | Confirmed role | Evidence still required |
+|---|---:|---|---|---|
+| first-generation `PixyCam` / CMUcam5 | 1 | wired SPI | onboard red/green traffic-pillar detection | exact revision photo, power requirement, trained signatures and field tests |
+| `BNO085` | 1 | I2C | fused yaw / heading feedback | final mounting orientation and calibration log |
+| `VL53L1X` | 1 | I2C | front-distance measurement and corner approach sensing | final position, settings, address and repeatability |
+| `VL53L4CD` | 2 | I2C | left/right local spacing | final positions, addresses, startup sequence and repeatability |
 
-| Sensor | Main role in the robot | Why we selected it |
-| --- | --- | --- |
-| camera system | wider scene interpretation and obstacle/lane perception | it sees farther ahead than short-range sensors and supports higher-level driving decisions |
-| `BNO085` IMU | heading awareness, straight-line stability, turn consistency | a steering robot benefits from yaw feedback even when distance readings momentarily change |
-| `front VL53L1X` | close approach and turn triggering | it gives direct information about the boundary ahead of the robot |
-| `left VL53L1CD` | side-distance awareness | it supports wall-offset control on one side of the robot |
-| `right VL53L1CD` | opposite side-distance awareness | it allows the same control model to be used when the reference side changes |
+The correct active side-sensor model is `VL53L4CD`. Earlier text that said `VL53L1CD` is retained only in archived historical snapshots.
 
-## Tested Alternative And Why We Rejected It
+## Sensor responsibilities
 
-We also tested `VL53L5CX` matrix sensors during development. We rejected that option in the final hardware documentation because:
+### PixyCam
 
-- the matrix output made the sensing pipeline more complex;
-- we had to decide which zones to trust and how to filter them;
-- in our tests, that added complexity did not give a strong enough improvement in real driving.
+The PixyCam performs colour-signature processing on its own processor. Hardware V2 intends to use it for red and green WRO traffic pillars and transfer compact block data to the ESP32 over SPI.
 
-For our published controller, simpler distance sensing was a better engineering choice than a more complex matrix sensor that did not improve practical performance enough.
+The final documentation must record:
 
-## Placement Reasoning
+- exact signature numbers;
+- training screenshots or exported settings;
+- minimum accepted block size;
+- selection rule when several blocks are visible;
+- rejection of ambiguous or stale data;
+- first reliable detection distance at final driving speed;
+- false-positive and false-negative observations under different lighting.
 
-The sensors were placed according to track geometry, not only according to free space inside the robot.
+### BNO085
 
-- the camera is used for the wider forward scene;
-- the front distance sensor is used for the approach area where close boundary detection must be confirmed;
-- the left distance sensor is used for side-distance awareness on one side of the robot;
-- the right distance sensor is used for side-distance awareness on the opposite side;
-- the IMU is mounted rigidly near the main structure so heading data reflects the chassis and not a flexible bracket.
+The BNO085 provides heading feedback. It must be mounted rigidly and its coordinate orientation must be documented. The final runtime must state the report type, update rate, address and failure behaviour.
 
-This combination supports the full robot behavior because the robot needs both:
+### ToF sensors
 
-- wider scene interpretation;
-- direct front-boundary detection;
-- side-spacing feedback together with heading stabilization.
+The front sensor and both side sensors serve different geometric roles. The final documentation must include:
 
-## Mounting Notes
+- physical height, angle and distance from the robot centre lines;
+- connector labels `FRONT_TOF`, `LEFT_TOF`, `RIGHT_TOF`;
+- I2C voltage and pull-ups;
+- runtime addresses;
+- XSHUT or startup-control sequence;
+- filtering and timeout behaviour;
+- tests with the motor and servo active.
 
-- The `BNO085` must be mounted rigidly so sensor fusion reflects robot motion rather than board flex.
-- The camera must be mounted so its field of view is stable and useful for the perception layer.
-- The front `VL53L1X` and the two `VL53L1CD` modules should be positioned so their view is not blocked by wheels, chassis walls, or servo parts.
-- The distance sensors must be documented together because they solve different geometric parts of the same control problem.
-- Using camera perception together with compact distance sensors keeps the sensing architecture broader without losing local geometric feedback.
+## Placement status
 
-## Calibration Notes
+Exact Hardware V2 mounting measurements are not yet available. They must be added after the final PCB, camera bracket and chassis layout are assembled. Until then, this file records sensor roles, not invented positions.
 
-The minimum calibration workflow used in development is:
+## Rejected or historical options
 
-1. verify stable IMU yaw while the robot is stationary;
-2. verify that the camera view is aligned with the intended driving direction;
-3. start the distance sensors in a controlled sequence so they can operate reliably on one communication bus;
-4. verify repeatable distance readings against a known wall position;
-5. re-check sensor alignment after any mechanical change that affects angle, height, or vibration.
-
-## Documentation Requirements
-
-- List the exact modules used.
-- Explain where each sensor is mounted.
-- Describe how each sensor contributes to the robot's decision cycle.
-- Mention any calibration or alignment requirements.
+Earlier development included Raspberry Pi camera processing and investigation of other distance-sensor arrangements. Those are Hardware V1 development evidence and do not define the active Hardware V2 sensor architecture.
