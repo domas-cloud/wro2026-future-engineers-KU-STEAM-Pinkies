@@ -1,56 +1,9 @@
-# Track Testing
+# Track testing
 
-## Version status
+The track is where we check whether a change actually helps the complete car.
 
-The previous Hardware V1 track-testing narrative was archived at [`archivo/hardware-v1-esp32-250rpm/docs/testing/track_testing.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/testing/track_testing.md).
+The V1 baseline we can reproduce most easily is a 3 m straight-drift test and an approximate 90° turning-space check. We also used repeated open-straight, obstacle-slalom and full-practice-route runs. Those numbers are in [`performance_measurements.md`](performance_measurements.md).
 
-Current measured results in `performance_measurements.md` describe Hardware V1. Hardware V2 has not yet completed final track validation.
+For V2 we will repeat comparable tests after the faster motor and new electronics are stable. We will also pay attention to reaction distance because higher speed can turn a previously safe obstacle or corner threshold into a late one.
 
-## Hardware V1 purposes
-
-Track tests were used to compare:
-
-- straight drift and heading stability;
-- corner entry and exit;
-- steering centring and mechanical binding;
-- obstacle-section recovery;
-- repeated route completion;
-- effect of sensor mounting and tuning.
-
-## Hardware V2 controlled-test requirements
-
-For each comparison record:
-
-- date and commit;
-- PCB and mechanical revision;
-- exact motor, driver and LiPo;
-- PixyCam settings;
-- field layout and direction;
-- surface and lighting notes;
-- unchanged tuning across the comparison block;
-- run count, pass count and failure reason.
-
-## Open Challenge metrics
-
-- three-lap completion;
-- time;
-- wall contacts;
-- straight drift;
-- turn-space/overshoot;
-- parking result;
-- repeatability across at least five, preferably ten, final runs.
-
-## Obstacle Challenge metrics
-
-- correct red decisions;
-- correct green decisions;
-- pillars moved;
-- late detections;
-- alignment after obstacle;
-- three-lap completion;
-- parking result;
-- repeated-run success rate.
-
-## Acceptance rule
-
-A Hardware V2 version becomes stable only when it improves the target problem without introducing a repeated failure elsewhere. One best run is not sufficient.
+Final Open and Obstacle runs will be counted rather than selected from only the best attempt.

@@ -1,77 +1,17 @@
-# Final Submission Checklist
+# Submission checklist
 
-## Version rule
+- [ ] README describes the final V2 robot and remains detailed enough to rebuild it
+- [ ] exact BOM is published
+- [ ] final CAD/STL files and dimensions are present
+- [ ] schematic, PCB source, Gerbers/drill files and connector/pin map are present
+- [ ] final source code builds from the repository instructions
+- [ ] startup/calibration procedure matches the physical car
+- [ ] six vehicle views show the final V2 revision
+- [ ] team photo is present
+- [ ] Open Challenge video is linked
+- [ ] Obstacle Challenge video is linked
+- [ ] final repeated-run tables are filled with real results
+- [ ] measured power/startup/thermal/camera checks are recorded
+- [ ] README, wiring, BOM, source and photos all refer to the same revision
 
-The previous checklist was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/submission_checklist.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/submission_checklist.md).
-
-Run this checklist against **Hardware V2**, not against mixed Hardware V1 and V2 files.
-
-## Entry and navigation
-
-- [ ] README is at least 5000 characters and states the exact robot version;
-- [ ] START_HERE gives a one-minute reading path;
-- [ ] evidence map separates verified evidence from missing evidence;
-- [ ] no active page calls Hardware V1 electronics the final Hardware V2 design;
-- [ ] all important links work.
-
-## Mechanical evidence
-
-- [ ] final dimensions and mass;
-- [ ] wheelbase, track widths, wheel diameter and clearance;
-- [ ] exact motor and drivetrain data;
-- [ ] motor speed/torque/current reasoning;
-- [ ] steering geometry and limits;
-- [ ] final CAD/STL/source files;
-- [ ] iteration and failure evidence;
-- [ ] final mechanical photos.
-
-## Electronics and PCB evidence
-
-- [ ] exact LiPo and safety information;
-- [ ] complete power/current budget;
-- [ ] schematic and editable source;
-- [ ] PCB source, Gerbers and drills;
-- [ ] BOM;
-- [ ] connector and pin map;
-- [ ] assembled PCB photos;
-- [ ] measured voltage/current/temperature;
-- [ ] ten-start sensor and communication test;
-- [ ] as-built wiring checklist completed.
-
-## Software evidence
-
-- [ ] final Hardware V2 source code;
-- [ ] PixyCam SPI implementation;
-- [ ] exact board/build environment;
-- [ ] code comments explain important logic;
-- [ ] state diagram matches source;
-- [ ] red/green decisions documented;
-- [ ] stale/ambiguous/camera-fault handling documented;
-- [ ] upload and calibration procedure tested.
-
-## Testing evidence
-
-- [ ] final motor comparison;
-- [ ] power and thermal results;
-- [ ] PixyCam detection matrix;
-- [ ] Open Challenge repeated runs;
-- [ ] Obstacle Challenge repeated runs;
-- [ ] failures linked to corrections and retests;
-- [ ] final results tied to a commit and physical revision.
-
-## Media
-
-- [ ] team photo;
-- [ ] final Hardware V2 front/back/left/right/top/bottom photos;
-- [ ] final Open Challenge video;
-- [ ] final Obstacle Challenge video;
-- [ ] links are public or accessible by link;
-- [ ] video runtime and autonomous segment satisfy the rules.
-
-## Honesty check
-
-- [ ] every number is measured or clearly labelled as calculated;
-- [ ] no `TBD` is hidden by an estimate;
-- [ ] Hardware V1 evidence is labelled historical;
-- [ ] diagrams, code, BOM, photos and text describe the same final robot;
-- [ ] another person can rebuild without undocumented team knowledge.
+This list stays short on purpose; the technical details belong in the subsystem pages.

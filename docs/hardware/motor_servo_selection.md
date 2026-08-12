@@ -1,40 +1,13 @@
-# Hardware V2 Motor And Servo Selection
-
-## Status
-
-The previous generic page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/hardware/motor_servo_selection.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/hardware/motor_servo_selection.md).
+# Motor and steering servo
 
 ## Steering servo
 
-`MG90S` is confirmed for Hardware V2 because it matches the existing steering baseline. Final validation still requires:
+We use an `MG90S`. The first robot showed that the steering problem was mostly linkage geometry rather than lack of servo power. After shortening the lever arm and improving the front-wheel grip, the MG90S worked much more consistently, so we are keeping it for V2.
 
-- supply voltage;
-- normal and near-stall current;
-- centre repeatability;
-- full left/right load;
-- rail voltage during movement;
-- performance at the selected faster driving speed.
+We still need to recheck centre repeatability and current draw with the faster V2 drivetrain.
 
 ## Drive motor
 
-The exact Hardware V2 motor is `TBD`. It must be faster than the V1 250 rpm baseline while remaining controllable and electrically compatible.
+Hardware V1 compared 50, 250 and 1000 rpm N20 motors and used the 250 rpm version. Hardware V2 is intentionally reopening that choice because we want more speed and the power/driver electronics are changing.
 
-For every candidate record:
-
-- exact model and supplier/datasheet;
-- rated voltage;
-- no-load rpm;
-- gearbox ratio;
-- stall torque/current;
-- loaded wheel speed;
-- launch current;
-- 3 m time;
-- corner/overshoot behaviour;
-- motor and driver temperature;
-- repeated three-lap result.
-
-## Selection rule
-
-Do not choose only by rpm. Choose the candidate that improves useful track time without causing repeated steering, perception, current, thermal or reliability failures.
-
-See [`../design/hardware_v2_motor_upgrade_plan.md`](../design/hardware_v2_motor_upgrade_plan.md).
+The final V2 motor has not been selected yet. We will compare realistic candidates using loaded speed, current, temperature, straight drift, corner behaviour and repeated challenge runs. See [`../design/hardware_v2_motor_upgrade_plan.md`](../design/hardware_v2_motor_upgrade_plan.md).

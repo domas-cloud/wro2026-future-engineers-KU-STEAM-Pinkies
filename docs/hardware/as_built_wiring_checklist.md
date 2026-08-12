@@ -1,76 +1,45 @@
-# Hardware V2 As-Built Wiring Checklist
+# V2 wiring check
 
-## Status
+We will use this page when the custom PCB is assembled. It is deliberately empty of final part numbers until the board exists.
 
-Hardware V2 has not yet been assembled, so this is a completion checklist rather than a claim that the wiring already exists. The Hardware V1 checklist was archived at [`archivo/hardware-v1-esp32-250rpm/docs/hardware/as_built_wiring_checklist.md`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/as_built_wiring_checklist.md).
+## Build details
 
-## Build identification
-
-| Field | Value |
+| Item | Value |
 |---|---|
-| PCB revision | `TBD` |
-| schematic revision | `TBD` |
-| firmware commit | `TBD` |
-| LiPo specification | `TBD` |
-| motor | `TBD` |
-| motor driver | `TBD` |
-| assembly date | `TBD` |
+| PCB revision | not recorded yet |
+| schematic revision | not recorded yet |
+| source commit | not recorded yet |
+| LiPo | not selected yet |
+| motor | not selected yet |
+| motor driver | not selected yet |
+| assembly date | not recorded yet |
 
-## Power path checks
+## Before connecting the motor
 
-- [ ] battery chemistry, cell count and maximum charged voltage match the schematic;
-- [ ] connector polarity and pin-1 markings are documented;
-- [ ] main switch and protection device are fitted;
-- [ ] reverse-polarity protection is verified;
-- [ ] every regulator output is measured before connecting loads;
-- [ ] ESP32, PixyCam, sensors, servo and motor rails are labelled;
-- [ ] motor and servo current do not return through sensitive sensor-ground paths;
-- [ ] rail voltage is measured during motor launch and steering movement;
-- [ ] no ESP32 reset or sensor dropout occurs during the worst observed transient.
+- [ ] battery polarity and maximum voltage match the schematic
+- [ ] protection and main power switch are fitted
+- [ ] every regulator rail is measured first
+- [ ] ESP32, camera and sensors start correctly
+- [ ] programming/reset access works
+- [ ] connector labels match the real cable positions
 
-## Controller and connector checks
+## Sensors and camera
 
-- [ ] programming connector works;
-- [ ] boot and reset access works;
-- [ ] physical start button works on the documented GPIO;
-- [ ] status outputs match the firmware;
-- [ ] PixyCam connector orientation is keyed or clearly marked;
-- [ ] front, left and right ToF connectors cannot be confused;
-- [ ] motor and servo connectors have strain relief;
-- [ ] complete pin map matches the schematic and source code.
+- [ ] BNO085 starts repeatedly and yaw is stable while the car is still
+- [ ] front VL53L1X starts at the documented address
+- [ ] both VL53L4CD sensors start at their documented addresses
+- [ ] ten full power cycles complete without an I2C address problem
+- [ ] PixyCam SPI starts repeatedly
+- [ ] red/green signatures and camera settings are saved
 
-## Sensor and camera checks
+## Servo and motor
 
-- [ ] `BNO085` starts repeatedly and reports stable yaw while stationary;
-- [ ] front `VL53L1X` starts at the documented address;
-- [ ] left `VL53L4CD` starts at the documented address;
-- [ ] right `VL53L4CD` starts at the documented address;
-- [ ] ten full power cycles complete without address conflict;
-- [ ] PixyCam SPI initializes repeatedly;
-- [ ] red and green signatures are documented;
-- [ ] camera data remains stable with motor and servo active;
-- [ ] stale or missing camera data produces the documented fallback.
+- [ ] MG90S centres without forcing the linkage against a hard stop
+- [ ] logic rails do not dip enough to reset the ESP32 while steering
+- [ ] motor direction agrees with the command
+- [ ] PWM range is tested
+- [ ] launch and stall current are recorded safely
+- [ ] driver/regulator temperature is checked after repeated load
+- [ ] sensor and camera communication still works with the motor running
 
-## Motor and steering checks
-
-- [ ] motor direction agrees with the firmware command;
-- [ ] PWM sweep is tested without driver fault;
-- [ ] launch and stall current are recorded safely;
-- [ ] motor-driver temperature is recorded after repeated load;
-- [ ] MG90S centres without heavy buzzing;
-- [ ] servo rail remains within the required voltage range;
-- [ ] steering limits do not force the mechanism against a hard stop.
-
-## Evidence to attach
-
-- PCB top and bottom photos;
-- labelled connector photo;
-- measured power table;
-- thermal table;
-- ten-start sensor table;
-- PixyCam detection table;
-- schematic and PCB revision links;
-- firmware commit;
-- signed review note stating that hardware, text and code match.
-
-Until these items are completed with real measurements, this file remains a preparation checklist.
+When this checklist is complete we will add PCB photos, measured power/temperature tables and the source commit used for the test.

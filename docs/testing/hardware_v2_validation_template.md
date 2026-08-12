@@ -1,121 +1,61 @@
-# Hardware V2 Validation Template
+# Hardware V2 test sheet
 
-Use this page during the Hardware V2 build. Replace `TBD` only with real measurements or observed results.
+We will fill this page with the real rebuilt car. Empty fields mean the test has not been done yet.
 
-## Build identification
+## Build used for the test
 
-| Field | Value |
-|---|---|
-| date | `TBD` |
-| Git commit | `TBD` |
-| PCB revision | `TBD` |
-| ESP32 implementation | `TBD` |
-| PixyCam revision / photo reference | `TBD` |
-| motor model | `TBD` |
-| motor driver | `TBD` |
-| LiPo specification | `TBD` |
-| robot mass | `TBD` |
-| robot dimensions | `TBD` |
+- PCB revision:
+- source commit:
+- LiPo:
+- motor:
+- motor driver:
+- robot mass:
+- date:
 
-## Power validation
+## Power and startup
 
-| Condition | Battery voltage | 5 V / servo rail | 3.3 V / logic rail | Total current | Notes |
-|---|---:|---:|---:|---:|---|
-| power on, idle | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| sensors active | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| PixyCam detecting | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| steering sweep | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| motor launch | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| motor + steering transient | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| repeated full run | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
+Record idle current, normal driving current and the highest observed transient. Measure logic rails while the motor starts and servo moves. Also record motor-driver and regulator temperature after repeated runs.
 
-## Thermal validation
+Run at least ten full power cycles and note whether the ESP32, BNO085, all three ToF sensors and PixyCam start correctly each time.
 
-Record ambient temperature and the measurement method.
+## PixyCam
 
-| Component | Start temperature | After test | Test duration / load | Pass condition | Result |
-|---|---:|---:|---|---|---|
-| motor driver | `TBD` | `TBD` | `TBD` | no thermal shutdown or unsafe heating | `TBD` |
-| motor | `TBD` | `TBD` | `TBD` | stable operation and no mechanical damage | `TBD` |
-| main regulator | `TBD` | `TBD` | `TBD` | voltage remains inside required range | `TBD` |
-| servo regulator / rail | `TBD` | `TBD` | `TBD` | no reset or excessive heating | `TBD` |
+Test red and green pillars at useful approach distances. Include bright, dark and side-lit conditions. Note false detections, missed detections and whether SPI stays stable while motor/servo are active.
 
-## Sensor startup reliability
+## Motor comparison
 
-Repeat at least ten cold or full power-cycle starts.
+For each serious motor candidate record loaded speed (or 3 m time), launch/current behaviour, temperature, straight drift, corner behaviour and repeated-run success. The final choice should be the fastest one we can still control reliably, not simply the highest rpm.
 
-| Start number | VL53L1X | Left VL53L4CD | Right VL53L4CD | BNO085 | PixyCam SPI | Notes |
-|---:|---|---|---|---|---|---|
-| 1 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 2 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 3 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 4 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 5 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 6 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 7 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 8 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 9 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 10 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
+## Track runs
 
-## PixyCam detection validation
+### Open Challenge
 
-| Scenario | Distance / position | Lighting | Expected signature | Detected result | Stable decision distance | Notes |
-|---|---|---|---|---|---:|---|
-| red pillar, centre | `TBD` | `TBD` | red | `TBD` | `TBD` | `TBD` |
-| red pillar, left | `TBD` | `TBD` | red | `TBD` | `TBD` | `TBD` |
-| red pillar, right | `TBD` | `TBD` | red | `TBD` | `TBD` | `TBD` |
-| green pillar, centre | `TBD` | `TBD` | green | `TBD` | `TBD` | `TBD` |
-| green pillar, left | `TBD` | `TBD` | green | `TBD` | `TBD` | `TBD` |
-| green pillar, right | `TBD` | `TBD` | green | `TBD` | `TBD` | `TBD` |
-| both colours visible | `TBD` | `TBD` | strategy-dependent | `TBD` | `TBD` | `TBD` |
-| no pillar | `TBD` | `TBD` | no valid block | `TBD` | `TBD` | `TBD` |
-| motor at high PWM | `TBD` | `TBD` | unchanged detection | `TBD` | `TBD` | `TBD` |
+| Run | Complete? | Time | Notes |
+|---:|---|---|---|
+| 1 |  |  |  |
+| 2 |  |  |  |
+| 3 |  |  |  |
+| 4 |  |  |  |
+| 5 |  |  |  |
+| 6 |  |  |  |
+| 7 |  |  |  |
+| 8 |  |  |  |
+| 9 |  |  |  |
+| 10 |  |  |  |
 
-## Motor candidate comparison
+### Obstacle Challenge
 
-| Candidate | Voltage | Rated / no-load rpm | Wheel diameter | Loaded 3 m time | Launch peak current | Stall current | Driver temperature | 3-lap completion rate | Decision |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| Hardware V1 250 rpm baseline | `6 V` | `250 rpm` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | baseline |
-| candidate A | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| candidate B | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| candidate C | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
+| Run | Complete? | Time | Notes |
+|---:|---|---|---|
+| 1 |  |  |  |
+| 2 |  |  |  |
+| 3 |  |  |  |
+| 4 |  |  |  |
+| 5 |  |  |  |
+| 6 |  |  |  |
+| 7 |  |  |  |
+| 8 |  |  |  |
+| 9 |  |  |  |
+| 10 |  |  |  |
 
-## Open Challenge final runs
-
-| Run | Date | Commit | Battery state | Time | Wall contacts | Completed 3 laps | Parking result | Notes |
-|---:|---|---|---|---:|---:|---|---|---|
-| 1 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 2 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 3 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 4 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 5 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 6 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 7 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 8 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 9 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 10 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-
-## Obstacle Challenge final runs
-
-| Run | Date | Commit | Layout | Red decisions | Green decisions | Pillars moved | Completed 3 laps | Parking result | Notes |
-|---:|---|---|---|---:|---:|---:|---|---|---|
-| 1 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 2 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 3 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 4 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 5 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 6 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 7 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 8 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 9 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-| 10 | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-
-## Failure and iteration log
-
-| Date | Version / commit | Failure observed | Root-cause hypothesis | Change made | Retest result | Evidence link |
-|---|---|---|---|---|---|---|
-| `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` | `TBD` |
-
-## Honesty rule
-
-Do not replace `TBD` with estimates presented as measurements. Calculated values must be labelled as calculations, and measured values must state the method and conditions.
+Any failure that changes the design or tuning should also be added to [`iteration_log.md`](iteration_log.md).
