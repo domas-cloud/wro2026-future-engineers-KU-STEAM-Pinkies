@@ -2,10 +2,9 @@
 
 ## Current project state
 
-The previous index was archived at [`archivo/hardware-v1-esp32-250rpm/docs/README.md`](../archivo/hardware-v1-esp32-250rpm/docs/README.md).
-
 - `[HW1-HISTORY]` Hardware V1: verified historical baseline;
-- `[HW2-IMPROVEMENT]` Hardware V2: active ESP32 + PixyCam SPI + custom-PCB migration.
+- `[HW2-IMPROVEMENT]` Hardware V2: active ESP32 + PixyCam SPI + custom-PCB migration;
+- `[HW2-TBD]` final Hardware V2 software: intentionally reset on 2026-08-12 and being redesigned.
 
 For the next review, missing information and the exact update locations are maintained in [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md).
 
@@ -46,14 +45,19 @@ Battery, motor, H-bridge, regulator, PCB and pin-map follow-up requirements are 
 
 ## Software
 
-- [`code/software_architecture_improved.md`](code/software_architecture_improved.md)
-- [`code/vision_interface.md`](code/vision_interface.md)
-- [`code/pixycam_spi_integration_plan.md`](code/pixycam_spi_integration_plan.md)
-- [`code/software_state_machine_and_obstacle_flow.md`](code/software_state_machine_and_obstacle_flow.md)
-- [`code/runtime_setup_and_calibration.md`](code/runtime_setup_and_calibration.md)
-- [`../src/README.md`](../src/README.md)
+Active status:
 
-The published source is currently Hardware V1 evidence. PixyCam SPI and final PCB integration remain `[HW2-TBD]` until source and hardware tests match.
+- [`code/README.md`](code/README.md) — current Hardware V2 software status and completion gate;
+- [`../src/README.md`](../src/README.md) — intentionally cleared active source area.
+
+Engineering history / brainstorm:
+
+- [`../brainstorm/software-redesign/README.md`](../brainstorm/software-redesign/README.md);
+- [`../brainstorm/software-redesign/previous-docs/`](../brainstorm/software-redesign/previous-docs/);
+- [`../brainstorm/software-redesign/previous-source/`](../brainstorm/software-redesign/previous-source/);
+- [`../engineering-journal/2026-08-12-software-redesign.md`](../engineering-journal/2026-08-12-software-redesign.md).
+
+The previous software architecture, state machine, PixyCam plan and source are no longer active Hardware V2 claims. They are preserved to show the engineering process and to inform the next implementation.
 
 ## Testing
 
@@ -78,4 +82,4 @@ The published source is currently Hardware V1 evidence. PixyCam SPI and final PC
 - [`../v-photos/`](../v-photos/) — Hardware V1 robot views until replaced;
 - [`../video/`](../video/) — Hardware V1 Open video until replaced.
 
-Old information remains useful as iteration evidence, but active pages must identify it as Hardware V1 and state the Hardware V2 improvement. No file should be treated as final Hardware V2 evidence unless its own status says `[HW2-DONE]` or verified.
+Old information remains useful as iteration evidence, but active pages must identify it as history or brainstorming. No file should be treated as final Hardware V2 evidence unless its implementation and validation match the physical robot.

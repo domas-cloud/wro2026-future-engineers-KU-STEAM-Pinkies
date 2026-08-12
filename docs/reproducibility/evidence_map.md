@@ -2,14 +2,13 @@
 
 ## How to read this repository
 
-The repository contains two evidence levels:
+The repository contains three evidence levels:
 
-- `[HW1-HISTORY]` **Hardware V1** — verified historical robot, code, measurements, photos and video;
-- `[HW2-IMPROVEMENT]` **Hardware V2** — active custom-PCB/PixyCam redesign with confirmed architecture and missing implementation evidence.
+- `[HW1-HISTORY]` **Hardware V1** — verified historical robot, measurements, photos, video and archived documentation;
+- `[HW2-IMPROVEMENT]` **Hardware V2** — active custom-PCB/PixyCam redesign with confirmed hardware direction and missing implementation evidence;
+- **Software brainstorm/history** — previous source and software-design material preserved outside the active judge-facing path after the 2026-08-12 software reset.
 
-The earlier evidence map was archived at [`archivo/hardware-v1-esp32-250rpm/docs/reproducibility/evidence_map.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/reproducibility/evidence_map.md).
-
-> **[NEXT-REVIEW]** The master list of missing information, update locations and completion conditions is [`../../NEXT_REVIEW.md`](../../NEXT_REVIEW.md). Search that file for the matching `HW2-...` ID before updating any section.
+The master list of missing information, update locations and completion conditions is [`../../NEXT_REVIEW.md`](../../NEXT_REVIEW.md).
 
 ## Criterion 1 — mobility and mechanical design
 
@@ -71,30 +70,38 @@ Tracker IDs: `HW2-POWER-01`, `HW2-DRIVER-01`, `HW2-PCB-01`.
 
 ## Criterion 3 — software architecture and obstacle strategy
 
-### Evidence already available
+### Current active status
 
-- [`src/README.md`](../../src/README.md) — `[HW1-HISTORY]` honest status of the published Hardware V1 code;
-- [`software_architecture_improved.md`](../code/software_architecture_improved.md) — `[HW2-CONFIRMED]` target architecture;
-- [`vision_interface.md`](../code/vision_interface.md) — required PixyCam SPI contract;
-- [`pixycam_spi_integration_plan.md`](../code/pixycam_spi_integration_plan.md) — camera implementation and test plan;
-- [`software_state_machine_and_obstacle_flow.md`](../code/software_state_machine_and_obstacle_flow.md) — target state flow and unresolved thresholds;
-- [`control_algorithms.md`](../code/control_algorithms.md) — Hardware V1 low-level control reasoning.
+`[HW2-TBD]` The final Hardware V2 software architecture is **not yet claimed as complete**.
 
-### [HW2-IMPROVEMENT] What is changing
+On 2026-08-12 the previous active software pages and source were moved out of the active path because the software is being redesigned around the final Hardware V2 hardware.
 
-The Raspberry Pi/UART vision path is being replaced by first-generation PixyCam onboard colour processing and direct SPI block-data access from the ESP32.
+Active status pages:
+
+- [`docs/code/README.md`](../code/README.md);
+- [`src/README.md`](../../src/README.md).
+
+### Engineering history / brainstorm evidence
+
+- [`brainstorm/software-redesign/README.md`](../../brainstorm/software-redesign/README.md) — reason for the reset and new design questions;
+- [`previous-docs/`](../../brainstorm/software-redesign/previous-docs/) — exact pre-reset software documentation;
+- [`previous-source/`](../../brainstorm/software-redesign/previous-source/) — exact pre-reset source tree;
+- [`engineering-journal/2026-08-12-software-redesign.md`](../../engineering-journal/2026-08-12-software-redesign.md) — journal-ready record of the decision.
+
+This material proves iteration and previous software work, but it is not final Hardware V2 software evidence.
 
 ### [HW2-TBD] Evidence still required
 
 Tracker IDs: `HW2-VISION-02`, `HW2-VISION-03`, `HW2-SW-01`.
 
-- published PixyCam SPI source;
+- final source code;
+- tested PixyCam SPI communication;
 - final board configuration and pin map;
-- exact state transitions and fault handling;
+- implemented state transitions and fault handling;
 - matching code comments and diagrams;
 - red/green detection results;
-- stale/ambiguous-data tests;
-- repeated Obstacle Challenge validation.
+- stale/ambiguous-data tests if that handling is part of the final design;
+- repeated Open and Obstacle Challenge validation.
 
 ## Criterion 4 — systems thinking and engineering decisions
 
@@ -105,7 +112,10 @@ Tracker IDs: `HW2-VISION-02`, `HW2-VISION-03`, `HW2-SW-01`.
 - [`risk_and_failures.md`](../design/risk_and_failures.md);
 - [`hardware_v2_decision_register.md`](../hardware/hardware_v2_decision_register.md);
 - [`iteration_log.md`](../testing/iteration_log.md);
-- [`hardware_v2_validation_template.md`](../testing/hardware_v2_validation_template.md).
+- [`hardware_v2_validation_template.md`](../testing/hardware_v2_validation_template.md);
+- [`software-redesign journal entry`](../../engineering-journal/2026-08-12-software-redesign.md).
+
+The software reset itself is systems-thinking evidence: the team chose not to preserve a software architecture that no longer matched the changed perception, PCB, power and drive assumptions.
 
 ### [HW2-TBD] Evidence still required
 
@@ -115,7 +125,8 @@ Tracker IDs: `HW2-PCB-01`, `HW2-MOTOR-01`, `HW2-TEST-01`.
 - measured effect of faster speed on perception and turning;
 - V1 versus V2 comparison;
 - decisions tied to commit, photo, measurement or video evidence;
-- final explanation of rejected battery, motor and driver options.
+- final explanation of rejected battery, motor and driver options;
+- software decisions tied to implementation and retest evidence.
 
 ## Criterion 5 — reproducibility and GitHub quality
 
@@ -128,7 +139,7 @@ Tracker IDs: `HW2-PCB-01`, `HW2-MOTOR-01`, `HW2-TEST-01`.
 - [`submission_checklist.md`](submission_checklist.md);
 - [`full_rebuild_guide.md`](full_rebuild_guide.md);
 - [`models/README.md`](../../models/README.md);
-- archived Hardware V1 code, wiring and documentation.
+- archived Hardware V1 documentation and preserved software history.
 
 ### [HW2-TBD] Evidence still required
 
@@ -149,8 +160,9 @@ Tracker IDs: `HW2-REBUILD-01`, `HW2-MEDIA-01`, `HW2-TEST-01`.
 3. [`NEXT_REVIEW.md`](../../NEXT_REVIEW.md)
 4. [`Hardware V2 decision register`](../hardware/hardware_v2_decision_register.md)
 5. [`Hardware V2 PCB plan`](../hardware/hardware_v2_custom_pcb_plan.md)
-6. [`PixyCam SPI plan`](../code/pixycam_spi_integration_plan.md)
-7. [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
-8. [`Hardware V1 performance measurements`](../testing/performance_measurements.md)
+6. [`Software status`](../code/README.md)
+7. [`Software redesign brainstorm`](../../brainstorm/software-redesign/README.md)
+8. [`Hardware V2 validation template`](../testing/hardware_v2_validation_template.md)
+9. [`Hardware V1 performance measurements`](../testing/performance_measurements.md)
 
 This map does not claim that missing Hardware V2 artifacts already exist. An item becomes `[HW2-DONE]` only when the implementation, repository files and measured evidence describe the same physical robot.

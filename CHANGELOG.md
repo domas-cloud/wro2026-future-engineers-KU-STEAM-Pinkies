@@ -2,7 +2,19 @@
 
 This changelog tracks repository milestones so judges can distinguish verified history from active development.
 
-## Current milestone
+## Unreleased — Hardware V2 software redesign reset — 2026-08-12
+
+- intentionally cleared the active Hardware V2 software documentation and source path before the next software implementation;
+- preserved the exact pre-reset software documentation under `brainstorm/software-redesign/previous-docs/`;
+- preserved the exact pre-reset source tree under `brainstorm/software-redesign/previous-source/`;
+- added `brainstorm/software-redesign/README.md` to explain why the software architecture is being reconsidered and which questions must be answered by testing;
+- added `engineering-journal/2026-08-12-software-redesign.md` as a journal-ready record of the decision;
+- replaced active `docs/code/` material with software-reset status pages rather than keeping untested architecture, state-machine or threshold claims;
+- cleared active `src/` to a status page so new Hardware V2 code starts from the final PCB and hardware interfaces;
+- kept the confirmed Hardware V2 hardware constraints: ESP32-WROOM-32, first-generation PixyCam over wired SPI, BNO085, front VL53L1X, 2x VL53L4CD and MG90S;
+- did not promote any new software algorithm to active documentation without implementation and physical testing.
+
+## Current hardware milestone
 
 ### v1.2 hardware-v2 architecture, text alignment and follow-up tracking — 2026-07-21
 
@@ -32,7 +44,7 @@ This changelog tracks repository milestones so judges can distinguish verified h
 - `v1.3 hardware-v2 component lock` — exact LiPo, motor, driver, regulators and ESP32 PCB implementation selected;
 - `v1.4 hardware-v2 schematic` — reviewed schematic and locked pin map;
 - `v1.5 hardware-v2 prototype` — assembled PCB and bench-validation evidence;
-- `v1.6 hardware-v2 field-tested` — PixyCam, motor and repeated Open/Obstacle results;
+- `v1.6 hardware-v2 field-tested` — PixyCam, new software, motor and repeated Open/Obstacle results;
 - `v2.0 final hardware documentation` — final BOM, PCB production files, code, calibration and rebuild guide.
 
 ## v0.8 regional-ready — 2026-04-07
