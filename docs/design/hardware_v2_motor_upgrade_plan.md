@@ -1,87 +1,19 @@
-# Hardware V2: Faster Drive Motor Plan
+# Faster motor for Hardware V2
 
-## Goal
+The V1 car used an N20 6 V 250 rpm motor. We chose it after trying 50, 250 and 1000 rpm versions because it was the easiest useful compromise on that robot.
 
-Increase vehicle speed without losing the repeatability that the current 250 rpm motor provided. The new motor must be selected from measured robot performance, not from rpm alone.
+For V2 we want more speed, so we are reopening the motor choice. The custom PCB and new power system also mean we can choose a driver that better matches the motor instead of designing around the old L298N module.
 
-## Why the previous decision is being reopened
+We do not want to choose from rpm alone. For every serious candidate we will record the exact model, rated voltage, gearbox/rpm, current data, shaft/mount dimensions and the wheel size used. On the car we will measure loaded speed or a fixed-distance time, launch behaviour, current, temperature, straight drift and corner behaviour.
 
-Hardware V1 selected the N20 6 V 250 rpm motor because it was the best balance among the tested 50, 250 and 1000 rpm options. Hardware V2 changes the electrical architecture and creates an opportunity to use a stronger motor driver, cleaner power distribution and a motor that provides more usable speed under load.
-
-This does not make the old choice wrong. It creates a new design point with different constraints.
-
-## Candidate data required
-
-For every candidate motor record:
-
-- manufacturer and exact model;
-- rated voltage;
-- no-load rpm;
-- no-load current;
-- rated current and torque, if published;
-- stall current and stall torque;
-- gearbox ratio;
-- mass;
-- shaft diameter and mounting dimensions;
-- wheel diameter used in the test;
-- measured loaded speed on the actual robot.
-
-## Speed calculation
-
-Estimate theoretical linear speed using:
+A simple speed estimate is still useful:
 
 `vehicle speed = motor output rpm × wheel circumference / 60`
 
-This is only a starting estimate. Real speed must be measured because gearbox losses, battery sag, wheel slip, robot mass and cornering load reduce the usable result.
+but it is only an estimate. Battery sag, gearbox losses, tyre slip and the real mass of the car matter more once it is on the floor.
 
-## Test matrix
+The motor we keep should make the car faster without causing brownouts, excessive wheelspin, uncontrollable corner exits or a large drop in repeated-run reliability. We also need enough current/thermal margin in the H-bridge and connectors.
 
-| Test | What to record | Acceptance direction |
-|---|---|---|
-| free-wheel test | rpm/current with axle lifted | confirms wiring and approximate speed |
-| launch test | peak current and time to stable speed | no brownout, no uncontrolled wheelspin |
-| 3 m straight | time, drift and controller correction | faster than V1 without major drift increase |
-| repeated 90 degree turns | overshoot, recovery time and motor temperature | controllable corner exit |
-| three-lap run | completion rate and total time | faster median time with acceptable reliability |
-| blocked/stall protection | driver response and current limit | no PCB or wiring damage |
-| battery sag | minimum battery and logic rail voltage | logic remains stable during peaks |
+After the motor changes we will retune turn timing, steering response and obstacle reaction distance because the old thresholds were developed at the V1 speed. We will also check the LEGO differential, shaft coupling and motor mount for the higher load.
 
-## Selection rule
-
-Do not choose the candidate with the highest unloaded rpm. Choose the fastest candidate that:
-
-- completes repeated turns without unstable overshoot;
-- remains inside the motor-driver and battery current limits;
-- does not cause controller resets or sensor dropouts;
-- maintains reliable three-lap completion;
-- fits the chassis and weight budget;
-- leaves tuning margin for both Open and Obstacle challenges.
-
-## Software consequences
-
-A faster motor will require retesting:
-
-- PWM operating range and acceleration ramp;
-- turn-trigger distance;
-- steering gains;
-- derivative filtering;
-- obstacle reaction distance;
-- braking or coast behaviour;
-- finish-section stopping logic;
-- stale-camera-data fallback at the higher approach speed.
-
-## Mechanical consequences
-
-Check:
-
-- differential and gear durability;
-- shaft coupler and wheel retention;
-- rear-wheel grip and slip;
-- chassis vibration;
-- steering response at higher speed;
-- stopping distance;
-- mass distribution and rollover tendency.
-
-## Final evidence table
-
-The final documentation should contain a table comparing Hardware V1 and each serious Hardware V2 candidate with measured current, loaded straight speed, lap time, corner overshoot, temperature and successful-run rate.
+The final comparison will sit here once we have real candidate measurements rather than guessed values.

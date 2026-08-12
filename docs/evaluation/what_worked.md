@@ -1,32 +1,9 @@
-# What Worked — Hardware V1 Evidence
+# What worked on the first robot
 
-## Status
+Several V1 changes were good enough that we are carrying the ideas into Hardware V2.
 
-The previous page was archived at [`archivo/hardware-v1-esp32-250rpm/docs/evaluation/what_worked.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/evaluation/what_worked.md).
+The corrected steering linkage reduced unnecessary servo load and made the centre more repeatable. Silicone front tyres gave much better steering grip. The LEGO differential turned more smoothly than the metal solution we had tried earlier. Rigid BNO085 mounting also made heading behaviour more consistent.
 
-## Supported Hardware V1 lessons
+The 250 rpm N20 motor was a good compromise for V1 even though we now want more speed. More importantly, the motor tests taught us not to choose the highest rpm without checking torque and control.
 
-### Mechanics
-
-- corrected steering geometry reduced the large lever-arm problem;
-- MG90S became sufficient after mechanical resistance was reduced;
-- silicone front wheels improved useful steering grip;
-- LEGO differential reduced turning resistance and binding;
-- compact packaging improved manoeuvrability.
-
-### Sensors and control
-
-- BNO085 provided heading feedback;
-- front/side ToF sensing supported local distance control;
-- rigid mounting improved consistency;
-- ESP32 handled the real-time controller.
-
-### Process
-
-- comparing repeated runs was more useful than judging one best run;
-- mechanical improvements made software tuning easier;
-- preserving rejected versions made the engineering decisions explainable.
-
-## Hardware V2 caution
-
-The Raspberry Pi camera, 18650 power system, L298N and 250 rpm motor are not active V2 choices. PixyCam, LiPo, custom PCB and the faster motor require new validation before being added to this list.
+These are the parts of V1 we treat as useful engineering lessons rather than things that need to be redesigned automatically.
