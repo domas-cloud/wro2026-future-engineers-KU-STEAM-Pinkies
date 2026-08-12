@@ -1,41 +1,7 @@
-# Software Flow And State Logic
+# Moved to software brainstorm
 
-## Version status
+`[HW2-TBD]` This page is no longer active Hardware V2 software documentation.
 
-The previous Hardware V1 flow description was archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/software_flow_and_state_logic.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/code/software_flow_and_state_logic.md).
+The software architecture is being redesigned. The exact pre-reset version of this file is preserved under [`../../brainstorm/software-redesign/previous-docs/`](../../brainstorm/software-redesign/previous-docs/).
 
-Use [`software_state_machine_and_obstacle_flow.md`](software_state_machine_and_obstacle_flow.md) as the active Hardware V2 state reference.
-
-## Hardware V2 flow summary
-
-```text
-power on
-  -> initialize ESP32, sensors, PixyCam and outputs
-  -> initialization valid?
-       no -> safe fault state
-       yes -> wait for physical start
-  -> read yaw, ToF and Pixy blocks
-  -> trusted red/green block?
-       yes -> select legal avoidance reference
-       no  -> neutral local control
-  -> corner condition?
-       yes -> execute corner and update heading reference
-       no  -> continue straight/avoidance control
-  -> run complete?
-       yes -> stop using documented final state
-       no  -> repeat
-```
-
-## Exact implementation still required
-
-- final pin map;
-- Pixy SPI module;
-- accepted block rules;
-- stale and ambiguous handling;
-- corner trigger;
-- lap/finish logic;
-- parking logic;
-- fault transitions;
-- final stop/restart behaviour.
-
-The final diagram must be regenerated from the actual tested source, not from an earlier Pi/UART concept.
+Use [`README.md`](README.md) for the current software status. Do not use the previous architecture, thresholds, state flow or calibration notes as final Hardware V2 evidence until the new implementation is written and tested on the physical robot.

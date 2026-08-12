@@ -1,37 +1,7 @@
-# Navigation Strategy
+# Moved to software brainstorm
 
-## Version status
+`[HW2-TBD]` This page is no longer active Hardware V2 software documentation.
 
-The previous Hardware V1 strategy was archived at [`archivo/hardware-v1-esp32-250rpm/docs/code/navigation_strategy_improved.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/code/navigation_strategy_improved.md).
+The software architecture is being redesigned. The exact pre-reset version of this file is preserved under [`../../brainstorm/software-redesign/previous-docs/`](../../brainstorm/software-redesign/previous-docs/).
 
-## Hardware V2 target strategy
-
-- BNO085 provides heading feedback;
-- front VL53L1X contributes corner-approach information;
-- side VL53L4CD sensors provide local spacing;
-- PixyCam identifies red/green pillar blocks;
-- ESP32 selects the required passing reference and controls steering/motor outputs.
-
-## Obstacle rule
-
-- red pillar → pass right;
-- green pillar → pass left.
-
-The final code must define how block position and size become a path offset, when avoidance begins/ends, and how camera decisions interact with corner logic.
-
-## Direction and corner logic
-
-The Hardware V1 code selected direction and corner entry from sensor/sector conditions. Hardware V2 must publish the exact final method after it is implemented and tested. Old fixed-threshold descriptions should not override the source code.
-
-## Finish and parking
-
-The final strategy must document:
-
-- direction selection;
-- lap/sector counting;
-- finish detection;
-- parking approach;
-- final steering state;
-- restart behaviour.
-
-Parking and final Obstacle behaviour remain `TBD` until the final runtime is tested.
+Use [`README.md`](README.md) for the current software status. Do not use the previous architecture, thresholds, state flow or calibration notes as final Hardware V2 evidence until the new implementation is written and tested on the physical robot.
