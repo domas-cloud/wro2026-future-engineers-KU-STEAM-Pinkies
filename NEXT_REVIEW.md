@@ -41,18 +41,20 @@ Hardware V1 remains valid historical evidence. It used:
 
 Old information must not be silently deleted or presented as current Hardware V2 information. It should be labelled as Hardware V1 history and linked to the relevant improvement.
 
+Software that is being reconsidered belongs in [`brainstorm/software-redesign/`](brainstorm/software-redesign/) rather than the active judge-facing software path.
+
 ### [HW2-IMPROVEMENT] Active redesign
 
 | Hardware V1 history | Hardware V2 improvement | Current status |
 |---|---|---|
 | Raspberry Pi Zero + camera | first-generation PixyCam / CMUcam5 with onboard colour processing | `[HW2-CONFIRMED]` |
-| Pi-to-ESP32 UART | direct wired SPI connection from PixyCam to ESP32 | `[HW2-CONFIRMED]` |
+| Pi-to-ESP32 UART | direct wired SPI connection from PixyCam to ESP32 | `[HW2-CONFIRMED]` hardware interface |
 | ESP32 development board + perfboard | purpose-built custom PCB around ESP32-WROOM-32 | `[HW2-VERIFY]` design incomplete |
 | `2x 18650` Li-ion supply | LiPo-based power system | `[HW2-TBD]` exact pack unknown |
 | `N20 250 rpm` motor | faster geared DC motor | `[HW2-TBD]` exact model unknown |
 | `L298N` module | custom-PCB H-bridge matched to the selected motor | `[HW2-TBD]` exact IC unknown |
 | older `VL53L1CD` side-sensor text | correct side sensors documented as `2x VL53L4CD` | `[HW2-CONFIRMED]` |
-| Hardware V1 UART vision parser | PixyCam SPI interface and obstacle-decision logic | `[HW2-TBD]` firmware not implemented |
+| Hardware V1 software + first V2 software plan | clean Hardware V2 software redesign based on final hardware | `[HW2-TBD]` active software reset on 2026-08-12 |
 | Hardware V1 media | new Hardware V2 photos and Open/Obstacle videos | `[HW2-TBD]` not recorded |
 
 ## Confirmed Hardware V2 facts
@@ -154,7 +156,7 @@ Update these files when known:
 - `docs/hardware/electronics_overview.md`;
 - `docs/hardware/hardware_v2_custom_pcb_plan.md`;
 - `schemes/custom_pcb_description.md`;
-- `src/lib/Engine/` or its Hardware V2 replacement;
+- active `src/` after the new motor-control module is implemented;
 - power and thermal validation tables.
 
 Completion condition: the driver is electrically matched to the final motor and LiPo and passes the thermal test.
@@ -189,13 +191,12 @@ Update these files when known:
 - `schemes/README.md`;
 - `schemes/custom_pcb_description.md`;
 - `schemes/wiring_overview.md`;
-- `src/platformio.ini`;
-- `src/README.md`;
+- `src/` when the new firmware project is created;
 - final rebuild guides.
 
 Completion condition: another person can manufacture, assemble, program and test the same board from repository files.
 
-### 5. PixyCam configuration and SPI firmware
+### 5. PixyCam configuration and SPI software
 
 **Marker:** `[HW2-TBD] HW2-VISION-02 / HW2-VISION-03`
 
@@ -207,28 +208,21 @@ Information required:
 - Pixy signature number used for red;
 - Pixy signature number used for green;
 - PixyMon screenshots or exported settings;
-- exact fields read by ESP32, such as signature, x, y, width and height;
-- block-selection rule when several objects are visible;
-- minimum size or repeated-frame filtering;
-- stale-data timeout;
-- ambiguous or camera-fault behaviour;
+- exact fields that prove useful on the final robot;
+- block-selection or filtering approach selected from testing;
 - measured detection and stable-decision distance;
 - bright, dark and side-lit test results;
 - motor-on and servo-on communication stability;
-- final obstacle-decision code.
+- final obstacle-decision implementation.
 
-Update these files when known:
+Development path:
 
-- `docs/code/pixycam_spi_integration_plan.md`;
-- `docs/code/vision_interface.md`;
-- `docs/code/software_architecture_improved.md`;
-- `docs/code/software_state_machine_and_obstacle_flow.md`;
-- `docs/code/runtime_setup_and_calibration.md`;
-- `src/README.md`;
-- Hardware V2 source code;
-- validation and final-result tables.
+- record experimental ideas and rejected approaches under `brainstorm/software-redesign/`;
+- publish only tested software under `src/`;
+- update [`docs/code/README.md`](docs/code/README.md) first, then create detailed active software pages only when the implementation is stable enough to document;
+- update validation and final-result tables with real measurements.
 
-Completion condition: published source and measured tests demonstrate both red and green decisions through SPI.
+Completion condition: published source and measured tests demonstrate reliable PixyCam communication and the required red/green driving decisions.
 
 ### 6. Sensor placement and final geometry
 
@@ -257,35 +251,36 @@ Update these files when known:
 
 Completion condition: all placements and dimensions match the physical Hardware V2 robot.
 
-### 7. Firmware alignment
+### 7. Software redesign and firmware alignment
 
 **Marker:** `[HW2-TBD] HW2-SW-01`
 
-Current source is Hardware V1 evidence. Hardware V2 still requires:
+The previous active software was reset on 2026-08-12. Exact pre-reset documentation and source are preserved under `brainstorm/software-redesign/` and recorded in the Engineering Journal.
 
-- PixyCam SPI implementation;
-- removal or isolation of active Pi/UART assumptions;
-- final PCB pin map;
-- explicit sensor type selection instead of inferring sensor type from one GPIO number;
-- verified start-button pin;
-- documented corner-trigger formula;
-- final stop and steering-centre behaviour;
-- review of derivative/error-state handling;
-- camera, sensor and driver fault handling;
-- final PlatformIO environment;
-- code comments matching the state diagrams;
-- build and upload test on the custom PCB.
+Hardware V2 still requires:
+
+- final software architecture selected from the real Hardware V2 constraints;
+- minimal hardware bring-up for ESP32, PixyCam, BNO085, ToF sensors, servo and motor driver;
+- final PCB pin map and matching code configuration;
+- verified start-button and finish behaviour;
+- explicit fault handling for required sensors and communication;
+- navigation / corner logic developed from field testing rather than copied thresholds;
+- obstacle strategy implemented with the tested PixyCam data;
+- parking logic if used by the final solution;
+- final PlatformIO environment or equivalent reproducible build configuration;
+- code comments and diagrams matching the real implementation;
+- build, upload and runtime test on the custom PCB.
 
 Update these files when complete:
 
-- `src/src/main.cpp`;
-- `src/lib/` modules;
-- `src/platformio.ini`;
-- `src/README.md`;
-- all active `docs/code/` pages;
-- wiring and pin-map documents.
+- `src/` — new active source tree;
+- `docs/code/README.md` — status and evidence index;
+- new detailed `docs/code/` pages created only for implemented/tested logic;
+- wiring and pin-map documents;
+- `engineering-journal/` with important iterations and rejected approaches;
+- `brainstorm/software-redesign/` with experiments before they become active decisions.
 
-Completion condition: code, PCB, documentation and measured behaviour describe the same implementation.
+Completion condition: source, PCB, documentation and measured behaviour describe the same implementation.
 
 ### 8. Validation results
 
@@ -338,7 +333,7 @@ Update:
 - evidence map;
 - final submission pack.
 
-Completion condition: media clearly shows the same Hardware V2 configuration documented in the BOM, PCB and code.
+Completion condition: media clearly shows the same Hardware V2 configuration documented in the BOM, PCB and source.
 
 ### 10. Final reproducibility package
 
@@ -372,27 +367,29 @@ Completion condition: a technically competent person can rebuild and validate th
 ## What to do when new information is provided
 
 1. Open this file and find the matching `HW2-...` item.
-2. Copy the current active file into `archivo/` before rewriting it.
-3. Replace only the relevant `TBD` with confirmed facts.
-4. Add the source: datasheet, photo, CAD file, code commit, measurement or video.
-5. Update the decision register and changelog.
-6. Update every linked file listed under that item.
-7. Keep Hardware V1 information labelled as history rather than deleting it.
-8. Change the marker to `[HW2-VERIFY]` when selected but not tested.
-9. Change it to `[HW2-DONE]` only after implementation and evidence match.
+2. Preserve the previous confirmed state before rewriting active documentation.
+3. For software experiments, use `brainstorm/software-redesign/` until the approach is implemented and tested.
+4. Replace only the relevant `TBD` with confirmed facts.
+5. Add the source: datasheet, photo, CAD file, code commit, measurement or video.
+6. Update the decision register and changelog.
+7. Update every linked file listed under that item.
+8. Keep Hardware V1 information labelled as history rather than deleting it.
+9. Change the marker to `[HW2-VERIFY]` when selected but not tested.
+10. Change it to `[HW2-DONE]` only after implementation and evidence match.
 
 ## Next full-review procedure
 
 During the next detailed repository review:
 
 1. open `NEXT_REVIEW.md` first;
-2. search active files for `Raspberry Pi`, `UART`, `L298N`, `2x 18650`, `250 rpm` and `VL53L1CD`;
-3. outside `archivo/`, each old term must either be explicitly labelled `[HW1-HISTORY]` or explained as a V1-to-V2 improvement;
+2. search active judge-facing files for `Raspberry Pi`, `UART`, `L298N`, `2x 18650`, `250 rpm` and `VL53L1CD`;
+3. outside `archivo/` and `brainstorm/`, each old term must either be explicitly labelled `[HW1-HISTORY]` or explained as a V1-to-V2 improvement;
 4. search for `HW2-TBD`, `HW2-VERIFY`, `TBD` and `NEXT-REVIEW`;
-5. compare the active BOM, PCB plan, source code, photos and test tables;
-6. confirm that no old media or result is described as final Hardware V2 evidence;
-7. confirm that no missing measurement has been replaced by an invented value;
-8. keep the PR in draft until every required final item is genuinely complete.
+5. compare the active BOM, PCB plan, active source status, photos and test tables;
+6. confirm that brainstorm software is not described as final Hardware V2 evidence;
+7. confirm that no old media or result is described as final Hardware V2 evidence;
+8. confirm that no missing measurement has been replaced by an invented value;
+9. keep the PR in draft until every required final item is genuinely complete.
 
 ## Current next priorities
 
@@ -400,7 +397,8 @@ During the next detailed repository review:
 2. `[HW2-TBD]` identify and test the faster motor;
 3. `[HW2-TBD]` select the H-bridge from measured motor current;
 4. `[HW2-TBD]` lock ESP32 PCB implementation and pin map;
-5. `[HW2-TBD]` implement PixyCam SPI firmware;
-6. `[HW2-VERIFY]` assemble and bench-test the PCB;
-7. `[HW2-VERIFY]` complete repeated Open and Obstacle tests;
-8. `[HW2-TBD]` replace Hardware V1 media with final Hardware V2 media.
+5. `[HW2-TBD]` verify PixyCam SPI bring-up on the real controller/PCB;
+6. `[HW2-TBD]` design and implement the new Hardware V2 software from those verified interfaces;
+7. `[HW2-VERIFY]` assemble and bench-test the PCB;
+8. `[HW2-VERIFY]` complete repeated Open and Obstacle tests;
+9. `[HW2-TBD]` replace Hardware V1 media with final Hardware V2 media.
