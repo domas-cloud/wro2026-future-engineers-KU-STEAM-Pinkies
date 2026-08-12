@@ -1,39 +1,19 @@
-# Risk And Failure Analysis
+# Risks and failures
 
-## Version status
+Some of the most useful changes came from things that did not work well on the first robot. The early steering geometry overloaded the servo, low-grip front wheels wasted steering motion, the metal differential bound in corners and a loose IMU mount made heading less repeatable. Those problems are why we now test mechanics and software together instead of trying to tune around a mechanical fault.
 
-The previous Hardware V1 analysis was archived at [`archivo/hardware-v1-esp32-250rpm/docs/design/risk_and_failures.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/design/risk_and_failures.md).
+For V2 the main risks are different because the power system, camera, PCB and motor are changing.
 
-## Historical Hardware V1 risks and lessons
-
-- large steering lever arm increased servo load;
-- excessive useful steering angle reduced stability;
-- front-wheel slip weakened turning;
-- an unsuitable differential increased binding;
-- motor extremes were less useful than the V1 middle option;
-- loose IMU mounting reduced heading consistency;
-- mechanics and software had to be improved together.
-
-## Hardware V2 risk register
-
-| Risk | Likely effect | Required mitigation/evidence |
+| Risk | What could happen | What we will check |
 |---|---|---|
-| unknown LiPo maximum voltage | damaged electronics | select exact pack before schematic release |
-| underestimated motor stall current | H-bridge or connector failure | safe current measurement and design margin |
-| servo current spike | reset or sensor fault | separate/robust rail, capacitance and transient test |
-| motor noise | SPI/I2C errors | suppression, layout separation and motor-on communication test |
-| PixyCam false colour match | wrong passing side | trained signatures and varied-lighting test matrix |
-| PixyCam stale/ambiguous block | unstable avoidance | explicit rejection and timeout handling |
-| ToF address/startup conflict | missing local distance | XSHUT/startup sequence and ten-cycle validation |
-| wrong PCB pin map | non-functional board | schematic-code cross-review |
-| faster speed | late detection and overshoot | reaction-distance and repeated track testing |
-| loose connectors | intermittent round failure | keyed connectors and strain relief |
-| thermal overload | shutdown or damage | repeated-load temperature measurement |
+| wrong LiPo voltage or weak regulator margin | damaged parts or resets | lock the exact pack before final PCB review and measure every rail |
+| motor stall current higher than expected | H-bridge/connector overheating | measure current safely and leave design margin |
+| MG90S current spike | ESP32 reset or sensor dropout | measure rail sag while steering under load |
+| motor electrical noise | SPI/I2C errors | suppression/layout checks and communication test with motor running |
+| PixyCam colour confusion | wrong obstacle decision | test signatures under several lighting conditions |
+| ToF startup/address conflict | missing distance reading | controlled startup and repeated full power cycles |
+| wrong PCB pin map | board and software do not match | cross-check schematic, connector labels and source before testing |
+| higher vehicle speed | late turns or obstacle reaction | repeat reaction-distance and track tests after the motor change |
+| heat in motor driver/regulators | unstable or damaged electronics | measure temperature after repeated runs |
 
-## Failure-log format
-
-| Date | Revision/commit | Failure | Root-cause hypothesis | Change | Retest | Evidence |
-|---|---|---|---|---|---|---|
-| `TBD` | `TBD` | observed behaviour | testable cause | controlled change | measured result | link |
-
-Hardware V2 conclusions must be based on the final assembled system, not copied from Hardware V1.
+When a real failure happens on V2 we will add the date, robot revision, what we saw, what we changed and the retest result to [`../testing/iteration_log.md`](../testing/iteration_log.md).

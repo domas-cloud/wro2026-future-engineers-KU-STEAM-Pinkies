@@ -1,269 +1,134 @@
 # KU STEAM Pinkies — WRO 2026 Future Engineers
 
-## Quick navigation
+We are building an autonomous car for the WRO 2026 Future Engineers category. This repository is our engineering record: mechanical parts, electronics, test notes, old versions and, when it is ready, the final software.
 
-| Purpose | Open |
-|---|---|
-| Start here | [`START_HERE.md`](START_HERE.md) |
-| **Continue the next review** | **[`NEXT_REVIEW.md`](NEXT_REVIEW.md)** |
-| Hardware V2 status | [`Hardware V2 decision register`](docs/hardware/hardware_v2_decision_register.md) |
-| Custom PCB work | [`Custom PCB migration plan`](docs/hardware/hardware_v2_custom_pcb_plan.md) |
-| Active BOM | [`Parts list`](docs/hardware/parts_list.md) |
-| Electronics architecture | [`Electronics overview`](docs/hardware/electronics_overview.md) |
-| Software redesign status | [`Software status`](docs/code/README.md) |
-| Software brainstorm/history | [`Software redesign brainstorm`](brainstorm/software-redesign/README.md) |
-| Motor upgrade | [`Motor upgrade plan`](docs/design/hardware_v2_motor_upgrade_plan.md) |
-| Testing | [`Hardware V2 validation template`](docs/testing/hardware_v2_validation_template.md) |
-| Evidence by rubric area | [`Evidence map`](docs/reproducibility/evidence_map.md) |
-| Historical Hardware V1 | [`archivo/hardware-v1-esp32-250rpm/`](archivo/hardware-v1-esp32-250rpm/) |
+The robot is currently going through its second major hardware version. The first version worked and gave us useful test data, but during the summer we decided to rebuild the electronics around a custom PCB, remove the Raspberry Pi Zero, use a PixyCam for colour detection, move to a LiPo battery and try a faster drive motor.
 
-> **Repository status:** `[HW1-HISTORY]` Hardware V1 is the last verified and measured robot baseline. `[HW2-IMPROVEMENT]` Hardware V2 is the active redesign. Hardware V2 must not be described as final until its exact motor, motor driver, LiPo, regulators, PCB files, software and repeated field results are available.
+The old robot has not been deleted. We keep it under [`archivo/hardware-v1-esp32-250rpm/`](archivo/hardware-v1-esp32-250rpm/) because it shows how the design developed and why several parts were changed.
 
-> **Software status:** on **2026-08-12** the active Hardware V2 software documentation and source were intentionally reset. Previous software material was preserved under [`brainstorm/software-redesign/`](brainstorm/software-redesign/) so the next implementation can be designed from the final Hardware V2 hardware rather than from old assumptions.
+## Team
 
-> **[NEXT-REVIEW]** All missing information, update locations and completion conditions are indexed in [`NEXT_REVIEW.md`](NEXT_REVIEW.md). Search the repository for `HW2-TBD`, `HW2-VERIFY` or `NEXT-REVIEW` during the next check.
+- **Marius** — software and mechanical design
+- **Domas** — project coordination, testing and documentation
+- **Jonas** — electronics and PCB work
 
-We are **KU STEAM Pinkies**, competing in **WRO 2026 Future Engineers**. This repository records the engineering process rather than hiding earlier versions. When an active design changes, previous work is preserved as engineering history before the judge-facing version is rewritten.
+## Where the project is now
 
-## Status markers
+The mechanical layout is mostly based on the working first robot. The biggest changes are in electronics, power and vision.
 
-- `[HW1-HISTORY]` — verified older evidence;
-- `[HW2-IMPROVEMENT]` — what changed or will improve after Hardware V1;
-- `[HW2-CONFIRMED]` — selected Hardware V2 fact;
-- `[HW2-TBD]` — exact information is still missing;
-- `[HW2-VERIFY]` — selected but still needs a real test;
-- `[HW2-DONE]` — implementation and evidence are complete;
-- `[NEXT-REVIEW]` — item to check during the next repository review.
-
-## Contents
-
-- [1. Version map](#1-version-map)
-- [2. Team](#2-team)
-- [3. Verified Hardware V1 baseline](#3-verified-hardware-v1-baseline)
-- [4. Confirmed Hardware V2 architecture](#4-confirmed-hardware-v2-architecture)
-- [5. Decisions still open](#5-decisions-still-open)
-- [6. Mechanical engineering history](#6-mechanical-engineering-history)
-- [7. Electronics and sensing](#7-electronics-and-sensing)
-- [8. Software status](#8-software-status)
-- [9. Testing evidence](#9-testing-evidence)
-- [10. Reproducibility status](#10-reproducibility-status)
-- [11. Photos and video](#11-photos-and-video)
-- [12. Repository layout](#12-repository-layout)
-- [13. Current conclusion](#13-current-conclusion)
-
-## 1. Version map
-
-| Version | Meaning | Evidence state |
+| Part | Previous robot | Hardware V2 |
 |---|---|---|
-| `[HW1-HISTORY]` Hardware V1 | ESP32 development-board/perfboard robot with Raspberry Pi Zero, `N20 250 rpm`, `L298N` and `2x 18650` supply | historical working and measured baseline |
-| `[HW2-IMPROVEMENT]` Hardware V2 | custom-PCB robot using ESP32-WROOM-32 and first-generation PixyCam over SPI | hardware architecture confirmed; implementation, software and validation incomplete |
+| main controller | ESP32 development board | ESP32-WROOM-32 in the custom-PCB design |
+| camera processing | Raspberry Pi Zero + camera | first-generation PixyCam / CMUcam5 |
+| camera link | UART from Pi to ESP32 | wired SPI from PixyCam to ESP32 |
+| front distance sensor | VL53L1X | VL53L1X |
+| side distance sensors | two VL53L4CD | two VL53L4CD |
+| IMU | BNO085 | BNO085 |
+| steering | MG90S | MG90S |
+| battery | 2x 18650 Li-ion | LiPo; exact pack still being selected |
+| drive motor | N20 6 V 250 rpm | faster motor; exact model still being tested/selected |
+| motor driver | L298N module | H-bridge on the custom PCB; final IC follows the motor choice |
+| wiring | modules + perfboard | custom PCB |
 
-Hardware V1 material is not presented as the current target. It remains valuable because it shows real iterations, measured results, rejected choices and the reason for the Hardware V2 redesign. The exact V1-to-V2 improvement map is in [`NEXT_REVIEW.md`](NEXT_REVIEW.md).
+The new software is also being rebuilt. We cleared the active software folder on 12 August because the old program still assumed the Pi/UART architecture. The old code and software notes are in [`brainstorm/software-redesign/`](brainstorm/software-redesign/) so we can reuse useful ideas without pretending that the old program already matches the new robot.
 
-## 2. Team
+## Mechanical development
 
-- **Marius** — software development and mechanical design;
-- **Domas** — project coordination, testing and documentation;
-- **Jonas** — electronics and hardware design.
+Our first versions were larger and harder to tune. The current chassis is compact, with rear-wheel drive and front steering. The working V1 chassis was about **21 cm long, 10 cm wide and 8 cm high**. Those measurements will be taken again after the V2 electronics and battery are mounted.
 
-Responsibilities are divided, but major decisions are reviewed as one robot system because mechanics, electronics, power and software affect each other.
+### Steering
 
-## 3. Verified Hardware V1 baseline
+Steering went through several versions. The early mechanism put too much load on the servo because of the lever geometry. We shortened the lever arm and corrected the linkage instead of solving the problem by fitting a stronger servo. This made the centre position more repeatable and reduced unnecessary servo load.
 
-`[HW1-HISTORY]` The last fully documented baseline used:
+We kept the `MG90S` because the steering mechanism worked reliably after the geometry was corrected. Final centre repeatability and steering limits still need to be checked again at the higher V2 speed.
 
-- rear-wheel drive and front-wheel steering;
-- ESP32 low-level control;
-- Raspberry Pi Zero camera processing;
-- `BNO085` heading feedback;
-- one front `VL53L1X` and two side ToF sensors;
-- `MG90S` steering servo;
-- `N20 6 V 250 rpm` drive motor;
-- `L298N` module;
-- `2x 18650` Li-ion supply;
-- perfboard-based integration;
-- LEGO rear differential and custom silicone front wheels.
+### Wheels and differential
 
-The old Raspberry Pi, UART, perfboard, battery and motor documents are preserved under [`archivo/hardware-v1-esp32-250rpm/`](archivo/hardware-v1-esp32-250rpm/). The previous software source and software-planning documents are additionally preserved under [`brainstorm/software-redesign/`](brainstorm/software-redesign/). The existing schematic PDF and current robot photos describe Hardware V1 unless explicitly stated otherwise.
+The front wheels use custom silicone tyres. They gave noticeably better grip than the earlier wheels, so more of the servo movement became real steering instead of tyre slip.
 
-`[HW2-IMPROVEMENT]` Hardware V2 removes the Pi/UART path, changes to PixyCam SPI, moves to a custom PCB, changes to LiPo power and reopens the motor/driver selection.
+At the rear we use a LEGO differential. An earlier metal differential created more binding in corners. The LEGO unit gave smoother turns on the first robot and is being kept as the baseline for V2. We will still check it again with the faster motor.
 
-## 4. Confirmed Hardware V2 architecture
+### Motor testing from the first robot
 
-The team has confirmed the following hardware direction:
+For Hardware V1 we compared `50 rpm`, `250 rpm` and `1000 rpm` N20 motors. The 50 rpm motor was too slow for the way we wanted the car to drive. The 1000 rpm option was fast but gave too little useful control and torque for that build. The 250 rpm motor was the best compromise and became the V1 motor.
 
-| Subsystem | Hardware V2 decision | Status |
-|---|---|---|
-| main controller | `ESP32-WROOM-32` | `[HW2-CONFIRMED]` |
-| perception | first-generation `PixyCam` / CMUcam5 with onboard colour processing | `[HW2-CONFIRMED]` |
-| camera link | wired `SPI` | `[HW2-CONFIRMED]` |
-| front distance sensor | `VL53L1X` | `[HW2-CONFIRMED]` |
-| side distance sensors | `2x VL53L4CD` | `[HW2-CONFIRMED]` |
-| orientation | `BNO085` | `[HW2-CONFIRMED]` |
-| steering | `MG90S` | `[HW2-CONFIRMED]` |
-| power chemistry | LiPo | `[HW2-CONFIRMED]` direction; exact pack `[HW2-TBD]` |
-| drive motor | faster than the Hardware V1 `250 rpm` baseline | exact part `[HW2-TBD]` |
-| motor driver | custom-PCB H-bridge stage | exact IC `[HW2-TBD]` |
-| electronics integration | purpose-built custom PCB | `[HW2-CONFIRMED]` direction; `[HW2-VERIFY]` design incomplete |
+That result does not automatically decide the V2 motor. The new PCB and power system allow us to revisit the choice. For V2 we want more speed, but we will choose the motor from loaded speed, current, temperature and repeated track runs rather than from the rpm printed on the listing.
 
-At hardware-interface level, PixyCam is intended to provide compact object information to the ESP32 over SPI. The **final software architecture that uses those inputs is not yet locked**.
+More detail: [`docs/design/drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md) and [`docs/design/hardware_v2_motor_upgrade_plan.md`](docs/design/hardware_v2_motor_upgrade_plan.md).
 
-Raspberry Pi Zero is not part of the active Hardware V2 architecture.
+## Electronics
 
-## 5. Decisions still open
+The main controller remains an `ESP32-WROOM-32`. We chose to keep the ESP32 because it is already familiar to us and is capable of handling the IMU, ToF sensors, PixyCam data, steering and motor control without a second computer.
 
-The repository deliberately leaves these values visible as `[HW2-TBD]`:
+The Raspberry Pi Zero was useful on the first robot, but it added another boot process, another power branch and a UART link between two computers. In V2 the PixyCam does the colour-signature processing itself and sends object information directly to the ESP32 over SPI.
 
-1. exact LiPo cell count, voltage, capacity, C-rating and connector;
-2. exact faster motor, voltage, rpm, gearbox, torque and current;
-3. exact motor-driver IC and thermal design;
-4. exact power regulators and current margins;
-5. whether the ESP32 module is soldered directly or used through a carrier;
-6. complete GPIO and connector pin map;
-7. PCB dimensions, layer count, mounting holes and production files;
-8. PixyCam signature numbers, settings and measured detection limits;
-9. final robot dimensions and mass;
-10. final Hardware V2 software architecture and source;
-11. final repeated Open and Obstacle results.
+The sensor set is:
 
-The required content, repository update locations and completion conditions for every item are described in [`NEXT_REVIEW.md`](NEXT_REVIEW.md). No missing measurement is replaced with an estimate presented as a fact.
+- front `VL53L1X` for forward distance and turn timing;
+- left and right `VL53L4CD` sensors for local side distance;
+- `BNO085` for fused heading/yaw;
+- first-generation PixyCam for red/green traffic pillars.
 
-## 6. Mechanical engineering history
+The custom PCB is still being finished. Before calling it final we need the exact battery, motor, H-bridge, regulators, connector pinout, ESP32 GPIO map, schematic/PCB production files and bench measurements. The current electronics notes are in [`docs/hardware/`](docs/hardware/) and the schematic material is in [`schemes/`](schemes/).
 
-`[HW1-HISTORY]` The verified mechanical baseline is still useful for Hardware V2 because the main chassis and steering lessons remain relevant:
+## Vision
 
-- reducing the steering lever arm lowered servo load;
-- custom silicone front wheels improved the transfer of steering commands to the field surface;
-- the LEGO differential reduced binding in turns;
-- limiting the useful steering range improved stability;
-- practical repeatability mattered more than maximum theoretical speed.
+The PixyCam will be trained for the red and green WRO traffic pillars. It performs colour processing on the camera, so the ESP32 does not need to receive full camera frames. We expect to use block data such as signature, position and size, but the final filtering rules will come from tests on the actual field.
 
-Hardware V1 compared `50 rpm`, `250 rpm` and `1000 rpm` N20 options and retained `250 rpm` for that robot. This does **not** mean `250 rpm` is the final Hardware V2 motor.
+We still need to record the final Pixy signature numbers, camera mounting angle, useful detection distance and behaviour under bright, dark and side lighting. SPI communication also has to stay reliable with the motor and servo running.
 
-`[HW2-IMPROVEMENT]` Hardware V2 reopens the motor selection and requires loaded-speed, current, thermal and repeated-run evidence while retaining the successful steering and differential lessons.
+## Software
 
-Mechanical references:
+There is intentionally no final V2 program in `src/` yet. We do not want to publish the old Pi/UART program as if it were the code for the custom-PCB robot.
 
-- [`drivetrain_and_steering.md`](docs/design/drivetrain_and_steering.md)
-- [`engineering_decisions.md`](docs/design/engineering_decisions.md)
-- [`risk_and_failures.md`](docs/design/risk_and_failures.md)
-- [`hardware_v2_motor_upgrade_plan.md`](docs/design/hardware_v2_motor_upgrade_plan.md)
-- [`models/README.md`](models/README.md)
+The next program will be built from the hardware upwards: first sensor and actuator bring-up, then driving and cornering, then PixyCam obstacle handling, and finally tuning from repeated runs. Old source and software ideas are preserved in [`brainstorm/software-redesign/`](brainstorm/software-redesign/).
 
-## 7. Electronics and sensing
+See [`src/README.md`](src/README.md) for the current source status.
 
-The active Hardware V2 sensor set is:
+## What we learned from Hardware V1
 
-- front `VL53L1X`;
-- left `VL53L4CD`;
-- right `VL53L4CD`;
-- `BNO085` IMU;
-- first-generation PixyCam.
+The most useful measurements we kept from the first robot were:
 
-`[HW1-HISTORY]` The earlier `VL53L1CD` label in several Hardware V1 text files was a documentation error. Archived snapshots remain unchanged.
-
-`[HW2-IMPROVEMENT]` Active Hardware V2 documents use the correct `VL53L4CD` side-sensor model and require the final address, startup and placement evidence.
-
-The final PCB documentation still needs `[HW2-TBD]`:
-
-- exact power tree;
-- reverse-polarity and over-current protection;
-- I2C voltage, pull-ups, addresses and startup sequence;
-- PixyCam supply and SPI electrical compatibility;
-- servo transient-current handling;
-- motor suppression and H-bridge thermal design;
-- labelled connectors, test points and complete pin map;
-- editable schematic, PCB source, Gerbers, drill files and BOM;
-- assembled-board photos and measured rail stability.
-
-See [`electronics_overview.md`](docs/hardware/electronics_overview.md), [`hardware_v2_custom_pcb_plan.md`](docs/hardware/hardware_v2_custom_pcb_plan.md) and the `HW2-POWER-01`, `HW2-DRIVER-01` and `HW2-PCB-01` sections in [`NEXT_REVIEW.md`](NEXT_REVIEW.md).
-
-## 8. Software status
-
-`[HW2-TBD]` **Hardware V2 software is being redesigned from a clean active state.**
-
-On 2026-08-12 we removed the previous software architecture, state-machine, PixyCam integration-plan and source tree from the active Hardware V2 path. They were not deleted; exact copies were moved to:
-
-- [`brainstorm/software-redesign/previous-docs/`](brainstorm/software-redesign/previous-docs/)
-- [`brainstorm/software-redesign/previous-source/`](brainstorm/software-redesign/previous-source/)
-
-The reason is simple: Hardware V2 changed the perception device, communication path, PCB, power and drive system. Carrying forward an old state machine, pin map, thresholds or control logic before the final hardware is implemented would make the documentation look more complete than the robot really is.
-
-The active software page is now [`docs/code/README.md`](docs/code/README.md). The active source directory [`src/`](src/) contains only the reset status until new code is implemented.
-
-The software reset is also documented as an engineering iteration in [`engineering-journal/2026-08-12-software-redesign.md`](engineering-journal/2026-08-12-software-redesign.md).
-
-Before software is presented as final Hardware V2 evidence, it must:
-
-1. match the final PCB GPIO and electrical interfaces;
-2. communicate with PixyCam over tested SPI;
-3. support the selected motor driver;
-4. initialize the BNO085 and all ToF sensors reliably;
-5. implement and document start, stop and fault behaviour;
-6. demonstrate Open and Obstacle behaviour in repeated physical tests;
-7. have documentation that matches the tested source.
-
-## 9. Testing evidence
-
-`[HW1-HISTORY]` The strict Hardware V1 measurement source is [`performance_measurements.md`](docs/testing/performance_measurements.md). The currently documented quantitative snapshot is:
-
-| Metric | Earlier version | Hardware V1 result |
+| Test | Earlier version | Hardware V1 result |
 |---|---:|---:|
-| average drift over `3 m` | `10.6 cm` | `4.0 cm` |
-| approximate `90°` turn space | `46 cm` | `39 cm` |
-| open straight clean passes | not recorded as a matched earlier set | `5/5` |
-| obstacle slalom clean passes | not recorded as a matched earlier set | `4/5` |
-| full practice route completions | not recorded as a matched earlier set | `4/5` |
+| average drift over 3 m | 10.6 cm | 4.0 cm |
+| space used for a 90° turn | about 46 cm | about 39 cm |
+| open straight test | — | 5/5 clean runs |
+| obstacle slalom | — | 4/5 clean runs |
+| full practice route | — | 4/5 completed runs |
 
-These values are historical Hardware V1 evidence, not Hardware V2 results.
+These are **V1 results**, not results for the current rebuild. They are useful because they give us a baseline for deciding whether V2 is actually better.
 
-`[HW2-TBD]` Final Hardware V2 tables remain empty until real tests are performed. Use [`hardware_v2_validation_template.md`](docs/testing/hardware_v2_validation_template.md) and `HW2-TEST-01` in [`NEXT_REVIEW.md`](NEXT_REVIEW.md) for power, thermal, sensor-startup, camera, motor, software and field validation.
+The full V1 measurement notes are in [`docs/testing/performance_measurements.md`](docs/testing/performance_measurements.md).
 
-## 10. Reproducibility status
+## What still has to be finished
 
-- `[HW1-HISTORY]` Hardware V1: historical parts, code, wiring and media remain available as engineering evidence;
-- `[HW2-TBD]` Hardware V2: not yet reproducible as a complete robot because exact power, motor, driver, pin map, PCB files, final source and validation are still missing.
+The main unfinished jobs are practical rather than documentation work: choose the exact LiPo and motor, lock the motor driver and regulators, finish the PCB and pin map, test PixyCam SPI, write the new software, measure power and temperatures, and then run repeated Open and Obstacle Challenge tests.
 
-A final Hardware V2 rebuild guide must include exact parts, assembly files, pinout, firmware configuration, calibration procedure and measured acceptance results. The complete required package is listed under `HW2-REBUILD-01` in [`NEXT_REVIEW.md`](NEXT_REVIEW.md).
+We keep the current working list in [`NEXT_REVIEW.md`](NEXT_REVIEW.md). It is just our project checklist; completed results are moved into the relevant technical pages.
 
-## 11. Photos and video
+## Files in this repository
 
-`[HW1-HISTORY]` The current six-view robot photos and the linked Open Challenge video show Hardware V1. They are retained as verified historical evidence.
+- [`docs/design/`](docs/design/) — chassis, steering, drivetrain and design decisions
+- [`docs/hardware/`](docs/hardware/) — electronics, sensors, PCB and parts
+- [`docs/testing/`](docs/testing/) — V1 measurements and V2 test sheets
+- [`docs/reproducibility/`](docs/reproducibility/) — rebuild and submission notes
+- [`models/`](models/) — CAD/STL files
+- [`schemes/`](schemes/) — wiring and PCB material
+- [`src/`](src/) — active V2 source when it is ready
+- [`brainstorm/`](brainstorm/) — unfinished software work and previous code
+- [`engineering-journal/`](engineering-journal/) — dated engineering decisions
+- [`archivo/`](archivo/) — older documentation kept as development history
+- [`v-photos/`](v-photos/) — vehicle photographs
+- [`t-photos/`](t-photos/) — team photograph
+- [`video/`](video/) — challenge video links/status
 
-`[HW2-TBD]` Hardware V2 still requires:
+## Current media
 
-- final six-view robot photos;
-- PCB top and bottom photos;
-- connector and sensor-placement photos;
-- PixyCam training screenshots;
-- final Open Challenge video;
-- final Obstacle Challenge video.
+The six vehicle photos and the current Open Challenge video show the working Hardware V1 robot. We are keeping them because they are real development evidence, but they will be replaced by V2 photos and new Open/Obstacle videos once the rebuilt robot is finished.
 
-See [`v-photos/README.md`](v-photos/README.md), [`video/video.md`](video/video.md) and `HW2-MEDIA-01` in [`NEXT_REVIEW.md`](NEXT_REVIEW.md).
+## Rebuilding the final robot
 
-## 12. Repository layout
+The final repository needs to be enough for another technically competent person to reproduce the car. For V2 that means publishing the exact BOM, mechanical files, PCB source and manufacturing files, connector/pin map, source code, build/upload instructions, calibration/start procedure and measured validation results.
 
-- `NEXT_REVIEW.md` — single searchable tracker for every missing V2 item and the next full review;
-- `docs/design/` — mechanical decisions, risks and system reasoning;
-- `docs/hardware/` — active Hardware V2 architecture, BOM and PCB planning;
-- `docs/code/` — active software status only until the new implementation is tested;
-- `docs/testing/` — historical results and Hardware V2 validation templates;
-- `docs/evaluation/` — evaluation of the verified baseline;
-- `docs/reproducibility/` — evidence and rebuild-status maps;
-- `schemes/` — Hardware V1 schematic evidence and Hardware V2 requirements;
-- `models/` — CAD/STL evidence;
-- `src/` — intentionally cleared active Hardware V2 source area;
-- `brainstorm/software-redesign/` — exact pre-reset software documents/source plus future software ideas;
-- `engineering-journal/` — journal-ready engineering decisions and iteration notes;
-- `archivo/` — preserved earlier text snapshots from the Hardware V1/HW2 migration;
-- `t-photos/`, `v-photos/`, `video/` — media evidence with version status documented.
-
-## 13. Current conclusion
-
-The repository separates verified history from the active redesign. Hardware V1 proves that the team built, tested and improved a working robot. Hardware V2 keeps the successful mechanical lessons while changing the perception, power, drive and electronics integration.
-
-The software has now been deliberately reset rather than pretending the old implementation is already the final V2 solution. The next engineering milestones are component lock, PCB implementation and measured evidence, followed by a new software implementation built against that real hardware.
-
-Until the final LiPo, motor, H-bridge, PCB, PixyCam settings, source code and repeated field tests exist together, Hardware V2 remains an honestly documented engineering migration rather than a falsely completed final robot.
-
-Open [`NEXT_REVIEW.md`](NEXT_REVIEW.md) at the start of the next update so no missing item or old-version reference is overlooked.
+The structure for that is already in [`docs/reproducibility/`](docs/reproducibility/), but several details cannot be filled in honestly until the final hardware exists.

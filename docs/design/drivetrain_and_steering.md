@@ -1,60 +1,19 @@
-# Drivetrain And Steering
+# Drivetrain and steering
 
-## Version status
+The drivetrain uses rear-wheel drive with a LEGO differential. Steering is at the front with an MG90S servo and custom linkage.
 
-The previous detailed document was archived at [`archivo/hardware-v1-esp32-250rpm/docs/design/drivetrain_and_steering.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/design/drivetrain_and_steering.md).
+## What we kept from the first robot
 
-This page records verified Hardware V1 mechanical evidence and the information still required for Hardware V2.
+The first steering arrangement put too much load on the servo. The problem was mainly geometry, not lack of servo torque, so we shortened the lever arm and corrected the linkage. That made the steering easier to centre and more repeatable. Silicone front tyres also helped because the wheels stopped sliding as much when the servo turned them.
 
-## Hardware V1 verified baseline
+We tried a metal differential before the LEGO one. The metal unit bound more in corners; the LEGO differential turned more smoothly, so it became our working baseline.
 
-- rear-wheel drive;
-- front steering with MG90S;
-- LEGO rear differential;
-- custom silicone front wheels;
-- three main steering iterations;
-- tested `50`, `250` and `1000 rpm` N20 options;
-- `250 rpm` retained for Hardware V1.
+For Hardware V1 we also compared 50, 250 and 1000 rpm N20 motors. The 250 rpm motor gave the best balance on that version of the car. The old detailed notes are kept in [`archivo/`](../../../archivo/hardware-v1-esp32-250rpm/docs/design/drivetrain_and_steering.md).
 
-The 250 rpm choice is historical and is not the final Hardware V2 motor decision.
+## What changes for V2
 
-## Steering lessons retained for Hardware V2
+We want a faster motor, but we have not locked the exact part yet. We will compare candidates using loaded speed/current, temperature, straight-line control, corner behaviour and repeated Open/Obstacle runs. The selected H-bridge has to match the measured motor current.
 
-- reduce mechanical resistance before selecting a stronger servo;
-- avoid a large wheel lever arm;
-- keep left/right geometry symmetric;
-- use enough front grip to translate servo motion into real turning;
-- limit steering travel to the useful mechanical range;
-- validate centre repeatability after repeated left/right cycles.
+The steering and differential also need to be checked again at the new speed. Before the mechanical side is final we still need the final motor/mount, mass, wheelbase, track widths, wheel diameter, clearance, steering limits and measured turning space.
 
-## Differential
-
-The LEGO differential remains the current baseline because Hardware V1 testing indicated smoother turning and less binding than the earlier metal solution. It must be retested with the selected faster motor.
-
-## Hardware V2 motor selection required
-
-The final motor document must include:
-
-- exact model and rated voltage;
-- no-load and loaded rpm;
-- gearbox ratio;
-- wheel diameter and calculated speed;
-- free-run, launch and stall current;
-- available torque or measured acceleration;
-- compatibility with the differential and mount;
-- H-bridge temperature;
-- repeated Open and Obstacle results;
-- reason for choosing it over at least one realistic alternative.
-
-Use [`hardware_v2_motor_upgrade_plan.md`](hardware_v2_motor_upgrade_plan.md).
-
-## Final mechanical data still required
-
-- final mass;
-- wheelbase and track widths;
-- wheel diameters;
-- ground clearance;
-- measured steering limits;
-- turning space at final speed;
-- final motor mount and CAD;
-- photos of the final drivetrain and steering.
+Motor test notes: [`hardware_v2_motor_upgrade_plan.md`](hardware_v2_motor_upgrade_plan.md).

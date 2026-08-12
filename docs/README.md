@@ -1,85 +1,39 @@
-# Documentation Index
+# Documentation
 
-## Current project state
+The root [`README`](../README.md) tells the project story. The files here hold the technical detail behind it.
 
-- `[HW1-HISTORY]` Hardware V1: verified historical baseline;
-- `[HW2-IMPROVEMENT]` Hardware V2: active ESP32 + PixyCam SPI + custom-PCB migration;
-- `[HW2-TBD]` final Hardware V2 software: intentionally reset on 2026-08-12 and being redesigned.
+## Design
 
-For the next review, missing information and the exact update locations are maintained in [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md).
+- [`design/system_overview.md`](design/system_overview.md) — how the mechanical, electrical and sensing parts affect each other
+- [`design/chassis_design_improved.md`](design/chassis_design_improved.md) — chassis and packaging
+- [`design/drivetrain_and_steering.md`](design/drivetrain_and_steering.md) — steering, differential and motor history
+- [`design/engineering_decisions.md`](design/engineering_decisions.md) — important choices and what led to them
+- [`design/risk_and_failures.md`](design/risk_and_failures.md) — failures we already saw and risks we still need to test
 
-## Status markers
-
-- `[HW1-HISTORY]` — older verified evidence;
-- `[HW2-IMPROVEMENT]` — change from Hardware V1;
-- `[HW2-CONFIRMED]` — selected V2 fact;
-- `[HW2-TBD]` — missing exact information;
-- `[HW2-VERIFY]` — requires physical validation;
-- `[HW2-DONE]` — complete and verified.
-
-## Best first files
-
-1. [`../README.md`](../README.md)
-2. [`../START_HERE.md`](../START_HERE.md)
-3. [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md)
-4. [`hardware/hardware_v2_decision_register.md`](hardware/hardware_v2_decision_register.md)
-5. [`reproducibility/evidence_map.md`](reproducibility/evidence_map.md)
-6. [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
-
-## Hardware V2 design
-
-- [`design/system_overview.md`](design/system_overview.md)
-- [`hardware/hardware_v2_custom_pcb_plan.md`](hardware/hardware_v2_custom_pcb_plan.md)
-- [`hardware/hardware_v2_decision_register.md`](hardware/hardware_v2_decision_register.md)
-- [`design/hardware_v2_motor_upgrade_plan.md`](design/hardware_v2_motor_upgrade_plan.md)
-
-## Electronics
+## Hardware
 
 - [`hardware/electronics_overview.md`](hardware/electronics_overview.md)
 - [`hardware/parts_list.md`](hardware/parts_list.md)
 - [`hardware/sensor_list.md`](hardware/sensor_list.md)
+- [`hardware/hardware_v2_custom_pcb_plan.md`](hardware/hardware_v2_custom_pcb_plan.md)
 - [`hardware/pcb_wiring_diagrams.md`](hardware/pcb_wiring_diagrams.md)
 - [`hardware/as_built_wiring_checklist.md`](hardware/as_built_wiring_checklist.md)
 
-Battery, motor, H-bridge, regulator, PCB and pin-map follow-up requirements are indexed under the matching IDs in [`../NEXT_REVIEW.md`](../NEXT_REVIEW.md).
-
 ## Software
 
-Active status:
-
-- [`code/README.md`](code/README.md) — current Hardware V2 software status and completion gate;
-- [`../src/README.md`](../src/README.md) — intentionally cleared active source area.
-
-Engineering history / brainstorm:
-
-- [`../brainstorm/software-redesign/README.md`](../brainstorm/software-redesign/README.md);
-- [`../brainstorm/software-redesign/previous-docs/`](../brainstorm/software-redesign/previous-docs/);
-- [`../brainstorm/software-redesign/previous-source/`](../brainstorm/software-redesign/previous-source/);
-- [`../engineering-journal/2026-08-12-software-redesign.md`](../engineering-journal/2026-08-12-software-redesign.md).
-
-The previous software architecture, state machine, PixyCam plan and source are no longer active Hardware V2 claims. They are preserved to show the engineering process and to inform the next implementation.
+The V2 software is being rewritten. [`code/README.md`](code/README.md) explains the current state. Old code and software notes are preserved in [`../brainstorm/software-redesign/`](../brainstorm/software-redesign/).
 
 ## Testing
 
-- [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md)
-- [`testing/tests.md`](testing/tests.md)
-- [`testing/final_validation_results.md`](testing/final_validation_results.md)
-- [`testing/performance_measurements.md`](testing/performance_measurements.md) — `[HW1-HISTORY]` measurement source;
-- [`testing/iteration_log.md`](testing/iteration_log.md).
+- [`testing/performance_measurements.md`](testing/performance_measurements.md) — real measurements from Hardware V1
+- [`testing/iteration_log.md`](testing/iteration_log.md) — changes and failures
+- [`testing/hardware_v2_validation_template.md`](testing/hardware_v2_validation_template.md) — measurements to collect on V2
+- [`testing/final_validation_results.md`](testing/final_validation_results.md) — final run table once V2 is ready
 
-## Reproducibility and submission
+## Rebuilding the robot
 
-- [`reproducibility/evidence_map.md`](reproducibility/evidence_map.md)
-- [`reproducibility/full_rebuild_guide.md`](reproducibility/full_rebuild_guide.md)
-- [`reproducibility/exact_rebuild_wiring_upload_start.md`](reproducibility/exact_rebuild_wiring_upload_start.md)
-- [`reproducibility/submission_checklist.md`](reproducibility/submission_checklist.md)
-- [`reproducibility/final_submission_pack.md`](reproducibility/final_submission_pack.md)
+The [`reproducibility/`](reproducibility/) folder contains the BOM/wiring/build/submission notes. Some pages still describe what must be filled in after the final PCB and software are finished.
 
-## Historical evidence
+Mechanical files are in [`../models/`](../models/), electrical drawings in [`../schemes/`](../schemes/), vehicle photos in [`../v-photos/`](../v-photos/) and videos in [`../video/`](../video/).
 
-- [`../archivo/hardware-v1-esp32-250rpm/`](../archivo/hardware-v1-esp32-250rpm/) — `[HW1-HISTORY]` archived text snapshots;
-- [`../schemes/`](../schemes/) — Hardware V1 schematic/media status and Hardware V2 requirements;
-- [`../v-photos/`](../v-photos/) — Hardware V1 robot views until replaced;
-- [`../video/`](../video/) — Hardware V1 Open video until replaced.
-
-Old information remains useful as iteration evidence, but active pages must identify it as history or brainstorming. No file should be treated as final Hardware V2 evidence unless its implementation and validation match the physical robot.
+Older V1 documentation lives in [`../archivo/`](../archivo/). We keep it because the rejected and replaced versions are part of the engineering process.

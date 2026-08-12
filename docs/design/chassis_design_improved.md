@@ -1,48 +1,9 @@
-# Chassis Design
+# Chassis design
 
-## Version status
+The working Hardware V1 chassis was about **21 cm long, 10 cm wide and 8 cm high**. It used a compact wooden frame, rear-wheel drive, front steering, a LEGO differential, printed parts and silicone front tyres.
 
-The previous Hardware V1 chassis document was archived at [`archivo/hardware-v1-esp32-250rpm/docs/design/chassis_design_improved.md`](../../../archivo/hardware-v1-esp32-250rpm/docs/design/chassis_design_improved.md).
+We are keeping the same basic mechanical idea for Hardware V2 because the first robot became much easier to tune after the steering and wheel problems were fixed. The previous detailed V1 page is kept in [`archivo/`](../../../archivo/hardware-v1-esp32-250rpm/docs/design/chassis_design_improved.md).
 
-## Hardware V1 baseline
+V2 changes the packaging more than the chassis principle. The custom PCB, LiPo, PixyCam and faster motor can move the centre of mass and may require a different motor mount, battery holder, camera bracket and cable routing.
 
-The documented chassis was approximately:
-
-- 21 cm long;
-- 10 cm wide;
-- 8 cm high.
-
-It used a compact wood frame, rear-wheel drive, front steering, custom printed parts, LEGO differential and custom silicone front wheels. These values describe Hardware V1 and must be remeasured after Hardware V2 is assembled.
-
-## Retained design lessons
-
-- compact size improved manoeuvrability but made packaging harder;
-- mechanical simplicity improved tuning and repeatability;
-- rigid steering and sensor mounting mattered;
-- weight distribution affected predictable behaviour;
-- wheel mounting, grip and differential behaviour influenced straight drift;
-- custom parts must be published for reproducibility.
-
-## Hardware V2 packaging changes
-
-The custom PCB, PixyCam, LiPo and faster motor may change:
-
-- component placement;
-- centre of mass;
-- motor mount;
-- battery retention;
-- camera bracket;
-- sensor height/angle;
-- cable routing;
-- chassis dimensions and mass.
-
-## Final Hardware V2 data required
-
-- measured length, width, height and mass;
-- wheelbase, track widths and clearance;
-- component-layout drawing;
-- PCB/battery/camera mounting details;
-- final CAD/STL/source files;
-- six-view and internal-layout photos;
-- explanation of any change from the V1 chassis;
-- turning and drift validation at final speed.
+When the V2 build is physically complete we need to measure the dimensions and mass again rather than reuse the V1 numbers. We also want final wheelbase, track widths, ground clearance, camera/sensor heights and an internal-layout photo. If the PCB or battery forces a chassis change, that change will be added here together with the reason and the track result.
