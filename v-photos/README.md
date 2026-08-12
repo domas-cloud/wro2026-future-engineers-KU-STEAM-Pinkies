@@ -1,21 +1,5 @@
-# Robot Photos
+# Vehicle photos
 
-This folder stores robot photos documenting the build and final appearance.
+The current front, rear, left, right, top and bottom photos show the working Hardware V1 robot. We keep them as development evidence while Hardware V2 is being rebuilt.
 
-Included final files:
-
-- [front.jpg](front.jpg)
-- [back.jpg](back.jpg)
-- [left.jpg](left.jpg)
-- [right.jpg](right.jpg)
-- [top.jpg](top.jpg)
-- [bottom.jpg](bottom.jpg)
-
-For WRO submission, these six files are the final robot-view package used by the repository:
-
-- front view;
-- rear view (`back.jpg`);
-- left side view;
-- right side view;
-- top view;
-- bottom view.
+Before final submission these will be replaced or clearly supplemented with six views of the finished V2 car, plus close photos of the custom PCB, sensors and camera mounting.

@@ -1,17 +1,9 @@
-# Comparison With Initial Goals
+# From the first build to Hardware V2
 
-This table compares the first planned robot with the final repository-state robot.
+At the start we mainly wanted a compact car that could drive repeatably, turn cleanly and be simple enough to repair and tune. Hardware V1 reached a useful working state and gave us a baseline, but it also showed where the next version could improve.
 
-| Initial goal | Final outcome | What changed | Why it changed | Evidence file |
-| --- | --- | --- | --- | --- |
-| simple front steering with enough torque | three-gear steering with corrected geometry and `MG90S` servo | steering pivots and geometry were rebuilt | the earlier wheel lever arm overloaded the servo and reduced repeatability | `docs/design/drivetrain_and_steering.md` |
-| single-sensor navigation concept | mixed sensing with camera, `BNO085`, and `front VL53L1X + 2x VL53L1CD` | architecture became multi-layer instead of single-source | one sensor type alone was not reliable enough across layouts | `docs/hardware/electronics_overview.md` |
-| direct drive without much drivetrain complexity | rear differential retained in the final robot | drivetrain became mechanically more forgiving | the version without a differential increased corner resistance and slip | `docs/evaluation/what_didnt.md` |
-| fastest possible motor choice | `N20 6 V 250 rpm` chosen as the final balance | slower and faster motors were rejected | the team prioritized controllability and usable torque over headline speed | `docs/testing/performance_measurements.md` |
-| software driven mostly from one controller | split `Raspberry Pi Zero` and `ESP32` runtime | perception and low-level control were separated | this made the control loop simpler and the perception role clearer | `docs/code/software_architecture_improved.md` |
-| generic rebuild notes | judge-oriented rebuild path with BOM, CAD, schematics, and runtime docs | documentation became part of the engineered solution | reproducibility is judged directly in WRO submission review | `docs/reproducibility/evidence_map.md` |
+The biggest V1 lessons were mechanical: steering geometry mattered more than fitting a stronger servo, silicone front tyres helped the car follow the commanded angle, the LEGO differential reduced corner binding and a rigid IMU mount made heading behaviour more consistent.
 
-## Most Logical Next Improvement
+The main V2 goal is not to replace those parts just because they are old. We are keeping what worked and changing the parts that limit speed, wiring quality or vision simplicity. That is why V2 keeps the steering/differential ideas but changes the power system, motor, PCB and camera architecture.
 
-The next practical improvement is not a new subsystem. It is tighter repeatability: more counted full-route runs and a cleaner perception-to-controller interface under more obstacle layouts.
-
+We will judge the rebuild against the V1 baseline using the same kinds of straight, corner and repeated-run tests. If V2 is faster but much less repeatable, it is not an improvement.

@@ -1,27 +1,9 @@
-# What Did Not Work
+# What did not work well
 
-This section lists solutions and situations that did not work well or had to be redesigned.
+The first steering geometry created too much servo load. Trying to tune software around that did not solve the real problem; changing the linkage did.
 
-## Excessive Wheel Lever Arm In The Steering Mechanism
+Earlier front wheels slipped too much, so a correct servo movement did not always become a correct turn. The metal differential also created more binding in corners than the LEGO solution.
 
-One of the most important early weaknesses was the large wheel lever arm.
-Because of it, the servo had to overcome a much larger load, which made the system less efficient and harder to repeat reliably.
-This solution was not kept because real tests showed that it reduced steering reliability.
+At the motor extremes, the slow option limited the car too much and the 1000 rpm option was difficult to use well on the V1 build. That is why the V2 motor test will look at complete-car behaviour instead of only advertised speed.
 
-## Previous Robot Without A Differential
-
-A mistake in the previous robot was not using a differential.
-In turns, that strongly increased turning resistance, worsened the trajectory, and increased the chance of slipping.
-Because of that, the current robot kept the differential as a necessary drivetrain element.
-
-## Over-Reliance On One Sensor Type
-
-Testing showed that one sensor type alone was not enough for stable navigation in all situations.
-Camera data alone or short-range sensors alone could not reliably solve all track scenarios.
-Because of that, a mixed solution was chosen using the camera, `BNO085`, and distance sensors.
-
-## Insufficiently Rigid Mounting
-
-If the `BNO085` or other important components are mounted without enough rigidity, the readings become less reliable.
-This matters especially when the structure vibrates or flexes slightly while driving.
-Because of that, weaker mounting solutions were abandoned and more attention was given to stiffness.
+The Pi Zero camera system worked as a development step, but for V2 we decided the extra computer, boot process, power branch and UART link were complexity we no longer wanted. PixyCam moves the colour processing onto the camera and lets the ESP32 remain the only main controller.

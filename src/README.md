@@ -1,62 +1,9 @@
-# Embedded Controller
+# Source code
 
-This folder contains the active PlatformIO project for the robot controller.
+The active Hardware V2 source has not been written yet.
 
-## Main Files
+The previous source tree is preserved in [`../brainstorm/software-redesign/previous-source/`](../brainstorm/software-redesign/previous-source/). It is useful development history, but it belongs to the older hardware/software assumptions and should not be treated as the program for the custom-PCB robot.
 
-- [src/src/main.cpp](src/main.cpp): main robot loop
-- [src/lib/Lidar/Lidar.h](lib/Lidar/Lidar.h): distance sensor abstraction
-- [src/lib/Compass/Compass.h](lib/Compass/Compass.h): `BNO085` yaw handling
-- [src/lib/Engine/Engine.h](lib/Engine/Engine.h): motor control wrapper
-- [src/lib/Lights/](lib/Lights/): status lights
-- [src/platformio.ini](platformio.ini): PlatformIO configuration
-- [src/pi-zero/README.md](pi-zero/README.md): perception-side architecture note
-- [src/pi-zero/protocol.md](pi-zero/protocol.md): Pi-to-ESP32 packet format
+Before adding the new program here we need the final PCB GPIO map, tested PixyCam SPI connection, final motor-driver control and a repeatable startup sequence for the BNO085 and ToF sensors.
 
-## Current Runtime Model
-
-The documented runtime is split into two controllers:
-
-- an `ESP32` low-level controller under `src/src/main.cpp`;
-- a `Raspberry Pi Zero` perception-side architecture described under `src/pi-zero/`.
-
-The `ESP32` controller:
-
-- initializes three distance sensors and one compass;
-- waits for a start button;
-- drives forward at constant power;
-- keeps heading close to `targetAngle`;
-- uses side distance as an additional steering correction;
-- performs a hard left or right turn when the front sensor detects a close boundary;
-- counts sector transitions with `edge`;
-- stops cleanly when the run is finished.
-
-The documented `Raspberry Pi Zero` side:
-
-- selects a reference shift and obstacle-pass side at a higher level;
-- is intended to send a compact packet to the `ESP32`;
-- should time out to a neutral command if fresh perception data is unavailable.
-
-## Important Runtime Variables
-
-- `targetAngle`: desired heading reference
-- `edge`: number of completed sector turns
-- `isClockwise`: selected turning direction
-- `Kp`, `Kg`, `Kd`: control gains
-- `TARGET_DISTANCE`: desired wall offset
-- `TURN_DISTANCE`: threshold that triggers a corner turn
-
-## Build And Upload
-
-1. Open `src/` as a PlatformIO project.
-2. Build the environment from `src/platformio.ini`.
-3. Upload to the `ESP32`.
-4. Review the Pi-side interface notes in `src/pi-zero/` if the perception layer is used.
-5. Use the physical start button to toggle the run state.
-
-## Related Documentation
-
-- [Root README](../README.md)
-- [Software Architecture](../docs/code/software_architecture_improved.md)
-- [Software Flow and State Logic](../docs/code/software_flow_and_state_logic.md)
-- [Electronics Overview](../docs/hardware/electronics_overview.md)
+The new source will start with hardware bring-up, then normal driving/cornering, then obstacle handling and tuning from track runs. Build and upload instructions will be added here together with the code.

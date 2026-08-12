@@ -1,30 +1,13 @@
-# Motor And Servo Selection
+# Motor and steering servo
 
-## Motor
+## Steering servo
 
-The drive side uses a motor that can provide enough torque for acceleration and repeated restarts on the track.
-During selection, controllability and reliability were more important than maximum top speed alone.
+We use an `MG90S`. The first robot showed that the steering problem was mostly linkage geometry rather than lack of servo power. After shortening the lever arm and improving the front-wheel grip, the MG90S worked much more consistently, so we are keeping it for V2.
 
-## Steering Servo
+We still need to recheck centre repeatability and current draw with the faster V2 drivetrain.
 
-The steering servo must position the front wheels accurately and return to center consistently.
-Because steering precision directly affects lane-following behavior, servo stability is more important than extremely fast motion.
+## Drive motor
 
-## Mechanical Compatibility
+Hardware V1 compared 50, 250 and 1000 rpm N20 motors and used the 250 rpm version. Hardware V2 is intentionally reopening that choice because we want more speed and the power/driver electronics are changing.
 
-The servo choice is closely tied to the steering linkages and gear mechanism.
-This means the servo is not just a parts-list item; it defines how much steering range the geometry can use and how much load the mechanism can tolerate.
-
-## Selection Criteria
-
-- sufficient torque;
-- predictable response;
-- compatible voltage and current requirements;
-- mechanical compatibility with the steering geometry;
-- easy replacement if testing shows a better option.
-
-## What Should Be Documented
-
-- the exact part names;
-- why the parts were selected;
-- any trade-offs between speed, torque, accuracy, and power demand.
+The final V2 motor has not been selected yet. We will compare realistic candidates using loaded speed, current, temperature, straight drift, corner behaviour and repeated challenge runs. See [`../design/hardware_v2_motor_upgrade_plan.md`](../design/hardware_v2_motor_upgrade_plan.md).

@@ -1,146 +1,39 @@
-# Electronics Overview
+# Electronics overview
 
-Our robot uses a split electronics system. The `Raspberry Pi Zero` and camera handle perception, while the `ESP32` handles low-level control, steering, and motor output.
+Hardware V2 removes the Raspberry Pi Zero and brings the robot back to one main controller: an `ESP32-WROOM-32`. The PixyCam does the colour processing on its own processor and sends object information to the ESP32 over wired SPI.
 
-That split gave us two practical benefits:
+The previous Pi-based electronics page is kept in [`archivo/`](../../archivo/hardware-v1-esp32-250rpm/docs/hardware/electronics_overview.md).
 
-- the camera side could focus on track and obstacle interpretation;
-- the controller side could stay fast and predictable.
+## Main parts
 
-## Main Electronic Parts
+- ESP32-WROOM-32
+- first-generation PixyCam / CMUcam5
+- BNO085 IMU
+- front VL53L1X
+- left and right VL53L4CD
+- MG90S steering servo
+- LiPo battery (exact pack still being selected)
+- faster drive motor (exact model still being selected)
+- custom-PCB H-bridge stage (final IC follows the motor choice)
 
-The final electronics system includes:
+The old `VL53L1CD` side-sensor name found in some V1 text was a documentation mistake. The side sensors used for the current design are `VL53L4CD`.
 
-- `Raspberry Pi Zero`
-- camera module
-- `ESP32-WROOM-32`
-- `BNO085` IMU
-- one front `VL53L1X` ToF sensor
-- `2x VL53L1CD` distance sensors
-- `MG90S` steering servo
-- `N20 6 V 250 rpm` drive motor
-- `L298N` motor driver
-- `2x 18650 Li-ion` battery pack
-- step-down regulation and perfboard-based distribution
+## Connections
 
-## Board Roles
+BNO085 and the three ToF sensors share I2C resources. The final schematic/source must agree on the I2C voltage, pull-ups, XSHUT/startup lines, runtime addresses and connector labels.
 
-The `Raspberry Pi Zero` is responsible for perception. It can decide which driving line is safer or which side should be used around an obstacle.
+PixyCam needs power, ground, SCK, controller-to-camera data, camera-to-controller data and chip select. We have not published GPIO numbers yet because they need to match the final PCB instead of an early wiring guess.
 
-The `ESP32` is responsible for:
+## Power
 
-- reading the IMU and distance sensors;
-- holding the heading reference;
-- applying wall-distance correction;
-- driving the steering servo;
-- controlling the drive motor.
+We know the V2 battery chemistry will be LiPo, but the exact pack is not locked. Because of that we are not reusing the old V1 power budget as a V2 result. The old robot used 2x18650 and had an estimated peak budget around 2.32 A; those numbers belong to V1.
 
-So the robot is not built around one giant controller that tries to do everything. It is split into a perception layer and a control layer.
+For the new board we will measure the ESP32/camera/sensors, steering peak current, motor free/launch/stall current and complete-robot transients. Those measurements decide regulator headroom, connector choice, PCB copper and the motor driver.
 
-## Power Layout
+The board will keep the high-current motor/servo paths away from sensitive sensor returns as much as practical. We also plan motor-noise suppression, bulk capacitance near high-current loads, reverse-polarity/over-current protection and accessible test points.
 
-The robot is powered by a 2-cell `18650` pack, treated in our documentation as about `7.4 V` nominal under normal use.
+## Bring-up order
 
-From that source we separate power into several branches:
+We will power the first PCB from a current-limited supply or protected source, check each rail with motor and servo disconnected, then bring up the ESP32 and sensors, PixyCam SPI, servo and motor driver one at a time. After that we will repeat the communication tests with the drive system running and record rail sag and temperatures.
 
-- motor branch for the `L298N` and drive motor;
-- regulated logic branch for the `ESP32`;
-- regulated logic branch for the `Raspberry Pi Zero`;
-- regulated sensor branch for the IMU and distance sensors;
-- steering branch for the servo.
-
-We used separate branches because the drive motor and servo can disturb logic power if everything is tied together without enough isolation.
-
-## Current Budget
-
-The current values below are the practical design values we used in the documentation.
-
-| Subsystem | Main parts | Rail type | Design assumption |
-| --- | --- | --- | --- |
-| Logic compute | `Raspberry Pi Zero`, `ESP32` | regulated logic rail | `720 mA` continuous |
-| Sensors | `BNO085`, `VL53L1X`, `2x VL53L1CD` | regulated sensor rail | `132.3 mA` continuous |
-| Steering | `MG90S` servo | steering branch | `800 mA` peak |
-| Drive | `N20` + `L298N` | battery / motor branch | `0.67 A` peak |
-| Total | all branches together | battery input | about `2.32 A` peak |
-
-The total peak budget comes from the documented working assumptions: `0.72 A + 0.1323 A + 0.8 A + 0.67 A = 2.3223 A`.
-
-In practice, the current demand stayed similar during normal driving because the steering linkage was built to move freely. The servo was not used near stall torque during autonomous driving, so steering did not create the kind of large current spike that would be expected from a jammed or overloaded linkage.
-
-## Why We Kept Regulated Power
-
-Regulated power mattered for a few reasons:
-
-- neither the `ESP32` nor the `Raspberry Pi Zero` should be fed from raw battery voltage;
-- noisy logic power makes sensor data less trustworthy;
-- the servo and drive motor can cause voltage sag during aggressive movement;
-- a structured power layout is easier to debug and easier to rebuild.
-
-## Sensor Set
-
-We used several sensor types because they solve different problems.
-
-### Camera
-
-The camera gives a wider view of the track. That is useful for lane interpretation and obstacle-side decisions before the robot reaches the immediate interaction zone.
-
-### IMU
-
-The `BNO085` helps keep the robot aligned with its heading target. Without yaw feedback, straight driving and repeatable 90-degree turns would be much harder.
-
-### Distance Sensors
-
-The distance sensors are used as:
-
-- `front VL53L1X` for turn timing and close-range detection;
-- `left VL53L1CD` for side-distance feedback;
-- `right VL53L1CD` for the opposite side.
-
-Together, they give the controller local geometry that the camera alone cannot guarantee at short range.
-
-## Why We Stayed With This ToF Layout
-
-We also tried `VL53L5CX` matrix sensors during development. They offered richer data, but the added complexity was not worth it for this robot.
-
-For our final system, the `VL53L1X` + `VL53L1CD` layout was easier to integrate, easier to tune, and more practical for repeatable close-range sensing.
-
-## Sensor Placement
-
-The placement follows the job of each sensor:
-
-- the camera watches the wider scene ahead;
-- the front `VL53L1X` watches the area used for turn triggering;
-- the side `VL53L1CD` sensors watch wall or obstacle spacing;
-- the IMU is mounted rigidly so the yaw estimate follows the chassis, not a flexible bracket.
-
-## Calibration Routine
-
-Our basic setup routine is:
-
-1. make sure the `BNO085` is mounted rigidly and gives stable yaw when the robot is still;
-2. initialize the front and side distance sensors in the intended startup sequence so they can share the bus with different addresses;
-3. verify repeatable distance readings against known positions;
-4. check that the perception layer and the low-level controller agree on the intended driving line;
-5. verify that straight driving does not drift immediately after startup;
-6. repeat these checks after any meaningful mechanical or wiring change.
-
-## Main Electrical Risks
-
-The most important practical electrical risks were:
-
-| Risk | Likely effect | Mitigation |
-| --- | --- | --- |
-| motor noise on logic rails | unstable control or noisy sensor data | split power branches |
-| servo current spikes | voltage sag and steering inconsistency | separate steering branch with headroom |
-| ToF sensors on one bus | address conflict or missing readings | staged startup and address assignment |
-| flexible IMU mounting | unstable yaw estimate | rigid mounting and repeated checks |
-| sensor wires near motor path | inconsistent readings | keep logic and sensor wiring away from high-current paths |
-
-## Why This Layout Stayed
-
-We kept this electronics layout because it gave us:
-
-- stable power distribution;
-- a clean separation between perception and control;
-- reliable local sensing for the low-level controller;
-- documentation that another team can actually follow.
+The PCB drawings and manufacturing files belong in [`schemes/`](../../schemes/). The build checklist is [`as_built_wiring_checklist.md`](as_built_wiring_checklist.md).

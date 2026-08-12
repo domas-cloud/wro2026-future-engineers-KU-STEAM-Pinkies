@@ -1,33 +1,25 @@
 # Changelog
 
-This changelog tracks repository milestones so judges can quickly understand which state of the robot and documentation they are reading.
+## 2026-08-12
 
-## Planned Milestones
+We cleaned up the Hardware V2 branch after deciding that the software needed a fresh start. The old source and software notes were moved to `brainstorm/software-redesign/`, while `src/` and `docs/code/` now only describe the current state.
 
-- `v0.8 regional-ready` - stable robot package for regional demonstrations and structured testing;
-- `v1.0 documentation submission` - official documentation set prepared for review and submission;
-- `v1.1 final improvements` - small final refinements after the main submission package is locked.
+We also simplified the documentation so it reads more like our engineering notes and less like a checklist. The V1 robot remains archived and its measurements are still used as a baseline.
 
-## v0.8 regional-ready - 2026-04-07
+## 2026-07-21
 
-- built the documentation structure for the WRO Future Engineers robot;
-- added the main subsystem documentation;
-- added the wiring overview, parts list, test templates, and reproducibility checklist;
-- added project metadata and repo hygiene files;
-- prepared the repository for private GitHub hosting.
+Started the Hardware V2 rebuild. Main changes: custom PCB, ESP32-WROOM-32, PixyCam over SPI, LiPo power and a faster motor. Raspberry Pi Zero was removed from the active design. We also corrected the side ToF name to `VL53L4CD` in the active documentation.
 
-## v1.0 documentation submission - 2026-04-19
+At this point the exact battery, motor, H-bridge, regulators and final PCB files were still open.
 
-- strengthened judge-facing evidence for drivetrain, steering, software testing, and system interaction;
-- added visual schematic previews and design-comparison images for key hardware decisions;
-- aligned the main README and reproducibility checklist more closely with the WRO 2026 rubric and general rules.
+## 2026-04-24
 
-## v1.1 final improvements - planned
-
-- reserve this milestone for final wording, release-note polish, and small evidence-link improvements that do not change the main engineering story.
+Added the plywood case design and corrected the documented V1 motor test speeds.
 
 ## 2026-04-23
 
-- added `docs/testing/tests.md` with a documented testing workflow for open challenge and obstacle challenge;
-- documented acceptance criteria, fail/pass criteria, stable-version rules, and change-to-result logging expectations;
-- linked the testing workflow from the docs index and reproducibility files for easier judge navigation.
+Added the Open/Obstacle testing workflow and linked it from the documentation.
+
+## April 2026
+
+Built the first full documentation structure: subsystem notes, wiring, parts, test pages, CAD links and the first submission-oriented README. Hardware V1 was the working robot at this stage.

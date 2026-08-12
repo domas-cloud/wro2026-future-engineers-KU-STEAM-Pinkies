@@ -1,61 +1,45 @@
-# As-Built Wiring Checklist
+# V2 wiring check
 
-This checklist turns the current wiring documentation into a single judge-friendly verification page.
+We will use this page when the custom PCB is assembled. It is deliberately empty of final part numbers until the board exists.
 
-## Power Path
+## Build details
 
-| From | To | Purpose | Check |
-| --- | --- | --- | --- |
-| `2x 18650` battery pack | perfboard main input | main energy source | confirm polarity before powering |
-| perfboard distribution | `L298N` motor branch | drive motor power | motor branch isolated from logic wiring as much as possible |
-| perfboard distribution | logic regulator | stable logic voltage | regulator output checked before connecting boards |
-| logic regulator | `ESP32` | low-level controller power | common ground with all modules |
-| logic regulator | `Raspberry Pi Zero` | perception computer power | stable under camera load |
-| sensor branch | `BNO085` and ToF sensors | sensing power | common I2C ground |
-| steering branch | `MG90S` servo | steering actuation | servo power path checked under movement |
+| Item | Value |
+|---|---|
+| PCB revision | not recorded yet |
+| schematic revision | not recorded yet |
+| source commit | not recorded yet |
+| LiPo | not selected yet |
+| motor | not selected yet |
+| motor driver | not selected yet |
+| assembly date | not recorded yet |
 
-## ESP32 Pin Checklist
+## Before connecting the motor
 
-| Function | ESP32 pin / address | Verification |
-| --- | --- | --- |
-| start button input | `GPIO13` | button toggles run state |
-| motor PWM / enable | `GPIO32` | motor speed output changes |
-| motor direction 1 | `GPIO26` | forward direction correct |
-| motor direction 2 | `GPIO25` | reverse/brake logic not swapped |
-| steering servo PWM | `GPIO33` | servo centers and turns both directions |
-| front ToF XSHUT | `GPIO15` | front sensor initializes |
-| left ToF XSHUT | `GPIO5` | left sensor initializes |
-| right ToF XSHUT | `GPIO18` | right sensor initializes |
-| Pi UART RX | `GPIO16` | ESP32 receives Pi packets |
-| Pi UART TX | `GPIO17` | optional controller transmit line |
-| I2C bus | `400 kHz` | IMU and ToF sensors respond |
+- [ ] battery polarity and maximum voltage match the schematic
+- [ ] protection and main power switch are fitted
+- [ ] every regulator rail is measured first
+- [ ] ESP32, camera and sensors start correctly
+- [ ] programming/reset access works
+- [ ] connector labels match the real cable positions
 
-## Sensor Address Checklist
+## Sensors and camera
 
-| Module | Address | Role | Verification |
-| --- | --- | --- | --- |
-| `BNO085` | `0x4A`, fallback `0x4B` | yaw / heading | stable heading while robot is still |
-| front ToF | `0x30` | front distance / turn trigger | distance changes when object moves in front |
-| left ToF | `0x31` | left clearance | distance changes on left side |
-| right ToF | `0x32` | right clearance | distance changes on right side |
+- [ ] BNO085 starts repeatedly and yaw is stable while the car is still
+- [ ] front VL53L1X starts at the documented address
+- [ ] both VL53L4CD sensors start at their documented addresses
+- [ ] ten full power cycles complete without an I2C address problem
+- [ ] PixyCam SPI starts repeatedly
+- [ ] red/green signatures and camera settings are saved
 
-## Pi Link Checklist
+## Servo and motor
 
-| Item | Expected value |
-| --- | --- |
-| voltage level | `3.3 V` TTL UART |
-| baud rate | `115200` |
-| packet format | `VISION,<mode>,<lane_shift_mm>,<obstacle_side>,<confidence>,<age_ms>` |
-| behavior on stale data | ESP32 should not depend on old perception packets |
+- [ ] MG90S centres without forcing the linkage against a hard stop
+- [ ] logic rails do not dip enough to reset the ESP32 while steering
+- [ ] motor direction agrees with the command
+- [ ] PWM range is tested
+- [ ] launch and stall current are recorded safely
+- [ ] driver/regulator temperature is checked after repeated load
+- [ ] sensor and camera communication still works with the motor running
 
-## Final Cross-Check
-
-Before submission, compare this page against:
-
-- [pcb_wiring_diagrams.md](pcb_wiring_diagrams.md);
-- [schemes/wiring_overview.md](../../schemes/wiring_overview.md);
-- [schemes/Wro_customPCBs.pdf](../../schemes/Wro_customPCBs.pdf);
-- final robot photos in [v-photos/](../../v-photos/).
-
-If the physical robot differs from this checklist, update the documentation instead of leaving a mismatch.
-
+When this checklist is complete we will add PCB photos, measured power/temperature tables and the source commit used for the test.
