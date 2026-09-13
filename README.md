@@ -200,6 +200,3 @@ This section is reserved for the next documentation update. It will cover obstac
 ## 6. Testing and iteration
 
 This section is reserved for the next documentation update. It will cover mechanical tests, steering adjustments, drive consistency, and repeatability between runs.
-
-
-The detailed source notes used for these sections are kept in [`docs/design/`](docs/design/).
