@@ -18,6 +18,7 @@ Last year, we took part in the Open Championship in Slovenia. The biggest lesson
   - [3.3 Differential comparison](#33-differential-comparison)
   - [3.4 Drivebase and mounting](#34-drivebase-and-mounting)
   - [3.5 Steering and wheels](#35-steering-and-wheels)
+- [Build photos](#build-photos)
 - [4. Power and sense management](#4-power-and-sense-management)
 - [5. Obstacle management and control](#5-obstacle-management-and-control)
 - [6. Testing and iteration](#6-testing-and-iteration)
@@ -188,6 +189,29 @@ All four wheels are custom silicone wheels. Using the same material on all four 
 | Motor transfer | Converter, X-shaped LEGO axle, and LEGO gear |
 | Steering | MG90S servo with front-wheel steering |
 | Wheels | Custom silicone wheels on all four corners |
+
+## Build photos
+
+These photos show the current physical build and give extra context for the mechanical and electronics layout. Duplicate views were left out to keep the README compact.
+
+<table>
+  <tr>
+    <td align="center"><strong>Electronics from above</strong><br><img src="docs/report/images/build-context/electronics-top.jpeg" alt="Robot electronics from above" width="320"></td>
+    <td align="center"><strong>Drivebase from above</strong><br><img src="docs/report/images/build-context/drivebase-top.jpeg" alt="LEGO drivebase and differential from above" width="320"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Drivebase and steering from the side</strong><br><img src="docs/report/images/build-context/drivebase-side.jpeg" alt="Robot drivebase and steering from the side" width="320"></td>
+    <td align="center"><strong>Electronics from below</strong><br><img src="docs/report/images/build-context/electronics-bottom.jpeg" alt="Robot electronics from below" width="320"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Camera and front mechanism</strong><br><img src="docs/report/images/build-context/camera-and-front-mechanism.jpeg" alt="Camera and front mechanism" width="320"></td>
+    <td align="center"><strong>Line sensor board</strong><br><img src="docs/report/images/build-context/line-sensor-board.jpeg" alt="Line sensor board" width="320"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Battery</strong><br><img src="docs/report/images/build-context/battery.jpeg" alt="Robot battery" width="320"></td>
+    <td></td>
+  </tr>
+</table>
 
 ## 4. Power and sense management
 
