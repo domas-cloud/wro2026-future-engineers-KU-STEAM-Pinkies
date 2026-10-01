@@ -6,9 +6,9 @@ We gave each subsystem one job. If hardware added wiring, latency or failure poi
 
 ## Team
 
-- **Domas Lukas**
-- **Jonas Danisevičius**
-- **Marius Plečkaitis**
+- **Domas Lukas (left)**
+- **Jonas Danisevičius(right)**
+- **Marius Plečkaitis(center)**
 
 <p align="center">
   <img src="t-photos/team.jpg" width="650" alt="KU STEAM Pinkies team">
