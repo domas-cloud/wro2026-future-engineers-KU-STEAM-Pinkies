@@ -1,647 +1,718 @@
-# KU STEAM Pinkies - WRO 2026 Future Engineers
+# KU STEAM Pinkies: WRO 2026 Future Engineers
 
-We are KU STEAM Pinkies, a WRO Future Engineers team. We will compete at the Open Championship in Croatia. This README documents our robot's mechanical design, electronics, software, and the decisions behind it. We will continue expanding the testing section as measurements are finalized.
+We are **KU STEAM Pinkies** from Klaipėda University STEAM Centre. For WRO 2026 Future Engineers, we built a compact rear-wheel-drive, front-wheel-steer robot with an ESP32, a BNO085 heading sensor, three VL53L1X distance sensors and Pixy2 vision.
 
-Last year, we competed at the Open Championship in Slovenia. Our main lesson was simple: keep the robot small, simple, and easy to control. We followed that idea this year and kept the design simpler. In our case, David beats Goliath by being smaller and less complicated.
+We gave each subsystem one job. If hardware added wiring, latency or failure points without giving us useful information, we left it out.
 
-## Table of contents
+## Team
 
-- [1. Review and changes](#1-review-and-changes)
-- [2. Mechanical design](#2-mechanical-design)
-  - [2.1 Chassis](#21-chassis)
-  - [2.2 Drive motor](#22-drive-motor)
-  - [2.3 Steering servo](#23-steering-servo)
-  - [2.4 Differential and wheels](#24-differential-and-wheels)
-- [3. Engineering / Design](#3-engineering--design)
-  - [3.1 Mechanical engineering](#31-mechanical-engineering)
-  - [3.2 Drive transmission](#32-drive-transmission)
-  - [3.3 Differential comparison](#33-differential-comparison)
-  - [3.4 Drivebase and mounting](#34-drivebase-and-mounting)
-  - [3.5 Steering and wheels](#35-steering-and-wheels)
-  - [3.6 System simplification and engineering decisions](#36-system-simplification-and-engineering-decisions)
-- [4. Power and sense management](#4-power-and-sense-management)
-  - [4.1 Battery and power distribution](#41-battery-and-power-distribution)
-  - [4.2 Main electronics](#42-main-electronics)
-  - [4.3 Sensors and obstacle recognition](#43-sensors-and-obstacle-recognition)
-  - [4.4 Custom PCB and wiring layout](#44-custom-pcb-and-wiring-layout)
-  - [4.5 ESP32 pinout and control links](#45-esp32-pinout-and-control-links)
-  - [4.6 Button and LEDs](#46-button-and-leds)
-  - [4.7 Firmware reproducibility](#47-firmware-reproducibility)
-- [5. Obstacle management and control](#5-obstacle-management-and-control)
-  - [5.1 Software structure](#51-software-structure)
-  - [5.2 Start and initialization](#52-start-and-initialization)
-  - [5.3 Heading control](#53-heading-control)
-  - [5.4 Corner detection and driving direction](#54-corner-detection-and-driving-direction)
-  - [5.5 Wall-distance correction](#55-wall-distance-correction)
-  - [5.6 Pixy2 obstacle detection](#56-pixy2-obstacle-detection)
-  - [5.7 Obstacle avoidance steering](#57-obstacle-avoidance-steering)
-  - [5.8 Steering controller](#58-steering-controller)
-  - [5.9 Lap completion and stop logic](#59-lap-completion-and-stop-logic)
-- [6. Testing and iteration](#6-testing-and-iteration)
+- **Domas Lukas**
+- **Jonas Danisevičius**
+- **Marius Plečkaitis**
 
-## 1. Review and changes
+<p align="center">
+  <img src="t-photos/team.jpg" width="650" alt="KU STEAM Pinkies team">
+</p>
 
-Before building this robot, we had a larger car with a more complicated rack-and-gearbox layout. It helped us test ideas, but it took more work to turn and tune. The extra parts also made its behavior inconsistent from one run to the next and made everything harder to fit together.
+## Competition videos
 
-That experience shaped this design. We made the frame smaller, kept the drivetrain easy to trace, and gave each part a clear job. The steering servo no longer carries loads from parts we do not need. This version uses a smaller frame and a simpler drive path.
+- **Open Challenge:** https://www.youtube.com/watch?v=PdYDFbR_HfI
+- **Obstacle Challenge:** [MP4 recording](videos/obstacle-challenge.mp4)
 
-The same simplification principle was also applied to the electronics and software. The previous architecture used a Raspberry Pi between the camera and the main controller. In the current robot, image processing is handled by Pixy2 and the driving logic runs directly on the ESP32. This makes both the software and hardware easier to manage and removes the larger communication delay of the previous camera -> Raspberry Pi -> ESP32 chain.
+## Contents
 
-We also moved from a prototyping board to a custom PCB after the hardware design had become stable. Once we were confident that the main electronics no longer needed frequent rewiring, a custom PCB allowed us to reduce the space used by electronics, remove most loose wiring, and make assembly more convenient.
+- [Final robot](#final-robot)
+- [Mechanical design](#1-mechanical-design)
+- [Electronics, power and sensors](#2-electronics-power-and-sensors)
+- [Software architecture](#3-software-architecture)
+- [Engineering decisions and system development](#4-engineering-decisions-and-system-development)
+- [Testing and tuning](#5-testing-and-tuning)
+- [Robot evolution](#6-robot-evolution)
+- [Bill of materials and sourcing](#7-bill-of-materials-and-sourcing)
+- [Rebuilding the robot](#8-rebuilding-the-robot)
+- [Repository layout](#9-repository-layout)
+---
 
-Other important changes were moving from a Li-ion battery arrangement to a compact 2S LiPo battery, replacing the MPU6050 with the BNO085 because yaw drift was a problem, and reducing the distance-sensor count from five sensors to three. The reduced sensor layout became possible because the software now uses the IMU yaw directly as the angular reference instead of trying to derive the robot angle mathematically from multiple distance measurements.
+# Final robot
+
+The final competition robot has a **black custom PCB and white rear wheels**.
 
 <table>
-  <tr>
-    <td align="center"><strong>Previous robot base and steering</strong></td>
-    <td align="center"><strong>Previous robot drivetrain</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/design/images/previous-robot-overall.jpg" alt="Previous robot base and steering" width="520"></td>
-    <td align="center"><img src="docs/design/images/previous-robot-drivetrain.jpg" alt="Previous robot drivetrain" width="520"></td>
-  </tr>
-  <tr>
-    <td align="center">The old base and steering assembly was much larger than the current one.</td>
-    <td align="center">The old drivetrain showed us where the mechanical complexity came from.</td>
-  </tr>
+<tr>
+<td align="center"><img src="v-photos/final-01.jpg" width="280"><br><b>Final robot, view 1</b></td>
+<td align="center"><img src="v-photos/final-02.jpg" width="280"><br><b>Final robot, view 2</b></td>
+</tr>
+<tr>
+<td align="center"><img src="v-photos/final-03.jpg" width="280"><br><b>Final robot, view 3</b></td>
+<td align="center"><img src="v-photos/final-04.jpg" width="280"><br><b>Final robot, view 4</b></td>
+</tr>
+<tr>
+<td align="center" colspan="2"><img src="v-photos/final-05.jpg" width="360"><br><b>Final robot, view 5</b></td>
+</tr>
 </table>
 
-## 2. Mechanical design
-
-We built the robot around a compact rear-wheel-drive chassis with front-wheel steering. Its smaller size makes it easier to turn and park, and leaves us with a simpler mechanical layout.
-
-### 2.1 Chassis
-
-The frame is made from wood. The complete drivebase and all of its mounting parts are LEGO. The robot is about 21 cm long, 10 cm wide, and 8 cm high.
-
-| Part | Final choice |
+| Subsystem | Final version |
 |---|---|
-| Drive layout | Rear-wheel drive |
-| Drivebase | LEGO drivebase, including its mounts |
-| Steering layout | Front-wheel steering |
-| Robot size | Approximately 21 x 10 x 8 cm |
-| Main structure | Custom wood frame with LEGO drivebase |
+| Controller | ESP32-WROOM-32, 30-pin DevKit V1 form factor |
+| Heading | BNO085 |
+| Range sensing | 3 × VL53L1X, Long mode |
+| Vision | Pixy2 / Pixy2.1 |
+| Drive | rear-wheel drive |
+| Motor | N20, 6 V, nominal 600 rpm |
+| Transmission | LEGO-compatible gearing + LEGO differential |
+| Steering | front-wheel steering, positional MG90S |
+| Battery | 2S LiPo, 7.4 V, 2500 mAh, 30C |
+| Electronics | custom PCB |
+| Mass | 332.4 g |
+| Approx. overall size | 165 × 145 × 70 mm |
 
-### 2.2 Drive motor
+---
 
-We use a small 6 V N20 geared motor rated at 600 rpm. It fits the compact chassis and gives the robot enough speed without making it difficult to control.
+# 1. Mechanical design
 
-The motor shaft goes into a converter. The converter produces an X-shaped LEGO axle, which drives a LEGO gear and then the official LEGO differential used in the drivetrain.
+## 1.1 Layout
+
+We chose **rear-wheel drive** and **front-wheel steering**. That leaves the rear axle to provide traction and the front mechanism to steer. The layout also simplified the control model and left room in the centre of the chassis for the battery, PCB and sensors.
+
+We kept the car compact to leave more room around corners and obstacles and reduce the steering correction needed after a turn.
+
+## 1.2 Drivetrain
+
+```text
+N20 geared motor
+      ↓
+shaft adapter
+      ↓
+LEGO-compatible gear stage
+      ↓
+LEGO differential
+      ↓
+rear wheels
+```
+
+The nominal motor speed is 600 rpm. With the final effective reduction of about 1.50:1:
+
+```text
+wheel_rpm = 600 / 1.50 = 400 rpm
+wheel circumference = π × 0.054 = 0.1696 m
+ideal geometric speed = 400 × 0.1696 / 60 ≈ 1.13 m/s
+```
+
+For the design model we used 0.08 N·m useful motor torque and 80% drivetrain efficiency:
+
+```text
+wheel torque ≈ 0.08 × 1.50 × 0.80 = 0.096 N·m
+tractive force ≈ 0.096 / 0.027 ≈ 3.6 N
+```
+
+These figures are design calculations. Under load, the car runs slower because of motor load, friction, tyre deformation, PWM and battery voltage.
+
+We balanced speed against the time the controller needs to sample the ToF sensors, correct the heading, detect corners and recover after an obstacle. More reduction increases wheel torque but lowers lap speed. The final 1.50:1 ratio is our compromise.
+
+## 1.3 Differential iteration
 
 <table>
-  <tr>
-    <th colspan="2">N20 6 V, 600 rpm geared motor</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <img src="docs/design/images/n20-6v-600rpm-reference.png" alt="Reference photo of a 6 V N20 geared motor" width="300"><br>
-      <em>Reference photo. Source: <a href="https://zbotic.in/product/n20-6v-600-rpm-micro-metal-gear-motor/">Zbotic product page</a>.</em>
-    </td>
-  </tr>
-  <tr>
-    <th colspan="2">Specifications</th>
-  </tr>
-  <tr><td>Voltage</td><td>6 V</td></tr>
-  <tr><td>Type</td><td>N20 geared DC motor</td></tr>
-  <tr><td>Speed</td><td>600 rpm</td></tr>
-  <tr><td>Power transfer</td><td>N20 shaft -> converter -> LEGO cross axle -> LEGO gear -> LEGO differential</td></tr>
+<tr><td align="center"><b>Earlier metal differential</b></td><td align="center"><b>Final LEGO differential</b></td></tr>
+<tr><td><img src="docs/design/images/metal-differential.jpg" width="410"></td><td><img src="docs/design/images/lego-differential.png" width="410"></td></tr>
 </table>
 
-### 2.3 Steering servo
+We kept the LEGO differential because it fits the rest of the LEGO-compatible axle and gearing directly, uses fewer custom couplings and is easier to replace during competition. It also allows the two rear wheels to rotate at different speeds in a corner.
 
-For steering, we use an MG90S servo with a small gear mechanism. The direct layout keeps the mechanism compact and gives us a useful steering angle.
-
-We center the servo before fixing the linkage. This helps both front wheels move symmetrically and keeps the robot steadier on straight sections.
+## 1.4 Steering iteration
 
 <table>
-  <tr>
-    <th colspan="2">MG90S metal-gear micro servo</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <img src="docs/design/images/mg90s-servo-reference.jpg" alt="Reference photo of an MG90S servo" width="300"><br>
-      <em>Reference photo. Source: <a href="https://hitechxyz.in/products/tower-pro-9g-micro-sg90s-180-metal-gear-servo-motor-original-tower-pro">Hi Tech XYZ product page</a>.</em>
-    </td>
-  </tr>
-  <tr>
-    <th colspan="2">Specifications</th>
-  </tr>
-  <tr><td>Servo</td><td>MG90S metal-gear micro servo</td></tr>
-  <tr><td>Operating voltage</td><td>4.8 - 6 V</td></tr>
-  <tr><td>Control</td><td>PWM</td></tr>
-  <tr><td>Use</td><td>Front-wheel steering</td></tr>
+<tr><td align="center"><b>Earlier steering</b></td><td align="center"><b>Final steering</b></td></tr>
+<tr><td><img src="docs/design/images/steering-v1.jpg" width="410"></td><td><img src="docs/design/images/steering-v3-final.png" width="410"></td></tr>
 </table>
 
-### 2.4 Differential and wheels
+The final steering uses a positional MG90S servo. We centre the linkage mechanically before fixing the servo horn. Firmware limits the servo command from **60° to 120°**, with **88°** as straight ahead. The limits keep the linkage out of the range where it binds and heats the servo.
 
-The entire drivebase is LEGO: the rear axle, differential, gears, and the mounts that hold the drive system in place. The LEGO gear driven by the cross axle turns the differential, so the inside and outside wheels can rotate at different speeds in a turn.
+During development, we saw the space needed for a 90° turn fall from about 46 cm to 39 cm after changing the steering. We did not keep the original matched test log, so treat those figures as an engineering observation, not a precise measurement.
 
-All four wheels are custom silicone wheels. They give us more grip for driving and steering.
+## 1.5 CAD and base fabrication
 
-| Part | Final choice |
+The final custom parts are in `models/`:
+
+| File | Part |
 |---|---|
-| Drivebase | LEGO drivebase |
-| Drive mounts | LEGO mounting parts |
-| Rear axle | Official LEGO mechanical differential |
-| Rear wheels | Custom silicone wheels |
-| Front wheels | Custom silicone wheels |
-| Steering range | About 60 degrees of useful motion |
+| `Body1.stl` | body / structural part |
+| `Front.stl` | front assembly part |
+| `lego-mold-su-x.stl` | LEGO-interface mould/part |
+| `ratas-su-x.stl` | custom wheel part |
+| `motor-shaft-spacer.stl` | motor shaft spacer |
+| `steering-column-housing-short.stl` | steering column housing |
+| `steering-gear-cover-disc.stl` | steering gear cover |
+| `steering-gear-hub.stl` | steering gear hub |
+| `steering-gear-plate.stl` | steering gear plate |
+| `steering-pin-adapter.stl` | steering pin adapter |
+| `case.ai` | 2D plywood/base cutting vector |
 
-## 3. Engineering / Design
+`models/case.ai` is the base fabrication file. Its main rectangular path is approximately **90 × 150 mm** when imported at the original scale. That number is only a scale check; holes, slots and curves must be taken from the vector itself.
 
-### 3.1 Mechanical engineering
+Mechanical build order:
 
-The whole drivebase, including its mounts, is LEGO. The rear axle, differential, gears, and the pieces that hold them in place all belong to the same system.
+1. cut `models/case.ai` at 1:1 scale;
+2. print the STL parts without rescaling;
+3. mount the N20 motor and motor-shaft interface;
+4. assemble the LEGO-compatible gear stage and rear differential;
+5. install the rear wheels and confirm both sides rotate freely;
+6. assemble the front steering parts and MG90S;
+7. centre the steering mechanically;
+8. check the full range from 60° to 120° for binding;
+9. mount the electronics stack and compare the result with the final photos above.
 
-The rear wheels drive the robot and the front wheels steer it. Keeping those jobs separate made testing easier.
+Standard LEGO Technic shafts and gears, along with ordinary fasteners, are not performance-tuned. Replace them only with parts that keep the shaft, hole and mounting geometry shown in the CAD and final assembly.
 
-### 3.2 Drive transmission
+---
 
-The final mechanical transfer is:
+# 2. Electronics, power and sensors
+
+## 2.1 Power architecture
+
+The final battery is **2S LiPo, 7.4 V, 2500 mAh, 30C**.
 
 ```text
-N20 shaft -> converter -> X-shaped LEGO axle -> LEGO gear -> LEGO differential
+2S LiPo
+  |
+  +--> custom PCB --> motor driver --> N20 motor
+  |
+  +--> regulated logic rail --> ESP32
+  |
+  +--> PCB distribution --> BNO085 / VL53L1X / Pixy2 / MG90S
 ```
 
-The N20 shaft goes into a converter, which gives us an X-shaped LEGO axle. The axle turns a LEGO gear and the gear turns the differential. That is how the motor reaches the driven wheels.
+Battery energy:
 
-### 3.3 Differential comparison
+```text
+E = 7.4 V × 2.5 Ah = 18.5 Wh
+```
 
-We compared an earlier metal differential with the LEGO differential. We kept the LEGO version because it fit the simpler layout we chose for the final drivebase.
+### Current budget used during design
 
-<table>
-  <tr>
-    <td align="center"><strong>Earlier metal differential</strong></td>
-    <td align="center"><strong>Final LEGO differential</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/design/images/metal-differential.jpg" alt="Earlier metal differential" width="520"></td>
-    <td align="center"><img src="docs/design/images/lego-differential.png" alt="Final LEGO differential" width="520"></td>
-  </tr>
-</table>
+| Load | Normal | Short peak | Main concern |
+|---|---:|---:|---|
+| ESP32 | ~160 mA | ~240 mA | logic stability |
+| BNO085 | ~15 mA | ~20 mA | heading stability |
+| 3 × VL53L1X | ~75 mA total | ~120 mA total | ranging / I2C stability |
+| Pixy2 | ~140 mA | ~200 mA | camera processing |
+| MG90S | ~200–300 mA | ~750 mA | steering peak/stall |
+| N20 motor | ~350 mA | ~1.3 A | acceleration/stall |
+| whole robot | ~0.9–1.2 A | ~1.8–2.2 A | regulator and connector voltage drop |
 
-### 3.4 Drivebase and mounting
+The battery has ample discharge reserve. During motor and servo peaks, the tighter limits are the regulator, PCB traces, connectors and wiring. During testing, we reject a build if acceleration or steering repeatedly resets the ESP32 or interrupts sensor communication.
 
-LEGO is used for more than the differential. It makes up the rear axle, the gears, and every mount holding the drivetrain. The drive section is one LEGO system.
-
-The motor sits with its shaft aligned with the converter. The X-shaped LEGO axle carries the rotation through the gear and into the differential.
-
-<table>
-  <tr>
-    <td align="center"><strong>Final drivebase from above</strong></td>
-    <td align="center"><strong>Drivebase and steering from the side</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/report/images/build-context/drivebase-top.jpeg" alt="Final LEGO drivebase and differential from above" width="430"></td>
-    <td align="center"><img src="docs/report/images/build-context/drivebase-side.jpeg" alt="Final drivebase and steering from the side" width="430"></td>
-  </tr>
-  <tr>
-    <td align="center">The rear axle, gearing, differential and mounts are visible as one compact LEGO drive system.</td>
-    <td align="center">Side view showing how the drivebase and front steering fit into the compact chassis.</td>
-  </tr>
-</table>
-
-### 3.5 Steering and wheels
-
-An MG90S servo moves the front-wheel steering. The front axle is separate from the driven rear axle, so the servo only moves the steering mechanism.
-
-All four wheels use custom silicone wheels. Using the same material at all four corners keeps contact with the track more predictable and gives the front axle the grip it needs when the servo changes direction.
-
-The steering geometry was not kept as a single first attempt. The repository records an earlier steering version and the final CAD geometry used for the current design.
+## 2.2 Custom PCB
 
 <table>
-  <tr>
-    <td align="center"><strong>Earlier steering version</strong></td>
-    <td align="center"><strong>Final steering geometry</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/design/images/steering-v1.jpg" alt="Earlier steering design" width="430"></td>
-    <td align="center"><img src="docs/design/images/steering-v3-final.png" alt="Final steering geometry CAD view" width="430"></td>
-  </tr>
+<tr><td align="center"><b>PCB layout</b></td><td align="center"><b>PCB routing</b></td></tr>
+<tr><td><img src="schemes/images/custom-pcb-layout-top.jpeg" width="410"></td><td><img src="schemes/images/custom-pcb-routing.jpeg" width="410"></td></tr>
 </table>
 
-| Part | Final choice |
+The electrical folder contains:
+
+- `schemes/Wro_customPCBs.pdf`
+- `schemes/images/schematic-overview.png`
+- `schemes/images/sensor-bus-detail.png`
+- complete top/bottom copper, solder-mask and silkscreen Gerbers
+- board outline and mechanical/document layers
+- plated, non-plated and via drill files
+- flying-probe test data
+
+The Gerber and drill files are for manufacturing the final PCB revision.
+
+## 2.3 Pin and sensor identity
+
+| Function | ESP32 pin / bus |
 |---|---|
-| Frame | Wood, approximately 21 x 10 x 8 cm |
-| Drivebase | LEGO rear axle, differential, gears, and all drive mounts |
-| Drive motor | 6 V N20 geared motor, 600 rpm |
-| Motor transfer | Converter, X-shaped LEGO axle, and LEGO gear |
-| Steering | MG90S servo with front-wheel steering |
-| Wheels | Custom silicone wheels on all four corners |
+| Start button | GPIO14 |
+| Motor enable / PWM | GPIO32 |
+| Motor input 1 | GPIO26 |
+| Motor input 2 | GPIO25 |
+| Steering servo | GPIO33 |
+| Front VL53L1X XSHUT | GPIO15 |
+| Left VL53L1X XSHUT | GPIO5 |
+| Right VL53L1X XSHUT | GPIO18 |
+| BNO085 | I2C |
+| 3 × VL53L1X | shared I2C, separate XSHUT |
+| Pixy2 | direct Pixy2-to-ESP32 interface |
 
-### 3.6 System simplification and engineering decisions
+All three ToF modules share the same factory I2C address. Firmware enables them one at a time and assigns each a different runtime address:
 
-A major design goal for the 2026 robot is reducing unnecessary complexity. Several design changes follow the same principle:
+| Sensor | XSHUT | Runtime address |
+|---|---:|---:|
+| Front | GPIO15 | `0x30` |
+| Left | GPIO5 | `0x31` |
+| Right | GPIO18 | `0x32` |
 
-| Previous approach | Current approach | Reason for the change |
-|---|---|---|
-| Camera -> Raspberry Pi -> ESP32 | Pixy2 + ESP32 | Simpler software and hardware architecture and lower communication delay |
-| Prototyping/perfboard wiring | Custom PCB | Smaller electronics footprint, fewer loose wires, easier assembly once the hardware design became stable |
-| Li-ion battery arrangement | 2S LiPo | More convenient and takes less space in the compact chassis |
-| MPU6050 | BNO085 | The previous IMU solution suffered from yaw drift |
-| Five distance sensors | Three distance sensors + BNO085 yaw | The robot angle is now obtained directly from IMU yaw, reducing the need to derive orientation mathematically from several distance measurements |
-| More complicated previous chassis | Smaller and simpler chassis | Easier packaging, steering, tuning and more repeatable mechanical behaviour |
+## 2.4 Sensor placement and track geometry
 
-These changes are related rather than independent. Removing the Raspberry Pi reduced the number of processors and communication stages. The custom PCB then made the smaller electronics layout easier to package. Using BNO085 yaw directly simplified the navigation logic enough to reduce the number of distance sensors. The overall direction of development was therefore to remove components and calculations that were no longer necessary instead of adding more hardware.
-
-## 4. Power and sense management
-
-The robot has one main controller, an `ESP32-WROOM-32`. We do not use a Raspberry Pi. The Pixy2 has its own processor, so it processes the camera image and provides obstacle-recognition information without requiring the previous camera-to-Raspberry-Pi-to-ESP32 processing chain.
-
-The ESP32 handles the low-level and high-level driving control. It reads the IMU and three ToF sensors, controls the drive motor and steering servo, and uses the button and LEDs for state feedback and obstacle-detection debugging.
-
-### 4.1 Battery and power distribution
-
-The robot runs from a 2S LiPo battery. Its label shows `7.4 V`, `2500 mAh`, `18.5 Wh`, and `30C`. We chose the 2S LiPo format because it is convenient and uses less space in the compact robot than the previous battery arrangement.
+The **front VL53L1X** faces forward and is mounted beside the **Pixy2** camera. It measures forward clearance and helps detect a corner; Pixy2 independently reports the position of coloured obstacles. The **left and right VL53L1X** modules sit at the lateral edges of the custom PCB and measure the corresponding side clearances for wall correction. The chassis-mounted **BNO085** provides heading, so range and orientation feedback come from separate sensors.
 
 <table>
-  <tr>
-    <td align="center"><img src="docs/report/images/build-context/battery.jpeg" alt="2S LiPo battery used in the robot" width="420"></td>
-  </tr>
-  <tr>
-    <td align="center">The 2S LiPo battery used in the current compact robot.</td>
-  </tr>
+<tr>
+<td align="center"><img src="docs/report/images/build-context/electronics-top.jpeg" width="420" alt="Top view of the assembled electronics and sensor locations"><br><strong>Installed sensor positions.</strong> Left and right VL53L1X modules sit at the PCB side edges; the front VL53L1X is beside Pixy2.</td>
+<td align="center"><img src="schemes/images/custom-pcb-layout-top.jpeg" width="420" alt="Dimensioned top view of the custom PCB"><br><strong>PCB footprint.</strong> The drawing marks the board as 90 × 100 mm.</td>
+</tr>
 </table>
 
-Power enters the custom PCB through the connector marked `Power`. The board then distributes it to the motor-driver branch and to the controller and peripheral connections. The drive motor runs through the motor driver, while the ESP32 receives power through a Matek Micro BEC.
+The robot's documented overall dimensions are approximately **165 × 145 × 70 mm**.
 
-We use a [Matek Micro BEC 6S](https://www.rcdalys.lt/detales/0/27234/MATEK-MICRO-BEC-6S-6-30V-5V9V-ADJUSTABLE-3PCS). It accepts a 6-30 V input and has an adjustable 5 V or 9 V output. In this robot, it supplies the ESP32 from the 7.4 V battery. The motor has its own battery-side path through the motor driver.
+### Projection onto the WRO corridor
 
-The PCB puts the power and signal connections in one place. That makes the battery path easier to trace, keeps a common ground, and lets us disconnect individual modules during testing.
+The [WRO 2026 Future Engineers rules](https://wro.hr/wp-content/uploads/2026/01/WRO-2026-Future-Engineers-Self-Driving-Cars-General-Rules.pdf) specify nominal corridor widths of **600 mm or 1000 mm** for Open Challenge, and **1000 mm** for Obstacle Challenge. The Open Challenge width may vary by ±100 mm at the International Final; Obstacle Challenge specifies ±10 mm.
 
-### 4.2 Main electronics
+For this estimate, the **90 mm PCB dimension is assumed to run across the robot**, with the two side sensor centres at opposite PCB edges. The car is assumed to be centred and parallel to the corridor walls. These are geometry estimates from the PCB drawing and assembly photos, not direct measurements of the installed sensor centres or calibrated readings.
 
-| Component | Final choice | Function |
-|---|---|---|
-| Main controller | `ESP32-WROOM-32` | Reads sensors and runs the driving logic |
-| Camera | `Pixy2` | Processes colour-connected components for obstacle recognition |
-| IMU | `BNO085` | Measures the robot's yaw and orientation |
-| Front distance sensor | `VL53L1X` | Measures the distance ahead of the robot |
-| Side distance sensors | `2x VL53L4CD` | Measure the left and right side distances |
-| Drive motor driver | [Makeblock MegaPi Encoder DC Motor Driver](https://cpc.farnell.com/makeblock/12040/megapi-encoder-dc-motor-driver/dp/HK01693) | Controls the one rear drive motor |
-| Drive motor | `6 V N20, 600 rpm` | Provides power to the rear LEGO drivetrain |
-| Steering actuator | `MG90S` servo | Moves the front steering mechanism |
-| Battery | `2S LiPo, 7.4 V, 2500 mAh` | Main energy source |
-| Voltage regulator | Matek Micro BEC | Provides regulated power for the ESP32 |
+| WRO section | Nominal corridor width | Side sensor centre to nearest wall, centred | Robot body side to wall, centred |
+|---|---:|---:|---:|
+| Open Challenge, narrow corridor | 600 mm | ≈255 mm | ≈227.5 mm |
+| Open Challenge, wide corridor | 1000 mm | ≈455 mm | ≈427.5 mm |
+| Obstacle Challenge | 1000 mm | ≈455 mm | ≈427.5 mm |
 
-### 4.3 Sensors and obstacle recognition
-
-The current sensor layout uses three ToF sensors instead of the five-distance-sensor approach used earlier in development. The software no longer needs several distance measurements to estimate the robot's angular orientation because the BNO085 supplies yaw directly.
-
-The three ToF sensors provide the measurements needed for the current control strategy:
-
-- the front `VL53L1X` checks the space in front of the robot and triggers the corner sequence;
-- the left `VL53L4CD` measures the left side distance;
-- the right `VL53L4CD` measures the right side distance.
-
-The BNO085 provides the heading reference. Pixy2 provides obstacle position and signature information. This gives the ESP32 three different kinds of information: heading from the IMU, local geometry from the ToF sensors, and obstacle information from the camera.
-
-The ToF sensors share the ESP32 I2C bus. The ESP32 starts them one at a time using separate shutdown lines and then assigns each sensor a different I2C address:
-
-| Sensor | Type | I2C address | ESP32 shutdown pin |
-|---|---|---:|---:|
-| Front | `VL53L1X` | `0x30` | `GPIO15` |
-| Left | `VL53L4CD` | `0x31` | `GPIO5` |
-| Right | `VL53L4CD` | `0x32` | `GPIO2` |
-
-This startup sequence keeps the three ToF modules from conflicting on the shared bus.
-
-### 4.4 Custom PCB and wiring layout
-
-The electronics are mounted and connected through a custom PCB measuring approximately `90 x 100 mm`. The board is installed in the robot, not just shown in the schematic.
-
-Earlier development used a prototyping/perfboard-style wiring arrangement. We moved to the custom PCB after the hardware design had become stable enough that frequent rewiring was no longer necessary. The custom board takes less space, is more convenient to assemble, and removes most loose point-to-point wiring.
-
-The PCB has labeled areas and connectors for:
-
-- `Power`: battery input;
-- `Camera`: Pixy2 connection;
-- `ToF`: the three distance-sensor connections;
-- `Servo`: MG90S steering connection;
-- `Motor Driver`: Makeblock motor-driver connection;
-- `DC-DC Converter`: Matek Micro BEC connection;
-- red and green LEDs;
-- the push button used during debugging.
-
-The basic electrical path is:
+Calculation: `sensor-to-wall = (corridor width − 90 mm) / 2`; body clearance uses the documented 145 mm vehicle width: `(corridor width − 145 mm) / 2`. Firmware uses `ROBOT_WIDTH = 150 mm` as its rounded control model.
 
 ```text
-2S LiPo battery, 7.4 V
-  -> custom PCB Power input
-     -> Makeblock motor driver -> 6 V N20 motor -> LEGO differential
-     -> Matek Micro BEC -> ESP32-WROOM-32
-     -> PCB peripheral connections -> Pixy2, BNO085, 3x ToF, and MG90S servo
+Plan view — schematic, not to scale
+
+600 mm corridor:
+LEFT WALL │← ≈255 mm →│ ● Left ToF ── ≈90 mm ── Right ToF ● │← ≈255 mm →│ RIGHT WALL
+
+1000 mm corridor:
+LEFT WALL │← ≈455 mm →│ ● Left ToF ── ≈90 mm ── Right ToF ● │← ≈455 mm →│ RIGHT WALL
+
+Robot layout (body width ≈145 mm):
+                         FRONT / direction of travel ↑
++----------------------------------------------+
+| Front VL53L1X beside Pixy2 camera            |
+| Left ToF   [PCB 90 × 100 mm]   Right ToF     |
++----------------------------------------------+
 ```
 
-The board layout keeps the high-current motor path separate from the controller and sensor connections where possible. All modules use the PCB's common ground reference.
+The firmware's `TARGET_DISTANCE=300 mm` is a side-wall setpoint while the current section width is unknown; in the Obstacle Challenge build, section width is not learned, so normal wall following uses that 300 mm target. At the nominal centred geometry, this is 45 mm farther from the selected wall than the 600 mm corridor reading (≈255 mm), and 155 mm closer to the selected wall than the 1000 mm corridor reading (≈455 mm). This comparison describes the setpoint relative to a centred car, not a measured driving offset. Confirm the PCB orientation, sensor centres and beam angles on the assembled robot, then record calibrated left/right readings on the actual field.
 
-<table>
-  <tr>
-    <td align="center"><strong>Custom PCB component layout</strong></td>
-    <td align="center"><strong>Custom PCB routing view</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="schemes/images/custom-pcb-layout-top.jpeg" alt="Custom PCB component layout" width="410"></td>
-    <td align="center"><img src="schemes/images/custom-pcb-routing.jpeg" alt="Custom PCB routing view" width="410"></td>
-  </tr>
-</table>
+## 2.5 Sensor architecture changes
 
-### 4.5 ESP32 pinout and control links
+### MPU6050 → BNO085
 
-The controller code currently uses these ESP32 connections:
+The earlier MPU6050 setup showed noticeable yaw drift during repeated turns. Because heading error directly becomes steering error, we replaced it with BNO085 and used the IMU as the dedicated chassis-heading reference.
 
-| Function | ESP32 connection |
-|---|---:|
-| Motor driver direction 1 | `GPIO25` |
-| Motor driver direction 2 | `GPIO26` |
-| Motor driver PWM / enable | `GPIO27` |
-| MG90S steering PWM | `GPIO33` |
-| Front ToF shutdown | `GPIO15` |
-| Left ToF shutdown | `GPIO5` |
-| Right ToF shutdown | `GPIO2` |
-| BNO085 reset | `GPIO32` |
-| Push button | `GPIO12` |
+### Five range sensors → three VL53L1X + BNO085
 
-The ESP32 sends the motor-driver direction and PWM signals, while the servo receives its own PWM steering signal. The current Pixy2 implementation is initialized through the Pixy2 library with `pixy.init()`; the control code does not define separate UART2 RX/TX pins for the camera.
+With the BNO085 handling heading, we only needed three range measurements: front, left and right. We removed the other range modules and their wiring.
 
-### 4.6 Button and LEDs
+### VL53L4CD → VL53L1X Long mode
 
-The push button toggles the robot between waiting and driving states. The red and green LEDs provide visual feedback during debugging and obstacle recognition, including different feedback for the detected obstacle signature.
+The side controller needs wall readings before the car gets close to a wall. VL53L1X Long mode provided a larger useful range, so we used it for all three distance sensors.
 
-### 4.7 Firmware reproducibility
+### Raspberry Pi + UART → Pixy2 directly on ESP32
 
-The current firmware source is developed in the public repository [`mapdevelopment/pinkies3`](https://github.com/mapdevelopment/pinkies3). It is a PlatformIO project for the ESP32 using the Arduino framework.
+Pixy2 sends colour connected-component data directly to the ESP32, so we removed the Raspberry Pi and UART link. That cut wiring and delay and removed one source of stale packets or communication failures.
 
-The project configuration identifies the target as `esp32doit-devkit-v1` and records the main library dependencies:
+## 2.6 Calibration
 
-- STM32duino VL53L4CD;
-- Pololu VL53L1X;
-- Adafruit BNO08x;
-- ESP32Servo;
-- RunningAverage;
-- Pixy2;
-- Wire/I2C.
+**ToF identity and direction**
 
-To reproduce the firmware build:
+1. Put a flat target close to the left module only and check that the left channel changes.
+2. Repeat for the right module.
+3. Check the front sensor against a target placed on the centreline.
+4. Test several known distances and record mean reading, spread and invalid samples.
+5. Make sure no wheel or chassis part clips a sensor beam.
 
-```text
-1. Clone https://github.com/mapdevelopment/pinkies3.git
-2. Open the repository in VS Code with PlatformIO installed.
-3. Let PlatformIO install the dependencies listed in platformio.ini.
-4. Build the esp32doit-devkit-v1 environment.
-5. Connect the ESP32 and use PlatformIO Upload to flash the firmware.
+**BNO085**
+
+1. Point the car along a known straight reference.
+2. Record yaw.
+3. Rotate the chassis about 90° and confirm the expected sign/direction.
+4. Cross the 0°/360° boundary to check heading wrapping.
+
+**Pixy2**
+
+1. Load the obstacle colour signatures used by the controller.
+2. Place a trained obstacle near image centre.
+3. Move it left and right and verify the reported X coordinate changes in the expected direction.
+4. Check that the front structure does not block the useful image area.
+
+---
+
+# 3. Software architecture
+
+The final firmware is in `src/` and is built with PlatformIO.
+
+Two build environments use the same source code:
+
+```bash
+platformio run -d src -e open_challenge
+platformio run -d src -e obstacle_challenge
 ```
 
-The code is split between `src/main.cpp`, configuration headers in `include/`, and hardware-specific classes in `lib/`. The documentation repository contains the robot design, photographs, PCB information and mechanical models, while the firmware repository contains the actively developed control code.
+- `open_challenge` uses `WRO_CHALLENGE_MODE=0`
+- `obstacle_challenge` uses `WRO_CHALLENGE_MODE=1`
 
-## 5. Obstacle management and control
+`src/include/CompetitionMode.h` validates the build-time value, so challenge mode is not changed by editing `main.cpp`.
 
-The current software is implemented on the ESP32 and combines heading information, three distance measurements, and Pixy2 colour-block detection into one continuous steering loop. The code is organized around small hardware classes for the motor, IMU, distance sensors, and lights, while `main.cpp` contains the high-level driving decisions.
+## 3.1 Modules
 
-The main control flow is:
-
-```text
-Start / wait for button
-        |
-        v
-Store current BNO085 yaw as target heading
-        |
-        v
-Drive motor at configured speed
-        |
-        v
-Read BNO085 + front/left/right ToF + Pixy2
-        |
-        v
-Is front wall within corner threshold?
-   | yes                         | no
-   v                             v
-Determine/keep CW or CCW      Continue heading control
-Update target by 90 degrees      |
-Perform corner turn              |
-   |                             |
-   +-------------+---------------+
-                 v
-         Is an obstacle selected?
-            | yes        | no
-            v            v
-       Pixy X control   Outer-wall correction
-            \            /
-             \          /
-              v        v
-          Add derivative correction
-                 |
-                 v
-        Constrain servo command
-                 |
-                 v
-              Steer
-```
-
-### 5.1 Software structure
-
-The main software components are:
-
-| Software component | Responsibility |
+| Module | Responsibility |
 |---|---|
-| `main.cpp` | High-level driving logic, corner handling, obstacle selection, steering combination, and stopping logic |
-| `Engine` | Motor direction and PWM output |
-| `Compass` | BNO085 initialization and conversion of rotation-vector data to yaw |
-| `Distance_Sensor` | ToF initialization, unique I2C addressing, measurement status, and running-average distance filtering |
-| `Pixy2` library | Colour Connected Components (CCC) obstacle detection |
-| `Lights` | Visual state and obstacle-debug feedback |
-| `Config.h` | Central configuration of GPIO pins, steering limits, target distance, corner threshold, speed, and obstacle-round mode |
+| `src/src/main.cpp` | driving behaviour and state transitions |
+| `Engine` | DC motor direction and PWM |
+| `Compass` | BNO085 startup and yaw |
+| `Distance_Sensor` | VL53L1X startup, address assignment and ranging |
+| Pixy2 interface | colour connected-component acquisition |
+| `Lights` | visible robot state |
+| `CompetitionMode.h` | Open/Obstacle build selection |
 
-This separation keeps low-level hardware access outside the main decision loop and makes the configurable values easier to tune without rewriting the control logic.
+## 3.2 State machine
 
-### 5.2 Start and initialization
-
-At startup, the ESP32 initializes I2C, the motor driver, servo, three distance sensors, BNO085 and Pixy2. The distance sensors are enabled sequentially and assigned different I2C addresses so that devices sharing the bus do not conflict.
-
-The robot does not begin driving immediately. It waits for the push button. A button press toggles the `started` state and stores the current BNO085 yaw as `targetAngle`. This makes the starting orientation the first reference direction instead of requiring one fixed absolute compass direction.
-
-When the robot is not started, the motor is stopped and the control loop returns without issuing driving commands.
-
-### 5.3 Heading control
-
-The BNO085 is configured to provide its Game Rotation Vector. The `Compass` class converts the returned quaternion into yaw in degrees from `0` to `360`.
-
-The BNO085 replaced the previous MPU6050-based solution because yaw drift was a practical problem. The current strategy therefore uses the BNO085 yaw as the direct angular reference instead of estimating the vehicle angle mathematically from several distance sensors.
-
-During driving, the heading error is calculated as:
+The controller follows a state machine:
 
 ```text
-heading = targetAngle - currentYaw
+WAIT_FOR_START
+      |
+      | start button
+      v
+NORMAL_DRIVING
+   |       |
+   |       +-- corner detected --> TURNING --------+
+   |                                               |
+   +-- obstacle detected --> OBSTACLE_AVOIDANCE    |
+                              |                     |
+                              | obstacle disappears |
+                              v                     |
+                         OBSTACLE_RECOVERY ----------+
+                              |
+                              | recovery timer ends
+                              v
+                        NORMAL_DRIVING
+
+12 corners / 3 laps + stable finish condition --> FINISHED
+sensor-start failure ---------------------------> ERROR
 ```
 
-The error is normalized to the range `-180° ... +180°`. This prevents a heading near the `0°/360°` boundary from producing an unnecessarily large steering correction.
+### What each state does
 
-The basic angular correction uses:
+- **WAIT_FOR_START** keeps the motor stopped until the team starts a run.
+- **NORMAL_DRIVING** uses heading and wall control.
+- **TURNING** handles a corner and updates the target heading by about 90° after the turn condition is met.
+- **OBSTACLE_AVOIDANCE** gives Pixy2 steering priority while an obstacle block is present.
+- **OBSTACLE_RECOVERY** keeps wall following from taking over while the car is still angled after passing an obstacle.
+- **FINISHED** keeps the robot stopped after three laps.
+- **ERROR** stops the run if an essential sensor fails during startup.
+
+## 3.3 Heading and wall control
+
+Heading error is wrapped to the shortest direction:
 
 ```text
-angle = Kg * heading
+heading_error = target_heading - yaw
+if heading_error > 180:  heading_error -= 360
+if heading_error < -180: heading_error += 360
 ```
 
-with the current code using `Kg = 0.5`. The purpose of this term is to keep the robot aligned with the current straight section of the track and to recover the target heading after a corner or avoidance manoeuvre.
+Heading error sets the base steering correction. The firmware has a `Kd` term, but its previous-error value is not updated on every control cycle. It therefore does not implement the usual discrete derivative of current and previous heading error, and its damping effect has not been validated.
 
-### 5.4 Corner detection and driving direction
-
-The front distance reading is used as the corner trigger. The current configuration uses a front threshold of `600 mm`. When the front measured distance becomes equal to or lower than this value, the robot enters its turning sequence.
-
-During the first corner, the robot determines the travel direction from the side measurements. The result is stored in `isClockwise`, and `sideLock` prevents the program from re-deciding the direction at every later corner.
-
-The target heading changes in exact quarter-turn increments:
+Wall correction uses the outside wall:
 
 ```text
-clockwise:         targetAngle -= 90°
-counter-clockwise: targetAngle += 90°
+wall_error = measured_outer_wall_distance - target_wall_distance
 ```
 
-The steering servo is then sent temporarily to one of its mechanical steering limits. The current implementation holds the corner command for about `750 ms`, recenters the steering, and waits about `600 ms` before normal closed-loop correction continues.
+Clockwise runs use the left outer wall, and counter-clockwise runs use the right. The controller accepts a range reading only when its status and the combined left and right distances are plausible.
 
-This approach separates two jobs: the front ToF decides when a corner has been reached, while the BNO085 provides the heading reference used after the turn.
-
-### 5.5 Wall-distance correction
-
-The robot also uses a side sensor to control lateral position in a straight section. The program deliberately follows the outer wall:
-
-- clockwise driving uses the left distance sensor;
-- counter-clockwise driving uses the right distance sensor.
-
-The error is calculated as:
+The steering command is conceptually:
 
 ```text
-distance error = measured outer-wall distance - target distance
+straight centre
++ heading correction
++ wall-distance correction
++ derivative damping
++ Pixy2 correction when avoiding an obstacle
 ```
 
-and converted into an additional steering term:
+Servo output is clamped to the mechanical range.
 
-```text
-Kp * distance_error
-```
+## 3.4 Corner strategy
 
-with the sign reversed for the opposite driving direction. The current proportional coefficient is `Kp = 0.09`.
+When the front ToF detects a corner, the controller enters `TURNING`. If the driving direction is not set yet, it locks one in, steers to the turn limit and waits for the sensor to show that the car has cleared the corner. It then updates the target heading by about 90° and returns to `NORMAL_DRIVING`.
 
-The configured target distance depends on the run mode. The current configuration uses `250 mm` when obstacle-round mode is disabled and `500 mm` when obstacle-round mode is enabled.
+The front ToF tells the controller when to turn; BNO085 provides the heading the car should recover to.
 
-Combining wall distance with BNO085 heading helps solve two different errors: heading control keeps the robot parallel to the track direction, while the side ToF correction prevents gradual lateral drift.
+## 3.5 Obstacle strategy
 
-### 5.6 Pixy2 obstacle detection
+In `obstacle_challenge`, Pixy2 CCC blocks go straight to the ESP32. The controller filters detections by height so tiny or oversized blocks do not trigger steering.
 
-Obstacle recognition uses Pixy2 Colour Connected Components. Every loop calls `pixy.ccc.getBlocks()` and examines the blocks returned by the camera.
+Among the remaining blocks, the controller chooses the closest using image Y. Each signature has its own horizontal target offset, which sets the side the car passes on.
 
-<table>
-  <tr>
-    <td align="center"><img src="docs/report/images/build-context/camera-and-front-mechanism.jpeg" alt="Pixy2 camera mounted at the front of the robot" width="620"></td>
-  </tr>
-  <tr>
-    <td align="center">Pixy2 mounted at the front of the current robot, next to the front mechanism and sensing area.</td>
-  </tr>
-</table>
-
-The program does not automatically use the first detected object. It selects the valid block with the greatest `y` coordinate, because an object lower in the camera image is normally closer to the robot. Blocks are accepted only when their detected height is between `8` and `70` pixels. This removes very small detections and rejects unusually large blocks from this selection stage.
-
-The selected Pixy block provides:
-
-- `m_signature` for obstacle class/colour;
-- `m_x` for horizontal position;
-- `m_y` for closeness in the image;
-- block width and height for filtering/debugging.
-
-The camera LEDs are disabled during initialization and the robot's own red/green LEDs are used for debugging the selected obstacle signature.
-
-### 5.7 Obstacle avoidance steering
-
-When obstacle-round mode is enabled and a valid Pixy block is present, camera steering temporarily becomes the dominant steering input.
-
-The program assigns a different horizontal target offset depending on the Pixy signature. In the current code:
-
-```text
-signature 1 -> offset = -105 pixels
-other       -> offset = +55 pixels
-```
-
-The camera error is then calculated from the desired image position and the obstacle's measured `x` coordinate:
-
-```text
-camera_error = frame_center + offset - obstacle_x
-```
-
-and the obstacle steering correction is:
-
-```text
-angle = 0.32 * camera_error
-```
-
-This means the robot does not simply steer away from the centre of the obstacle. It aims for a signature-dependent position in the camera frame, producing a different passing path for the two obstacle classes.
-
-While this obstacle correction is active, the normal wall-distance contribution is suppressed. After the obstacle disappears, the program uses a short `450 ms` timing lock before fully returning to the usual wall-following behaviour. This reduces an immediate control-mode switch while the robot is still completing the avoidance manoeuvre.
-
-### 5.8 Steering controller
-
-The final servo command can contain several terms depending on the current situation:
-
-1. BNO085 heading correction;
-2. outer-wall distance correction;
-3. derivative correction based on the change in heading error;
-4. Pixy2 camera correction during obstacle avoidance.
-
-The current controller values were established through testing rather than selected from a theoretical model alone. The present implementation uses `Kg = 0.5`, `Kp = 0.09` and `Kd = 0.05`. The corner timing, `600 mm` front threshold and Pixy2 passing offsets were also tuned during robot testing.
-
-A derivative coefficient `Kd = 0.05` is used. The derivative term is based on how quickly the heading-related error changes with time and is added to the steering command to react to rapid changes rather than only the absolute error.
-
-Very small steering corrections are removed:
-
-```text
-if abs(angle) < 1 -> angle = 0
-```
-
-This dead band is used to reduce unnecessary servo jitter when the calculated correction is extremely small.
-
-Finally, the calculated correction is added to the calibrated straight-servo angle. The current steering calibration is:
+Current obstacle tuning constants:
 
 | Parameter | Value |
 |---|---:|
-| Minimum servo command | `45°` |
-| Straight servo command | `85°` |
-| Maximum servo command | `125°` |
+| Minimum block height | 8 |
+| Maximum block height | 70 |
+| Signature 1 offset | -105 |
+| Other signature offset | 55 |
+| Pixy steering gain | 0.32 |
+| Recovery time | 450 ms |
 
-The command is constrained to this range before being sent to the MG90S, preventing the controller from requesting steering beyond the configured mechanical limits.
+When the obstacle disappears, the controller waits 450 ms in `OBSTACLE_RECOVERY`, then resumes wall control.
 
-### 5.9 Lap completion and stop logic
+## 3.6 Controller constants
 
-Every detected corner increments the `edge` counter. A normal three-lap WRO run contains twelve corners, so after `edge >= 12` the software starts a stop timer.
+| Constant | Value |
+|---|---:|
+| `ROBOT_WIDTH` | 150 mm controller model |
+| `TARGET_DISTANCE` | 300 mm |
+| `WIDTH_THRESHOLD` | 150 mm |
+| `MIN_ANGLE` | 60° |
+| `MAX_ANGLE` | 120° |
+| `STRAIGHT_ANGLE` | 88° |
+| `Kp` | 0.09 |
+| `Kg` | 0.95 |
+| `Kd` | 0.05 |
 
-After approximately `2500 ms`, the motor is stopped and the ESP32 restarts. The delay allows the car to continue past the twelfth corner before the run is terminated instead of stopping immediately at the corner trigger.
+## 3.7 Failure handling
 
-The current implementation therefore tracks progress using discrete corner events rather than wheel odometry or GPS. The BNO085 maintains orientation, the front ToF identifies corner approach, the side ToF sensor controls lateral position, and Pixy2 takes over steering when obstacle avoidance is active.
+The firmware handles several failure cases; the remaining gaps are listed in section 5.
 
-## 6. Testing and iteration
+- The ToF sensors share a default address, so separate XSHUT lines let startup assign each sensor a different runtime address.
+- The robot stays stopped if a ToF sensor or the BNO085 fails at startup.
+- Invalid ToF readings are filtered during wall control and corner detection, but the TURNING loop has no timeout if the front sensor never reports that the corner is clear.
+- Heading error is normalised to ±180° across the 0°/360° boundary.
+- Pixy2 filters false or implausible blocks by image size.
+- Servo commands are clamped to the linkage's mechanical range.
+- After obstacle avoidance, a recovery state and timer delay the return to wall following.
+- Load tests check whether power sag resets the ESP32 or interrupts sensor communication.
 
-Testing is used directly to tune the control constants and timing values in the firmware. The current values for heading correction, wall-distance correction, derivative correction, corner timing, front-wall threshold and Pixy2 passing offsets were selected through robot testing.
+---
 
-The current software exposes the main tuning parameters centrally in `Config.h` or near the top of `main.cpp`, allowing one parameter to be changed without rewriting the complete controller. Examples include:
+# 4. Engineering decisions and system development
 
-| Parameter | Current value | Purpose |
-|---|---:|---|
-| Heading gain `Kg` | `0.5` | Correct heading error from BNO085 yaw |
-| Wall-distance gain `Kp` | `0.09` | Correct lateral distance from the outer wall |
-| Derivative gain `Kd` | `0.05` | React to rapid changes in steering error |
-| Front corner threshold | `600 mm` | Trigger the corner sequence |
-| Corner steering time | `750 ms` | Initial strong steering command during a corner |
-| Post-turn delay | `600 ms` | Allow the robot to leave the corner before normal correction resumes |
-| Obstacle steering gain | `0.32` | Convert Pixy2 horizontal error into steering correction |
-| Signature 1 target offset | `-105 px` | Target passing position for one obstacle class |
-| Other-signature target offset | `+55 px` | Target passing position for the other obstacle class |
-| Obstacle recovery lock | `450 ms` | Prevent an immediate switch back to wall following |
+We designed around chassis size, corner clearance, steering geometry, drivetrain alignment, power stability, I2C addressing, camera view and loop latency. The robot also had to be repairable and quick to debug at a competition.
 
-The design itself also records several completed iteration steps:
+| Earlier approach | Final approach | Why we changed it |
+|---|---|---|
+| larger packaging | compact chassis | more clearance and simpler layout |
+| metal/custom differential interfaces | LEGO differential | easier integration and repair |
+| MPU6050 | BNO085 | more useful heading reference after observed drift |
+| five range sensors | three VL53L1X + BNO085 | clearer sensor roles and less wiring |
+| VL53L4CD side sensing | VL53L1X Long mode | larger useful wall-ranging region |
+| Raspberry Pi camera chain | Pixy2 directly to ESP32 | fewer processors and communication stages |
+| prototype wiring | custom PCB | repeatable and compact electrical build |
+| earlier Li-ion arrangement | 2S LiPo | compact package with good transient-current reserve |
+| earlier steering linkage | revised compact linkage | better centring and less binding |
+| implicit behaviour flags | explicit state machine | easier to understand, test and recover between behaviours |
 
-1. The previous larger and more complicated chassis was replaced by the smaller current layout.
-2. The Raspberry Pi processing stage was removed, leaving Pixy2 and ESP32 as the main processing architecture.
-3. Prototyping-board wiring was replaced by a custom PCB once the hardware configuration was stable.
-4. The battery arrangement was changed to a compact 2S LiPo.
-5. The MPU6050 was replaced by BNO085 because yaw drift affected the earlier approach.
-6. The number of distance sensors was reduced from five to three after yaw-based heading control removed the need to calculate the robot angle from multiple range measurements.
+## Risk table
 
-These are confirmed design iterations. Quantitative repeatability results, success-rate measurements and before/after controller comparisons will be added only after they have been measured consistently; they are not estimated here.
+| Failure | Effect | Mitigation |
+|---|---|---|
+| ToF address collision | no reliable distance data | independent XSHUT + `0x30/0x31/0x32` addresses |
+| bad front range | wrong corner trigger | status check and startup validation |
+| bad side range | wrong wall correction | range/status/geometry filtering |
+| IMU failure | no heading reference | startup check |
+| heading wrap | very large false error | ±180° normalisation |
+| steering over-travel | binding / heating | mechanical centring + 60°–120° clamp |
+| false vision block | wrong passing path | signature/height/position filtering |
+| obstacle hand-back too early | oscillation after pass | dedicated recovery state |
+| power sag | reset or sensor dropout | current margin + powered load test |
+| loose wiring | intermittent fault | custom PCB and fixed connectors |
+| firmware/document mismatch | hard-to-reproduce robot | CI, Git history and two fixed build environments |
+
+---
+
+# 5. Testing and tuning
+
+We tuned the robot in this order:
+
+1. free mechanical movement and steering centre;
+2. BNO085 direction and heading response;
+3. heading gain;
+4. derivative damping;
+5. wall-distance gain;
+6. clockwise and counter-clockwise corners;
+7. Pixy2 obstacle pass;
+8. obstacle recovery;
+9. repeated full-route attempts.
+
+Saved results are in `docs/testing/validation-summary.csv`.
+
+| Test | Earlier | Updated/final | Notes |
+|---|---:|---:|---|
+| Straight drift after 2 m | 9 cm | 4 cm | team-recorded comparison, 10 runs |
+| Successful 3-lap runs | 6/10 | 9/10 | 10 attempts per version |
+| Corner overshoot | 14 cm | 6 cm | development observation |
+| Obstacle recovery | 1.2 s | 0.6 s | development observation |
+| Matched 3 m drift mean | 10.6 cm | 4.0 cm | five retained values per version |
+| Open straight | — | 5/5 | final layout |
+| Obstacle slalom | — | 4/5 | final layout |
+| Full practice route | — | 4/5 | final layout |
+| 90° turning space | ~46 cm | ~39 cm | development observation |
+
+For the matched 3 m drift comparison, the retained values are:
+
+```text
+earlier: 11, 10, 12, 9, 11 cm  -> mean 10.6 cm
+updated:  4,  5,  3, 4,  4 cm  -> mean  4.0 cm
+```
+
+That is a 6.6 cm reduction in the retained means, about 62%.
+
+The earlier tests predate per-run Git SHA logging, so the CSV labels their evidence accordingly. For new physical runs, use `docs/testing/raw/run-template.csv`. Record the challenge mode, firmware SHA, battery state, changed variable, outcome and any measured error or failure.
+
+Leave a field blank if you did not measure it.
+## What the saved evidence does not show
+
+The current files support some design choices, but they do not establish every performance claim with measurements.
+
+| Choice or result | What the README supports | What is missing |
+|---|---|---|
+| N20, 600 rpm | With the 54 mm wheel and 1.50:1 reduction, the nominal speed gives an ideal geometric estimate of about 1.13 m/s. This was the design estimate. | No loaded-speed measurement or comparison with another motor speed is recorded. |
+| MG90S steering servo | A positional servo is needed for bounded steering; the firmware limits its command to 60° to 120° and uses 88° as straight ahead. | No steering-load torque/current measurement or comparison with another servo is recorded. |
+| Chassis geometry | The overall size is about 165 × 145 × 70 mm. | Wheelbase and track width were not recorded. Overall dimensions do not determine either value. |
+| ToF placement | The front sensor measures ahead; the side sensors support wall correction. | Section 2.4 gives nominal corridor-distance estimates from the dimensioned PCB and assembled photos, assuming a centred, parallel car and sensors at the PCB edges. Exact mounting offsets and angles, measured field of view, body-edge offsets, and calibrated readings remain unverified. |
+| Power | The current table contains design estimates. | No measured peak current or 5 V / 3.3 V rail voltage sag is recorded. |
+| Run results | The CSV retains five matched drift values per version. Other entries are team-reported results or summary observations. | Some observations have no raw log or sample count. Firmware and date metadata are missing for the matched drift runs. |
+| Firmware edge cases | CI builds both PlatformIO environments. | In the current source, the Kd calculation uses a stale previous-error value, the TURNING loop has no timeout, and the result of pixy.init() is not checked. |
+| Release version | The workflow builds the Open and Obstacle firmware configurations. | The repository has no published GitHub release, so the report and saved validation data are not tied to a released firmware revision. |
+
+The figures above are not new measurements. The software notes describe the current firmware; the code was not changed for this documentation update.
+
+---
+
+# 6. Robot evolution
+
+We kept older photos to show how the design changed.
+
+## Stage 1: earlier full vehicle
+
+<table>
+<tr><td><img src="docs/design/history/vehicle-photos-2026-04/front.jpg" width="260"></td><td><img src="docs/design/history/vehicle-photos-2026-04/back.jpg" width="260"></td></tr>
+<tr><td><img src="docs/design/history/vehicle-photos-2026-04/left.jpg" width="260"></td><td><img src="docs/design/history/vehicle-photos-2026-04/right.jpg" width="260"></td></tr>
+<tr><td><img src="docs/design/history/vehicle-photos-2026-04/top.jpg" width="260"></td><td><img src="docs/design/history/vehicle-photos-2026-04/bottom.jpg" width="260"></td></tr>
+</table>
+
+This is the earlier packaging baseline. The later car is smaller and uses less hardware.
+
+## Stage 2: differential and drivetrain
+
+<table>
+<tr><td><img src="docs/design/images/metal-differential.jpg" width="360"></td><td><img src="docs/design/images/lego-differential.png" width="360"></td></tr>
+</table>
+
+## Stage 3: steering
+
+<table>
+<tr><td><img src="docs/design/images/steering-v1.jpg" width="360"></td><td><img src="docs/design/images/steering-v3-final.png" width="360"></td></tr>
+</table>
+
+## Stage 4: electronics integration
+
+<table>
+<tr><td><img src="docs/report/images/build-context/electronics-top.jpeg" width="360"></td><td><img src="docs/report/images/build-context/electronics-bottom.jpeg" width="360"></td></tr>
+<tr><td><img src="docs/report/images/build-context/drivebase-top.jpeg" width="360"></td><td><img src="docs/report/images/build-context/drivebase-side.jpeg" width="360"></td></tr>
+<tr><td colspan="2" align="center"><img src="docs/report/images/build-context/camera-and-front-mechanism.jpeg" width="520"></td></tr>
+</table>
+
+## Stage 5: final competition robot
+
+The five photos near the top show the final robot with the black PCB and white rear wheels.
+
+---
+
+# 7. Bill of materials and sourcing
+
+The supplier links are examples. Match each part to the model, footprint and electrical or mechanical interface listed here.
+
+| Qty | Component | Final specification | Example source | Important detail |
+|---:|---|---|---|---|
+| 1 | ESP32 board | ESP32-WROOM-32 DevKit V1, **30 pin** | [3DSVET EU](https://www.3dsvet.eu/izdelek/esp32-wroom32-30pinov-microusb/) | 38-pin boards do not fit the same PCB footprint |
+| 1 | IMU | Adafruit BNO085, product 4754 | [Adafruit](https://www.adafruit.com/product/4754) | fixed chassis orientation |
+| 3 | ToF sensor | VL53L1X on 6-pin carrier | [Pololu](https://www.pololu.com/product/3415) | the sensor itself must be VL53L1X, even if the carrier looks similar |
+| 1 | Camera | Pixy2 / Pixy2.1 CMUcam5 | [RobotShop EU](https://eu.robotshop.com/products/charmed-labs-pixy-21-robot-vision-image-sensor-rbc) | direct ESP32 connection |
+| 1 | Steering servo | TowerPro MG90S positional | [Anodas LT](https://www.anodas.lt/en/towerpro-mg90s-micro-analog-servo-with-metal-gear) | do not use 360° continuous rotation |
+| 1 | Motor driver | Makeblock MegaPi Encoder/DC Motor Driver V1 | [BerryBase](https://www.berry-base.com/makeblock-megapi-encoder-dc-motor-driver-v1-2-kanaele-6-12-v-3-a-nennstrom-5-5-a-peak) | brushed DC output used |
+| 1 | Drive motor | N20, 6 V, nominal 600 rpm, 3 mm D-shaft class | [HESTORE](https://www.hestore.eu/prod_10042830.html) | check shaft length before ordering |
+| 1 | Battery | 2S LiPo, 7.4 V, 2500 mAh, 30C | RC supplier | must fit final packaging |
+| 1 | PCB | KU STEAM Pinkies final board | `schemes/` Gerbers | manufacture from the checked-in package |
+| 1 | Rear differential | LEGO-compatible differential | LEGO/Technic source | geometry must match final drivetrain |
+| 2 | Rear wheels | final white custom wheel geometry | `models/` | use final wheel CAD/material |
+| 2 | Front wheel/steering assemblies | final printed/LEGO-compatible geometry | `models/` | do not scale STL files |
+| 1 | Plywood base | final cut vector | `models/case.ai` | import at 1:1 scale |
+
+### Replacement rules
+
+- ESP32 replacements must keep the same 30-pin footprint and required GPIOs.
+- ToF replacements must use VL53L1X and expose XSHUT.
+- Servo must be positional, not continuous rotation.
+- N20 replacements must match voltage, speed class and shaft geometry.
+- Mechanical substitutions must preserve axle, hole and wheel geometry.
+- Treat any change to the pinout, sensor type, wheel size, steering geometry or camera interface as a new robot revision, and retest the robot.
+
+---
+
+# 8. Rebuilding the robot
+
+Use the CAD files and steps below to rebuild the robot. Use the photos as visual references, not for measuring dimensions.
+
+## Mechanics
+
+1. Cut the base from `models/case.ai`.
+2. Print the final STLs from `models/` without scaling.
+3. Assemble the rear motor, gear stage, differential and wheels.
+4. Assemble the front steering parts and MG90S.
+5. Centre the linkage and verify the command range from 60° to 120°.
+
+## Electronics
+
+1. Manufacture the PCB from the `schemes/` Gerber/drill package.
+2. Install the 30-pin ESP32 board.
+3. Connect BNO085 and the three VL53L1X modules to I2C.
+4. Connect XSHUT to GPIO15 / GPIO5 / GPIO18 for front / left / right.
+5. Connect MG90S to GPIO33.
+6. Connect the motor driver to GPIO26, GPIO25 and GPIO32.
+7. Connect Pixy2 directly to the ESP32 interface used by the final board.
+8. Check ground and supply polarity before applying motor power.
+
+## Firmware
+
+```bash
+platformio run -d src -e open_challenge
+platformio run -d src -e obstacle_challenge
+```
+
+Upload the build for the required challenge, then run the calibration checks in section 2.6.
+
+## Final acceptance checks
+
+- base and printed parts match the final CAD revision;
+- drivetrain turns freely;
+- steering is centred and does not bind;
+- front/left/right ToF identities match `0x30/0x31/0x32`;
+- BNO085 heading direction is correct;
+- Pixy2 image direction matches steering logic;
+- ESP32 does not reset during hard steering and acceleration;
+- both PlatformIO environments compile;
+- Open Challenge straight/corner control runs without manual input;
+- Obstacle Challenge recognises the trained signatures, passes and recovers to normal driving.
+
+---
+
+# 9. Repository layout
+
+```text
+README.md                     project engineering journal
+src/                          ESP32 PlatformIO firmware
+models/                       final STL/CAD + case.ai base vector
+schemes/                      schematic images, PCB PDF, Gerbers and drill files
+videos/                       competition run recordings
+v-photos/                     final robot photographs
+t-photos/                     team photograph
+docs/design/images/           drivetrain and steering development photos
+docs/design/history/          earlier whole-robot photographs
+docs/report/images/           build/electronics development photographs
+docs/testing/                 validation CSV and raw-run template
+scripts/                      architecture verification script
+.github/workflows/            automatic Open/Obstacle builds
+```
+
+This README explains the design. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats.

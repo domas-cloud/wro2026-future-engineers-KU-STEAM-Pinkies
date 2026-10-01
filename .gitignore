@@ -5,23 +5,16 @@ Thumbs.db
 .idea/
 
 # Build and cache artifacts
+.pio/
 __pycache__/
 *.pyc
 *.pyo
 *.log
-tmp/
 .venv/
 venv/
-.pio/
-src/.pio/
-src/.vscode/.browse_c_cpp.db*
-src/.vscode/c_cpp_properties.json
-src/.vscode/launch.json
-src/.vscode/ipch/
+tmp/
 
-# Optional local exports and generated documents
+# Temporary local files
 *.tmp
 *.bak
 ~$*.docx
-output/doc/*
-!output/doc/KU-STEAM-Pinkies-project-report.docx

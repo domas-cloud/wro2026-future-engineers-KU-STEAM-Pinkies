@@ -1,0 +1,15 @@
+metric,earlier_version,updated_version,sample_or_scope,notes,evidence_class
+straight_corridor_drift_after_2m_cm,9,4,10 runs,team-reported comparison,team_reported
+successful_3_lap_runs,6/10,9/10,10 attempts per version,repeatability comparison,team_reported
+corner_overshoot_cm,14,6,summary observation,no matched raw dataset retained,summary_observation
+obstacle_recovery_s,1.2,0.6,summary observation,no matched raw dataset retained,summary_observation
+strict_3m_drift_run_1_cm,11,4,matched five-run comparison,,matched_run_values
+strict_3m_drift_run_2_cm,10,5,matched five-run comparison,,matched_run_values
+strict_3m_drift_run_3_cm,12,3,matched five-run comparison,,matched_run_values
+strict_3m_drift_run_4_cm,9,4,matched five-run comparison,,matched_run_values
+strict_3m_drift_run_5_cm,11,4,matched five-run comparison,,matched_run_values
+strict_3m_drift_average_cm,10.6,4.0,5 runs per version,6.6 cm reduction (~62%); run-level values retained in this CSV but original firmware/date metadata not retained,matched_run_values
+open_straight_success,,5/5,final validation layout,no matched earlier baseline recorded,final_layout_result
+obstacle_slalom_success,,4/5,final validation layout,no matched earlier baseline recorded,final_layout_result
+full_practice_route_success,,4/5,final validation layout,no matched earlier baseline recorded,final_layout_result
+turning_space_90deg_cm,46,39,summary observation,sample count not recorded,summary_observation

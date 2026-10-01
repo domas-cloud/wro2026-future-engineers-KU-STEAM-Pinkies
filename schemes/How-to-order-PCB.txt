@@ -1,0 +1,4 @@
+How to Order PCB
+
+PCB ordering instructions are on this EasyEDA page:
+https://prodocs.easyeda.com/en/pcb/order-order-pcb/index.html
