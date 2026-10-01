@@ -31,6 +31,7 @@ We gave each subsystem one job. If hardware added wiring, latency or failure poi
 - [Bill of materials and sourcing](#7-bill-of-materials-and-sourcing)
 - [Rebuilding the robot](#8-rebuilding-the-robot)
 - [Repository layout](#9-repository-layout)
+- [Release and versioning notes](RELEASE_NOTES.md)
 ---
 
 # Final robot
@@ -350,6 +351,8 @@ platformio run -d src -e obstacle_challenge
 
 `src/include/CompetitionMode.h` validates the build-time value, so challenge mode is not changed by editing `main.cpp`.
 
+Build verification is **manual**. The repository intentionally does not include GitHub Actions CI or a `scripts/` verification directory. The same two commands above are the documented reproducible build entry points.
+
 ## 3.1 Modules
 
 | Module | Responsibility |
@@ -516,7 +519,7 @@ We designed around chassis size, corner clearance, steering geometry, drivetrain
 | obstacle hand-back too early | oscillation after pass | dedicated recovery state |
 | power sag | reset or sensor dropout | current margin + powered load test |
 | loose wiring | intermittent fault | custom PCB and fixed connectors |
-| firmware/document mismatch | hard-to-reproduce robot | CI, Git history and two fixed build environments |
+| firmware/document mismatch | hard-to-reproduce robot | Git history, two fixed PlatformIO environments, manual verification workflow and dated release notes |
 
 ---
 
@@ -535,6 +538,20 @@ We tuned the robot in this order:
 9. repeated full-route attempts.
 
 Saved results are in `docs/testing/validation-summary.csv`.
+
+## 5.1 Manual verification and evidence workflow
+
+This repository uses a manual verification workflow rather than GitHub Actions CI:
+
+1. record the Git commit SHA for the revision being tested;
+2. run `platformio run -d src -e open_challenge`;
+3. run `platformio run -d src -e obstacle_challenge`;
+4. perform the sensor calibration checks in section 2.6;
+5. perform the final acceptance checks in section 8;
+6. for each new physical run, copy `docs/testing/raw/run-template.csv` and record challenge mode, firmware SHA, battery state, changed variable, result and measured error/failure where available;
+7. update `docs/testing/validation-summary.csv` only from retained evidence.
+
+Leave a field blank when it was not measured. Do not reconstruct a missing measurement from memory. Dated repository versioning notes are kept in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
 
 | Test | Earlier | Updated/final | Notes |
 |---|---:|---:|---|
@@ -572,8 +589,8 @@ The current files support some design choices, but they do not establish every p
 | ToF placement | The front sensor measures ahead; the side sensors support wall correction. | Section 2.4 gives nominal corridor-distance estimates from the dimensioned PCB and assembled photos, assuming a centred, parallel car and sensors at the PCB edges. Exact mounting offsets and angles, measured field of view, body-edge offsets, and calibrated readings remain unverified. |
 | Power | The current table contains design estimates. | No measured peak current or 5 V / 3.3 V rail voltage sag is recorded. |
 | Run results | The CSV retains five matched drift values per version. Other entries are team-reported results or summary observations. | Some observations have no raw log or sample count. Firmware and date metadata are missing for the matched drift runs. |
-| Firmware edge cases | CI builds both PlatformIO environments. | In the current source, the Kd calculation uses a stale previous-error value, the TURNING loop has no timeout, and the result of pixy.init() is not checked. |
-| Release version | The workflow builds the Open and Obstacle firmware configurations. | The repository has no published GitHub release, so the report and saved validation data are not tied to a released firmware revision. |
+| Firmware edge cases | Both PlatformIO environments are explicitly defined and their manual build commands are documented. | In the current source, the Kd calculation uses a stale previous-error value, the TURNING loop has no timeout, and the result of pixy.init() is not checked. |
+| Release/versioning | Dated versioning notes are kept in `RELEASE_NOTES.md`. | No GitHub binary release is claimed; future material revisions should add a new dated entry with the relevant commit SHA and retest scope. |
 
 The figures above are not new measurements. The software notes describe the current firmware; the code was not changed for this documentation update.
 
@@ -701,6 +718,7 @@ Upload the build for the required challenge, then run the calibration checks in 
 
 ```text
 README.md                     project engineering journal
+RELEASE_NOTES.md               dated repository versioning and verification notes
 src/                          ESP32 PlatformIO firmware
 models/                       final STL/CAD + case.ai base vector
 schemes/                      schematic images, PCB PDF, Gerbers and drill files
@@ -711,8 +729,6 @@ docs/design/images/           drivetrain and steering development photos
 docs/design/history/          earlier whole-robot photographs
 docs/report/images/           build/electronics development photographs
 docs/testing/                 validation CSV and raw-run template
-scripts/                      architecture verification script
-.github/workflows/            automatic Open/Obstacle builds
 ```
 
-This README explains the design. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats.
+This README explains the design. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats. Build verification is manual; there is intentionally no GitHub Actions CI or `scripts/` verification directory in the current repository.
