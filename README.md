@@ -39,15 +39,15 @@ The final competition robot has a **black custom PCB and white rear wheels**.
 
 <table>
 <tr>
-<td align="center"><img src="v-photos/final-01.jpg" width="280"><br><b>Final robot, view 1</b></td>
-<td align="center"><img src="v-photos/final-02.jpg" width="280"><br><b>Final robot, view 2</b></td>
+<td align="center"><img src="v-photos/final-01.jpg" width="280"><br><b>Final robot, right side</b></td>
+<td align="center"><img src="v-photos/final-02.jpg" width="280"><br><b>Final robot, left side</b></td>
 </tr>
 <tr>
-<td align="center"><img src="v-photos/final-03.jpg" width="280"><br><b>Final robot, view 3</b></td>
-<td align="center"><img src="v-photos/final-04.jpg" width="280"><br><b>Final robot, view 4</b></td>
+<td align="center"><img src="v-photos/final-03.jpg" width="280"><br><b>Final robot, front</b></td>
+<td align="center"><img src="v-photos/final-04.jpg" width="280"><br><b>Final robot, top</b></td>
 </tr>
 <tr>
-<td align="center" colspan="2"><img src="v-photos/final-05.jpg" width="360"><br><b>Final robot, view 5</b></td>
+<td align="center" colspan="2"><img src="v-photos/final-05.jpg" width="360"><br><b>Final robot, bottom</b></td>
 </tr>
 </table>
 
