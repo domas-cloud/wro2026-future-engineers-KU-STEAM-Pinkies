@@ -1,0 +1,32 @@
+name: Firmware validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  architecture-and-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - open_challenge
+          - obstacle_challenge
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check final hardware/software architecture
+        run: python scripts/check_final_architecture.py
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build ESP32 firmware (${{ matrix.environment }})
+        run: platformio run -d src -e ${{ matrix.environment }}
