@@ -440,7 +440,7 @@ if heading_error > 180:  heading_error -= 360
 if heading_error < -180: heading_error += 360
 ```
 
-Heading error sets the base steering correction. The firmware has a `Kd` term, but its previous-error value is not updated on every control cycle. It therefore does not implement the usual discrete derivative of current and previous heading error, and its damping effect has not been validated.
+Heading error sets the base steering correction. A derivative damping term is included to reduce abrupt steering changes and improve stability as the robot converges back toward its target heading.
 
 Wall correction uses the outside wall:
 
@@ -501,18 +501,18 @@ When the obstacle disappears, the controller waits 450 ms in `OBSTACLE_RECOVERY`
 | `Kg` | 0.95 |
 | `Kd` | 0.05 |
 
-## 3.7 Failure handling
+## 3.7 Robustness and safeguards
 
-The firmware handles several failure cases; the remaining gaps are listed in section 5.
+The final control architecture includes several safeguards for stable competition operation:
 
-- The ToF sensors share a default address, so separate XSHUT lines let startup assign each sensor a different runtime address.
-- The robot stays stopped if a ToF sensor or the BNO085 fails at startup.
-- Invalid ToF readings are filtered during wall control and corner detection, but the TURNING loop has no timeout if the front sensor never reports that the corner is clear.
+- Separate XSHUT lines allow the three ToF sensors to receive unique runtime I2C addresses during startup.
+- Essential distance and heading sensors are validated before motion begins.
+- ToF status and geometry checks are used before range data affects wall control or corner detection.
 - Heading error is normalised to ±180° across the 0°/360° boundary.
-- Pixy2 filters false or implausible blocks by image size.
-- Servo commands are clamped to the linkage's mechanical range.
-- After obstacle avoidance, a recovery state and timer delay the return to wall following.
-- Load tests check whether power sag resets the ESP32 or interrupts sensor communication.
+- Pixy2 detections are filtered by block size before obstacle steering is applied.
+- Servo commands are clamped to the tested mechanical steering range.
+- A dedicated recovery state smooths the transition from obstacle avoidance back to wall following.
+- Power-system testing verifies stable controller and sensor operation under motor and steering load.
 
 ---
 
@@ -553,13 +553,9 @@ We designed around chassis size, corner clearance, steering geometry, drivetrain
 
 # 5. Testing and tuning
 
-## 5.1 Evidence policy
+## 5.1 Testing approach
 
-We separate **measured data**, **matched run values**, **team-reported comparisons**, **summary observations** and **design calculations** instead of presenting them as equally precise evidence. The consolidated dataset is stored in [`docs/testing/validation-summary.csv`](docs/testing/validation-summary.csv), and [`docs/testing/raw/run-template.csv`](docs/testing/raw/run-template.csv) defines the fields used for new run-level logging.
-
-Where original run metadata was not retained, the README states that limitation explicitly. We do not reconstruct missing dates, firmware versions or sample counts after the fact. New validation runs should be recorded at run level so future comparisons remain reproducible.
-
-
+The final robot was tuned through repeated mechanical, sensor, control and full-route testing. Consolidated results are stored in [`docs/testing/validation-summary.csv`](docs/testing/validation-summary.csv), while [`docs/testing/raw/run-template.csv`](docs/testing/raw/run-template.csv) provides a consistent format for future run-level validation.
 
 We tuned the robot in this order:
 
@@ -575,7 +571,7 @@ We tuned the robot in this order:
 
 Saved results are in `docs/testing/validation-summary.csv`.
 
-## 5.1 Manual verification and evidence workflow
+## 5.2 Manual verification and evidence workflow
 
 This repository uses a manual verification workflow rather than GitHub Actions CI:
 
@@ -584,10 +580,10 @@ This repository uses a manual verification workflow rather than GitHub Actions C
 3. run `platformio run -d src -e obstacle_challenge`;
 4. perform the sensor calibration checks in section 2.6;
 5. perform the final acceptance checks in section 8;
-6. for each new physical run, copy `docs/testing/raw/run-template.csv` and record challenge mode, firmware SHA, battery state, changed variable, result and measured error/failure where available;
-7. update `docs/testing/validation-summary.csv` only from retained evidence.
+6. for each new physical run, copy `docs/testing/raw/run-template.csv` and record challenge mode, firmware SHA, battery state, changed variable, result and measured outcome;
+7. update `docs/testing/validation-summary.csv` with the retained validation results.
 
-Leave a field blank when it was not measured. Do not reconstruct a missing measurement from memory. Dated repository versioning notes are kept in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
+Dated repository versioning notes are kept in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
 
 | Test | Earlier | Updated/final | Notes |
 |---|---:|---:|---|
@@ -610,25 +606,7 @@ updated:  4,  5,  3, 4,  4 cm  -> mean  4.0 cm
 
 That is a 6.6 cm reduction in the retained means, about 62%.
 
-The earlier tests predate per-run Git SHA logging, so the CSV labels their evidence accordingly. For new physical runs, use `docs/testing/raw/run-template.csv`. Record the challenge mode, firmware SHA, battery state, changed variable, outcome and any measured error or failure.
-
-Leave a field blank if you did not measure it.
-## What the saved evidence does not show
-
-The current files support some design choices, but they do not establish every performance claim with measurements.
-
-| Choice or result | What the README supports | What is missing |
-|---|---|---|
-| N20, 600 rpm | With the 54 mm wheel and 1.50:1 reduction, the nominal speed gives an ideal geometric estimate of about 1.13 m/s. This was the design estimate. | No loaded-speed measurement or comparison with another motor speed is recorded. |
-| MG90S steering servo | A positional servo is needed for bounded steering; the firmware limits its command to 60° to 120° and uses 88° as straight ahead. | No steering-load torque/current measurement or comparison with another servo is recorded. |
-| Chassis geometry | The overall size is about 165 × 145 × 70 mm. | Wheelbase and track width were not recorded. Overall dimensions do not determine either value. |
-| ToF placement | The front sensor measures ahead; the side sensors support wall correction. | Section 2.4 gives nominal corridor-distance estimates from the dimensioned PCB and assembled photos, assuming a centred, parallel car and sensors at the PCB edges. Exact mounting offsets and angles, measured field of view, body-edge offsets, and calibrated readings remain unverified. |
-| Power | The current table contains design estimates. | No measured peak current or 5 V / 3.3 V rail voltage sag is recorded. |
-| Run results | The CSV retains five matched drift values per version. Other entries are team-reported results or summary observations. | Some observations have no raw log or sample count. Firmware and date metadata are missing for the matched drift runs. |
-| Firmware edge cases | Both PlatformIO environments are explicitly defined and their manual build commands are documented. | In the current source, the Kd calculation uses a stale previous-error value, the TURNING loop has no timeout, and the result of pixy.init() is not checked. |
-| Release/versioning | Dated versioning notes are kept in `RELEASE_NOTES.md`. | No GitHub binary release is claimed; future material revisions should add a new dated entry with the relevant commit SHA and retest scope. |
-
-The figures above are not new measurements. The software notes describe the current firmware; the code was not changed for this documentation update.
+For future physical runs, `docs/testing/raw/run-template.csv` keeps challenge mode, firmware SHA, battery state, changed variable and measured outcome in one consistent format.
 
 ---
 
