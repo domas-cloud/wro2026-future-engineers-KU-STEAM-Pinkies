@@ -209,6 +209,20 @@ The battery has ample discharge reserve. During motor and servo peaks, the tight
 <tr><td><img src="schemes/images/custom-pcb-layout-top.jpeg" width="410"></td><td><img src="schemes/images/custom-pcb-routing.jpeg" width="410"></td></tr>
 </table>
 
+### Wiring and sensor-bus diagrams
+
+<p align="center">
+  <img src="schemes/images/schematic-overview.png" width="820" alt="Robot electrical wiring and power architecture">
+</p>
+
+<p align="center"><strong>Electrical overview.</strong> The diagram shows the battery, regulated logic supply, ESP32, motor driver, steering servo and sensor connections used on the final robot.</p>
+
+<p align="center">
+  <img src="schemes/images/sensor-bus-detail.png" width="820" alt="ESP32 sensor bus and I2C wiring detail">
+</p>
+
+<p align="center"><strong>Sensor-bus detail.</strong> The three VL53L1X modules share I2C and are given unique runtime addresses through separate XSHUT lines; the BNO085 is the independent heading reference.</p>
+
 The electrical folder contains:
 
 - `schemes/Wro_customPCBs.pdf`
@@ -392,6 +406,20 @@ NORMAL_DRIVING
 sensor-start failure ---------------------------> ERROR
 ```
 
+The same control flow is shown below as a diagram for quicker review:
+
+```mermaid
+flowchart TD
+    A[WAIT_FOR_START] -->|start button| B[NORMAL_DRIVING]
+    B -->|corner detected| C[TURNING]
+    C --> B
+    B -->|obstacle detected| D[OBSTACLE_AVOIDANCE]
+    D -->|obstacle no longer detected| E[OBSTACLE_RECOVERY]
+    E -->|recovery interval completed| B
+    B -->|12 corners / 3 laps + stable finish| F[FINISHED]
+    A -->|essential sensor startup failure| G[ERROR]
+```
+
 ### What each state does
 
 - **WAIT_FOR_START** keeps the motor stopped until the team starts a run.
@@ -524,6 +552,14 @@ We designed around chassis size, corner clearance, steering geometry, drivetrain
 ---
 
 # 5. Testing and tuning
+
+## 5.1 Evidence policy
+
+We separate **measured data**, **matched run values**, **team-reported comparisons**, **summary observations** and **design calculations** instead of presenting them as equally precise evidence. The consolidated dataset is stored in [`docs/testing/validation-summary.csv`](docs/testing/validation-summary.csv), and [`docs/testing/raw/run-template.csv`](docs/testing/raw/run-template.csv) defines the fields used for new run-level logging.
+
+Where original run metadata was not retained, the README states that limitation explicitly. We do not reconstruct missing dates, firmware versions or sample counts after the fact. New validation runs should be recorded at run level so future comparisons remain reproducible.
+
+
 
 We tuned the robot in this order:
 
