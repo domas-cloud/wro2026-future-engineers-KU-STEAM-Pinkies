@@ -173,13 +173,11 @@ Standard LEGO Technic shafts and gears, along with ordinary fasteners, are not p
 The final battery is **2S LiPo, 7.4 V, 2500 mAh, 30C**.
 
 ```text
-2S LiPo
+2S LiPo (7.4 V)
   |
   +--> custom PCB --> motor driver --> N20 motor
   |
-  +--> regulated logic rail --> ESP32
-  |
-  +--> PCB distribution --> BNO085 / VL53L1X / Pixy2 / MG90S
+  +--> buck converter --> 5VLINE --> ESP32 / BNO085 / VL53L1X / Pixy2 / MG90S
 ```
 
 Battery energy:
@@ -198,9 +196,9 @@ E = 7.4 V × 2.5 Ah = 18.5 Wh
 | Pixy2 | ~140 mA | ~200 mA | camera processing |
 | MG90S | ~200–300 mA | ~750 mA | steering peak/stall |
 | N20 motor | ~350 mA | ~1.3 A | acceleration/stall |
-| whole robot | ~0.9–1.2 A | ~1.8–2.2 A | regulator and connector voltage drop |
+| whole robot | ~0.9–1.2 A | ~1.8–2.2 A coincident design peak; ~2.63 A if every listed individual peak is summed simultaneously | regulator and connector voltage drop |
 
-The battery has ample discharge reserve. During motor and servo peaks, the tighter limits are the regulator, PCB traces, connectors and wiring. During testing, we reject a build if acceleration or steering repeatedly resets the ESP32 or interrupts sensor communication.
+The PCB netlist shows the 7.4 V battery rail feeding a buck converter whose output is the board's `5VLINE`. That 5 V rail supplies the ESP32 and the low-voltage peripherals shown in the PCB export. The individual peak figures above are component-level design values; their direct arithmetic sum is about 2.63 A, while the 1.8–2.2 A figure is the expected coincident operating peak because the listed component maxima do not normally occur at exactly the same instant.
 
 ## 2.2 Custom PCB
 
@@ -249,7 +247,7 @@ The Gerber and drill files are for manufacturing the final PCB revision.
 | Right VL53L1X XSHUT | GPIO18 |
 | BNO085 | I2C |
 | 3 × VL53L1X | shared I2C, separate XSHUT |
-| Pixy2 | direct Pixy2-to-ESP32 interface |
+| Pixy2 | SPI on custom PCB (MOSI / MISO / SCK) |
 
 All three ToF modules share the same factory I2C address. Firmware enables them one at a time and assigns each a different runtime address:
 
@@ -319,9 +317,9 @@ With the BNO085 handling heading, we only needed three range measurements: front
 
 The side controller needs wall readings before the car gets close to a wall. VL53L1X Long mode provided a larger useful range, so we used it for all three distance sensors.
 
-### Raspberry Pi + UART → Pixy2 directly on ESP32
+### Raspberry Pi camera chain → Pixy2 directly to ESP32 over SPI
 
-Pixy2 sends colour connected-component data directly to the ESP32, so we removed the Raspberry Pi and UART link. That cut wiring and delay and removed one source of stale packets or communication failures.
+The final PCB connects Pixy2 directly to the ESP32 using the SPI data and clock nets `MOSI`, `MISO` and `SCK`. This removed the Raspberry Pi processing stage and its inter-processor communication link, reducing wiring and communication stages.
 
 ## 2.6 Calibration
 
@@ -527,7 +525,7 @@ We designed around chassis size, corner clearance, steering geometry, drivetrain
 | MPU6050 | BNO085 | more useful heading reference after observed drift |
 | five range sensors | three VL53L1X + BNO085 | clearer sensor roles and less wiring |
 | VL53L4CD side sensing | VL53L1X Long mode | larger useful wall-ranging region |
-| Raspberry Pi camera chain | Pixy2 directly to ESP32 | fewer processors and communication stages |
+| Raspberry Pi camera chain | Pixy2 directly to ESP32 over SPI | fewer processors and communication stages |
 | prototype wiring | custom PCB | repeatable and compact electrical build |
 | earlier Li-ion arrangement | 2S LiPo | compact package with good transient-current reserve |
 | earlier steering linkage | revised compact linkage | better centring and less binding |
@@ -659,7 +657,7 @@ The supplier links are examples. Match each part to the model, footprint and ele
 | 1 | ESP32 board | ESP32-WROOM-32 DevKit V1, **30 pin** | [3DSVET EU](https://www.3dsvet.eu/izdelek/esp32-wroom32-30pinov-microusb/) | 38-pin boards do not fit the same PCB footprint |
 | 1 | IMU | Adafruit BNO085, product 4754 | [Adafruit](https://www.adafruit.com/product/4754) | fixed chassis orientation |
 | 3 | ToF sensor | VL53L1X on 6-pin carrier | [Pololu](https://www.pololu.com/product/3415) | the sensor itself must be VL53L1X, even if the carrier looks similar |
-| 1 | Camera | Pixy2 / Pixy2.1 CMUcam5 | [RobotShop EU](https://eu.robotshop.com/products/charmed-labs-pixy-21-robot-vision-image-sensor-rbc) | direct ESP32 connection |
+| 1 | Camera | Pixy2 / Pixy2.1 CMUcam5 | [RobotShop EU](https://eu.robotshop.com/products/charmed-labs-pixy-21-robot-vision-image-sensor-rbc) | direct ESP32 SPI connection through the custom PCB |
 | 1 | Steering servo | TowerPro MG90S positional | [Anodas LT](https://www.anodas.lt/en/towerpro-mg90s-micro-analog-servo-with-metal-gear) | do not use 360° continuous rotation |
 | 1 | Motor driver | Makeblock MegaPi Encoder/DC Motor Driver V1 | [BerryBase](https://www.berry-base.com/makeblock-megapi-encoder-dc-motor-driver-v1-2-kanaele-6-12-v-3-a-nennstrom-5-5-a-peak) | brushed DC output used |
 | 1 | Drive motor | N20, 6 V, nominal 600 rpm, 3 mm D-shaft class | [HESTORE](https://www.hestore.eu/prod_10042830.html) | check shaft length before ordering |
@@ -701,7 +699,7 @@ Use the CAD files and steps below to rebuild the robot. Use the photos as visual
 4. Connect XSHUT to GPIO15 / GPIO5 / GPIO18 for front / left / right.
 5. Connect MG90S to GPIO33.
 6. Connect the motor driver to GPIO26, GPIO25 and GPIO32.
-7. Connect Pixy2 directly to the ESP32 interface used by the final board.
+7. Connect Pixy2 to the final board's SPI camera connector; the PCB routes `MOSI`, `MISO`, `SCK`, 5 V and GND to the camera header.
 8. Check ground and supply polarity before applying motor power.
 
 ## Firmware
