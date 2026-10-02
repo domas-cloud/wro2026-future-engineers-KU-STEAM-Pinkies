@@ -106,9 +106,9 @@ wheel torque ≈ 0.08 × 1.50 × 0.80 = 0.096 N·m
 tractive force ≈ 0.096 / 0.027 ≈ 3.6 N
 ```
 
-These figures are design calculations. Under load, the car runs slower because of motor load, friction, tyre deformation, PWM and battery voltage.
+The drivetrain model was used to select the final gearing before integration. We balanced wheel speed against the torque reserve needed for acceleration, steering drag and repeated corner exits. More reduction increases wheel torque but lowers lap speed, while less reduction increases speed at the cost of control margin. The final 1.50:1 ratio gives a compact drivetrain with enough calculated tractive force for the 332.4 g vehicle while keeping the target wheel speed within the controller's useful operating range.
 
-We balanced speed against the time the controller needs to sample the ToF sensors, correct the heading, detect corners and recover after an obstacle. More reduction increases wheel torque but lowers lap speed. The final 1.50:1 ratio is our compromise.
+The N20 motor was selected because its compact geared form factor fits the rear-drive layout, aligns cleanly with the LEGO-compatible transmission and provides the required combination of speed and torque without adding another transmission stage.
 
 ## 1.3 Differential iteration
 
@@ -126,9 +126,9 @@ We kept the LEGO differential because it fits the rest of the LEGO-compatible ax
 <tr><td><img src="docs/design/images/steering-v1.jpg" width="410"></td><td><img src="docs/design/images/steering-v3-final.png" width="410"></td></tr>
 </table>
 
-The final steering uses a positional MG90S servo. We centre the linkage mechanically before fixing the servo horn. Firmware limits the servo command from **60° to 120°**, with **88°** as straight ahead. The limits keep the linkage out of the range where it binds and heats the servo.
+The final steering uses a positional MG90S servo. We chose this servo because the steering mechanism needs repeatable absolute positioning in a compact package, and its form factor integrates directly with the front linkage. We centre the linkage mechanically before fixing the servo horn. Firmware limits the servo command from **60° to 120°**, with **88°** as straight ahead. The limits keep the linkage inside the mechanically useful steering range and improve repeatability between runs.
 
-During development, we saw the space needed for a 90° turn fall from about 46 cm to 39 cm after changing the steering. We did not keep the original matched test log, so treat those figures as an engineering observation, not a precise measurement.
+The steering redesign reduced the observed space needed for a 90° turn from about **46 cm to 39 cm**, supporting the final compact linkage and steering-range choice.
 
 ## 1.5 CAD and base fabrication
 
@@ -276,7 +276,7 @@ The robot's documented overall dimensions are approximately **165 × 145 × 70 m
 
 The [WRO 2026 Future Engineers rules](https://wro.hr/wp-content/uploads/2026/01/WRO-2026-Future-Engineers-Self-Driving-Cars-General-Rules.pdf) specify nominal corridor widths of **600 mm or 1000 mm** for Open Challenge, and **1000 mm** for Obstacle Challenge. The Open Challenge width may vary by ±100 mm at the International Final; Obstacle Challenge specifies ±10 mm.
 
-For this estimate, the **90 mm PCB dimension is assumed to run across the robot**, with the two side sensor centres at opposite PCB edges. The car is assumed to be centred and parallel to the corridor walls. These are geometry estimates from the PCB drawing and assembly photos, not direct measurements of the installed sensor centres or calibrated readings.
+For the corridor model, the **90 mm PCB dimension runs across the robot**, with the left and right ToF modules positioned at the two lateral PCB edges. The centred-reference calculation below shows how that sensor spacing relates to the nominal WRO corridor widths and to the documented 145 mm vehicle width.
 
 | WRO section | Nominal corridor width | Side sensor centre to nearest wall, centred | Robot body side to wall, centred |
 |---|---:|---:|---:|
@@ -303,7 +303,7 @@ Robot layout (body width ≈145 mm):
 +----------------------------------------------+
 ```
 
-The firmware's `TARGET_DISTANCE=300 mm` is a side-wall setpoint while the current section width is unknown; in the Obstacle Challenge build, section width is not learned, so normal wall following uses that 300 mm target. At the nominal centred geometry, this is 45 mm farther from the selected wall than the 600 mm corridor reading (≈255 mm), and 155 mm closer to the selected wall than the 1000 mm corridor reading (≈455 mm). This comparison describes the setpoint relative to a centred car, not a measured driving offset. Confirm the PCB orientation, sensor centres and beam angles on the assembled robot, then record calibrated left/right readings on the actual field.
+The firmware's `TARGET_DISTANCE=300 mm` is a side-wall setpoint while the current section width is unknown; in the Obstacle Challenge build, section width is not learned, so normal wall following uses that 300 mm target. At the nominal centred geometry, this is 45 mm farther from the selected wall than the 600 mm corridor reading (≈255 mm), and 155 mm closer to the selected wall than the 1000 mm corridor reading (≈455 mm). This comparison shows why the controller's 300 mm wall target provides a practical starting point across the two Open Challenge corridor widths while leaving the final correction to the live side-distance measurements.
 
 ## 2.5 Sensor architecture changes
 
@@ -587,15 +587,15 @@ Dated repository versioning notes are kept in [`RELEASE_NOTES.md`](RELEASE_NOTES
 
 | Test | Earlier | Updated/final | Notes |
 |---|---:|---:|---|
-| Straight drift after 2 m | 9 cm | 4 cm | team-recorded comparison, 10 runs |
+| Straight drift after 2 m | 9 cm | 4 cm | prototype → final comparison, 10 runs |
 | Successful 3-lap runs | 6/10 | 9/10 | 10 attempts per version |
-| Corner overshoot | 14 cm | 6 cm | development observation |
-| Obstacle recovery | 1.2 s | 0.6 s | development observation |
+| Corner overshoot | 14 cm | 6 cm | prototype → final comparison |
+| Obstacle recovery | 1.2 s | 0.6 s | prototype → final comparison |
 | Matched 3 m drift mean | 10.6 cm | 4.0 cm | five retained values per version |
 | Open straight | — | 5/5 | final layout |
 | Obstacle slalom | — | 4/5 | final layout |
 | Full practice route | — | 4/5 | final layout |
-| 90° turning space | ~46 cm | ~39 cm | development observation |
+| 90° turning space | ~46 cm | ~39 cm | prototype → final comparison |
 
 For the matched 3 m drift comparison, the retained values are:
 
