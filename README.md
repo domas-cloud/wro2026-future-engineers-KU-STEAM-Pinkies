@@ -31,7 +31,7 @@ We gave each subsystem one job. If hardware added wiring, latency or failure poi
 - [Bill of materials and sourcing](#7-bill-of-materials-and-sourcing)
 - [Rebuilding the robot](#8-rebuilding-the-robot)
 - [Repository layout](#9-repository-layout)
-- [Release and versioning notes](RELEASE_NOTES.md)
+- [Versioning and verification record](#10-versioning-and-verification-record)
 ---
 
 # Final robot
@@ -552,7 +552,7 @@ We designed around chassis size, corner clearance, steering geometry, drivetrain
 | obstacle hand-back too early | oscillation after pass | dedicated recovery state |
 | power sag | reset or sensor dropout | current margin + powered load test |
 | loose wiring | intermittent fault | custom PCB and fixed connectors |
-| firmware/document mismatch | hard-to-reproduce robot | Git history, two fixed PlatformIO environments, manual verification workflow and dated release notes |
+| firmware/document mismatch | hard-to-reproduce robot | Git history, two fixed PlatformIO environments, manual verification workflow and the README versioning record |
 
 ---
 
@@ -588,7 +588,7 @@ This repository uses a manual verification workflow rather than GitHub Actions C
 6. for each new physical run, copy `docs/testing/raw/run-template.csv` and record challenge mode, firmware SHA, battery state, changed variable, result and measured outcome;
 7. update `docs/testing/validation-summary.csv` with the retained validation results.
 
-Dated repository versioning notes are kept in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
+The repository versioning and verification record is included in section 10 of this README.
 
 | Test | Earlier | Updated/final | Notes |
 |---|---:|---:|---|
@@ -739,7 +739,6 @@ Upload the build for the required challenge, then run the calibration checks in 
 
 ```text
 README.md                     project engineering journal
-RELEASE_NOTES.md               dated repository versioning and verification notes
 src/                          ESP32 PlatformIO firmware
 models/                       final STL/CAD + case.ai base vector
 schemes/                      schematic images, PCB PDF, Gerbers and drill files
@@ -753,3 +752,68 @@ docs/testing/                 validation CSV and raw-run template
 ```
 
 This README explains the design. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats. Build verification is manual; there is intentionally no GitHub Actions CI or `scripts/` verification directory in the current repository.
+
+---
+
+# 10. Versioning and verification record
+
+This section records the competition-ready documentation state of the robot and the workflow used to keep hardware, firmware and validation evidence aligned. Git commit history provides the detailed change-by-change record, while this section identifies the current documented revision and the checks expected after material changes.
+
+## Current competition revision
+
+The documented competition configuration uses:
+
+- ESP32-WROOM-32, 30-pin DevKit V1 form factor;
+- BNO085 heading sensor;
+- 3 × VL53L1X distance sensors in Long mode;
+- Pixy2 / Pixy2.1 vision connected directly to ESP32 over SPI;
+- N20 6 V motor, nominal 600 rpm;
+- LEGO-compatible gearing and rear differential;
+- MG90S positional steering servo;
+- 2S LiPo, 7.4 V, 2500 mAh, 30C;
+- custom PCB;
+- approximate overall size of 165 × 145 × 70 mm;
+- documented mass of 332.4 g.
+
+The firmware is maintained as one source tree with two explicit PlatformIO environments:
+
+```bash
+platformio run -d src -e open_challenge
+platformio run -d src -e obstacle_challenge
+```
+
+- `open_challenge` uses `WRO_CHALLENGE_MODE=0`;
+- `obstacle_challenge` uses `WRO_CHALLENGE_MODE=1`.
+
+## Reproducibility package
+
+The repository keeps the material needed to rebuild, inspect and validate the documented robot in version control:
+
+- `README.md` — design reasoning, architecture, calibration, tuning, rebuild instructions and this versioning record;
+- `src/` — ESP32 PlatformIO firmware;
+- `models/` — final STL/CAD files and `case.ai`;
+- `schemes/` — PCB documentation, Gerbers, drill files and schematic images;
+- `docs/testing/validation-summary.csv` — retained validation summary;
+- `docs/testing/raw/run-template.csv` — repeatable run-record format;
+- `v-photos/` — final robot photographs;
+- `t-photos/` — team photograph;
+- `videos/` — competition run recordings.
+
+## Verification workflow for a material revision
+
+When a material robot revision is made:
+
+1. record the Git commit SHA used for the revision;
+2. build both PlatformIO environments;
+3. repeat the calibration checks in section 2.6;
+4. repeat the final acceptance checks in section 8;
+5. record new physical runs using `docs/testing/raw/run-template.csv`;
+6. update `docs/testing/validation-summary.csv` from retained measurements;
+7. document what changed, why it changed and which subsystem was affected.
+
+A change to pinout, sensor type, wheel size, steering geometry, camera interface or challenge-control behaviour is treated as a new robot revision and is rechecked before its results are used as final competition evidence.
+
+## Revision trace
+
+The Git history provides the detailed evolution of the project. Meaningful commits cover the major documented revisions, including chassis and drivetrain development, steering redesign, sensor architecture changes, custom PCB integration, Pixy2 SPI correction, testing workflow updates and final power/sensor/calibration documentation. Together with the robot-evolution section and retained test results, this provides traceability from earlier prototypes to the current competition configuration.
+
