@@ -63,6 +63,7 @@ The final competition robot has a **black custom PCB and white rear wheels**.
 | Transmission | LEGO-compatible gearing + LEGO differential |
 | Steering | front-wheel steering, positional MG90S |
 | Battery | 2S LiPo, 7.4 V, 2500 mAh, 30C |
+| 5 V regulator | Matek Micro BEC 6S, 6–30 V input, 5 V/9 V adjustable, used at 5 V |
 | Electronics | custom PCB |
 | Mass | 332.4 g |
 | Approx. overall size | 165 × 145 × 70 mm |
@@ -99,7 +100,7 @@ wheel circumference = π × 0.054 = 0.1696 m
 ideal geometric speed = 400 × 0.1696 / 60 ≈ 1.13 m/s
 ```
 
-For the design model we used 0.08 N·m useful motor torque and 80% drivetrain efficiency:
+The **0.08 N·m motor-torque value comes from the official motor specification**. The **80% drivetrain efficiency is an engineering assumption** used for the design calculation rather than a measured efficiency value:
 
 ```text
 wheel torque ≈ 0.08 × 1.50 × 0.80 = 0.096 N·m
@@ -126,7 +127,7 @@ We kept the LEGO differential because it fits the rest of the LEGO-compatible ax
 <tr><td><img src="docs/design/images/steering-v1.jpg" width="410"></td><td><img src="docs/design/images/steering-v3-final.png" width="410"></td></tr>
 </table>
 
-The final steering uses a positional MG90S servo. We chose this servo because the steering mechanism needs repeatable absolute positioning in a compact package, and its form factor integrates directly with the front linkage. We centre the linkage mechanically before fixing the servo horn. Firmware limits the servo command from **60° to 120°**, with **88°** as straight ahead. The limits keep the linkage inside the mechanically useful steering range and improve repeatability between runs.
+The final steering uses a positional MG90S servo. We chose this servo because the steering mechanism needs repeatable absolute positioning in a compact package, and its form factor integrates directly with the front linkage. We centre the linkage mechanically before fixing the servo horn. Firmware limits the servo command from **60° to 120°**, with **88°** as straight ahead. The final linkage is approximately **1:1 in angular movement around the centre position**, so the controller endpoints correspond approximately to **−28° and +32° of wheel steering relative to the 88° straight position**. These endpoint angles are derived from the linkage relationship and firmware commands; they are not separate protractor measurements. The limits keep the linkage inside the mechanically useful steering range and improve repeatability between runs.
 
 The steering redesign reduced the observed space needed for a 90° turn from about **46 cm to 39 cm**, supporting the final compact linkage and steering-range choice.
 
@@ -177,7 +178,7 @@ The final battery is **2S LiPo, 7.4 V, 2500 mAh, 30C**.
   |
   +--> custom PCB --> motor driver --> N20 motor
   |
-  +--> buck converter --> 5VLINE --> ESP32 / BNO085 / VL53L1X / Pixy2 / MG90S
+  +--> Matek Micro BEC 6S (set to 5 V) --> 5VLINE --> ESP32 / BNO085 / VL53L1X / Pixy2 / MG90S
 ```
 
 Battery energy:
@@ -198,7 +199,9 @@ E = 7.4 V × 2.5 Ah = 18.5 Wh
 | N20 motor | ~350 mA | ~1.3 A | acceleration/stall |
 | whole robot | ~0.9–1.2 A | ~1.8–2.2 A coincident design peak; ~2.63 A if every listed individual peak is summed simultaneously | regulator and connector voltage drop |
 
-The PCB netlist shows the 7.4 V battery rail feeding a buck converter whose output is the board's `5VLINE`. That 5 V rail supplies the ESP32 and the low-voltage peripherals shown in the PCB export. The individual peak figures above are component-level design values; their direct arithmetic sum is about 2.63 A, while the 1.8–2.2 A figure is the expected coincident operating peak because the listed component maxima do not normally occur at exactly the same instant.
+The PCB netlist shows the 7.4 V battery rail feeding the **Matek Micro BEC 6S**, configured for **5 V**, whose output is the board's `5VLINE`. The regulator is specified for a **6–30 V input**, **5 V or 9 V adjustable output (5 V default)**, **1.5 A continuous load**, and **2.5 A maximum for 5 s/minute**. It also specifies over-current protection, thermal shutdown and short-circuit tolerance. Product reference: https://www.rcdalys.lt/detales/0/27234/MATEK-MICRO-BEC-6S-6-30V-5V9V-ADJUSTABLE-3PCS
+
+The 5 V branch supplies the ESP32, BNO085, three VL53L1X modules, Pixy2 and MG90S. Using the component peak values in the table above, the listed 5 V loads sum to approximately **1.33 A**, below the BEC's **1.5 A continuous** rating. The N20 motor is supplied through the separate battery/motor-driver path, so its current is not part of the BEC load. The individual peak figures are component-level design values; the whole-robot 1.8–2.2 A figure is the expected coincident operating peak because all listed component maxima do not normally occur at exactly the same instant.
 
 ## 2.2 Custom PCB
 
@@ -259,7 +262,7 @@ All three ToF modules share the same factory I2C address. Firmware enables them 
 
 ## 2.4 Sensor placement and track geometry
 
-The **front VL53L1X** faces forward and is mounted beside the **Pixy2** camera. It measures forward clearance and helps detect a corner; Pixy2 independently reports the position of coloured obstacles. The **left and right VL53L1X** modules sit at the lateral edges of the custom PCB and measure the corresponding side clearances for wall correction. The chassis-mounted **BNO085** provides heading, so range and orientation feedback come from separate sensors.
+The **front VL53L1X** faces forward on the robot **centreline**, beside the **Pixy2** camera. It measures forward clearance and helps detect a corner; Pixy2 independently reports the position of coloured obstacles. The **left and right VL53L1X** modules are installed directly in the dedicated ToF positions provided by the custom PCB, at its lateral sides, and measure the corresponding side clearances for wall correction. Their placement is therefore fixed by the checked-in PCB layout rather than by an arbitrary hand-measured mounting offset. The chassis-mounted **BNO085** provides heading, so range and orientation feedback come from separate sensors.
 
 <table>
 <tr>
@@ -340,10 +343,14 @@ The final PCB connects Pixy2 directly to the ESP32 using the SPI data and clock 
 
 **Pixy2**
 
-1. Load the obstacle colour signatures used by the controller.
-2. Place a trained obstacle near image centre.
-3. Move it left and right and verify the reported X coordinate changes in the expected direction.
-4. Check that the front structure does not block the useful image area.
+1. Open **PixyMon** and train the colour signatures on the actual obstacle cubes used for testing.
+2. Train/check each cube individually rather than relying on one generic colour sample.
+3. Repeat the signature check under different lighting conditions so the stored signatures remain usable when ambient illumination changes.
+4. Place a trained obstacle near image centre and confirm that Pixy2 reports the expected signature.
+5. Move it left and right and verify the reported X coordinate changes in the expected direction.
+6. Check that the front structure does not block the useful image area.
+
+The camera calibration is therefore based on PixyMon's trained colour signatures rather than fixed RGB/HSV values in the ESP32 firmware.
 
 ---
 
@@ -662,6 +669,7 @@ The supplier links are examples. Match each part to the model, footprint and ele
 | 1 | Motor driver | Makeblock MegaPi Encoder/DC Motor Driver V1 | [BerryBase](https://www.berry-base.com/makeblock-megapi-encoder-dc-motor-driver-v1-2-kanaele-6-12-v-3-a-nennstrom-5-5-a-peak) | brushed DC output used |
 | 1 | Drive motor | N20, 6 V, nominal 600 rpm, 3 mm D-shaft class | [HESTORE](https://www.hestore.eu/prod_10042830.html) | check shaft length before ordering |
 | 1 | Battery | 2S LiPo, 7.4 V, 2500 mAh, 30C | RC supplier | must fit final packaging |
+| 1 | 5 V regulator | Matek Micro BEC 6S, 6–30 V input, 5 V/9 V adjustable | [RCdalys](https://www.rcdalys.lt/detales/0/27234/MATEK-MICRO-BEC-6S-6-30V-5V9V-ADJUSTABLE-3PCS) | set to 5 V; 1.5 A continuous, 2.5 A max for 5 s/min |
 | 1 | PCB | KU STEAM Pinkies final board | `schemes/` Gerbers | manufacture from the checked-in package |
 | 1 | Rear differential | LEGO-compatible differential | LEGO/Technic source | geometry must match final drivetrain |
 | 2 | Rear wheels | final white custom wheel geometry | `models/` | use final wheel CAD/material |
@@ -673,6 +681,7 @@ The supplier links are examples. Match each part to the model, footprint and ele
 - ESP32 replacements must keep the same 30-pin footprint and required GPIOs.
 - ToF replacements must use VL53L1X and expose XSHUT.
 - Servo must be positional, not continuous rotation.
+- The 5 V regulator must meet the final Matek Micro BEC 6S electrical role: 2S-compatible input and enough continuous current for the documented 5 V load.
 - N20 replacements must match voltage, speed class and shaft geometry.
 - Mechanical substitutions must preserve axle, hole and wheel geometry.
 - Treat any change to the pinout, sensor type, wheel size, steering geometry or camera interface as a new robot revision, and retest the robot.
