@@ -213,7 +213,7 @@ The 5 V branch supplies the ESP32, BNO085, three VL53L1X modules, Pixy2 and MG90
 ### Wiring and sensor-bus diagrams
 
 <p align="center">
-  <img src="schemes/images/schematic-overview.png" width="820" alt="Robot electrical wiring and power architecture">
+  <img src="schemes/images/schematic-overview(1).png" width="820" alt="Robot electrical wiring and power architecture">
 </p>
 
 <p align="center"><strong>Electrical overview.</strong> The diagram shows the battery, regulated logic supply, ESP32, motor driver, steering servo and sensor connections used on the final robot.</p>
