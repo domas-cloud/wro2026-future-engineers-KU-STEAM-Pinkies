@@ -37,8 +37,12 @@ The team uses signature **1 = green** and signature **2 = red**. WRO 2026 requir
 1. Record the firmware SHA, track layout and start configuration.
 2. Attempt three full laps without touching or adjusting the vehicle after the authorised start.
 3. Record laps and counted corners, final stopping behaviour, wall/pillar contacts and whether intervention was required.
-4. For an Obstacle Challenge run, record parking separately from the three-lap stop: whether the parking-space boundaries are untouched, and whether the robot is inside and parallel. The current main control file's `FINISHED` state alone does not establish autonomous parking.
+4. **Current status:** autonomous parallel parking is **not implemented**. For an Obstacle Challenge driving run, score the three-lap/obstacle portion separately and record parking as `not implemented`, never `success`. If parking is added in a future firmware revision, separately record whether the parking-space boundaries remain untouched and whether the robot finishes inside and parallel. The present `FINISHED` state only implements a stop condition.
 5. A success fraction is `successful independently documented runs / all independently documented attempts`. Keep failed attempts in the denominator; do not combine incompatible layouts as if they were identical.
+
+## Informal current performance estimates
+
+According to the team, the robot currently succeeds in approximately **8 out of 10 Open driving attempts** and **6 out of 10 Obstacle driving/avoidance attempts**. These are rough observed frequencies without retained independent per-run logs, not a completed 10-trial study. The Obstacle estimate excludes parking, which is currently not implemented. Future tests should state the precise success definition, layout and all unsuccessful attempts before calculating an actual rate.
 
 ## Metric definitions
 
