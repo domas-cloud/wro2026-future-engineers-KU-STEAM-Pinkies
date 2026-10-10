@@ -477,7 +477,9 @@ The front ToF tells the controller when to turn; BNO085 provides the heading the
 
 In `obstacle_challenge`, Pixy2 CCC blocks go straight to the ESP32. The controller filters detections by height so tiny or oversized blocks do not trigger steering.
 
-Among the remaining blocks, the controller chooses the closest using image Y. Each signature has its own horizontal target offset, which sets the side the car passes on.
+Among the remaining blocks, the controller selects the block with the largest image-Y coordinate as a **camera-image proximity heuristic** (not a direct physical-distance measurement). The team trained **Pixy2 signature 1 for the green pillar** and **signature 2 for the red pillar** in PixyMon. Under the WRO rules, green must be passed on the left and red on the right. The code uses the signature-dependent horizontal image target to generate a steering correction; the sign of the resulting physical turn depends on the fitted steering mechanism and camera orientation, which must be verified on the track.
+
+The present `main.cpp` tests `m_signature == 1`, otherwise it uses the second offset. Thus **all non-1 signatures**, not exclusively signature 2, currently take the red-signature branch. During PixyMon preparation, only the intended two colour signatures should be enabled; explicitly rejecting unexpected signatures is a useful additional robustness improvement.
 
 Current obstacle tuning constants:
 
@@ -485,8 +487,8 @@ Current obstacle tuning constants:
 |---|---:|
 | Minimum block height | 8 |
 | Maximum block height | 70 |
-| Signature 1 offset | -105 |
-| Other signature offset | 55 |
+| Signature 1 — green offset | -105 |
+| Signature 2 — red / current fallback offset | 55 |
 | Pixy steering gain | 0.32 |
 | Recovery time | 450 ms |
 
@@ -506,18 +508,36 @@ When the obstacle disappears, the controller waits 450 ms in `OBSTACLE_RECOVERY`
 | `Kg` | 0.95 |
 | `Kd` | 0.05 |
 
-## 3.7 Robustness and safeguards
+## 3.7 Controller tuning and boundaries
+
+The team iterated controller coefficients and corner behaviour during development. The final constants below are taken directly from `src/src/main.cpp`; no intermediate coefficient history is available for a numeric before/after comparison.
+
+| Control element | Current code | Engineering purpose / check |
+|---|---|---|
+| Heading | `angle = Kg * heading`, `Kg = 0.95` | Bring the robot back to the BNO085 target heading; verify both driving directions |
+| Wall position | `Kp = 0.09` applied to outer-wall distance error | Correct lateral displacement only when distance/geometry gates pass |
+| Damping | `Kd = 0.05` applied to an error-difference term over elapsed time | Moderate abrupt steering changes; review overshoot on corner exit |
+| Corner detection | Valid front ToF reading, a front-clearance threshold and combined side width ≥ 900 mm | Distinguish corner entry from normal wall following |
+| Corner steering | Servo limited to 60° or 120° during the turn | Keep the command inside the chosen mechanical travel |
+| Corner counting | One increment after the front-distance turn-exit condition | Track the required 12 corners over three laps |
+| Normal stop | At least 12 counted corners, wall-distance error under 50 mm and heading error within 5° for 2 seconds | Avoid declaring a finish on a single instantaneous reading |
+
+The firmware handles heading wrap across 0°/360°, stops on essential ToF/BNO085 **initialisation** failures, ignores implausible readings for specified wall-control paths and uses a 450 ms obstacle-recovery state. These are code-level mechanisms, not claims that every physical failure has been eliminated.
+
+**Cases to test explicitly:** uncertain colour classification; an unrelated Pixy2 signature; loss of valid ToF readings during a corner; heading events unavailable after start; unexpected stopping or restarting; and return to the finish area after the twelfth corner. In particular, the current corner-exit `while` loop has no independent timeout, so a persistent invalid reading may prevent progression. A separate parking trajectory should not be inferred merely from the three-lap `FINISHED` state; its behaviour must be demonstrated and matched to the deployed firmware.
+
+## 3.8 Robustness and safeguards
 
 The final control architecture includes several safeguards for stable competition operation:
 
 - Separate XSHUT lines allow the three ToF sensors to receive unique runtime I2C addresses during startup.
 - Essential distance and heading sensors are validated before motion begins.
-- ToF status and geometry checks are used before range data affects wall control or corner detection.
+- Front ToF validity is checked at corner entry, and outer-wall readings are subject to distance/geometry gates during wall correction; some other paths, including the combined side-width condition, do not separately reject all invalid readings.
 - Heading error is normalised to ±180° across the 0°/360° boundary.
 - Pixy2 detections are filtered by block size before obstacle steering is applied.
 - Servo commands are clamped to the tested mechanical steering range.
 - A dedicated recovery state smooths the transition from obstacle avoidance back to wall following.
-- Power-system testing verifies stable controller and sensor operation under motor and steering load.
+- The documented current budget identifies the regulator's design margin; a dated under-load voltage/current log would be stronger physical verification.
 
 ---
 
@@ -588,7 +608,11 @@ This repository uses a manual verification workflow rather than GitHub Actions C
 6. for each new physical run, copy `docs/testing/raw/run-template.csv` and record challenge mode, firmware SHA, battery state, changed variable, result and measured outcome;
 7. update `docs/testing/validation-summary.csv` with the retained validation results.
 
-The repository versioning and verification record is included in section 10 of this README.
+The repository versioning and verification record is included in section 10 of this README. For a repeatable procedure, measurement definitions and pass/fail logging, see [`docs/testing/TEST_PROTOCOL.md`](docs/testing/TEST_PROTOCOL.md).
+
+### Historical test summary and evidence provenance
+
+The figures below reproduce the project's existing historical summary. They are **not** an independently reconstructable run-by-run dataset: the original per-run logs, firmware SHA and exact field layouts for these earlier summaries were not retained. The evidence classes in `docs/testing/validation-summary.csv` distinguish team-reported comparisons, summary observations and retained five-value drift comparisons. The five-value calculations can be checked arithmetically, but the original measurement conditions cannot be independently re-created from the surviving records alone. New quantitative claims should be based on newly logged runs with firmware and layout identifiers.
 
 | Test | Earlier | Updated/final | Notes |
 |---|---:|---:|---|
@@ -611,7 +635,7 @@ updated:  4,  5,  3, 4,  4 cm  -> mean  4.0 cm
 
 That is a 6.6 cm reduction in the retained means, about 62%.
 
-For future physical runs, `docs/testing/raw/run-template.csv` keeps challenge mode, firmware SHA, battery state, changed variable and measured outcome in one consistent format.
+For future physical runs, `docs/testing/raw/run-template.csv` keeps challenge mode, firmware SHA, battery state, changed variable and measured outcome in one consistent format. The two linked YouTube videos at the top provide a visual demonstration of the final robot according to the team; they do not by themselves establish a statistically sampled success rate.
 
 ---
 
@@ -748,7 +772,7 @@ t-photos/                     team photograph
 docs/design/images/           drivetrain and steering development photos
 docs/design/history/          earlier whole-robot photographs
 docs/report/images/           build/electronics development photographs
-docs/testing/                 validation CSV and raw-run template
+docs/testing/                 validation CSV, raw-run template and test protocol
 ```
 
 This README explains the design. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats. Build verification is manual; there is intentionally no GitHub Actions CI or `scripts/` verification directory in the current repository.
@@ -795,6 +819,7 @@ The repository keeps the material needed to rebuild, inspect and validate the do
 - `schemes/` — PCB documentation, Gerbers, drill files and schematic images;
 - `docs/testing/validation-summary.csv` — retained validation summary;
 - `docs/testing/raw/run-template.csv` — repeatable run-record format;
+- `docs/testing/TEST_PROTOCOL.md` — test cases, metric definitions and evidence requirements;
 - `v-photos/` — final robot photographs;
 - `t-photos/` — team photograph;
 - `videos/` — competition run recordings.
@@ -817,3 +842,6 @@ A change to pinout, sensor type, wheel size, steering geometry, camera interface
 
 The Git history provides the detailed evolution of the project. Meaningful commits cover the major documented revisions, including chassis and drivetrain development, steering redesign, sensor architecture changes, custom PCB integration, Pixy2 SPI correction, testing workflow updates and final power/sensor/calibration documentation. Together with the robot-evolution section and retained test results, this provides traceability from earlier prototypes to the current competition configuration.
 
+## Documentation clarification record
+
+The documentation explicitly identifies Pixy2 green as signature 1 and red as signature 2; separates firmware constants from historical measurements; explains coefficient and corner-control decisions from the checked-in code; and links a repeatable testing protocol. This clarification does not imply a change to the physical robot or new physical measurements.
