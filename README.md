@@ -218,9 +218,6 @@ The 5 V branch supplies the ESP32, BNO085, three VL53L1X modules, Pixy2 and MG90
 
 <p align="center"><strong>Electrical overview.</strong> The diagram shows the battery, regulated logic supply, ESP32, motor driver, steering servo and sensor connections used on the final robot.</p>
 
-<p align="center">
-  <img src="schemes/images/sensor-bus-detail.png" width="820" alt="ESP32 sensor bus and I2C wiring detail">
-</p>
 
 <p align="center"><strong>Sensor-bus detail.</strong> The three VL53L1X modules share I2C and are given unique runtime addresses through separate XSHUT lines; the BNO085 is the independent heading reference.</p>
 
