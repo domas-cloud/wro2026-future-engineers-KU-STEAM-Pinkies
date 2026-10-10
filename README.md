@@ -610,13 +610,13 @@ This repository uses a manual verification workflow rather than GitHub Actions C
 6. for each new physical run, copy `docs/testing/raw/run-template.csv` and record challenge mode, firmware SHA, battery state, changed variable, result and measured outcome;
 7. update `docs/testing/validation-summary.csv` with the retained validation results.
 
-The repository versioning and verification record is included in section 10 of this README. For a repeatable procedure, measurement definitions and pass/fail logging, see [`docs/testing/TEST_PROTOCOL.md`](docs/testing/TEST_PROTOCOL.md).
+The repository versioning and verification record is included in section 10 of this README. The complete repeatable test procedure, measurement definitions and evidence rules are in sections 5.3–5.6 **of this README**.
 
 ### Current qualitative performance estimate
 
 The team reports **approximately 8/10 successful Open Challenge driving attempts (~80%)** and **approximately 6/10 successful Obstacle Challenge driving/avoidance attempts (~60%)** with the current robot. These are informal approximate field estimates, **not** ten individually recorded trials with a controlled layout. Their detailed pass/fail definitions, distributions across layouts and firmware SHAs have not been retained. In particular, **the obstacle estimate excludes autonomous parking**, which is not implemented. Consequently, it must not be described as a 60% success rate for completing the entire 2026 Obstacle Challenge.
 
-The engineering development included tuning steering coefficients and corner behaviour. The current coefficient values are listed in section 3.6, and testable tuning questions are described in section 3.7 and `docs/testing/TEST_PROTOCOL.md`.
+The engineering development included tuning steering coefficients and corner behaviour. The current coefficient values are listed in section 3.6, and testable tuning questions are described in sections 3.7 and 5.4 of this README.
 
 ### Historical test summary and evidence provenance
 
@@ -644,6 +644,73 @@ updated:  4,  5,  3, 4,  4 cm  -> mean  4.0 cm
 That is a 6.6 cm reduction in the retained means, about 62%.
 
 For future physical runs, `docs/testing/raw/run-template.csv` keeps challenge mode, firmware SHA, battery state, changed variable and measured outcome in one consistent format. The two linked YouTube videos at the top provide a visual demonstration of the final robot according to the team; they do not by themselves establish a statistically sampled success rate, nor do they establish successful parallel parking.
+
+
+## 5.3 Repeatable test setup and traceability
+
+The following procedure is for documenting **future physical testing**. It does not assert that tests were performed after the historical summary above. Estimated results must not be converted into invented per-run measurements.
+
+Before changing firmware or tuning, save the full Git commit SHA and select the correct PlatformIO environment:
+- `platformio run -d src -e open_challenge`
+- `platformio run -d src -e obstacle_challenge`
+
+Use a copy of `docs/testing/raw/run-template.csv` for each physical test series. Record the date/time, firmware SHA, mode, direction and track layout, battery voltage/state if measured, parameter intentionally changed, outcome, elapsed time, observed errors and any reset or repair. Enter `not measured` when an instrument or reliable visual measurement is unavailable rather than inventing a precision value.
+
+The test layout should record the corridor widths (for Open Challenge), start zone, direction and the positions and signatures of relevant coloured pillars (for Obstacle Challenge). A top-view photo or sketch labelled with the run ID is useful.
+
+## 5.4 Repeatable physical test procedures
+
+### A. Steering and corner tuning
+
+1. Record the deployed values of `Kp`, `Kg`, `Kd`, turn thresholds and 60°/120° steering limits.
+2. Check the servo centre and both mechanical end positions with the drive motor disabled.
+3. Drive a known straight segment. If measuring drift, identify the reference line, the distance travelled (2 m or 3 m), and the lateral offset at the endpoint in cm.
+4. Test clockwise and counter-clockwise 90° corners with identical layout and start speed.
+5. For each attempt, note whether the front ToF initiated a turn, whether it exited the turn condition, any wall contact, and any visibly excessive correction.
+6. Change only one gain or threshold at a time, keeping a record of the old and new values and of the same test layout. Do not describe an improvement quantitatively unless matched measurements were retained.
+
+### B. Pixy2 signatures and obstacle passing
+
+The team uses signature **1 = green** and signature **2 = red**. WRO 2026 requires green to be passed on the left and red on the right.
+
+1. In PixyMon verify each of the two trained colour signatures under the lighting used for the test.
+2. Place the green and red pillar in turn at known track positions. Record each detected signature and whether the physical pass is on the required side.
+3. Repeat from the two track directions where the layout permits.
+4. Vary one parameter per series: target image offsets (`-105` for signature 1 and `55` for the other-signature fallback), block-height filter, steering gain (`0.32`) or recovery period (`450 ms`).
+5. Note mistaken signatures, missed detections, contacts, side errors and recovery behaviour. A video link and timestamp should be attached for decisive cases.
+6. When a detection is not signature 1 or 2, record the event; the current source code uses its fallback offset rather than rejecting it.
+
+### C. Three-lap run, stopping and parking status
+
+1. Record the firmware SHA, track layout and start configuration.
+2. Attempt three full laps without touching or adjusting the vehicle after the authorised start.
+3. Record laps and counted corners, final stopping behaviour, wall/pillar contacts and whether intervention was required.
+4. **Current status:** autonomous parallel parking is **not implemented**. For an Obstacle Challenge driving run, score the three-lap/obstacle portion separately and record parking as `not implemented`, never `success`. If parking is added in a future firmware revision, separately record whether the parking-space boundaries remain untouched and whether the robot finishes inside and parallel. The present `FINISHED` state only implements a stop condition.
+5. A success fraction is `successful independently documented runs / all independently documented attempts`. Keep failed attempts in the denominator; do not combine incompatible layouts as if they were identical.
+
+## 5.5 Metric definitions
+
+| Metric | Definition | Source |
+|---|---|---|
+| Straight-line drift (cm) | Lateral endpoint offset after a stated 2 m or 3 m straight | Tape/ruler and reference line |
+| Turn overshoot (cm) | Maximum lateral deviation from the stated intended path after a 90° corner | Marked track / measured video |
+| Obstacle pass success | Correct pass side with no disqualifying contact | Video + run sheet |
+| Three-lap completion | Three complete laps and separately recorded finish behaviour | Video + run sheet |
+| Obstacle recovery (s) | Time from obstacle no longer being detected to normal steering control, using a defined source | Instrumented trace / frame-by-frame video |
+| Reset/timeout count | Number of controller resets or uncompleted turn conditions per run | Serial/event notes |
+| Supply voltage (V) | Measured 5 V line or battery voltage and specified load state | Multimeter / logger |
+
+Report `n`, exact metric, units, setup and spread/range with any average. When a metric cannot be measured, log the observation qualitatively and leave the numeric field blank or mark it unavailable.
+
+## 5.6 Evidence quality and reporting
+
+1. Source-controlled firmware SHA, raw run record, corresponding video with time markers and a documented layout.
+2. Dated test notes with measured values and enough setup information to repeat.
+3. Historical team summary and observations, which can illustrate development but are not equivalent to a traceable run series.
+
+Preserve the existing `validation-summary.csv` as a historical summary. Add new physical results with their own source evidence and do not overwrite older values to make the trend look smoother.
+
+The retained historical CSV remains linked as a numerical supporting file, while the result interpretation and the measurement protocol are fully explained in this README. A future physical test may improve the confidence in the reported estimates; documentation alone cannot supply missing measurements.
 
 ---
 
@@ -781,10 +848,10 @@ t-photos/                     team photograph
 docs/design/images/           drivetrain and steering development photos
 docs/design/history/          earlier whole-robot photographs
 docs/report/images/           build/electronics development photographs
-docs/testing/                 validation CSV, raw-run template and test protocol
+docs/testing/                 retained validation CSV and raw-run template
 ```
 
-This README explains the design. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats. Build verification is manual; there is intentionally no GitHub Actions CI or `scripts/` verification directory in the current repository.
+This README is the **single engineering-journal and assessment narrative**: technical rationale, methods, results, limitations, reconstruction, testing procedures and version notes are readable here without opening another Markdown document. Source code, CAD, PCB files, CSVs, photos and videos stay in their original formats as linked supporting evidence. Build verification is manual; there is intentionally no GitHub Actions CI or `scripts/` verification directory in the current repository.
 
 ---
 
@@ -828,7 +895,7 @@ The repository keeps the material needed to rebuild, inspect and validate the do
 - `schemes/` — PCB documentation, Gerbers, drill files and schematic images;
 - `docs/testing/validation-summary.csv` — retained validation summary;
 - `docs/testing/raw/run-template.csv` — repeatable run-record format;
-- `docs/testing/TEST_PROTOCOL.md` — test cases, metric definitions and evidence requirements;
+- `README.md` section 5 — the full test protocol, metric definitions, evidence requirements and historical result context;
 - `v-photos/` — final robot photographs;
 - `t-photos/` — team photograph;
 - `videos/` — competition run recordings.
@@ -853,4 +920,4 @@ The Git history provides the detailed evolution of the project. Meaningful commi
 
 ## Documentation clarification record
 
-The documentation explicitly identifies Pixy2 green as signature 1 and red as signature 2; separates firmware constants from historical measurements; explains coefficient and corner-control decisions from the checked-in code; and links a repeatable testing protocol. This clarification does not imply a change to the physical robot or new physical measurements.
+The documentation explicitly identifies Pixy2 green as signature 1 and red as signature 2; separates firmware constants from historical measurements; explains coefficient and corner-control decisions from the checked-in code; and includes the repeatable testing protocol directly in section 5 of this README. This clarification does not imply a change to the physical robot or new physical measurements.
