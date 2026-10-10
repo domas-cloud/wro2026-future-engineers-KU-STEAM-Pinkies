@@ -135,19 +135,20 @@ The steering redesign reduced the observed space needed for a 90° turn from abo
 
 The final custom parts are in `models/`:
 
-| File | Part |
-|---|---|
-| `Body1.stl` | body / structural part |
-| `Front.stl` | front assembly part |
-| `lego-mold-su-x.stl` | LEGO-interface mould/part |
-| `ratas-su-x.stl` | custom wheel part |
-| `motor-shaft-spacer.stl` | motor shaft spacer |
-| `steering-column-housing-short.stl` | steering column housing |
-| `steering-gear-cover-disc.stl` | steering gear cover |
-| `steering-gear-hub.stl` | steering gear hub |
-| `steering-gear-plate.stl` | steering gear plate |
-| `steering-pin-adapter.stl` | steering pin adapter |
-| `case.ai` | 2D plywood/base cutting vector |
+| Current file in `models/` | Earlier name in Git history | Identification / verification note |
+|---|---|---|
+| `Front.stl` | unchanged | front-assembly geometry |
+| `Front_wheel_gear.stl` | `Body1.stl` | formerly documented as body/structural geometry |
+| `Front_wheel.stl` | `motor-shaft-spacer.stl` | formerly documented as motor-shaft spacer |
+| `Rear_wheel_mold.stl` | `lego-mold-su-x.stl` | formerly documented as LEGO-interface mould/part |
+| `Front_wheel_gear(1).stl` | `steering-column-housing-short.stl` | formerly documented as steering-column housing |
+| `middle_gear_steering.stl` | `steering-gear-cover-disc.stl` | formerly documented as steering gear-cover disc |
+| `Front_wheel_mold(1).stl` | `steering-gear-hub.stl` | formerly documented as steering-gear hub |
+| `Front_wheel_mold.stl` | `steering-gear-plate.stl` | formerly documented as steering-gear plate |
+| `Motor_adapter.stl` | `steering-pin-adapter.stl` | formerly documented as steering-pin adapter |
+| `case.ai` | unchanged | 2D plywood/base cutting vector |
+
+**File identity note:** These are the actual names present in the checked-in final CAD package. The previous names and descriptions come from the README and Git rename history, not from newly verified CAD assembly constraints. Some newer filenames do not match the earlier descriptions; identify installation positions by inspecting the STL geometry alongside the final robot photos. The former `ratas-su-x.stl` file was deleted and is **not** required for this revision. Do not follow older file lists or silently substitute a missing model.
 
 `models/case.ai` is the base fabrication file. Its main rectangular path is approximately **90 × 150 mm** when imported at the original scale. That number is only a scale check; holes, slots and curves must be taken from the vector itself.
 
@@ -213,19 +214,28 @@ The 5 V branch supplies the ESP32, BNO085, three VL53L1X modules, Pixy2 and MG90
 ### Wiring and sensor-bus diagrams
 
 <p align="center">
-  <img src="schemes/images/schematic-overview(1).png" width="820" alt="Robot electrical wiring and power architecture">
+  <img src="schemes/images/schematic-overview.png" width="820" alt="Robot electrical wiring and power architecture">
 </p>
 
 <p align="center"><strong>Electrical overview.</strong> The diagram shows the battery, regulated logic supply, ESP32, motor driver, steering servo and sensor connections used on the final robot.</p>
 
 
-<p align="center"><strong>Sensor-bus detail.</strong> The three VL53L1X modules share I2C and are given unique runtime addresses through separate XSHUT lines; the BNO085 is the independent heading reference.</p>
+**Sensor-bus detail (functional connection map):**
+
+```text
+ESP32 I2C SDA/SCL  ---+--- BNO085
+                      +--- Front VL53L1X (XSHUT GPIO15, address 0x30)
+                      +--- Left  VL53L1X (XSHUT GPIO5,  address 0x31)
+                      +--- Right VL53L1X (XSHUT GPIO18, address 0x32)
+ESP32 SPI (MOSI/MISO/SCK) --- Pixy2 (separate camera interface)
+```
+
+All I2C sensors share the bus; each ToF XSHUT is controlled separately to resolve the sensors' identical factory addresses. The electrical image above and the PCB files in `schemes/` are the physical wiring references. This connection map is functional rather than a substitute for the PCB netlist.
 
 The electrical folder contains:
 
 - `schemes/Wro_customPCBs.pdf`
 - `schemes/images/schematic-overview.png`
-- `schemes/images/sensor-bus-detail.png`
 - complete top/bottom copper, solder-mask and silkscreen Gerbers
 - board outline and mechanical/document layers
 - plated, non-plated and via drill files
@@ -476,7 +486,7 @@ In `obstacle_challenge`, Pixy2 CCC blocks go straight to the ESP32. The controll
 
 Among the remaining blocks, the controller selects the block with the largest image-Y coordinate as a **camera-image proximity heuristic** (not a direct physical-distance measurement). The team trained **Pixy2 signature 1 for the green pillar** and **signature 2 for the red pillar** in PixyMon. Under the WRO rules, green must be passed on the left and red on the right. The code uses the signature-dependent horizontal image target to generate a steering correction; the sign of the resulting physical turn depends on the fitted steering mechanism and camera orientation, which must be verified on the track.
 
-The present `main.cpp` tests `m_signature == 1`, otherwise it uses the second offset. Thus **all non-1 signatures**, not exclusively signature 2, currently take the red-signature branch. During PixyMon preparation, only the intended two colour signatures should be enabled; explicitly rejecting unexpected signatures is a useful additional robustness improvement.
+The checked-in `main.cpp` now accepts only Pixy2 **signature 1 (green)** and **signature 2 (red)** when selecting an obstacle block. Blocks bearing any other signature are discarded rather than being treated as red. This is a code-level robustness change; the physical behaviour with reflective objects, lighting variation and unexpected signatures still needs a recorded track test.
 
 Current obstacle tuning constants:
 
@@ -485,7 +495,7 @@ Current obstacle tuning constants:
 | Minimum block height | 8 |
 | Maximum block height | 70 |
 | Signature 1 — green offset | -105 |
-| Signature 2 — red / current fallback offset | 55 |
+| Signature 2 — red offset | 55 |
 | Pixy steering gain | 0.32 |
 | Recovery time | 450 ms |
 
@@ -523,7 +533,7 @@ The team iterated controller coefficients and corner behaviour during developmen
 
 The firmware handles heading wrap across 0°/360°, stops on essential ToF/BNO085 **initialisation** failures, ignores implausible readings for specified wall-control paths and uses a 450 ms obstacle-recovery state. These are code-level mechanisms, not claims that every physical failure has been eliminated.
 
-**Cases to test explicitly:** uncertain colour classification; an unrelated Pixy2 signature; loss of valid ToF readings during a corner; heading events unavailable after start; unexpected stopping or restarting; and return to the finish area after the twelfth corner. In particular, the current corner-exit `while` loop has no independent timeout, so a persistent invalid reading may prevent progression. A separate parking trajectory should not be inferred merely from the three-lap `FINISHED` state; its behaviour must be demonstrated and matched to the deployed firmware.
+**Cases to test explicitly:** uncertain colour classification; an unrelated Pixy2 signature; loss of valid ToF readings during a corner; heading events unavailable after start; unexpected stopping or restarting; and return to the finish area after the twelfth corner. The corner-exit `while` loop now has an independent **5000 ms watchdog**. If it expires, the firmware stops the motor and enters `ERROR` rather than driving indefinitely. This is a conservative code fail-safe, **not a measured or validated corner duration**; verify that normal corners finish comfortably before the limit on the physical track. The `FINISHED` state remains a three-lap stop, **not** parallel parking.
 
 ## 3.8 Robustness and safeguards
 
@@ -533,7 +543,8 @@ The final control architecture includes several safeguards for stable competitio
 - Essential distance and heading sensors are validated before motion begins.
 - Front ToF validity is checked at corner entry, and outer-wall readings are subject to distance/geometry gates during wall correction; some other paths, including the combined side-width condition, do not separately reject all invalid readings.
 - Heading error is normalised to ±180° across the 0°/360° boundary.
-- Pixy2 detections are filtered by block size before obstacle steering is applied.
+- Pixy2 detections are filtered by block size **and an explicit allow-list (signatures 1 and 2)** before obstacle steering is applied.
+- A 5000 ms corner-exit watchdog stops the drive and enters `ERROR` if the exit condition does not occur; physical timeout validation is pending.
 - Servo commands are clamped to the tested mechanical steering range.
 - A dedicated recovery state smooths the transition from obstacle avoidance back to wall following.
 - The documented current budget identifies the regulator's design margin; a dated under-load voltage/current log would be stronger physical verification.
@@ -567,7 +578,8 @@ We designed around chassis size, corner clearance, steering geometry, drivetrain
 | IMU failure | no heading reference | startup check |
 | heading wrap | very large false error | ±180° normalisation |
 | steering over-travel | binding / heating | mechanical centring + 60°–120° clamp |
-| false vision block | wrong passing path | signature/height/position filtering |
+| false vision block | wrong passing path | signature 1/2 allow-list, height and image-position filtering; needs physical validation |
+| stalled corner-exit reading | indefinite turn / wall collision | 5000 ms watchdog, stop motor and enter ERROR; track validation pending |
 | obstacle hand-back too early | oscillation after pass | dedicated recovery state |
 | power sag | reset or sensor dropout | current margin + powered load test |
 | loose wiring | intermittent fault | custom PCB and fixed connectors |
@@ -673,9 +685,9 @@ The team uses signature **1 = green** and signature **2 = red**. WRO 2026 requir
 1. In PixyMon verify each of the two trained colour signatures under the lighting used for the test.
 2. Place the green and red pillar in turn at known track positions. Record each detected signature and whether the physical pass is on the required side.
 3. Repeat from the two track directions where the layout permits.
-4. Vary one parameter per series: target image offsets (`-105` for signature 1 and `55` for the other-signature fallback), block-height filter, steering gain (`0.32`) or recovery period (`450 ms`).
+4. Vary one parameter per series: target image offsets (`-105` for signature 1 and `55` for signature 2), block-height filter, steering gain (`0.32`) or recovery period (`450 ms`).
 5. Note mistaken signatures, missed detections, contacts, side errors and recovery behaviour. A video link and timestamp should be attached for decisive cases.
-6. When a detection is not signature 1 or 2, record the event; the current source code uses its fallback offset rather than rejecting it.
+6. Present an unrelated/untrained Pixy2 signature during a controlled test. Confirm that it is ignored and does not create an obstacle steering command; record the event and firmware SHA.
 
 ### C. Three-lap run, stopping and parking status
 
@@ -684,6 +696,12 @@ The team uses signature **1 = green** and signature **2 = red**. WRO 2026 requir
 3. Record laps and counted corners, final stopping behaviour, wall/pillar contacts and whether intervention was required.
 4. **Current status:** autonomous parallel parking is **not implemented**. For an Obstacle Challenge driving run, score the three-lap/obstacle portion separately and record parking as `not implemented`, never `success`. If parking is added in a future firmware revision, separately record whether the parking-space boundaries remain untouched and whether the robot finishes inside and parallel. The present `FINISHED` state only implements a stop condition.
 5. A success fraction is `successful independently documented runs / all independently documented attempts`. Keep failed attempts in the denominator; do not combine incompatible layouts as if they were identical.
+
+### D. Corner-exit watchdog and failure checks
+
+1. With the drive wheels raised and no wall contact possible, verify that a stuck front-ToF corner-exit condition cannot keep the motor running indefinitely; expected code action is motor stop and `ERROR` after 5000 ms.
+2. Repeat normal clockwise and counter-clockwise corners on the actual track, recording entry-to-exit times and whether the watchdog was activated.
+3. Treat the fail-safe as **implemented but not physically verified** until these tests are logged; never report test success solely because the code contains the watchdog.
 
 ## 5.5 Metric definitions
 
@@ -825,6 +843,8 @@ Upload the build for the required challenge, then run the calibration checks in 
 - BNO085 heading direction is correct;
 - Pixy2 image direction matches steering logic;
 - ESP32 does not reset during hard steering and acceleration;
+- only trained Pixy2 signatures 1/2 influence obstacle steering (regression test still required);
+- the corner-exit watchdog ends a stuck turn without ongoing motor power (physical validation still required);
 - both PlatformIO environments compile;
 - Open Challenge straight/corner control runs without manual input;
 - Obstacle Challenge recognises the trained signatures, passes and recovers to normal driving;
@@ -917,4 +937,6 @@ The Git history provides the detailed evolution of the project. Meaningful commi
 
 ## Documentation clarification record
 
-The documentation explicitly identifies Pixy2 green as signature 1 and red as signature 2; separates firmware constants from historical measurements; explains coefficient and corner-control decisions from the checked-in code; and includes the repeatable testing protocol directly in section 5 of this README. This clarification does not imply a change to the physical robot or new physical measurements.
+The documentation identifies Pixy2 green as signature 1 and red as signature 2; separates firmware constants from historical measurements; explains coefficient and corner-control decisions; and includes the repeatable testing protocol directly in section 5 of this README.
+
+**Repository correction and code safety update:** The final CAD inventory was aligned with filenames in `models/`, a missing sensor-diagram reference was replaced by an in-README functional bus map, the firmware now ignores unrelated Pixy2 signatures, and a corner-exit watchdog stops the drive on timeout. No new physical test results were generated by these documentation/code changes. The recorded approximate Open/Obstacle success estimates remain informal; parking remains unimplemented. The modified code must be uploaded, compiled and track-validated before describing these safeguards as field-tested.
