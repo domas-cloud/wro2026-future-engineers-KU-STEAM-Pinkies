@@ -24,9 +24,11 @@ const int WIDTH_THRESHOLD = 150;
 const int PIXY_MIN_BLOCK_HEIGHT = 8;
 const int PIXY_MAX_BLOCK_HEIGHT = 70;
 const int PIXY_SIGNATURE_1_OFFSET = -105;
-const int PIXY_OTHER_SIGNATURE_OFFSET = 55;
+const int PIXY_SIGNATURE_2_OFFSET = 55;
 const float PIXY_STEERING_GAIN = 0.32;
 const unsigned long OBSTACLE_RECOVERY_MS = 450;
+// Fail-safe only: stop if a corner-exit condition cannot be reached.
+const unsigned long CORNER_EXIT_TIMEOUT_MS = 5000;
 
 // PPD constants
 const float Kp = 0.09;
@@ -233,7 +235,15 @@ void loop() {
       sectorWidth[currentSector] = constrain(cumulativeWidth / measurementCount, 500, 900);
     }
 
+    const unsigned long cornerStartedAt = millis();
     while (frontDistance.distance <= 1500 || frontDistance.distance >= 2700 || frontDistance.status == 4) {
+      if (millis() - cornerStartedAt >= CORNER_EXIT_TIMEOUT_MS) {
+        // Never drive indefinitely when a ranging/turn-exit condition is stuck.
+        Serial.println("Corner exit timeout: motor stopped; check front ToF and steering.");
+        engine.stop();
+        setRobotState(RobotState::ERROR);
+        return;
+      }
       frontDistance = frontSensor.measureDistance();
       myservo.write(isClockwise ? MIN_ANGLE : MAX_ANGLE);
       delay(20);
@@ -257,7 +267,9 @@ void loop() {
 
   for (int i = 0; i < pixy.ccc.numBlocks; i++) {
     const Block candidate = pixy.ccc.blocks[i];
-    if (candidate.m_y > maxY
+    // Only trained pillar colours are valid; ignore other Pixy2 signatures.
+    if ((candidate.m_signature == 1 || candidate.m_signature == 2)
+        && candidate.m_y > maxY
         && candidate.m_height > PIXY_MIN_BLOCK_HEIGHT
         && candidate.m_height < PIXY_MAX_BLOCK_HEIGHT) {
       maxY = candidate.m_y;
@@ -283,7 +295,7 @@ void loop() {
   if (robotState == RobotState::OBSTACLE_AVOIDANCE && obstacleFound) {
     const int offset = selectedBlock.m_signature == 1
       ? PIXY_SIGNATURE_1_OFFSET
-      : PIXY_OTHER_SIGNATURE_OFFSET;
+      : PIXY_SIGNATURE_2_OFFSET;
 
     const int cameraError = pixy.frameWidth / 2 + offset - selectedBlock.m_x;
     angle = PIXY_STEERING_GAIN * cameraError;
