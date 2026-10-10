@@ -16,8 +16,8 @@ We gave each subsystem one job. If hardware added wiring, latency or failure poi
 
 ## Competition videos
 
-- **Open Challenge:** https://www.youtube.com/watch?v=PdYDFbR_HfI
-- **Obstacle Challenge:** [MP4 recording](videos/obstacle-challenge.mp4)
+- **Open Challenge:** https://youtu.be/wYDWJLPF3cQ
+- **Obstacle Challenge:** https://youtu.be/kq5EeDzJqs0
 
 ## Contents
 
