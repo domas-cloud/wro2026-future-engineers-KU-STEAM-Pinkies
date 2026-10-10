@@ -432,7 +432,7 @@ flowchart TD
 - **TURNING** handles a corner and updates the target heading by about 90° after the turn condition is met.
 - **OBSTACLE_AVOIDANCE** gives Pixy2 steering priority while an obstacle block is present.
 - **OBSTACLE_RECOVERY** keeps wall following from taking over while the car is still angled after passing an obstacle.
-- **FINISHED** keeps the robot stopped after three laps.
+- **FINISHED** keeps the robot stopped after the coded three-lap finish condition. It does not execute parallel parking.
 - **ERROR** stops the run if an essential sensor fails during startup.
 
 ## 3.3 Heading and wall control
@@ -493,6 +493,8 @@ Current obstacle tuning constants:
 | Recovery time | 450 ms |
 
 When the obstacle disappears, the controller waits 450 ms in `OBSTACLE_RECOVERY`, then resumes wall control.
+
+**Current competition limitation — parking:** The team's present robot does **not** implement autonomous parallel parking. The `FINISHED` state in `src/src/main.cpp` is a three-lap stop condition, **not** a parking manoeuvre. Therefore, demonstrations and performance summaries here describe driving and obstacle avoidance, not a successfully completed WRO Obstacle Challenge including parking. Parking remains an unimplemented task under the 2026 rules.
 
 ## 3.6 Controller constants
 
@@ -610,14 +612,20 @@ This repository uses a manual verification workflow rather than GitHub Actions C
 
 The repository versioning and verification record is included in section 10 of this README. For a repeatable procedure, measurement definitions and pass/fail logging, see [`docs/testing/TEST_PROTOCOL.md`](docs/testing/TEST_PROTOCOL.md).
 
+### Current qualitative performance estimate
+
+The team reports **approximately 8/10 successful Open Challenge driving attempts (~80%)** and **approximately 6/10 successful Obstacle Challenge driving/avoidance attempts (~60%)** with the current robot. These are informal approximate field estimates, **not** ten individually recorded trials with a controlled layout. Their detailed pass/fail definitions, distributions across layouts and firmware SHAs have not been retained. In particular, **the obstacle estimate excludes autonomous parking**, which is not implemented. Consequently, it must not be described as a 60% success rate for completing the entire 2026 Obstacle Challenge.
+
+The engineering development included tuning steering coefficients and corner behaviour. The current coefficient values are listed in section 3.6, and testable tuning questions are described in section 3.7 and `docs/testing/TEST_PROTOCOL.md`.
+
 ### Historical test summary and evidence provenance
 
-The figures below reproduce the project's existing historical summary. They are **not** an independently reconstructable run-by-run dataset: the original per-run logs, firmware SHA and exact field layouts for these earlier summaries were not retained. The evidence classes in `docs/testing/validation-summary.csv` distinguish team-reported comparisons, summary observations and retained five-value drift comparisons. The five-value calculations can be checked arithmetically, but the original measurement conditions cannot be independently re-created from the surviving records alone. New quantitative claims should be based on newly logged runs with firmware and layout identifiers.
+The figures below reproduce the project's existing historical summary. These are **archived prior estimates, not the current 8/10 and 6/10 estimates** and not independently validated measurements. They are **not** an independently reconstructable run-by-run dataset: the original per-run logs, firmware SHA and exact field layouts for these earlier summaries were not retained. The evidence classes in `docs/testing/validation-summary.csv` distinguish team-reported comparisons, summary observations and retained five-value drift comparisons. The five-value calculations can be checked arithmetically, but the original measurement conditions cannot be independently re-created from the surviving records alone. New quantitative claims should be based on newly logged runs with firmware and layout identifiers.
 
 | Test | Earlier | Updated/final | Notes |
 |---|---:|---:|---|
 | Straight drift after 2 m | 9 cm | 4 cm | prototype → final comparison, 10 runs |
-| Successful 3-lap runs | 6/10 | 9/10 | 10 attempts per version |
+| Successful 3-lap runs (archived estimate, not current) | 6/10 | 9/10 | Original per-run logs unavailable; not to be used as present success rate |
 | Corner overshoot | 14 cm | 6 cm | prototype → final comparison |
 | Obstacle recovery | 1.2 s | 0.6 s | prototype → final comparison |
 | Matched 3 m drift mean | 10.6 cm | 4.0 cm | five retained values per version |
@@ -635,7 +643,7 @@ updated:  4,  5,  3, 4,  4 cm  -> mean  4.0 cm
 
 That is a 6.6 cm reduction in the retained means, about 62%.
 
-For future physical runs, `docs/testing/raw/run-template.csv` keeps challenge mode, firmware SHA, battery state, changed variable and measured outcome in one consistent format. The two linked YouTube videos at the top provide a visual demonstration of the final robot according to the team; they do not by themselves establish a statistically sampled success rate.
+For future physical runs, `docs/testing/raw/run-template.csv` keeps challenge mode, firmware SHA, battery state, changed variable and measured outcome in one consistent format. The two linked YouTube videos at the top provide a visual demonstration of the final robot according to the team; they do not by themselves establish a statistically sampled success rate, nor do they establish successful parallel parking.
 
 ---
 
@@ -755,7 +763,8 @@ Upload the build for the required challenge, then run the calibration checks in 
 - ESP32 does not reset during hard steering and acceleration;
 - both PlatformIO environments compile;
 - Open Challenge straight/corner control runs without manual input;
-- Obstacle Challenge recognises the trained signatures, passes and recovers to normal driving.
+- Obstacle Challenge recognises the trained signatures, passes and recovers to normal driving;
+- parallel parking is **not yet implemented**; do not record the entire 2026 Obstacle Challenge as complete.
 
 ---
 
@@ -799,7 +808,7 @@ The documented competition configuration uses:
 - approximate overall size of 165 × 145 × 70 mm;
 - documented mass of 332.4 g.
 
-The firmware is maintained as one source tree with two explicit PlatformIO environments:
+The firmware is maintained as one source tree with two explicit PlatformIO environments. The currently documented Obstacle build has pillar avoidance and finish stopping, but **no autonomous parallel-parking routine**:
 
 ```bash
 platformio run -d src -e open_challenge
