@@ -60,6 +60,7 @@ The final competition robot has a **black custom PCB and white rear wheels**.
 | Vision | Pixy2 / Pixy2.1 |
 | Drive | rear-wheel drive |
 | Motor | N20, 6 V, nominal 600 rpm |
+| Motor driver | Makeblock MegaPi Encoder/DC Motor Driver; [SKU 12040 reference](https://cpc.farnell.com/makeblock/12040/megapi-encoder-dc-motor-driver/dp/HK01693) (verify driver IC on the installed board) |
 | Transmission | LEGO-compatible gearing + LEGO differential |
 | Steering | front-wheel steering, positional MG90S |
 | Battery | 2S LiPo, 7.4 V, 2500 mAh, 30C |
@@ -177,7 +178,7 @@ The final battery is **2S LiPo, 7.4 V, 2500 mAh, 30C**.
 ```text
 2S LiPo (7.4 V)
   |
-  +--> custom PCB --> motor driver --> N20 motor
+  +--> custom PCB --> Makeblock MegaPi DC motor driver --> N20 motor
   |
   +--> Matek Micro BEC 6S (set to 5 V) --> 5VLINE --> ESP32 / BNO085 / VL53L1X / Pixy2 / MG90S
 ```
@@ -203,6 +204,28 @@ E = 7.4 V × 2.5 Ah = 18.5 Wh
 The PCB netlist shows the 7.4 V battery rail feeding the **Matek Micro BEC 6S**, configured for **5 V**, whose output is the board's `5VLINE`. The regulator is specified for a **6–30 V input**, **5 V or 9 V adjustable output (5 V default)**, **1.5 A continuous load**, and **2.5 A maximum for 5 s/minute**. It also specifies over-current protection, thermal shutdown and short-circuit tolerance. Product reference: https://www.rcdalys.lt/detales/0/27234/MATEK-MICRO-BEC-6S-6-30V-5V9V-ADJUSTABLE-3PCS
 
 The 5 V branch supplies the ESP32, BNO085, three VL53L1X modules, Pixy2 and MG90S. Using the component peak values in the table above, the listed 5 V loads sum to approximately **1.33 A**, below the BEC's **1.5 A continuous** rating. The N20 motor is supplied through the separate battery/motor-driver path, so its current is not part of the BEC load. The individual peak figures are component-level design values; the whole-robot 1.8–2.2 A figure is the expected coincident operating peak because all listed component maxima do not normally occur at exactly the same instant.
+
+### Drive motor controller — Makeblock MegaPi Encoder/DC Motor Driver
+
+The requested supplier reference is **Makeblock SKU 12040 / Farnell order code HK01693**: [CPC Farnell product and specifications](https://cpc.farnell.com/makeblock/12040/megapi-encoder-dc-motor-driver/dp/HK01693). The **12040 listing** specifies the following properties; they are supplier specifications, not separately measured results from our robot:
+
+| Property | Listed specification for SKU 12040 |
+|---|---|
+| Driver IC | TB6612FNG |
+| Outputs | 2 brushed DC motor channels, or 1 encoder motor using the dedicated interface |
+| Motor supply | 6–12 V |
+| Logic supply | 5 V |
+| Current per motor channel | 1 A continuous; 2 A peak |
+| Motor output | Green DC-motor terminals; white connector provided for the encoder-motor interface |
+| Host connector | 2 × 8-pin (16-pin), designed to plug into a Makeblock MegaPi board |
+| Module size | 15 × 30 mm |
+| Protection | Over-current protection; TVS protection on the encoder-motor interface |
+
+**Variant identification matters.** The previously cited [BerryBase driver](https://www.berry-base.com/makeblock-megapi-encoder-dc-motor-driver-v1-2-kanaele-6-12-v-3-a-nennstrom-5-5-a-peak) is **Makeblock SKU 12070**, identified with an **MP80495** IC and advertised at **3 A continuous / 5.5 A peak per channel**. Makeblock's [V1 support specification](https://support.makeblock.com/hc/en-us/articles/12544997605271-About-MegaPi-Encoder-DC-Driver-V1) also describes the MP80495 version. Those **12070 ratings must not be attributed to SKU 12040**. Check the markings on the physically installed module to determine which driver revision the robot actually uses; the repository does not independently establish its IC identity.
+
+**Control integration in the checked-in firmware:** `src/src/main.cpp` passes **GPIO26** (direction input 1), **GPIO25** (direction input 2) and **GPIO32** (PWM) to `src/lib/Engine/Engine.h`. `Engine::drive()` selects direction using the two inputs and sets PWM duty cycle (0–255); `Engine::stop()` drives both direction inputs low and PWM to zero. The drivetrain description uses **one brushed N20 drive motor**; no encoder-feedback control is implemented in that motor-control class. The Makeblock connector was designed for MegaPi, so its 16-pin header is **not automatically a pin-compatible ESP32 connection**. Confirm the actual PCB-to-module routing, logic supply, motor output and any enable/standby requirement against the installed board before rebuilding.
+
+**Electrical verification required for SKU 12040:** The 2S LiPo battery's approximately **7.4 V nominal (8.4 V fully charged)** is inside the module's 6–12 V motor-supply range, but the documented **N20 motor is nominally 6 V** and needs its own voltage/duty-cycle and temperature check. The motor's **~350 mA normal / ~1.3 A short-peak values** in the current budget are design estimates, not measured current logs. For the 12040 part, check that sustained channel current stays below **1 A**, that motor starting/stall events respect the **2 A peak** limit, and that driver temperature remains acceptable. The module is specified with **5 V logic**, whereas the ESP32 outputs **3.3 V signals**; verify signal-level compatibility and actual standby/enable wiring rather than assuming these are correct from the three GPIO assignments alone.
 
 ## 2.2 Custom PCB
 
@@ -248,9 +271,9 @@ The Gerber and drill files are for manufacturing the final PCB revision.
 | Function | ESP32 pin / bus |
 |---|---|
 | Start button | GPIO14 |
-| Motor enable / PWM | GPIO32 |
-| Motor input 1 | GPIO26 |
-| Motor input 2 | GPIO25 |
+| Motor-driver PWM | GPIO32 |
+| Motor-driver direction input 1 | GPIO26 |
+| Motor-driver direction input 2 | GPIO25 |
 | Steering servo | GPIO33 |
 | Front VL53L1X XSHUT | GPIO15 |
 | Left VL53L1X XSHUT | GPIO5 |
@@ -780,7 +803,7 @@ The supplier links are examples. Match each part to the model, footprint and ele
 | 3 | ToF sensor | VL53L1X on 6-pin carrier | [Pololu](https://www.pololu.com/product/3415) | the sensor itself must be VL53L1X, even if the carrier looks similar |
 | 1 | Camera | Pixy2 / Pixy2.1 CMUcam5 | [RobotShop EU](https://eu.robotshop.com/products/charmed-labs-pixy-21-robot-vision-image-sensor-rbc) | direct ESP32 SPI connection through the custom PCB |
 | 1 | Steering servo | TowerPro MG90S positional | [Anodas LT](https://www.anodas.lt/en/towerpro-mg90s-micro-analog-servo-with-metal-gear) | do not use 360° continuous rotation |
-| 1 | Motor driver | Makeblock MegaPi Encoder/DC Motor Driver V1 | [BerryBase](https://www.berry-base.com/makeblock-megapi-encoder-dc-motor-driver-v1-2-kanaele-6-12-v-3-a-nennstrom-5-5-a-peak) | brushed DC output used |
+| 1 | Motor driver | Makeblock MegaPi Encoder/DC Motor Driver, **SKU 12040** supplier reference (TB6612FNG, 6–12 V, 1 A continuous / 2 A peak per channel) | [CPC Farnell — 12040 / HK01693](https://cpc.farnell.com/makeblock/12040/megapi-encoder-dc-motor-driver/dp/HK01693) | verify physically installed IC; do not confuse with SKU 12070 / MP80495 |
 | 1 | Drive motor | N20, 6 V, nominal 600 rpm, 3 mm D-shaft class | [HESTORE](https://www.hestore.eu/prod_10042830.html) | check shaft length before ordering |
 | 1 | Battery | 2S LiPo, 7.4 V, 2500 mAh, 30C | RC supplier | must fit final packaging |
 | 1 | 5 V regulator | Matek Micro BEC 6S, 6–30 V input, 5 V/9 V adjustable | [RCdalys](https://www.rcdalys.lt/detales/0/27234/MATEK-MICRO-BEC-6S-6-30V-5V9V-ADJUSTABLE-3PCS) | set to 5 V; 1.5 A continuous, 2.5 A max for 5 s/min |
@@ -797,6 +820,7 @@ The supplier links are examples. Match each part to the model, footprint and ele
 - Servo must be positional, not continuous rotation.
 - The 5 V regulator must meet the final Matek Micro BEC 6S electrical role: 2S-compatible input and enough continuous current for the documented 5 V load.
 - N20 replacements must match voltage, speed class and shaft geometry.
+- Motor-driver substitutions must be identified by **actual SKU and chip marking**; SKU 12040 (TB6612FNG, 1 A continuous / 2 A peak) must not be assessed using the higher SKU 12070 (MP80495) current ratings. Check supply, logic-level compatibility and header/pinout.
 - Mechanical substitutions must preserve axle, hole and wheel geometry.
 - Treat any change to the pinout, sensor type, wheel size, steering geometry or camera interface as a new robot revision, and retest the robot.
 
@@ -821,9 +845,10 @@ Use the CAD files and steps below to rebuild the robot. Use the photos as visual
 3. Connect BNO085 and the three VL53L1X modules to I2C.
 4. Connect XSHUT to GPIO15 / GPIO5 / GPIO18 for front / left / right.
 5. Connect MG90S to GPIO33.
-6. Connect the motor driver to GPIO26, GPIO25 and GPIO32.
+6. Identify the installed Makeblock driver IC and 16-pin interface before connecting it; for the current firmware, route motor direction inputs to GPIO26/GPIO25 and PWM to GPIO32 **only after confirming the module/PCB pin mapping and enable/standby wiring** (section 2.1). Connect the N20 to the appropriate DC motor output.
 7. Connect Pixy2 to the final board's SPI camera connector; the PCB routes `MOSI`, `MISO`, `SCK`, 5 V and GND to the camera header.
-8. Check ground and supply polarity before applying motor power.
+8. Check ground, motor/logic supply rails, and supply polarity before applying motor power.
+9. With the rear wheels free, verify start/stop and direction response, then check motor-driver current and temperature under representative load; apply the limits of the **installed** driver variant.
 
 ## Firmware
 
@@ -885,6 +910,7 @@ The documented competition configuration uses:
 - 3 × VL53L1X distance sensors in Long mode;
 - Pixy2 / Pixy2.1 vision connected directly to ESP32 over SPI;
 - N20 6 V motor, nominal 600 rpm;
+- Makeblock MegaPi Encoder/DC Motor Driver (SKU 12040 supplier reference; installed IC variant still requires physical verification);
 - LEGO-compatible gearing and rear differential;
 - MG90S positional steering servo;
 - 2S LiPo, 7.4 V, 2500 mAh, 30C;
@@ -929,7 +955,7 @@ When a material robot revision is made:
 6. update `docs/testing/validation-summary.csv` from retained measurements;
 7. document what changed, why it changed and which subsystem was affected.
 
-A change to pinout, sensor type, wheel size, steering geometry, camera interface or challenge-control behaviour is treated as a new robot revision and is rechecked before its results are used as final competition evidence.
+A change to motor-driver SKU/IC, pinout, sensor type, wheel size, steering geometry, camera interface or challenge-control behaviour is treated as a new robot revision and is rechecked before its results are used as final competition evidence. The 12040 source and electrical-limit correction above is a documentation update; it does not by itself prove that a motor-driver hardware swap was performed.
 
 ## Revision trace
 
